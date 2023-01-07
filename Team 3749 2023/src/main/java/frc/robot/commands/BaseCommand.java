@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /***
  * @author Rohin Sood
  * 
- * Serves as a template to format commands
+ *         Serves as a template to format commands
  */
 public class BaseCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     Base base = new Base();
 
-    // Initializes the BaseCommand 
+    // Initializes the BaseCommand
     public BaseCommand(Base base) {
         this.base = base;
         addRequirements(base);

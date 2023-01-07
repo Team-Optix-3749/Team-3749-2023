@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /***
  * @author Rohin Sood
  * 
- * Serves as a template to format subsystems
+ *         Serves as a template to format subsystems
  */
 public class Base extends SubsystemBase {
-   
+
     private CANSparkMax neo = new CANSparkMax(3749, MotorType.kBrushless);
     private WPI_TalonFX falcon = new WPI_TalonFX(6328);
 
