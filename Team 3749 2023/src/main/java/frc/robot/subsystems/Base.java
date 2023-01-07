@@ -1,0 +1,52 @@
+package frc.robot.subsystems;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+/***
+ * @author Rohin Sood
+ * 
+ * Serves as a template to format subsystems
+ */
+public class Base extends SubsystemBase {
+   
+    private CANSparkMax neo = new CANSparkMax(3749, MotorType.kBrushless);
+    private WPI_TalonFX falcon = new WPI_TalonFX(6328);
+
+    private MotorControllerGroup base = new MotorControllerGroup(neo, falcon);
+
+    // Initializes the base subsystem
+    public Base() {
+        neo.setInverted(true);
+        falcon.setNeutralMode(NeutralMode.Brake);
+    }
+
+    /***
+     * Sets the speed. Value is between -1.0 and 1.0
+     * 
+     * @param percent_speed
+     */
+    public void set(double percent_speed) {
+        base.set(percent_speed);
+    }
+
+    /***
+     * Gets the speed. Value is between -1.0 and 1.0
+     * 
+     * @return speed of the first motor in the motor controller group (neo)
+     */
+    public double get() {
+        return base.get();
+    }
+
+    // Runs every 20 ms
+    @Override
+    public void periodic() {
+
+    }
+
+}
