@@ -5,4 +5,4 @@
 1. Open a *.java file
 2. `Command Pallete > Format Document` (Shift + Alt + f)
 
-> [VS Code Theme](https://marketplace.visualstudio.com/items?itemName=oguhpereira.spotify-color-theme)
+> [Our preferred VS Code theme](https://marketplace.visualstudio.com/items?itemName=oguhpereira.spotify-color-theme)
