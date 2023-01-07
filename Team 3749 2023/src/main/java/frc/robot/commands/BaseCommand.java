@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
+import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
@@ -31,7 +32,7 @@ public class BaseCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        base.set(0);
+        base.set(Constants.Base.speed.get().doubleValue());
     }
 
     // Run on command finish

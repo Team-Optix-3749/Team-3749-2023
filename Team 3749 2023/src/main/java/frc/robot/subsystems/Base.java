@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Constants;
 
 /***
  * @author Rohin Sood
@@ -14,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Base extends SubsystemBase {
 
-    private CANSparkMax neo = new CANSparkMax(3749, MotorType.kBrushless);
-    private WPI_TalonFX falcon = new WPI_TalonFX(6328);
+    private CANSparkMax neo = new CANSparkMax(Constants.Base.neo_id, MotorType.kBrushless);
+    private WPI_TalonFX falcon = new WPI_TalonFX(Constants.Base.falcon_id);
 
     private MotorControllerGroup base = new MotorControllerGroup(neo, falcon);
 
@@ -23,6 +24,8 @@ public class Base extends SubsystemBase {
     public Base() {
         neo.setInverted(true);
         falcon.setNeutralMode(NeutralMode.Brake);
+
+        Constants.Base.speed.set(new Double(16.90));
     }
 
     /***

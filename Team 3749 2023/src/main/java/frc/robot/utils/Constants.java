@@ -7,4 +7,9 @@ package frc.robot.utils;
  */
 public final class Constants {
 
+    public static final class Base {
+        public static final int neo_id = 3749;
+        public static final int falcon_id = 6328;
+        public static final SmartData<Double> speed = new SmartData<Double>("Base Speed", 2.54);
+    }
 }
