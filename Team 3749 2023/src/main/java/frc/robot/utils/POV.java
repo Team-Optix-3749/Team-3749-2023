@@ -14,88 +14,88 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
  *         Stores getters for all POV buttons
  */
 public class POV {
-    private final GenericHID m_hid;
-    private final int m_povNumber;
+    private final GenericHID hid;
+    private final int povNumber;
 
-    private POVButton m_upButton; // 0 degrees
-    private POVButton m_upRightButton; // 45 degrees
-    private POVButton m_rightButton; // 90 degrees
-    private POVButton m_downRightButton; // 135 degrees
-    private POVButton m_downButton; // 180 degrees
-    private POVButton m_downLeftButton; // 225 degrees
-    private POVButton m_leftButton; // 270 degrees
-    private POVButton m_upLeftButton; // 315 degrees
+    private POVButton upButton; // 0 degrees
+    private POVButton upRightButton; // 45 degrees
+    private POVButton rightButton; // 90 degrees
+    private POVButton downRightButton; // 135 degrees
+    private POVButton downButton; // 180 degrees
+    private POVButton downLeftButton; // 225 degrees
+    private POVButton leftButton; // 270 degrees
+    private POVButton upLeftButton; // 315 degrees
 
     public POV(GenericHID hid) {
         this(hid, 0);
     }
 
     public POV(GenericHID hid, int povNumber) {
-        m_hid = hid;
-        m_povNumber = povNumber;
+        this.hid = hid;
+        this.povNumber = povNumber;
     }
 
     public POVButton up() {
-        if (m_upButton == null) {
-            m_upButton = new POVButton(m_hid, 0, m_povNumber);
+        if (upButton == null) {
+            upButton = new POVButton(hid, 0, povNumber);
         }
 
-        return m_upButton;
+        return upButton;
     }
 
     public POVButton upRight() {
-        if (m_upRightButton == null) {
-            m_upRightButton = new POVButton(m_hid, 45, m_povNumber);
+        if (upRightButton == null) {
+            upRightButton = new POVButton(hid, 45, povNumber);
         }
 
-        return m_upRightButton;
+        return upRightButton;
     }
 
     public POVButton right() {
-        if (m_rightButton == null) {
-            m_rightButton = new POVButton(m_hid, 90, m_povNumber);
+        if (rightButton == null) {
+            rightButton = new POVButton(hid, 90, povNumber);
         }
 
-        return m_rightButton;
+        return rightButton;
     }
 
     public POVButton downRight() {
-        if (m_downRightButton == null) {
-            m_downRightButton = new POVButton(m_hid, 135, m_povNumber);
+        if (downRightButton == null) {
+            downRightButton = new POVButton(hid, 135, povNumber);
         }
 
-        return m_downRightButton;
+        return downRightButton;
     }
 
     public POVButton down() {
-        if (m_downButton == null) {
-            m_downButton = new POVButton(m_hid, 180, m_povNumber);
+        if (downButton == null) {
+            downButton = new POVButton(hid, 180, povNumber);
         }
 
-        return m_downButton;
+        return downButton;
     }
 
     public POVButton downLeft() {
-        if (m_downLeftButton == null) {
-            m_downLeftButton = new POVButton(m_hid, 225, m_povNumber);
+        if (downLeftButton == null) {
+            downLeftButton = new POVButton(hid, 225, povNumber);
         }
 
-        return m_downLeftButton;
+        return downLeftButton;
     }
 
     public POVButton left() {
-        if (m_leftButton == null) {
-            m_leftButton = new POVButton(m_hid, 270, m_povNumber);
+        if (leftButton == null) {
+            leftButton = new POVButton(hid, 270, povNumber);
         }
 
-        return m_leftButton;
+        return leftButton;
     }
 
     public POVButton upLeft() {
-        if (m_upLeftButton == null) {
-            m_upLeftButton = new POVButton(m_hid, 315, m_povNumber);
+        if (upLeftButton == null) {
+            upLeftButton = new POVButton(hid, 315, povNumber);
         }
 
-        return m_upLeftButton;
+        return upLeftButton;
     }
 }

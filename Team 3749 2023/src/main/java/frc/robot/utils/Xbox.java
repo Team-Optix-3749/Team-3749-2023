@@ -11,59 +11,59 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  *         Stores getters for all Xbox controller inputs
  */
 public class Xbox extends GenericHID {
-    private JoystickButton m_leftBumper;
-    private JoystickButton m_rightBumper;
-    private JoystickButton m_leftStick;
-    private JoystickButton m_rightStick;
-    private JoystickButton m_a;
-    private JoystickButton m_b;
-    private JoystickButton m_x;
-    private JoystickButton m_y;
+    private JoystickButton leftBumper;
+    private JoystickButton rightBumper;
+    private JoystickButton leftStick;
+    private JoystickButton rightStick;
+    private JoystickButton a;
+    private JoystickButton b;
+    private JoystickButton x;
+    private JoystickButton y;
 
     public Xbox(final int port) {
         super(port);
 
-        m_leftBumper = new JoystickButton(this, XboxController.Button.kLeftBumper.value);
-        m_rightBumper = new JoystickButton(this, XboxController.Button.kRightBumper.value);
-        m_leftStick = new JoystickButton(this, XboxController.Button.kLeftStick.value);
-        m_rightStick = new JoystickButton(this, XboxController.Button.kRightStick.value);
-        m_a = new JoystickButton(this, XboxController.Button.kA.value);
-        m_b = new JoystickButton(this, XboxController.Button.kB.value);
-        m_x = new JoystickButton(this, XboxController.Button.kX.value);
-        m_y = new JoystickButton(this, XboxController.Button.kY.value);
+        leftBumper = new JoystickButton(this, XboxController.Button.kLeftBumper.value);
+        rightBumper = new JoystickButton(this, XboxController.Button.kRightBumper.value);
+        leftStick = new JoystickButton(this, XboxController.Button.kLeftStick.value);
+        rightStick = new JoystickButton(this, XboxController.Button.kRightStick.value);
+        a = new JoystickButton(this, XboxController.Button.kA.value);
+        b = new JoystickButton(this, XboxController.Button.kB.value);
+        x = new JoystickButton(this, XboxController.Button.kX.value);
+        y = new JoystickButton(this, XboxController.Button.kY.value);
 
     }
 
     public JoystickButton leftBumper() {
-        return m_leftBumper;
+        return leftBumper;
     }
 
     public JoystickButton rightBumper() {
-        return m_rightBumper;
+        return rightBumper;
     }
 
     public JoystickButton leftStick() {
-        return m_leftStick;
+        return leftStick;
     }
 
     public JoystickButton rightStick() {
-        return m_rightStick;
+        return rightStick;
     }
 
     public JoystickButton a() {
-        return m_a;
+        return a;
     }
 
     public JoystickButton b() {
-        return m_b;
+        return b;
     }
 
     public JoystickButton x() {
-        return m_x;
+        return x;
     }
 
     public JoystickButton y() {
-        return m_y;
+        return y;
     }
 
     public double getLeftX() {
