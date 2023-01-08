@@ -19,6 +19,7 @@ public class LightsCommand extends CommandBase {
 
     Lights lights = new Lights();
     Timer timer = new Timer();
+    boolean settings = true;
 
     // Initializes the BaseCommand
     public LightsCommand(Lights lights) {
@@ -35,8 +36,15 @@ public class LightsCommand extends CommandBase {
     @Override
     public void execute() {
         if (timer.get() % 1000 <= 20) {
-            lights.setRGBOfStrip(255, 255, 255, 0, 255, 0);
-            timer.reset();
+            if (settings) {
+                lights.setRGBOfStrip(255, 255, 255, 0, 255, 0);
+                timer.reset();
+                settings = false;
+            } else {
+                lights.setRGBOfStrip(0, 255, 0, 255, 255, 255);
+                timer.reset();
+                settings = true;
+            }
         }
     }
      
