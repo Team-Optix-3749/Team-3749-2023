@@ -38,13 +38,12 @@ public class LightsCommand extends CommandBase {
         if (timer.get() % 1000 <= 20) {
             if (settings) {
                 lights.setRGBOfStrip(255, 255, 255, 0, 255, 0);
-                timer.reset();
                 settings = false;
             } else {
                 lights.setRGBOfStrip(0, 255, 0, 255, 255, 255);
-                timer.reset();
                 settings = true;
             }
+            timer.reset();
         }
     }
      
