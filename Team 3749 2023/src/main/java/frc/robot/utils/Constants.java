@@ -12,4 +12,8 @@ public final class Constants {
         public static final int falcon_id = 6328;
         public static final SmartData<Double> speed = new SmartData<Double>("Base Speed", 2.54);
     }
+    public static final class Lights {
+        public static final int led_length = 20;
+        public static final int led_port = 0;
+    }
 }
