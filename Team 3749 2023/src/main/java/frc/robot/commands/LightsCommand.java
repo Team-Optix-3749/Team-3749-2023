@@ -47,6 +47,10 @@ public class LightsCommand extends CommandBase {
                 lights.setRGBOfStrip(0, 255, 0, 255, 255, 255);
                 settings = true;
             }
+        }
+
+        // Make sure timer.get() value isn't too big
+        if (timer.get() >= 10000) {
             timer.reset();
         }
     }
