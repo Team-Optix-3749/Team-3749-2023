@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Jonathan Liu
- * 
+ * @author Bailey Say
  *         
  */
 public class LightsCommand extends CommandBase {
@@ -19,6 +19,8 @@ public class LightsCommand extends CommandBase {
 
     Lights lights = new Lights();
     Timer timer = new Timer();
+
+    // Settings is basically a variable alternating between true and false to allow each LED to change from color to color
     boolean settings = true;
 
     // Initializes the BaseCommand
@@ -32,9 +34,11 @@ public class LightsCommand extends CommandBase {
     public void initialize() {
     }
 
-  
+    
     @Override
     public void execute() {
+
+        // Checks if in the first 1/50 of a second to change color
         if (timer.get() % 1000 <= 20) {
             if (settings) {
                 lights.setRGBOfStrip(255, 255, 255, 0, 255, 0);
