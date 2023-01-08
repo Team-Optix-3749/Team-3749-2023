@@ -19,6 +19,7 @@ public final class Constants {
 
     public static final class SwerveModule {
         public static final double wheel_diameter = Units.inchesToMeters(4); // in meters
+        // make sure that gear ratios are updated
         public static final double drive_motor_gear_ratio = 1 / 5.8462;
         public static final double turning_motor_gear_ratio = 1 / 18.0;
         public static final double drive_encoder_rotations_to_meter = drive_motor_gear_ratio * Math.PI * wheel_diameter;
