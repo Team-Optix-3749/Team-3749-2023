@@ -1,4 +1,7 @@
-package frc.robot.subsystems;
+
+
+
+package frc.robot.utils;
 
 import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -10,7 +13,14 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.Constants;
+
+
+/***
+ * @author Rohin Sood, Harkirat, Noah Simon
+ * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
+ * 
+ *     SwerveDrive Module   ( I THINK THIS IS SUPPOSED TO GO IN UTILS)
+ */
 
 public class Swervedrive {
     // defined all of the motors along with encoders for those motors
@@ -19,7 +29,7 @@ public class Swervedrive {
 
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turningEncoder;
-    // controll PID, exact rotations of a motor, correct me if I am wrong Noah
+    // controll PID, allowing us to get exact motor movement
     private final PIDController turningPidController;
 
     // This looks at the offset position of the turn motor
@@ -28,9 +38,15 @@ public class Swervedrive {
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
-    //  Takes in the id's and positions along with other information(reversed(i think this means inverted)), There is also the offset value stored in a double. 
+
+    /*** 
+     * Constructor for Swerve, definegit s our drive and turning motors with encoders as well as the PID
+     * 
+     * for the parameters, reversed means inverted
+     * @param absoluteEncoderOffset
+     */
     public Swervedrive(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
-        // the degrees of the off set value is stored in this code, to be used in a later time when trying to set swerve to alighn at zero (my grammer good)
+        // the degrees of the off set value is stored in this code, to be used in a later time when trying to set swerve to align at zero (my grammer good)
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         // gets encoder values in a variable
@@ -40,7 +56,7 @@ public class Swervedrive {
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
 
-        //inverts somehing if needed
+        //inverts something if needed
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
@@ -54,14 +70,14 @@ public class Swervedrive {
         turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
-        // creats an object for PID controll (look at top code to know what PID controller does)
+        // creates an object for PID controll (look at top code to know what PID controller does)
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
         // robot knows that swerve is circle I THINK
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
         
         resetEncoders();
     }
-    // the next few commands ore to get position of the motors and the change of speed of the motors in drive or turning
+    // the next few commands are to get position of the motors and the change of speed of the motors in drive or turning
     public double getDrivePosition() {
         return driveEncoder.getPosition();
     }
@@ -79,6 +95,7 @@ public class Swervedrive {
     }
     // The absolute encoder value as well
     public double getAbsoluteEncoderRad() {
+
         // Gets percentage of rotation
         double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
         //convert to radians
@@ -88,28 +105,35 @@ public class Swervedrive {
         // multiplies by -1 if motor is inverted
         return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
-    // gives values from absolute encoders wich always know there location
+
+    // gives values from absolute encoders which always know their location
     public void resetEncoders() {
         //drive is zero while the turrning motor is rotated the amount of degrees it needs(wheel's angle).
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
-    //Data for WPI lib
+    //Data for WPI lib, returns an interatable object that contains the information of swerves present condition
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
     }
 
+
+    /*** 
+     * completetly defines the state of the swerve drive
+     * 
+     * @param state the desired state
+     */
     public void setDesiredState(SwerveModuleState state) {
         //prevents the code from going back to zero degrees after joystick is let go (driver convenience)
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
             return;
         }
-        //never move more than 90 degrees per wheel
+        //never move more than 90 degrees per wheel (they will turn the other direction instead)
         state = SwerveModuleState.optimize(state, getState().angle);
-        // scale down velocity
+        // set motor speed to be the value requested, calculated though constant factors and the current meters/s
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        // pid to calculate turning position
+        // pid to calculate turning position, 
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         // error code for help if something fails
         SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
