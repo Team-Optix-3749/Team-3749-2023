@@ -16,5 +16,8 @@ public class Lights extends SubsystemBase {
     public Lights() {
         AddressableLED m_led = new AddressableLED(Constants.Lights.led_port);
         AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(Constants.Lights.led_length);
+        m_led.setLength(m_ledBuffer.getLength());
+        m_led.setData(m_ledBuffer);
+        m_led.start();
     }
 }
