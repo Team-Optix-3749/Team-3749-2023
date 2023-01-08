@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -11,17 +10,17 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
-import frc.robot.utils.SwerveModule;
+import frc.robot.subsystems.Swervedrive;;
 
 
 /***
- * @author Rohin Sood
+ * @author Rohin Sood, Harkirat Httar
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
  *     Subsystem for swerve drive
  */
 public class Drivetrain extends SubsystemBase {
-    private final SwerveModule front_left_ = new SwerveModule(
+    private final Swervedrive front_left_ = new Swervedrive(
             DriveConstants.front_left_Drive_id,
             DriveConstants.front_left_Turning_id,
             DriveConstants.front_left_DriveEncoderReversed,
@@ -30,7 +29,7 @@ public class Drivetrain extends SubsystemBase {
             DriveConstants.front_left_DriveAbsoluteEncoderOffsetRad,
             DriveConstants.front_left_DriveAbsoluteEncoderReversed);
 
-    private final SwerveModule frontRight = new SwerveModule(
+    private final Swervedrive frontRight = new Swervedrive(
             DriveConstants.frontRightDrive_id,
             DriveConstants.frontRightTurning_id,
             DriveConstants.frontRightDriveEncoderReversed,
@@ -39,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
             DriveConstants.frontRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.frontRightDriveAbsoluteEncoderReversed);
 
-    private final SwerveModule back_left_ = new SwerveModule(
+    private final Swervedrive back_left_ = new Swervedrive(
             DriveConstants.kBack_left_Drive_id,
             DriveConstants.kBack_left_Turning_id,
             DriveConstants.kBack_left_DriveEncoderReversed,
@@ -48,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
             DriveConstants.kBack_left_DriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBack_left_DriveAbsoluteEncoderReversed);
 
-    private final SwerveModule backRight = new SwerveModule(
+    private final Swervedrive backRight = new Swervedrive(
             DriveConstants.kBackRightDrive_id,
             DriveConstants.kBackRightTurning_id,
             DriveConstants.kBackRightDriveEncoderReversed,
