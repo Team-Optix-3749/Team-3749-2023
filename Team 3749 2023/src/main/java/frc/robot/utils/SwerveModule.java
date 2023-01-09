@@ -13,26 +13,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /***
- * @author Rohin Sood, Harkirat, Noah Simon
+ * @author Rohin Sood
+ * 
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
  *     SwerveDrive Module   ( I THINK THIS IS SUPPOSED TO GO IN UTILS)
  */
 
-public class Swervedrive {
+public class SwerveModule {
     // defined all of the motors along with encoders for those motors
     private final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
 
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turningEncoder;
-    // controll PID, allowing us to get exact motor movement
+    // control PID, allowing us to get exact motor movement
     private final PIDController turningPidController;
-
-    // This looks at the offset position of the turn motor
-    private final AnalogInput absoluteEncoder;
-    // if its on an opposing channel the encoder is reversed
-    private final boolean absoluteEncoderReversed;
+    
+    private final AnalogInput absoluteEncoder; // This looks at the offset position of the turn motor
+    private final boolean absoluteEncoderReversed; // if its on an opposing channel the encoder is reversed
     private final double absoluteEncoderOffsetRad;
 
 
@@ -42,7 +41,7 @@ public class Swervedrive {
      * for the parameters, reversed means inverted
      * @param absoluteEncoderOffset
      */
-    public Swervedrive(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
         // the degrees of the off set value is stored in this code, to be used in a later time when trying to set swerve to align at zero (my grammer good)
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
