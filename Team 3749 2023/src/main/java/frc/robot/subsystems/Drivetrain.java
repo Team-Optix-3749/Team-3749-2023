@@ -10,11 +10,13 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
-import frc.robot.subsystems.Swervedrive;;
+import frc.robot.utils.SwerveModule;
 
 
 /***
- * @author Rohin Sood, Harkirat Httar
+ * @author Rohin Sood
+ * @author Harkirat Httar
+ * @author Noah Simon
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
  *     Subsystem for swerve drive
