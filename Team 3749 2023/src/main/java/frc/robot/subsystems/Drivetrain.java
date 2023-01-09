@@ -22,44 +22,44 @@ import frc.robot.utils.SwerveModule;
  *     Subsystem for swerve drive
  */
 public class Drivetrain extends SubsystemBase {
-    private final Swervedrive front_left_ = new Swervedrive(
-            Constants.front_left_Drive_id,
-            Constants.front_left_Turning_id,
-            Constants.front_left_DriveEncoderReversed,
-            Constants.front_left_TurningEncoderReversed,
-            Constants.front_left_DriveAbsoluteEncoderPort,
-            Constants.front_left_DriveAbsoluteEncoderOffsetRad,
-            Constants.front_left_DriveAbsoluteEncoderReversed);
+    private final SwerveModule front_left_ = new SwerveModule(
+            Constants.Drivetrain.front_left_drive_id,
+            Constants.Drivetrain.front_left_Turning_id,
+            Constants.Drivetrain.front_left_driveEncoderReversed,
+            Constants.Drivetrain.front_left_TurningEncoderReversed,
+            Constants.Drivetrain.front_left_driveAbsoluteEncoderPort,
+            Constants.Drivetrain.front_left_driveAbsoluteEncoderOffsetRad,
+            Constants.Drivetrain.front_left_driveAbsoluteEncoderReversed);
 
-    private final Swervedrive frontRight = new Swervedrive(
-            Constants.frontRightDrive_id,
-            Constants.frontRightTurning_id,
-            Constants.frontRightDriveEncoderReversed,
-            Constants.frontRightTurningEncoderReversed,
-            Constants.frontRightDriveAbsoluteEncoderPort,
-            Constants.frontRightDriveAbsoluteEncoderOffsetRad,
-            Constants.frontRightDriveAbsoluteEncoderReversed);
+    private final SwerveModule frontRight = new SwerveModule(
+            Constants.Drivetrain.frontRightdrive_id,
+            Constants.Drivetrain.frontRightTurning_id,
+            Constants.Drivetrain.frontRightdriveEncoderReversed,
+            Constants.Drivetrain.frontRightTurningEncoderReversed,
+            Constants.Drivetrain.frontRightdriveAbsoluteEncoderPort,
+            Constants.Drivetrain.frontRightdriveAbsoluteEncoderOffsetRad,
+            Constants.Drivetrain.frontRightdriveAbsoluteEncoderReversed);
 
-    private final Swervedrive back_left_ = new Swervedrive(
-            Constants.kBack_left_Drive_id,
-            Constants.kBack_left_Turning_id,
-            Constants.kBack_left_DriveEncoderReversed,
-            Constants.kBack_left_TurningEncoderReversed,
-            Constants.kBack_left_DriveAbsoluteEncoderPort,
-            Constants.kBack_left_DriveAbsoluteEncoderOffsetRad,
-            Constants.kBack_left_DriveAbsoluteEncoderReversed);
+    private final SwerveModule back_left_ = new SwerveModule(
+            Constants.Drivetrain.kBack_left_drive_id,
+            Constants.Drivetrain.kBack_left_Turning_id,
+            Constants.Drivetrain.kBack_left_driveEncoderReversed,
+            Constants.Drivetrain.kBack_left_TurningEncoderReversed,
+            Constants.Drivetrain.kBack_left_driveAbsoluteEncoderPort,
+            Constants.Drivetrain.kBack_left_driveAbsoluteEncoderOffsetRad,
+            Constants.Drivetrain.kBack_left_driveAbsoluteEncoderReversed);
 
-    private final Swervedrive backRight = new Swervedrive(
-            Constants.kBackRightDrive_id,
-            Constants.kBackRightTurning_id,
-            Constants.kBackRightDriveEncoderReversed,
-            Constants.kBackRightTurningEncoderReversed,
-            Constants.kBackRightDriveAbsoluteEncoderPort,
-            Constants.kBackRightDriveAbsoluteEncoderOffsetRad,
-            Constants.kBackRightDriveAbsoluteEncoderReversed);
+    private final SwerveModule backRight = new SwerveModule(
+            Constants.Drivetrain.kBackRightdrive_id,
+            Constants.Drivetrain.kBackRightTurning_id,
+            Constants.Drivetrain.kBackRightdriveEncoderReversed,
+            Constants.Drivetrain.kBackRightTurningEncoderReversed,
+            Constants.Drivetrain.kBackRightdriveAbsoluteEncoderPort,
+            Constants.Drivetrain.kBackRightdriveAbsoluteEncoderOffsetRad,
+            Constants.Drivetrain.kBackRightdriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final edu.wpi.first.math.kinematics.SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.kDriveKinematics,
+    private final edu.wpi.first.math.kinematics.SwerveModuleOdometry odometer = new SwerveModuleOdometry(Constants.Drivetrain.driveKinematics,
             new Rotation2d(0));
 
     public Drivetrain() {
@@ -107,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, Constants.kPhysicalMaxSpeedMetersPerSecond);
+        SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
         front_left_.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         back_left_.setDesiredState(desiredStates[2]);

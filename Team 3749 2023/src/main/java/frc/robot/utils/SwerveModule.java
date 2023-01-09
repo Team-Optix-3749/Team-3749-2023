@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.utils;
 
 import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -61,13 +61,13 @@ public class SwerveModule {
         turningEncoder = turningMotor.getEncoder();
         
         // conversion factors, ( motor rotation to wheel rotation )
-        driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
-        driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
-        turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
+        driveEncoder.setPositionConversionFactor(Constants.SwerveModule.drive_encoder_rotations_to_meter);
+        driveEncoder.setVelocityConversionFactor(Constants.SwerveModule.drive_encoder_RPM_to_MPS);
+        turningEncoder.setPositionConversionFactor(Constants.SwerveModule.turning_encoder_rotations_to_meter);
+        turningEncoder.setVelocityConversionFactor(Constants.SwerveModule.turning_encoder_RPM_to_MPS);
 
         // creates an object for PID controll (look at top code to know what PID controller does)
-        turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
+        turningPidController = new PIDController(Constants.SwerveModule.turning_p, 0, 0);
         // robot knows that swerve is circle I THINK
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
         
@@ -128,7 +128,7 @@ public class SwerveModule {
         //never move more than 90 degrees per wheel (they will turn the other direction instead)
         state = SwerveModuleState.optimize(state, getState().angle);
         // set motor speed to be the value requested, calculated though constant factors and the current meters/s
-        driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        driveMotor.set(state.speedMetersPerSecond / Constants.SwerveModule.turning_encoder_rotations_to_meter);
         // pid to calculate turning position, 
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         // error code for help if something fails
