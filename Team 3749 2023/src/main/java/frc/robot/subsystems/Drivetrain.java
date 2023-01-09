@@ -13,14 +13,13 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.swerve.SwerveENUMS;
 import frc.robot.utils.swerve.SwerveModule;
 
-
 /***
  * @author Rohin Sood
  * @author Harkirat Httar
  * @author Noah Simon
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
- *     Subsystem for swerve drive
+ *      Subsystem for swerve drive
  */
 public class Drivetrain extends SubsystemBase {
 
@@ -35,8 +34,8 @@ public class Drivetrain extends SubsystemBase {
 
     // gyro for to measure current angles and tilt
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    // odometer to measure current field position
-    private final edu.wpi.first.math.kinematics.SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.kDriveKinematics,
+    private final SwerveModuleOdometry odometer = new SwerveModuleOdometry(
+            Constants.Drivetrain.driveKinematics,
             new Rotation2d(0));
 
     public Drivetrain() {
@@ -67,7 +66,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return odometer.getPoseMeters();
+    return odometer.getPoseMeters();
     }
 
     public void resetOdometry(Pose2d pose) {
@@ -79,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         odometer.update(getRotation2d(), front_left.getState(), frontRight.getState(), back_left.getState(),backRight.getState());
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
     // stops swerve
     public void stopModules() {
@@ -95,9 +94,8 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // Normalize speeds so that two motors at different speeds, but both greater than max speed, will run at proportionate speeds 
-        SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, Constants.kPhysicalMaxSpeedMetersPerSecond);
-        // set states
-        front_left.setDesiredState(desiredStates[0]);
+        SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+        front_left_.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         back_left.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
