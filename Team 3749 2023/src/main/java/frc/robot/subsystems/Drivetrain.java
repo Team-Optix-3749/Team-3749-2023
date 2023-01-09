@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.swerve.SwerveENUMS;
 import frc.robot.utils.swerve.SwerveModule;
 
 
@@ -24,34 +25,13 @@ import frc.robot.utils.swerve.SwerveModule;
 public class Drivetrain extends SubsystemBase {
 
     
-    private final SwerveModule front_left_ = new SwerveModule(
-            Constants.front_left_Drive_id,
-            Constants.front_left_Turning_id,
-            Constants.front_left_DriveEncoderReversed,
-            Constants.front_left_TurningEncoderReversed,
-            Constants.front_left_DriveAbsoluteEncoderPort,
-            Constants.front_left_DriveAbsoluteEncoderOffsetRad,
-            Constants.front_left_DriveAbsoluteEncoderReversed);
+    private final SwerveModule front_left_ = new SwerveModule(SwerveENUMS.FRONT_LEFT);
 
-    private final SwerveModule frontRight = new SwerveModule(
-            Constants.frontRightDrive_id,
-            Constants.frontRightTurning_id,
-            Constants.frontRightDriveEncoderReversed,
-            Constants.frontRightTurningEncoderReversed,
-            Constants.frontRightDriveAbsoluteEncoderPort,
-            Constants.frontRightDriveAbsoluteEncoderOffsetRad,
-            Constants.frontRightDriveAbsoluteEncoderReversed);
+    private final SwerveModule frontRight = new SwerveModule(SwerveENUMS.FRONT_RIGHT);
 
-    private final SwerveModule back_left_ = new SwerveModule(
-            Constants.kBack_left_Drive_id,
-            Constants.kBack_left_Turning_id,
-            Constants.kBack_left_DriveEncoderReversed,
-            Constants.kBack_left_TurningEncoderReversed,
-            Constants.kBack_left_DriveAbsoluteEncoderPort,
-            Constants.kBack_left_DriveAbsoluteEncoderOffsetRad,
-            Constants.kBack_left_DriveAbsoluteEncoderReversed);
+    private final SwerveModule back_left_ = new SwerveModule(SwerveENUMS.BACK_LEFT);
 
-    private final SwerveModule backRight = new SwerveModule(SwerveENUM.LEFT_FRONT);
+    private final SwerveModule backRight = new SwerveModule(SwerveENUMS.BACK_RIGHT);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final edu.wpi.first.math.kinematics.SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.kDriveKinematics,
