@@ -1,4 +1,7 @@
-package frc.robot.subsystems;
+
+
+
+package frc.robot.utils;
 
 import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -13,8 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /***
- * @author Rohin Sood
- * 
+ * @author Rohin Sood, Harkirat, Noah Simon
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
  *     SwerveDrive Module   ( I THINK THIS IS SUPPOSED TO GO IN UTILS)
@@ -27,11 +29,13 @@ public class SwerveModule {
 
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turningEncoder;
-    // control PID, allowing us to get exact motor movement
+    // controll PID, allowing us to get exact motor movement
     private final PIDController turningPidController;
-    
-    private final AnalogInput absoluteEncoder; // This looks at the offset position of the turn motor
-    private final boolean absoluteEncoderReversed; // if its on an opposing channel the encoder is reversed
+
+    // This looks at the offset position of the turn motor
+    private final AnalogInput absoluteEncoder;
+    // if its on an opposing channel the encoder is reversed
+    private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
 
@@ -39,7 +43,7 @@ public class SwerveModule {
      * Constructor for Swerve, definegit s our drive and turning motors with encoders as well as the PID
      * 
      * for the parameters, reversed means inverted
-     * @param absoluteEncoderOffset
+     * @param absoluteEncoderOffset The encoder value may be (a consistant amount) higher or lower than the actual rotation of the wheel. This is that measure
      */
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
         // the degrees of the off set value is stored in this code, to be used in a later time when trying to set swerve to align at zero (my grammer good)
@@ -66,9 +70,9 @@ public class SwerveModule {
         turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
-        // creates an object for PID controll (look at top code to know what PID controller does)
+        // creates an object for PID controll 
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
-        // robot knows that swerve is circle I THINK
+        // Lets the PID know that it is rotating in a circle and when it reaches the end point it loops back around, from -PI to PI
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
         
         resetEncoders();
@@ -89,10 +93,10 @@ public class SwerveModule {
     public double getTurningVelocity() {
         return turningEncoder.getVelocity();
     }
-    // The absolute encoder value as well
+    // Get the absolute encoder value in radians
     public double getAbsoluteEncoderRad() {
 
-        // Gets percentage of rotation
+        // Gets percentage of rotation read by encoder
         double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
         //convert to radians
         angle *= 2.0 * Math.PI;
@@ -102,13 +106,13 @@ public class SwerveModule {
         return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
-    // gives values from absolute encoders which always know their location
+    // sets relative encoders to the position of the absolute encoder
     public void resetEncoders() {
         //drive is zero while the turrning motor is rotated the amount of degrees it needs(wheel's angle).
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
-    //Data for WPI lib, returns an interatable object that contains the information of swerves present condition
+    // returns an interatable object that contains the information of swerves present condition
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
     }
@@ -117,7 +121,7 @@ public class SwerveModule {
     /*** 
      * completetly defines the state of the swerve drive
      * 
-     * @param state the desired state
+     * @param state the desired state, with a velocity and angle request
      */
     public void setDesiredState(SwerveModuleState state) {
         //prevents the code from going back to zero degrees after joystick is let go (driver convenience)
@@ -127,11 +131,11 @@ public class SwerveModule {
         }
         //never move more than 90 degrees per wheel (they will turn the other direction instead)
         state = SwerveModuleState.optimize(state, getState().angle);
-        // set motor speed to be the value requested, calculated though constant factors and the current meters/s
+        // scales speed down to be the robot's max speed
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         // pid to calculate turning position, 
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        // error code for help if something fails
+        // SmartDashboard logging
         SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
     }
 
