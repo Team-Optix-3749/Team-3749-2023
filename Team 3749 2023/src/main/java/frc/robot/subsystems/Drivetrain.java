@@ -21,43 +21,43 @@ import frc.robot.subsystems.Swervedrive;;
  */
 public class Drivetrain extends SubsystemBase {
     private final Swervedrive front_left_ = new Swervedrive(
-            DriveConstants.front_left_Drive_id,
-            DriveConstants.front_left_Turning_id,
-            DriveConstants.front_left_DriveEncoderReversed,
-            DriveConstants.front_left_TurningEncoderReversed,
-            DriveConstants.front_left_DriveAbsoluteEncoderPort,
-            DriveConstants.front_left_DriveAbsoluteEncoderOffsetRad,
-            DriveConstants.front_left_DriveAbsoluteEncoderReversed);
+            Constants.front_left_Drive_id,
+            Constants.front_left_Turning_id,
+            Constants.front_left_DriveEncoderReversed,
+            Constants.front_left_TurningEncoderReversed,
+            Constants.front_left_DriveAbsoluteEncoderPort,
+            Constants.front_left_DriveAbsoluteEncoderOffsetRad,
+            Constants.front_left_DriveAbsoluteEncoderReversed);
 
     private final Swervedrive frontRight = new Swervedrive(
-            DriveConstants.frontRightDrive_id,
-            DriveConstants.frontRightTurning_id,
-            DriveConstants.frontRightDriveEncoderReversed,
-            DriveConstants.frontRightTurningEncoderReversed,
-            DriveConstants.frontRightDriveAbsoluteEncoderPort,
-            DriveConstants.frontRightDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.frontRightDriveAbsoluteEncoderReversed);
+            Constants.frontRightDrive_id,
+            Constants.frontRightTurning_id,
+            Constants.frontRightDriveEncoderReversed,
+            Constants.frontRightTurningEncoderReversed,
+            Constants.frontRightDriveAbsoluteEncoderPort,
+            Constants.frontRightDriveAbsoluteEncoderOffsetRad,
+            Constants.frontRightDriveAbsoluteEncoderReversed);
 
     private final Swervedrive back_left_ = new Swervedrive(
-            DriveConstants.kBack_left_Drive_id,
-            DriveConstants.kBack_left_Turning_id,
-            DriveConstants.kBack_left_DriveEncoderReversed,
-            DriveConstants.kBack_left_TurningEncoderReversed,
-            DriveConstants.kBack_left_DriveAbsoluteEncoderPort,
-            DriveConstants.kBack_left_DriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kBack_left_DriveAbsoluteEncoderReversed);
+            Constants.kBack_left_Drive_id,
+            Constants.kBack_left_Turning_id,
+            Constants.kBack_left_DriveEncoderReversed,
+            Constants.kBack_left_TurningEncoderReversed,
+            Constants.kBack_left_DriveAbsoluteEncoderPort,
+            Constants.kBack_left_DriveAbsoluteEncoderOffsetRad,
+            Constants.kBack_left_DriveAbsoluteEncoderReversed);
 
     private final Swervedrive backRight = new Swervedrive(
-            DriveConstants.kBackRightDrive_id,
-            DriveConstants.kBackRightTurning_id,
-            DriveConstants.kBackRightDriveEncoderReversed,
-            DriveConstants.kBackRightTurningEncoderReversed,
-            DriveConstants.kBackRightDriveAbsoluteEncoderPort,
-            DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
+            Constants.kBackRightDrive_id,
+            Constants.kBackRightTurning_id,
+            Constants.kBackRightDriveEncoderReversed,
+            Constants.kBackRightTurningEncoderReversed,
+            Constants.kBackRightDriveAbsoluteEncoderPort,
+            Constants.kBackRightDriveAbsoluteEncoderOffsetRad,
+            Constants.kBackRightDriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final edu.wpi.first.math.kinematics.SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
+    private final edu.wpi.first.math.kinematics.SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.kDriveKinematics,
             new Rotation2d(0));
 
     public Drivetrain() {
@@ -92,8 +92,7 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometer.update(getRotation2d(), front_left_.getState(), frontRight.getState(), back_left_.getState(),
-                backRight.getState());
+        odometer.update(getRotation2d(), front_left_.getState(), frontRight.getState(), back_left_.getState(),backRight.getState());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
@@ -106,7 +105,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, Constants.kPhysicalMaxSpeedMetersPerSecond);
         front_left_.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         back_left_.setDesiredState(desiredStates[2]);
