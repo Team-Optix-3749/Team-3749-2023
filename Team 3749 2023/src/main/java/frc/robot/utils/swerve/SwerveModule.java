@@ -1,7 +1,7 @@
 
 
 
-package frc.robot.utils;
+package frc.robot.utils.swerve;
 
 import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -45,7 +45,49 @@ public class SwerveModule {
      * for the parameters, reversed means inverted
      * @param absoluteEncoderOffset The encoder value may be (a consistant amount) higher or lower than the actual rotation of the wheel. This is that measure
      */
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+    public SwerveModule(SwerveENUMS modulePosition) {
+        int driveMotorId;
+        int turningMotorId;
+        boolean driveMotorReversed;
+        boolean turningMotorReversed;
+        int absoluteEncoderId;
+        double absoluteEncoderOffset;
+        boolean absoluteEncoderReversed;
+        switch(modulePosition){
+            case FRONT_LEFT:
+                driveMotorId = front_left_drive_id;
+                turningMotorId = front_left_Turning_id;
+                driveMotorReversed = front_left_DriveEncoderReversed
+                turningMotorReversed = front_left_TurningEncoderReversed;
+                absoluteEncoderId = front_left_driveAbsoluteEncoderPort;
+                absoluteEncoderOffset = front_left_driveAbsoluteEncoderOffsetRad;
+                absoluteEncoderReversed = front_left_AbsoluteEncoderReversed;
+            case FRONT_RIGHT:
+                driveMotorId = front_right_drive_id;
+                turningMotorId = front_right_Turning_id;
+                driveMotorReversed = front_right_DriveEncoderReversed
+                turningMotorReversed = front_right_TurningEncoderReversed;
+                absoluteEncoderId = front_right_driveAbsoluteEncoderPort;
+                absoluteEncoderOffset = front_right_driveAbsoluteEncoderOffsetRad;
+                absoluteEncoderReversed = front_right_AbsoluteEncoderReversed;
+            case BACK_LEFT:
+                driveMotorId = back_left_drive_id;
+                turningMotorId = back_left_Turning_id;
+                driveMotorReversed = back_left_DriveEncoderReversed
+                turningMotorReversed = back_left_TurningEncoderReversed;
+                absoluteEncoderId = back_left_driveAbsoluteEncoderPort;
+                absoluteEncoderOffset = back_left_driveAbsoluteEncoderOffsetRad;
+                absoluteEncoderReversed = back_left_AbsoluteEncoderReversed;
+            case BACK_RIGHT:
+                driveMotorId = back_right_drive_id;
+                turningMotorId = back_right_Turning_id;
+                driveMotorReversed = back_right_DriveEncoderReversed
+                turningMotorReversed = back_right_TurningEncoderReversed;
+                absoluteEncoderId = back_right_driveAbsoluteEncoderPort;
+                absoluteEncoderOffset = back_right_driveAbsoluteEncoderOffsetRad;
+                absoluteEncoderReversed = back_right_AbsoluteEncoderReversed;
+        }
+
         // the degrees of the off set value is stored in this code, to be used in a later time when trying to set swerve to align at zero (my grammer good)
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;

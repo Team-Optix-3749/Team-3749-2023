@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
-import frc.robot.utils.SwerveModule;
+import frc.robot.utils.swerve.SwerveModule;
 
 
 /***
@@ -22,7 +22,9 @@ import frc.robot.utils.SwerveModule;
  *     Subsystem for swerve drive
  */
 public class Drivetrain extends SubsystemBase {
-    private final Swervedrive front_left_ = new Swervedrive(
+
+    
+    private final SwerveModule front_left_ = new SwerveModule(
             Constants.front_left_Drive_id,
             Constants.front_left_Turning_id,
             Constants.front_left_DriveEncoderReversed,
@@ -31,7 +33,7 @@ public class Drivetrain extends SubsystemBase {
             Constants.front_left_DriveAbsoluteEncoderOffsetRad,
             Constants.front_left_DriveAbsoluteEncoderReversed);
 
-    private final Swervedrive frontRight = new Swervedrive(
+    private final SwerveModule frontRight = new SwerveModule(
             Constants.frontRightDrive_id,
             Constants.frontRightTurning_id,
             Constants.frontRightDriveEncoderReversed,
@@ -40,7 +42,7 @@ public class Drivetrain extends SubsystemBase {
             Constants.frontRightDriveAbsoluteEncoderOffsetRad,
             Constants.frontRightDriveAbsoluteEncoderReversed);
 
-    private final Swervedrive back_left_ = new Swervedrive(
+    private final SwerveModule back_left_ = new SwerveModule(
             Constants.kBack_left_Drive_id,
             Constants.kBack_left_Turning_id,
             Constants.kBack_left_DriveEncoderReversed,
@@ -49,14 +51,7 @@ public class Drivetrain extends SubsystemBase {
             Constants.kBack_left_DriveAbsoluteEncoderOffsetRad,
             Constants.kBack_left_DriveAbsoluteEncoderReversed);
 
-    private final Swervedrive backRight = new Swervedrive(
-            Constants.kBackRightDrive_id,
-            Constants.kBackRightTurning_id,
-            Constants.kBackRightDriveEncoderReversed,
-            Constants.kBackRightTurningEncoderReversed,
-            Constants.kBackRightDriveAbsoluteEncoderPort,
-            Constants.kBackRightDriveAbsoluteEncoderOffsetRad,
-            Constants.kBackRightDriveAbsoluteEncoderReversed);
+    private final SwerveModule backRight = new SwerveModule(SwerveENUM.LEFT_FRONT);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final edu.wpi.first.math.kinematics.SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.kDriveKinematics,
