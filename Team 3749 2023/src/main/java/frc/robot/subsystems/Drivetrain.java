@@ -25,11 +25,11 @@ import frc.robot.utils.swerve.SwerveModule;
 public class Drivetrain extends SubsystemBase {
 
     // Instatiate swerve modules. ENUMS are passed in to determine which constants should be used
-    private final SwerveModule front_left_ = new SwerveModule(SwerveENUMS.FRONT_LEFT);
+    private final SwerveModule front_left = new SwerveModule(SwerveENUMS.FRONT_LEFT);
 
     private final SwerveModule frontRight = new SwerveModule(SwerveENUMS.FRONT_RIGHT);
 
-    private final SwerveModule back_left_ = new SwerveModule(SwerveENUMS.BACK_LEFT);
+    private final SwerveModule back_left = new SwerveModule(SwerveENUMS.BACK_LEFT);
 
     private final SwerveModule backRight = new SwerveModule(SwerveENUMS.BACK_RIGHT);
 
@@ -77,15 +77,15 @@ public class Drivetrain extends SubsystemBase {
     // monitor robot heading value and display location and heading in smartdashboard
     @Override
     public void periodic() {
-        odometer.update(getRotation2d(), front_left_.getState(), frontRight.getState(), back_left_.getState(),backRight.getState());
+        odometer.update(getRotation2d(), front_left.getState(), frontRight.getState(), back_left.getState(),backRight.getState());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
     // stops swerve
     public void stopModules() {
-        front_left_.stop();
+        front_left.stop();
         frontRight.stop();
-        back_left_.stop();
+        back_left.stop();
         backRight.stop();
     }
 
@@ -97,9 +97,9 @@ public class Drivetrain extends SubsystemBase {
         // Normalize speeds so that two motors at different speeds, but both greater than max speed, will run at proportionate speeds 
         SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, Constants.kPhysicalMaxSpeedMetersPerSecond);
         // set states
-        front_left_.setDesiredState(desiredStates[0]);
+        front_left.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
-        back_left_.setDesiredState(desiredStates[2]);
+        back_left.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
     }
 }
