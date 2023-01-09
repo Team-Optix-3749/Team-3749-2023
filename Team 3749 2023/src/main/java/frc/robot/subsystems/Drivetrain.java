@@ -12,14 +12,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.SwerveModule;
 
-
 /***
  * @author Rohin Sood
  * @author Harkirat Httar
  * @author Noah Simon
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
- *     Subsystem for swerve drive
+ *      Subsystem for swerve drive
  */
 public class Drivetrain extends SubsystemBase {
     private final SwerveModule front_left_ = new SwerveModule(
@@ -59,7 +58,8 @@ public class Drivetrain extends SubsystemBase {
             Constants.Drivetrain.kBackRightdriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final edu.wpi.first.math.kinematics.SwerveModuleOdometry odometer = new SwerveModuleOdometry(Constants.Drivetrain.driveKinematics,
+    private final edu.wpi.first.math.kinematics.SwerveModuleOdometry odometer = new SwerveModuleOdometry(
+            Constants.Drivetrain.driveKinematics,
             new Rotation2d(0));
 
     public Drivetrain() {
@@ -84,19 +84,20 @@ public class Drivetrain extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
     }
 
-    public Pose2d getPose() {
-        return odometer.getPoseMeters();
-    }
+    // public Pose2d getPose() {
+    // return odometer.getPoseMeters();
+    // }
 
-    public void resetOdometry(Pose2d pose) {
-        odometer.resetPosition(pose, getRotation2d());
-    }
+    // public void resetOdometry(Pose2d pose) {
+    //     odometer.resetPosition(pose, getRotation2d());
+    // }
 
     @Override
     public void periodic() {
-        odometer.update(getRotation2d(), front_left_.getState(), frontRight.getState(), back_left_.getState(),backRight.getState());
+        // odometer.update(getRotation2d(), front_left_.getState(), frontRight.getState(), back_left_.getState(),
+        //         backRight.getState());
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
 
     public void stopModules() {
