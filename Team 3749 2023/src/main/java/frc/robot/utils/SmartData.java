@@ -6,10 +6,10 @@ import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
 
 /***
+ * Stores data that can be seen/edited in Smart Dashboard
+ * 
  * @author Rohan Juneja
  * @author Rohin Sood
- * 
- * Stores data that can be seen/edited in Smart Dashboard
  * @param <T> Type of data: Supported types include String, Double, and Boolean
  */
 public class SmartData<T> {
