@@ -65,8 +65,8 @@ public final class Constants {
                 new Translation2d(-wheel_base / 2, track_width / 2));
 
         // Front _left_ module
-        public static final int front_left_drive_id = 8;
-        public static final int front_left_turning_id = 7;
+        public static final int front_left_drive_id = 1;
+        public static final int front_left_turning_id = 2;
         public static final boolean front_left_turning_encoder_reversed = true;
         public static final boolean front_left_drive_encoder_reversed = true;
         public static final int front_left_drive_absolute_encoder_port = 0;
@@ -74,8 +74,8 @@ public final class Constants {
         public static final double front_left_drive_absolute_encoder_offset_rad = -0.254;
 
         // Back _left_ module
-        public static final int back_left_drive_id = 2;
-        public static final int back_left_turning_id = 1;
+        public static final int back_left_drive_id = 5;
+        public static final int back_left_turning_id = 6;
         public static final boolean back_left_turning_encoder_reversed = true;
         public static final boolean back_left_drive_encoder_reversed = true;
         public static final int back_left_drive_absolute_encoder_port = 2;
@@ -83,8 +83,8 @@ public final class Constants {
         public static final double back_left_drive_absolute_encoder_offset_rad = -1.252;
 
         // Front right module
-        public static final int front_right_drive_id = 6;
-        public static final int front_right_turning_id = 5;
+        public static final int front_right_drive_id = 3;
+        public static final int front_right_turning_id = 4;
         public static final boolean front_right_turning_encoder_reversed = true;
         public static final boolean front_right_drive_absolute_encoder_reversed = false;
         public static final int front_right_drive_absolute_encoder_port = 1;
@@ -92,8 +92,8 @@ public final class Constants {
         public static final double front_right_drive_absolute_encoder_offset_rad = -1.816;
 
         // Back right module
-        public static final int back_right_drive_id = 4;
-        public static final int back_right_turning_id = 3;
+        public static final int back_right_drive_id = 7;
+        public static final int back_right_turning_id = 8;
         public static final boolean back_right_turning_encoder_reversed = true;
         public static final boolean back_right_drive_encoder_reversed = false;
         public static final int back_right_drive_absolute_encoder_port = 3;
