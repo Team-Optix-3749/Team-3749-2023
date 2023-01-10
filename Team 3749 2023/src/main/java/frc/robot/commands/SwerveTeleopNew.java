@@ -21,65 +21,65 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  *         Controlling the
  */
 public class SwerveTeleopNew extends CommandBase {
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+    @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-  private final DrivetrainNew swerveSubsystem;
-  private final DoubleSupplier xSpdFunction, ySpdFunction, turningSpdFunction;
-  private final BooleanSupplier fieldOrientedFunction;
-  private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+    private final DrivetrainNew swerveSubsystem;
+    private final DoubleSupplier xSpdFunction, ySpdFunction, turningSpdFunction;
+    private final BooleanSupplier fieldOrientedFunction;
+    private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  // Initializes the BaseCommand
-  public SwerveTeleopNew(DrivetrainNew swerveSubsystem,
-      DoubleSupplier xSpdFunction, DoubleSupplier ySpdFunction, DoubleSupplier turningSpdFunction,
-      BooleanSupplier fieldOrientedFunction) {
-    this.swerveSubsystem = swerveSubsystem;
-    this.xSpdFunction = xSpdFunction;
-    this.ySpdFunction = ySpdFunction;
-    this.turningSpdFunction = turningSpdFunction;
-    this.fieldOrientedFunction = fieldOrientedFunction;
-    this.xLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
-    this.yLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
-    this.turningLimiter = new SlewRateLimiter(
-        Constants.DrivetrainOld.tele_drive_max_angular_acceleration_units_per_second);
-    addRequirements(swerveSubsystem);
-  }
+    // Initializes the BaseCommand
+    public SwerveTeleopNew(DrivetrainNew swerveSubsystem,
+            DoubleSupplier xSpdFunction, DoubleSupplier ySpdFunction, DoubleSupplier turningSpdFunction,
+            BooleanSupplier fieldOrientedFunction) {
+        this.swerveSubsystem = swerveSubsystem;
+        this.xSpdFunction = xSpdFunction;
+        this.ySpdFunction = ySpdFunction;
+        this.turningSpdFunction = turningSpdFunction;
+        this.fieldOrientedFunction = fieldOrientedFunction;
+        this.xLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
+        this.yLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
+        this.turningLimiter = new SlewRateLimiter(
+                Constants.DrivetrainOld.tele_drive_max_angular_acceleration_units_per_second);
+        addRequirements(swerveSubsystem);
+    }
 
-  // Run on command init
-  @Override
-  public void initialize() {
-  }
+    // Run on command init
+    @Override
+    public void initialize() {
+    }
 
-  // Run every 20 ms
-  @Override
-  public void execute() {
-    final var xSpeed = -xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.getAsDouble(), 0.02))
-        * Constants.DrivetrainNew.max_speed;
+    // Run every 20 ms
+    @Override
+    public void execute() {
+        final var xSpeed = -xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.getAsDouble(), 0.02))
+                * Constants.DrivetrainNew.max_speed;
 
-    // Get the y speed or sideways/strafe speed. We are inverting this because
-    // we want a positive value when we pull to the left. Xbox controllers
-    // return positive values when you pull to the right by default.
-    final var ySpeed = -yLimiter.calculate(MathUtil.applyDeadband(ySpdFunction.getAsDouble(), 0.02))
-        * Constants.DrivetrainNew.max_speed;
+        // Get the y speed or sideways/strafe speed. We are inverting this because
+        // we want a positive value when we pull to the left. Xbox controllers
+        // return positive values when you pull to the right by default.
+        final var ySpeed = -yLimiter.calculate(MathUtil.applyDeadband(ySpdFunction.getAsDouble(), 0.02))
+                * Constants.DrivetrainNew.max_speed;
 
-    // Get the rate of angular rotation. We are inverting this because we want a
-    // positive value when we pull to the left (remember, CCW is positive in
-    // mathematics). Xbox controllers return positive values when you pull to
-    // the right by default.
-    final var rot = -turningLimiter.calculate(MathUtil.applyDeadband(turningSpdFunction.getAsDouble(), 0.02))
-        * Constants.DrivetrainNew.max_angular_speed;
+        // Get the rate of angular rotation. We are inverting this because we want a
+        // positive value when we pull to the left (remember, CCW is positive in
+        // mathematics). Xbox controllers return positive values when you pull to
+        // the right by default.
+        final var rot = -turningLimiter.calculate(MathUtil.applyDeadband(turningSpdFunction.getAsDouble(), 0.02))
+                * Constants.DrivetrainNew.max_angular_speed;
 
-    // 4. Send processed inputs to the drive() function
-    swerveSubsystem.drive(xSpeed, ySpeed, rot, fieldOrientedFunction.getAsBoolean());
-  }
+        // 4. Send processed inputs to the drive() function
+        swerveSubsystem.drive(xSpeed, ySpeed, rot, fieldOrientedFunction.getAsBoolean());
+    }
 
-  // Run on command finish
-  @Override
-  public void end(boolean interrupted) {
-  }
+    // Run on command finish
+    @Override
+    public void end(boolean interrupted) {
+    }
 
-  // Returns true when the command should end
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Returns true when the command should end
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
