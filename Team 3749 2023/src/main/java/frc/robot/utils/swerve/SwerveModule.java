@@ -20,7 +20,7 @@ import frc.robot.utils.Constants;
  * @author Rohin Sood, Harkirat, Noah Simon
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
- *     SwerveDrive Module   ( I THINK THIS IS SUPPOSED TO GO IN UTILS)
+ *     Code to manage each swerve drive module, which contains two motors, two relative encoders, and an absolute encoder
  */
 
 public class SwerveModule {

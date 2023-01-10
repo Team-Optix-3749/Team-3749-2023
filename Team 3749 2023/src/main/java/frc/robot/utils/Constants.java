@@ -85,6 +85,8 @@ public final class Constants {
         public static final double kTeledriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
         public static final double kTeledriveMaxAccelerationUnitsPerSecond = 3;
         public static final double kTeledriveMaxAngularAccelerationUnitsPerSecond = 3;
+
+        public static final double deadband = 0.05;
     }
 
 }
