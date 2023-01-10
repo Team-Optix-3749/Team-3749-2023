@@ -90,4 +90,6 @@ public class Xbox extends GenericHID {
         return getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.1;
     }
 
+    
+
 }

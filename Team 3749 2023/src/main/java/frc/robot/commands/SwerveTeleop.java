@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -20,10 +22,9 @@ import frc.robot.utils.swerve.SwerveModule;
 public class SwerveTeleop extends CommandBase {
 
     private final Drivetrain swerveSubsystem;
-    private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    private final Supplier<Boolean> fieldOrientedFunction;
+    private final DoubleSupplier xSpdFunction, ySpdFunction, turningSpdFunction;
+    private final BooleanSupplier fieldOrientedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
-
 
     /***
      * 
@@ -33,9 +34,12 @@ public class SwerveTeleop extends CommandBase {
      * @param turningSpdFunction The lambda to recieve turning speed
      * @param fieldOrientedFunction The lambda to recieve whether or not to orient on the filed 
      */
+    // public SwerveTeleop(Drivetrain swerveSubsystem,
+    //         Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
+    //         Supplier<Boolean> fieldOrientedFunction) {
     public SwerveTeleop(Drivetrain swerveSubsystem,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-            Supplier<Boolean> fieldOrientedFunction) {
+        DoubleSupplier xSpdFunction, DoubleSupplier ySpdFunction, DoubleSupplier turningSpdFunction,
+        BooleanSupplier fieldOrientedFunction) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;

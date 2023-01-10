@@ -6,6 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.SwerveTeleop;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.utils.Constants;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
@@ -18,7 +21,9 @@ public class RobotContainer {
   private final POV pilotPOV = new POV(pilot);
   private final POV operatorPOV = new POV(operator);
 
+
   // Subsystems
+  private final Drivetrain drivetrain = new Drivetrain();
 
   // Commands
 
@@ -27,7 +32,9 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-  private void configureDefaultCommands() {}
+  private void configureDefaultCommands() {
+    drivetrain.setDefaultCommand(new SwerveTeleop(drivetrain, pilot::getLeftY, pilot::getLeftY,  pilot::getRightX , pilot.leftStick()::getAsBoolean));
+  }
 
   private void configureButtonBindings() {}
 
