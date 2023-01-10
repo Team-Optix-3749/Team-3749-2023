@@ -12,13 +12,12 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Rohin Sood
  * 
- *         Controlling the
+ *         Controlling the DrivetrainNew subsystem through use of joysticks 
  */
 public class SwerveTeleopNew extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
