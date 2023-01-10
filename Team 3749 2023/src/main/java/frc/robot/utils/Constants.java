@@ -29,6 +29,14 @@ public final class Constants {
         public static final double turning_p = 0.5;
     }
 
+    public static final class SwerveModule2 {
+        public static final double kWheelRadius = 0.0508;
+        public static final int kEncoderResolution = 4096;
+        // public static final double kModuleMaxAngularVelocity = Constants.;
+        public static final double kModuleMaxAngularAcceleration =
+            2 * Math.PI; // radians per second squared
+    }
+
     public static final class Drivetrain {
 
         // Distance between two wheels on opposite sides
@@ -41,6 +49,7 @@ public final class Constants {
                 new Translation2d(wheel_base / 2, track_width / 2),
                 new Translation2d(-wheel_base / 2, -track_width / 2),
                 new Translation2d(-wheel_base / 2, track_width / 2));
+                
 
         // Front _left_ module
         public static final int front_left_drive_id = 8;

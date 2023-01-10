@@ -61,9 +61,9 @@ public class SwerveTeleop extends CommandBase {
     @Override
     public void execute() {
         // 1. Get real-time joystick inputs
-        double xSpeed = xSpdFunction.get();
-        double ySpeed = ySpdFunction.get();
-        double turningSpeed = turningSpdFunction.get();
+        double xSpeed = xSpdFunction.getAsDouble();
+        double ySpeed = ySpdFunction.getAsDouble();
+        double turningSpeed = turningSpdFunction.getAsDouble();
 
         // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > Constants.Drivetrain.deadband ? xSpeed : 0.0;
@@ -78,11 +78,14 @@ public class SwerveTeleop extends CommandBase {
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
-        if (fieldOrientedFunction.get()) {
+        if (fieldOrientedFunction.getAsBoolean()) {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        } else {
+
+        }
+        
+        else {
             // Relative to robot
             chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
         }

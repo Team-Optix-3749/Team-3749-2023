@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,9 +35,17 @@ public class Drivetrain extends SubsystemBase {
 
     // gyro for to measure current angles and tilt
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
-            Constants.Drivetrain.driveKinematics,
-            new Rotation2d(0));
+    
+    // private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
+    //         Constants.Drivetrain.driveKinematics,
+    //         new Rotation2d(0),
+    //         new SwerveModulePosition[] {
+    //                 front_left.getState(),
+    //                 frontRight.getState(),
+    //                 back_left.getPosition(),
+    //                 backRight.getPosition()
+    //         }
+    //         );
 
     public Drivetrain() {
         // reset the gyro, but wait 1 second so that it can turn on and configure itself. New thread so other code continues
@@ -58,6 +67,7 @@ public class Drivetrain extends SubsystemBase {
         // loops around 360 degrees
         return Math.IEEEremainder(gyro.getAngle(), 360);
     }
+
 
     
     public Rotation2d getRotation2d() {
