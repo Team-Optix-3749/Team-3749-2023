@@ -41,9 +41,9 @@ public class SwerveTeleop extends CommandBase {
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.fieldOrientedFunction = fieldOrientedFunction;
-        this.xLimiter = new SlewRateLimiter(Constants.Drivetrain.kTeledriveMaxAccelerationUnitsPerSecond);
-        this.yLimiter = new SlewRateLimiter(Constants.Drivetrain.kTeledriveMaxAccelerationUnitsPerSecond);
-        this.turningLimiter = new SlewRateLimiter(Constants.Drivetrain.kTeledriveMaxAngularAccelerationUnitsPerSecond);
+        this.xLimiter = new SlewRateLimiter(Constants.Drivetrain.tele_drive_max_acceleration_units_per_second);
+        this.yLimiter = new SlewRateLimiter(Constants.Drivetrain.tele_drive_max_acceleration_units_per_second);
+        this.turningLimiter = new SlewRateLimiter(Constants.Drivetrain.tele_drive_max_angular_acceleration_units_per_second);
         addRequirements(swerveSubsystem);
     }
 
@@ -67,10 +67,10 @@ public class SwerveTeleop extends CommandBase {
         turningSpeed = Math.abs(turningSpeed) > Constants.Drivetrain.deadband ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother by limiting acceleration
-        xSpeed = xLimiter.calculate(xSpeed) * Constants.Drivetrain.kTeledriveMaxSpeedMetersPerSecond;
-        ySpeed = yLimiter.calculate(ySpeed) * Constants.Drivetrain.kTeledriveMaxSpeedMetersPerSecond;
+        xSpeed = xLimiter.calculate(xSpeed) * Constants.Drivetrain.tele_drive_max_speed_meters_per_second;
+        ySpeed = yLimiter.calculate(ySpeed) * Constants.Drivetrain.tele_drive_max_speed_meters_per_second;
         turningSpeed = turningLimiter.calculate(turningSpeed)
-                * Constants.Drivetrain.kTeledriveMaxAngularSpeedRadiansPerSecond;
+                * Constants.Drivetrain.tele_drive_max_angular_acceleration_units_per_second;
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
-import frc.robot.utils.swerve.SwerveENUMS;
+import frc.robot.utils.Constants.SwerveENUMS;
 import frc.robot.utils.swerve.SwerveModule;
 
 /***
@@ -94,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // Normalize speeds so that two motors at different speeds, but both greater than max speed, will run at proportionate speeds 
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Drivetrain.physical_max_speed_meters_per_second);
         // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
         front_left.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
