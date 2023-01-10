@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.SwerveENUMS;
-import frc.robot.utils.swerve.SwerveModule;
+import frc.robot.utils.swerve.SwerveModuleOld;
 
 /***
  * @author Rohin Sood
@@ -22,16 +22,13 @@ import frc.robot.utils.swerve.SwerveModule;
  * 
  *      Subsystem for swerve drive
  */
-public class Drivetrain extends SubsystemBase {
+public class DrivetrainOld extends SubsystemBase {
 
     // Instatiate swerve modules. ENUMS are passed in to determine which constants should be used
-    private final SwerveModule front_left = new SwerveModule(SwerveENUMS.FRONT_LEFT);
-
-    private final SwerveModule frontRight = new SwerveModule(SwerveENUMS.FRONT_RIGHT);
-
-    private final SwerveModule back_left = new SwerveModule(SwerveENUMS.BACK_LEFT);
-
-    private final SwerveModule backRight = new SwerveModule(SwerveENUMS.BACK_RIGHT);
+    private final SwerveModuleOld front_left = new SwerveModuleOld(SwerveENUMS.FRONT_LEFT);
+    private final SwerveModuleOld frontRight = new SwerveModuleOld(SwerveENUMS.FRONT_RIGHT);
+    private final SwerveModuleOld back_left = new SwerveModuleOld(SwerveENUMS.BACK_LEFT);
+    private final SwerveModuleOld backRight = new SwerveModuleOld(SwerveENUMS.BACK_RIGHT);
 
     // gyro for to measure current angles and tilt
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -47,7 +44,7 @@ public class Drivetrain extends SubsystemBase {
     //         }
     //         );
 
-    public Drivetrain() {
+    public DrivetrainOld() {
         // reset the gyro, but wait 1 second so that it can turn on and configure itself. New thread so other code continues
         new Thread(() -> {
             try {
@@ -68,8 +65,6 @@ public class Drivetrain extends SubsystemBase {
         return Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
-
-    
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
     }
@@ -104,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // Normalize speeds so that two motors at different speeds, but both greater than max speed, will run at proportionate speeds 
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Drivetrain.physical_max_speed_meters_per_second);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DrivetrainOld.physical_max_speed_meters_per_second);
         // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
         front_left.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);

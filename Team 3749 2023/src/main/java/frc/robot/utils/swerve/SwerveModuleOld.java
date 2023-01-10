@@ -20,8 +20,7 @@ import frc.robot.utils.Constants;
  * 
  *     Code to manage each swerve drive module, which contains two motors, two relative encoders, and an absolute encoder
  */
-
-public class SwerveModule {
+public class SwerveModuleOld {
     // defined all of the motors along with encoders for those motors
     private final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
@@ -44,7 +43,7 @@ public class SwerveModule {
      * for the parameters, reversed means inverted
      * @param absoluteEncoderOffset The encoder value may be (a consistant amount) higher or lower than the actual rotation of the wheel. This is that measure
      */
-    public SwerveModule(Constants.SwerveENUMS modulePosition) {
+    public SwerveModuleOld(Constants.SwerveENUMS modulePosition) {
         int drive_motor_id = 0;
         int turning_motor_id = 0;
         boolean drive_motor_reversed = false;
@@ -56,37 +55,37 @@ public class SwerveModule {
         // Uses enums to set the variables to proper constants. Done here instead of in parameters for organization in the Drivetrain subsystem
         switch(modulePosition){                
             case FRONT_LEFT:
-                drive_motor_id = Constants.Drivetrain.front_left_drive_id;
-                turning_motor_id = Constants.Drivetrain.front_left_turning_id;
-                drive_motor_reversed = Constants.Drivetrain.front_left_drive_encoder_reversed;
-                turning_motor_reversed = Constants.Drivetrain.front_left_turning_encoder_reversed;
-                absolute_encoder_id = Constants.Drivetrain.front_left_drive_absolute_encoder_port;
-                absolute_encoder_offset = Constants.Drivetrain.front_left_drive_absolute_encoder_offset_rad;
-                absolute_encoder_reversed = Constants.Drivetrain.front_left_drive_absolute_encoder_reversed;
+                drive_motor_id = Constants.DrivetrainOld.front_left_drive_id;
+                turning_motor_id = Constants.DrivetrainOld.front_left_turning_id;
+                drive_motor_reversed = Constants.DrivetrainOld.front_left_drive_encoder_reversed;
+                turning_motor_reversed = Constants.DrivetrainOld.front_left_turning_encoder_reversed;
+                absolute_encoder_id = Constants.DrivetrainOld.front_left_drive_absolute_encoder_port;
+                absolute_encoder_offset = Constants.DrivetrainOld.front_left_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.DrivetrainOld.front_left_drive_absolute_encoder_reversed;
             case FRONT_RIGHT:
-                drive_motor_id = Constants.Drivetrain.front_right_drive_id;
-                turning_motor_id = Constants.Drivetrain.front_right_turning_id;
-                drive_motor_reversed = Constants.Drivetrain.front_right_drive_encoder_reversed;
-                turning_motor_reversed = Constants.Drivetrain.front_right_turning_encoder_reversed;
-                absolute_encoder_id = Constants.Drivetrain.front_right_drive_absolute_encoder_port;
-                absolute_encoder_offset = Constants.Drivetrain.front_right_drive_absolute_encoder_offset_rad;
-                absolute_encoder_reversed = Constants.Drivetrain.front_right_drive_absolute_encoder_reversed;
+                drive_motor_id = Constants.DrivetrainOld.front_right_drive_id;
+                turning_motor_id = Constants.DrivetrainOld.front_right_turning_id;
+                drive_motor_reversed = Constants.DrivetrainOld.front_right_drive_encoder_reversed;
+                turning_motor_reversed = Constants.DrivetrainOld.front_right_turning_encoder_reversed;
+                absolute_encoder_id = Constants.DrivetrainOld.front_right_drive_absolute_encoder_port;
+                absolute_encoder_offset = Constants.DrivetrainOld.front_right_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.DrivetrainOld.front_right_drive_absolute_encoder_reversed;
             case BACK_LEFT:
-                drive_motor_id = Constants.Drivetrain.back_left_drive_id;
-                turning_motor_id = Constants.Drivetrain.back_left_turning_id;
-                drive_motor_reversed = Constants.Drivetrain.back_left_drive_encoder_reversed;
-                turning_motor_reversed = Constants.Drivetrain.back_left_turning_encoder_reversed;
-                absolute_encoder_id = Constants.Drivetrain.back_left_drive_absolute_encoder_port;
-                absolute_encoder_offset = Constants.Drivetrain.back_left_drive_absolute_encoder_offset_rad;
-                absolute_encoder_reversed = Constants.Drivetrain.back_left_drive_absolute_encoder_reversed;
+                drive_motor_id = Constants.DrivetrainOld.back_left_drive_id;
+                turning_motor_id = Constants.DrivetrainOld.back_left_turning_id;
+                drive_motor_reversed = Constants.DrivetrainOld.back_left_drive_encoder_reversed;
+                turning_motor_reversed = Constants.DrivetrainOld.back_left_turning_encoder_reversed;
+                absolute_encoder_id = Constants.DrivetrainOld.back_left_drive_absolute_encoder_port;
+                absolute_encoder_offset = Constants.DrivetrainOld.back_left_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.DrivetrainOld.back_left_drive_absolute_encoder_reversed;
             case BACK_RIGHT:
-                drive_motor_id = Constants.Drivetrain.back_right_drive_id;
-                turning_motor_id = Constants.Drivetrain.back_right_turning_id;
-                drive_motor_reversed = Constants.Drivetrain.back_right_drive_encoder_reversed;
-                turning_motor_reversed = Constants.Drivetrain.back_right_turning_encoder_reversed;
-                absolute_encoder_id = Constants.Drivetrain.back_right_drive_absolute_encoder_port;
-                absolute_encoder_offset = Constants.Drivetrain.back_right_drive_absolute_encoder_offset_rad;
-                absolute_encoder_reversed = Constants.Drivetrain.back_right_drive_absolute_encoder_reversed;
+                drive_motor_id = Constants.DrivetrainOld.back_right_drive_id;
+                turning_motor_id = Constants.DrivetrainOld.back_right_turning_id;
+                drive_motor_reversed = Constants.DrivetrainOld.back_right_drive_encoder_reversed;
+                turning_motor_reversed = Constants.DrivetrainOld.back_right_turning_encoder_reversed;
+                absolute_encoder_id = Constants.DrivetrainOld.back_right_drive_absolute_encoder_port;
+                absolute_encoder_offset = Constants.DrivetrainOld.back_right_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.DrivetrainOld.back_right_drive_absolute_encoder_reversed;
         }
 
         this.absoluteEncoderOffsetRad = absolute_encoder_offset;
@@ -104,12 +103,12 @@ public class SwerveModule {
         turningEncoder = turningMotor.getEncoder();
         
         // conversion factors, ( motor rotation to wheel rotation )
-        driveEncoder.setPositionConversionFactor(Constants.SwerveModule.drive_encoder_rotations_to_meter);
-        driveEncoder.setVelocityConversionFactor(Constants.SwerveModule.drive_encoder_RPM_to_MPS);
-        turningEncoder.setPositionConversionFactor(Constants.SwerveModule.turning_encoder_rotations_to_meter);
-        turningEncoder.setVelocityConversionFactor(Constants.SwerveModule.turning_encoder_RPM_to_MPS);
+        driveEncoder.setPositionConversionFactor(Constants.SwerveModuleOld.drive_encoder_rotations_to_meter);
+        driveEncoder.setVelocityConversionFactor(Constants.SwerveModuleOld.drive_encoder_RPM_to_MPS);
+        turningEncoder.setPositionConversionFactor(Constants.SwerveModuleOld.turning_encoder_rotations_to_meter);
+        turningEncoder.setVelocityConversionFactor(Constants.SwerveModuleOld.turning_encoder_RPM_to_MPS);
 
-        turningPidController = new PIDController(Constants.SwerveModule.turning_p, 0, 0);
+        turningPidController = new PIDController(Constants.SwerveModuleOld.turning_p, 0, 0);
         // The PID will understand that it is working in a circle and will loop around after pi or -pi
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
         
@@ -180,7 +179,7 @@ public class SwerveModule {
         //never move more than 90 degrees per wheel (they will turn the other direction instead)
         state = SwerveModuleState.optimize(state, getState().angle);
         // set motor speed to be the value requested, calculated though constant factors and the current meters/s
-        driveMotor.set(state.speedMetersPerSecond / Constants.SwerveModule.turning_encoder_rotations_to_meter);
+        driveMotor.set(state.speedMetersPerSecond / Constants.SwerveModuleOld.turning_encoder_rotations_to_meter);
         // pid to calculate turning position, 
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         // SmartDashboard logging

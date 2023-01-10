@@ -2,15 +2,12 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.utils.Constants;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.utils.swerve.SwerveModule;
+import frc.robot.subsystems.DrivetrainOld;
 
 
 /***
@@ -19,9 +16,9 @@ import frc.robot.utils.swerve.SwerveModule;
  *  @author Harkirat
  *  @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  */
-public class SwerveTeleop extends CommandBase {
+public class SwerveTeleopOld extends CommandBase {
 
-    private final Drivetrain swerveSubsystem;
+    private final DrivetrainOld swerveSubsystem;
     private final DoubleSupplier xSpdFunction, ySpdFunction, turningSpdFunction;
     private final BooleanSupplier fieldOrientedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
@@ -37,7 +34,7 @@ public class SwerveTeleop extends CommandBase {
     // public SwerveTeleop(Drivetrain swerveSubsystem,
     //         Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
     //         Supplier<Boolean> fieldOrientedFunction) {
-    public SwerveTeleop(Drivetrain swerveSubsystem,
+    public SwerveTeleopOld(DrivetrainOld swerveSubsystem,
         DoubleSupplier xSpdFunction, DoubleSupplier ySpdFunction, DoubleSupplier turningSpdFunction,
         BooleanSupplier fieldOrientedFunction) {
         this.swerveSubsystem = swerveSubsystem;
@@ -45,9 +42,9 @@ public class SwerveTeleop extends CommandBase {
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.fieldOrientedFunction = fieldOrientedFunction;
-        this.xLimiter = new SlewRateLimiter(Constants.Drivetrain.tele_drive_max_acceleration_units_per_second);
-        this.yLimiter = new SlewRateLimiter(Constants.Drivetrain.tele_drive_max_acceleration_units_per_second);
-        this.turningLimiter = new SlewRateLimiter(Constants.Drivetrain.tele_drive_max_angular_acceleration_units_per_second);
+        this.xLimiter = new SlewRateLimiter(Constants.DrivetrainOld.tele_drive_max_acceleration_units_per_second);
+        this.yLimiter = new SlewRateLimiter(Constants.DrivetrainOld.tele_drive_max_acceleration_units_per_second);
+        this.turningLimiter = new SlewRateLimiter(Constants.DrivetrainOld.tele_drive_max_angular_acceleration_units_per_second);
         addRequirements(swerveSubsystem);
     }
 
@@ -66,15 +63,15 @@ public class SwerveTeleop extends CommandBase {
         double turningSpeed = turningSpdFunction.getAsDouble();
 
         // 2. Apply deadband
-        xSpeed = Math.abs(xSpeed) > Constants.Drivetrain.deadband ? xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > Constants.Drivetrain.deadband ? ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > Constants.Drivetrain.deadband ? turningSpeed : 0.0;
+        xSpeed = Math.abs(xSpeed) > Constants.DrivetrainOld.deadband ? xSpeed : 0.0;
+        ySpeed = Math.abs(ySpeed) > Constants.DrivetrainOld.deadband ? ySpeed : 0.0;
+        turningSpeed = Math.abs(turningSpeed) > Constants.DrivetrainOld.deadband ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother by limiting acceleration
-        xSpeed = xLimiter.calculate(xSpeed) * Constants.Drivetrain.tele_drive_max_speed_meters_per_second;
-        ySpeed = yLimiter.calculate(ySpeed) * Constants.Drivetrain.tele_drive_max_speed_meters_per_second;
+        xSpeed = xLimiter.calculate(xSpeed) * Constants.DrivetrainOld.tele_drive_max_speed_meters_per_second;
+        ySpeed = yLimiter.calculate(ySpeed) * Constants.DrivetrainOld.tele_drive_max_speed_meters_per_second;
         turningSpeed = turningLimiter.calculate(turningSpeed)
-                * Constants.Drivetrain.tele_drive_max_angular_acceleration_units_per_second;
+                * Constants.DrivetrainOld.tele_drive_max_angular_acceleration_units_per_second;
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
@@ -91,7 +88,7 @@ public class SwerveTeleop extends CommandBase {
         }
 
         // 5. Convert chassis speeds to individual module states
-        SwerveModuleState[] moduleStates = Constants.Drivetrain.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] moduleStates = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // 6. Output each module states to wheels
         swerveSubsystem.setModuleStates(moduleStates);
