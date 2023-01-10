@@ -54,7 +54,6 @@ public class Drivetrain extends SubsystemBase {
         gyro.reset();
     }
 
-    // return heading
     public double getHeading() {
         // loops around 360 degrees
         return Math.IEEEremainder(gyro.getAngle(), 360);
@@ -78,7 +77,7 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         odometer.update(getRotation2d(), front_left.getState(), frontRight.getState(), back_left.getState(),backRight.getState());
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
     // stops swerve
     public void stopModules() {

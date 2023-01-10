@@ -54,6 +54,8 @@ public class SwerveModule {
         int absoluteEncoderId;
         double absoluteEncoderOffset;
         boolean absoluteEncoderReversed;
+
+        // Uses enums to set the variables to proper constants. Done here instead of in parameters for organization in the Drivetrain subsystem
         switch(modulePosition){
             case FRONT_LEFT:
                 driveMotorId = Constants.Drivetrain.front_left_drive_id;
@@ -89,21 +91,17 @@ public class SwerveModule {
                 absoluteEncoderReversed = Constants.Drivetrain.back_right_AbsoluteEncoderReversed;
         }
 
-        // the degrees of the off set value is stored in this code, to be used in a later time when trying to set swerve to align at zero (my grammer good)
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
-        // gets encoder values in a variable
+
         absoluteEncoder = new AnalogInput(absoluteEncoderId);
 
-        // motor controller groups
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
 
-        //inverts something if needed
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-        // gets data (from encoder if that is not obvios)
         driveEncoder = driveMotor.getEncoder();
         turningEncoder = turningMotor.getEncoder();
         
@@ -113,14 +111,13 @@ public class SwerveModule {
         turningEncoder.setPositionConversionFactor(Constants.SwerveModule.turning_encoder_rotations_to_meter);
         turningEncoder.setVelocityConversionFactor(Constants.SwerveModule.turning_encoder_RPM_to_MPS);
 
-        // creates an object for PID controll (look at top code to know what PID controller does)
         turningPidController = new PIDController(Constants.SwerveModule.turning_p, 0, 0);
-        // robot knows that swerve is circle I THINK
+        // The PID will understand that it is working in a circle and will loop around after pi or -pi
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
         
         resetEncoders();
     }
-    // the next few commands are to get position of the motors and the change of speed of the motors in drive or turning
+
     public double getDrivePosition() {
         return driveEncoder.getPosition();
     }
@@ -151,7 +148,7 @@ public class SwerveModule {
 
     // sets relative encoders to the position of the absolute encoder
     public void resetEncoders() {
-        //drive is zero while the turrning motor is rotated the amount of degrees it needs(wheel's angle).
+        //drive is zero while the turrning motor is rotated the amount of degrees it needs (wheel's angle).
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
