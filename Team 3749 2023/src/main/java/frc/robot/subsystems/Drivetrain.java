@@ -94,8 +94,10 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // Normalize speeds so that two motors at different speeds, but both greater than max speed, will run at proportionate speeds 
-        SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
-        front_left_.setDesiredState(desiredStates[0]);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+        // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+        front_left.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         back_left.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
