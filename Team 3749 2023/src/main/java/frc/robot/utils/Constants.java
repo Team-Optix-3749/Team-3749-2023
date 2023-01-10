@@ -28,7 +28,8 @@ public final class Constants {
                                                                                                      // second
         public static final double turning_encoder_RPM_to_MPS = turning_encoder_rotations_to_meter / 60; // in meters
                                                                                                          // per second
-        public static final double turning_p = 0.5;
+
+        public static final SmartData<Double> turning_p = new SmartData<Double>("Turning-P", 0.5); 
     }
 
     public static final class SwerveModuleNew {
@@ -64,6 +65,9 @@ public final class Constants {
                 new Translation2d(wheel_base / 2, track_width / 2),
                 new Translation2d(-wheel_base / 2, -track_width / 2),
                 new Translation2d(-wheel_base / 2, track_width / 2));
+        
+        public static final SmartData<Double> driveKV = new SmartData<Double>("Drive kV", 3.0);
+        public static final SmartData<Double> turningKV = new SmartData<Double>("Turning kV", 0.5);
     }
 
     public static final class DrivetrainOld {

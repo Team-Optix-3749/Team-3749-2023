@@ -41,8 +41,8 @@ public class SwerveModuleNew {
                     Constants.SwerveModuleNew.max_angular_acceleration));
 
     // Gains are for example purposes only - must be determined for your own robot!
-    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
-    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, Constants.DrivetrainNew.driveKV.get());
+    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, Constants.DrivetrainNew.turningKV.get());
 
     /**
      * Constructs a SwerveModule with a drive motor, turning motor, drive encoder

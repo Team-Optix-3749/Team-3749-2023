@@ -112,7 +112,7 @@ public class SwerveModuleOld {
         turningEncoder.setPositionConversionFactor(Constants.SwerveModuleOld.turning_encoder_rotations_to_meter);
         turningEncoder.setVelocityConversionFactor(Constants.SwerveModuleOld.turning_encoder_RPM_to_MPS);
 
-        turningPidController = new PIDController(Constants.SwerveModuleOld.turning_p, 0, 0);
+        turningPidController = new PIDController(Constants.SwerveModuleOld.turning_p.get(), 0, 0);
         // The PID will understand that it is working in a circle and will loop around
         // after pi or -pi
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
