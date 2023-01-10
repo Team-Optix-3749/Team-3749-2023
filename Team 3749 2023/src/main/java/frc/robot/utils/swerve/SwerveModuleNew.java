@@ -16,7 +16,8 @@ import frc.robot.utils.Constants;
 /***
  * @author Rohin Sood
  * 
- *     Code to manage each swerve drive module, which contains two motors, two relative encoders, and an absolute encoder
+ *         Code to manage each swerve drive module, which contains two motors,
+ *         two relative encoders, and an absolute encoder
  */
 
 public class SwerveModuleNew {
@@ -36,7 +37,8 @@ public class SwerveModuleNew {
             0,
             0,
             new TrapezoidProfile.Constraints(
-                    Constants.SwerveModuleNew.max_angular_velocity, Constants.SwerveModuleNew.max_angular_acceleration));
+                    Constants.SwerveModuleNew.max_angular_velocity,
+                    Constants.SwerveModuleNew.max_angular_acceleration));
 
     // Gains are for example purposes only - must be determined for your own robot!
     private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
@@ -47,14 +49,15 @@ public class SwerveModuleNew {
      * and turning encoder.
      */
     public SwerveModuleNew(Constants.SwerveENUMS modulePosition) {
-        
+
         int drive_motor_id = 0;
         int turning_motor_id = 0;
         boolean drive_motor_reversed = false;
         boolean turning_motor_reversed = false;
 
-        // Uses enums to set the variables to proper constants. Done here instead of in parameters for organization in the Drivetrain subsystem
-        switch(modulePosition){                
+        // Uses enums to set the variables to proper constants. Done here instead of in
+        // parameters for organization in the Drivetrain subsystem
+        switch (modulePosition) {
             case FRONT_LEFT:
                 drive_motor_id = Constants.DrivetrainOld.front_left_drive_id;
                 turning_motor_id = Constants.DrivetrainOld.front_left_turning_id;

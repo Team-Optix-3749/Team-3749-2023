@@ -14,33 +14,35 @@ import frc.robot.utils.Xbox;
 
 public class RobotContainer {
 
-  // Controllers
-  private final Xbox pilot = new Xbox(0);
-  private final Xbox operator = new Xbox(1);
+    // Controllers
+    private final Xbox pilot = new Xbox(0);
+    private final Xbox operator = new Xbox(1);
 
-  private final POV pilotPOV = new POV(pilot);
-  private final POV operatorPOV = new POV(operator);
+    private final POV pilotPOV = new POV(pilot);
+    private final POV operatorPOV = new POV(operator);
 
+    // Subsystems
+    private final DrivetrainOld drivetrain = new DrivetrainOld();
+    // private final DrivetraiNew drivetrain = new DrivetrainNew();
 
-  // Subsystems
-  private final DrivetrainOld drivetrain = new DrivetrainOld();
-  // private final DrivetraiNew drivetrain = new DrivetrainNew();
+    // Commands
 
-  // Commands
+    public RobotContainer() {
+        configureButtonBindings();
+        configureDefaultCommands();
+    }
 
-  public RobotContainer() {
-    configureButtonBindings();
-    configureDefaultCommands();
-  }
+    private void configureDefaultCommands() {
+        drivetrain.setDefaultCommand(new SwerveTeleopOld(drivetrain, pilot::getLeftY, pilot::getLeftY, pilot::getRightX,
+                pilot.leftStick()::getAsBoolean));
+        // drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftY,
+        // pilot::getLeftY, pilot::getRightX , pilot.leftStick()::getAsBoolean));
+    }
 
-  private void configureDefaultCommands() {
-    drivetrain.setDefaultCommand(new SwerveTeleopOld(drivetrain, pilot::getLeftY, pilot::getLeftY,  pilot::getRightX , pilot.leftStick()::getAsBoolean));
-    // drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftY, pilot::getLeftY,  pilot::getRightX , pilot.leftStick()::getAsBoolean));
-  }
+    private void configureButtonBindings() {
+    }
 
-  private void configureButtonBindings() {}
-
-  public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
-  }  
+    public Command getAutonomousCommand() {
+        return Commands.print("No autonomous command configured");
+    }
 }

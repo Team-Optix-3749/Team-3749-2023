@@ -83,13 +83,18 @@ public class DrivetrainNew extends SubsystemBase {
 
     /***
      * added by me
-     * @param desiredStates a set of 4 swerve module states that will all be normalized and set to the proper modules
+     * 
+     * @param desiredStates a set of 4 swerve module states that will all be
+     *                      normalized and set to the proper modules
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        // Normalize speeds so that two motors at different speeds, but both greater than max speed, will run at proportionate speeds 
+        // Normalize speeds so that two motors at different speeds, but both greater
+        // than max speed, will run at proportionate speeds
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DrivetrainOld.physical_max_speed_meters_per_second);
-        // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
+                Constants.DrivetrainOld.physical_max_speed_meters_per_second);
+        // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates,
+        // Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);

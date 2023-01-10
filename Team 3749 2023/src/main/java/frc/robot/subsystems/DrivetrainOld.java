@@ -24,7 +24,8 @@ import frc.robot.utils.swerve.SwerveModuleOld;
  */
 public class DrivetrainOld extends SubsystemBase {
 
-    // Instatiate swerve modules. ENUMS are passed in to determine which constants should be used
+    // Instatiate swerve modules. ENUMS are passed in to determine which constants
+    // should be used
     private final SwerveModuleOld front_left = new SwerveModuleOld(SwerveENUMS.FRONT_LEFT);
     private final SwerveModuleOld frontRight = new SwerveModuleOld(SwerveENUMS.FRONT_RIGHT);
     private final SwerveModuleOld back_left = new SwerveModuleOld(SwerveENUMS.BACK_LEFT);
@@ -32,20 +33,21 @@ public class DrivetrainOld extends SubsystemBase {
 
     // gyro for to measure current angles and tilt
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    
+
     // private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
-    //         Constants.Drivetrain.driveKinematics,
-    //         new Rotation2d(0),
-    //         new SwerveModulePosition[] {
-    //                 front_left.getState(),
-    //                 frontRight.getState(),
-    //                 back_left.getPosition(),
-    //                 backRight.getPosition()
-    //         }
-    //         );
+    // Constants.Drivetrain.driveKinematics,
+    // new Rotation2d(0),
+    // new SwerveModulePosition[] {
+    // front_left.getState(),
+    // frontRight.getState(),
+    // back_left.getPosition(),
+    // backRight.getPosition()
+    // }
+    // );
 
     public DrivetrainOld() {
-        // reset the gyro, but wait 1 second so that it can turn on and configure itself. New thread so other code continues
+        // reset the gyro, but wait 1 second so that it can turn on and configure
+        // itself. New thread so other code continues
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -70,20 +72,24 @@ public class DrivetrainOld extends SubsystemBase {
     }
 
     // public Pose2d getPose() {
-    //      return odometer.getPoseMeters();
+    // return odometer.getPoseMeters();
     // }
 
     // public void resetOdometry(Pose2d pose) {
-    //     odometer.resetPosition(pose, getRotation2d());
+    // odometer.resetPosition(pose, getRotation2d());
     // }
 
-    // monitor robot heading value and display location and heading in smartdashboard
+    // monitor robot heading value and display location and heading in
+    // smartdashboard
     @Override
     public void periodic() {
-     //   odometer.update(getRotation2d(), front_left.getState(), frontRight.getState(), back_left.getState(),backRight.getState());
+        // odometer.update(getRotation2d(), front_left.getState(),
+        // frontRight.getState(), back_left.getState(),backRight.getState());
         SmartDashboard.putNumber("Robot Heading", getHeading());
-       //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        // SmartDashboard.putString("Robot Location",
+        // getPose().getTranslation().toString());
     }
+
     // stops swerve
     public void stopModules() {
         front_left.stop();
@@ -94,13 +100,17 @@ public class DrivetrainOld extends SubsystemBase {
 
     /***
      * 
-     * @param desiredStates a set of 4 swerve module states that will all be normalized and set to the proper modules
+     * @param desiredStates a set of 4 swerve module states that will all be
+     *                      normalized and set to the proper modules
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        // Normalize speeds so that two motors at different speeds, but both greater than max speed, will run at proportionate speeds 
+        // Normalize speeds so that two motors at different speeds, but both greater
+        // than max speed, will run at proportionate speeds
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DrivetrainOld.physical_max_speed_meters_per_second);
-        // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates, Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
+                Constants.DrivetrainOld.physical_max_speed_meters_per_second);
+        // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates,
+        // Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
         front_left.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         back_left.setDesiredState(desiredStates[2]);

@@ -24,8 +24,10 @@ public final class Constants {
         public static final double turning_motor_gear_ratio = 1 / 18.0;
         public static final double drive_encoder_rotations_to_meter = drive_motor_gear_ratio * Math.PI * wheel_diameter;
         public static final double turning_encoder_rotations_to_meter = turning_motor_gear_ratio * 2 * Math.PI;
-        public static final double drive_encoder_RPM_to_MPS = drive_encoder_rotations_to_meter / 60; // in meters per second
-        public static final double turning_encoder_RPM_to_MPS = turning_encoder_rotations_to_meter / 60; // in meters per second
+        public static final double drive_encoder_RPM_to_MPS = drive_encoder_rotations_to_meter / 60; // in meters per
+                                                                                                     // second
+        public static final double turning_encoder_RPM_to_MPS = turning_encoder_rotations_to_meter / 60; // in meters
+                                                                                                         // per second
         public static final double turning_p = 0.5;
     }
 
@@ -39,7 +41,8 @@ public final class Constants {
         // meters
         public static final double drive_encoder_rotations_to_meter = 2 * Math.PI
                 * Constants.SwerveModuleNew.wheel_radius / Constants.SwerveModuleNew.encoder_resolution;
-        public static final double turning_encoder_rotations_to_meter = 2 * Math.PI / Constants.SwerveModuleNew.encoder_resolution;
+        public static final double turning_encoder_rotations_to_meter = 2 * Math.PI
+                / Constants.SwerveModuleNew.encoder_resolution;
 
         // meters per second
         public static final double drive_encoder_RPM_to_MPS = drive_encoder_rotations_to_meter / 60;
@@ -64,7 +67,6 @@ public final class Constants {
     }
 
     public static final class DrivetrainOld {
-
         // Distance between two wheels on opposite sides
         public static final double track_width = Units.inchesToMeters(18);
         // Distance between right and left wheels
@@ -122,11 +124,9 @@ public final class Constants {
         public static final double tele_drive_max_angular_acceleration_units_per_second = 3;
 
         public static final double deadband = 0.05;
-
     }
 
     public static enum SwerveENUMS {
-
         FRONT_RIGHT,
         FRONT_LEFT,
         BACK_RIGHT,

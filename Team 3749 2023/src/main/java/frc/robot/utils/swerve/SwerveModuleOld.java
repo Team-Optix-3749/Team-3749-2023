@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 
-
 /***
  * @author Rohin Sood
  * @author Harkirat
  * @author Noah Simon
  * @see https://www.youtube.com/watch?v=0Xi9yb1IMyA
  * 
- *     Code to manage each swerve drive module, which contains two motors, two relative encoders, and an absolute encoder
+ *      Code to manage each swerve drive module, which contains two motors, two
+ *      relative encoders, and an absolute encoder
  */
 public class SwerveModuleOld {
     // defined all of the motors along with encoders for those motors
@@ -36,12 +36,15 @@ public class SwerveModuleOld {
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
-
-    /*** 
-     * Constructor for Swerve, definegit s our drive and turning motors with encoders as well as the PID
+    /***
+     * Constructor for Swerve, definegit s our drive and turning motors with
+     * encoders as well as the PID
      * 
      * for the parameters, reversed means inverted
-     * @param absoluteEncoderOffset The encoder value may be (a consistant amount) higher or lower than the actual rotation of the wheel. This is that measure
+     * 
+     * @param absoluteEncoderOffset The encoder value may be (a consistant amount)
+     *                              higher or lower than the actual rotation of the
+     *                              wheel. This is that measure
      */
     public SwerveModuleOld(Constants.SwerveENUMS modulePosition) {
         int drive_motor_id = 0;
@@ -52,8 +55,9 @@ public class SwerveModuleOld {
         double absolute_encoder_offset = 0;
         boolean absolute_encoder_reversed = false;
 
-        // Uses enums to set the variables to proper constants. Done here instead of in parameters for organization in the Drivetrain subsystem
-        switch(modulePosition){                
+        // Uses enums to set the variables to proper constants. Done here instead of in
+        // parameters for organization in the Drivetrain subsystem
+        switch (modulePosition) {
             case FRONT_LEFT:
                 drive_motor_id = Constants.DrivetrainOld.front_left_drive_id;
                 turning_motor_id = Constants.DrivetrainOld.front_left_turning_id;
@@ -101,7 +105,7 @@ public class SwerveModuleOld {
 
         driveEncoder = driveMotor.getEncoder();
         turningEncoder = turningMotor.getEncoder();
-        
+
         // conversion factors, ( motor rotation to wheel rotation )
         driveEncoder.setPositionConversionFactor(Constants.SwerveModuleOld.drive_encoder_rotations_to_meter);
         driveEncoder.setVelocityConversionFactor(Constants.SwerveModuleOld.drive_encoder_RPM_to_MPS);
@@ -109,9 +113,10 @@ public class SwerveModuleOld {
         turningEncoder.setVelocityConversionFactor(Constants.SwerveModuleOld.turning_encoder_RPM_to_MPS);
 
         turningPidController = new PIDController(Constants.SwerveModuleOld.turning_p, 0, 0);
-        // The PID will understand that it is working in a circle and will loop around after pi or -pi
+        // The PID will understand that it is working in a circle and will loop around
+        // after pi or -pi
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
-        
+
         resetEncoders();
     }
 
@@ -130,12 +135,13 @@ public class SwerveModuleOld {
     public double getTurningVelocity() {
         return turningEncoder.getVelocity();
     }
+
     // Get the absolute encoder value in radians
     public double getAbsoluteEncoderRad() {
 
         // Gets percentage of rotation read by encoder
         double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
-        //convert to radians
+        // convert to radians
         angle *= 2.0 * Math.PI;
         // subtracts the offset to get the wheel calibrated
         angle -= absoluteEncoderOffsetRad;
@@ -145,47 +151,53 @@ public class SwerveModuleOld {
 
     // sets relative encoders to the position of the absolute encoder
     public void resetEncoders() {
-        //drive is zero while the turrning motor is rotated the amount of degrees it needs (wheel's angle).
+        // drive is zero while the turrning motor is rotated the amount of degrees it
+        // needs (wheel's angle).
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
-    // returns an interatable object that contains the information of swerves present condition
+
+    // returns an interatable object that contains the information of swerves
+    // present condition
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
     }
 
-//       /**
-//    * Returns the current position of the module.
-//    *
-//    * @return The current position of the module.
-//    */
-//   public SwerveModulePosition getPosition() {
-//     return new SwerveModulePosition(
-//         m_driveEncoder.getDistance(), new Rotation2d(m_turningEncoder.getDistance()));
-//   }
+    // /**
+    // * Returns the current position of the module.
+    // *
+    // * @return The current position of the module.
+    // */
+    // public SwerveModulePosition getPosition() {
+    // return new SwerveModulePosition(
+    // m_driveEncoder.getDistance(), new
+    // Rotation2d(m_turningEncoder.getDistance()));
+    // }
 
-    /*** 
+    /***
      * completetly defines the state of the swerve drive
      * 
      * @param state the desired state, with a velocity and angle request
      */
     public void setDesiredState(SwerveModuleState state) {
-        //prevents the code from going back to zero degrees after joystick is let go (driver convenience)
+        // prevents the code from going back to zero degrees after joystick is let go
+        // (driver convenience)
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
             return;
         }
-        
-        //never move more than 90 degrees per wheel (they will turn the other direction instead)
+
+        // never move more than 90 degrees per wheel (they will turn the other direction
+        // instead)
         state = SwerveModuleState.optimize(state, getState().angle);
-        // set motor speed to be the value requested, calculated though constant factors and the current meters/s
+        // set motor speed to be the value requested, calculated though constant factors
+        // and the current meters/s
         driveMotor.set(state.speedMetersPerSecond / Constants.SwerveModuleOld.turning_encoder_rotations_to_meter);
-        // pid to calculate turning position, 
+        // pid to calculate turning position,
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         // SmartDashboard logging
         SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
     }
-    
 
     public void stop() {
         driveMotor.set(0);
