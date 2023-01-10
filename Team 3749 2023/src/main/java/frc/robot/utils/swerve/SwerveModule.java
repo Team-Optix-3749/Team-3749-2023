@@ -59,28 +59,28 @@ public class SwerveModule {
         switch(modulePosition){
             case FRONT_LEFT:
                 driveMotorId = Constants.Drivetrain.front_left_drive_id;
-                turningMotorId = Constants.Drivetrain.front_left_Turning_id;
-                driveMotorReversed = Constants.Drivetrain.front_left_DriveEncoderReversed
-                turningMotorReversed = Constants.Drivetrain.front_left_TurningEncoderReversed;
-                absoluteEncoderId = Constants.Drivetrain.front_left_driveAbsoluteEncoderPort;
-                absoluteEncoderOffset = Constants.Drivetrain.front_left_driveAbsoluteEncoderOffsetRConstants.Drivetrain.ad;
-                absoluteEncoderReversed = Constants.Drivetrain.front_left_AbsoluteEncoderReversed;
+                turningMotorId = Constants.Drivetrain.front_left_turning_id;
+                driveMotorReversed = Constants.Drivetrain.front_left_drive_encoder_reversed
+                turningMotorReversed = Constants.Drivetrain.front_left_turning_encoder_reversed;
+                absoluteEncoderId = Constants.Drivetrain.front_left_drive_absolute_encoder_port;
+                absoluteEncoderOffset = Constants.Drivetrain.front_left_drive_absolute_encoder_offset_rad;
+                absoluteEncoderReversed = Constants.Drivetrain.front_left_absolute_encoder_reversed;
             case FRONT_RIGHT:
                 driveMotorId = Constants.Drivetrain.front_right_drive_id;
-                turningMotorId = Constants.Drivetrain.front_right_Turning_id;
-                driveMotorReversed = Constants.Drivetrain.front_right_DriveEncoderReversed
-                turningMotorReversed = Constants.Drivetrain.front_right_TurningEncoderReversed;
-                absoluteEncoderId = Constants.Drivetrain.front_right_driveAbsoluteEncoderPort;
-                absoluteEncoderOffset = Constants.Drivetrain.front_right_driveAbsoluteEncoderOffsetRad;
-                absoluteEncoderReversed = Constants.Drivetrain.front_right_AbsoluteEncoderReversed;
+                turningMotorId = Constants.Drivetrain.front_right_turning_id;
+                driveMotorReversed = Constants.Drivetrain.front_right_drive_encoder_reversed
+                turningMotorReversed = Constants.Drivetrain.front_right_turning_encoder_reversed;
+                absoluteEncoderId = Constants.Drivetrain.front_right_drive_absolute_encoder_port;
+                absoluteEncoderOffset = Constants.Drivetrain.front_right_drive_absolute_encoder_offset_rad;
+                absoluteEncoderReversed = Constants.Drivetrain.front_right_absolute_encoder_reversed;
             case BACK_LEFT:
                 driveMotorId = Constants.Drivetrain.back_left_drive_id;
-                turningMotorId = Constants.Drivetrain.back_left_Turning_id;
-                driveMotorReversed = Constants.Drivetrain.back_left_DriveEncoderReversed
-                turningMotorReversed = Constants.Drivetrain.back_left_TurningEncoderReversed;
-                absoluteEncoderId = Constants.Drivetrain.back_left_driveAbsoluteEncoderPort;
-                absoluteEncoderOffset = Constants.Drivetrain.back_left_driveAbsoluteEncoderOffsetRad;
-                absoluteEncoderReversed = Constants.Drivetrain.back_left_AbsoluteEncoderReversed;
+                turningMotorId = Constants.Drivetrain.back_left_turning_id;
+                driveMotorReversed = Constants.Drivetrain.back_left_drive_encoder_reversed;
+                turningMotorReversed = Constants.Drivetrain.back_left_turning_encoder_reversed;
+                absoluteEncoderId = Constants.Drivetrain.back_left_drive_absolute_encoder_port;
+                absoluteEncoderOffset = Constants.Drivetrain.back_left_drive_absolute_encoder_offset_rad;
+                absoluteEncoderReversed = Constants.Drivetrain.back_left_absolute_encoder_reversed;
             case BACK_RIGHT:
                 driveMotorId = Constants.Drivetrain.back_right_drive_id;
                 turningMotorId = Constants.Drivetrain.back_right_Turning_id;
