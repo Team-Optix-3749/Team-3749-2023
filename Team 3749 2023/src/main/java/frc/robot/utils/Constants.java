@@ -44,21 +44,21 @@ public final class Constants {
 
         // Front _left_ module
         public static final int front_left_drive_id = 8;
-        public static final int front_left_Turning_id = 7;
-        public static final boolean front_left_TurningEncoderReversed = true;
-        public static final boolean front_left_driveEncoderReversed = true;
-        public static final int front_left_driveAbsoluteEncoderPort = 0;
-        public static final boolean front_left_driveAbsoluteEncoderReversed = false;
-        public static final double front_left_driveAbsoluteEncoderOffsetRad = -0.254;
+        public static final int front_left_turning_id = 7;
+        public static final boolean front_left_turning_encoder_reversed = true;
+        public static final boolean front_left_drive_encoder_reversed = true;
+        public static final int front_left_drive_absolute_encoder_port = 0;
+        public static final boolean front_left_drive_absolute_encoder_reversed = false;
+        public static final double front_left_drive_absolute_encoder_offset_rad = -0.254;
 
         // Back _left_ module
-        public static final int kBack_left_drive_id = 2;
-        public static final int kBack_left_Turning_id = 1;
-        public static final boolean kBack_left_TurningEncoderReversed = true;
-        public static final boolean kBack_left_driveEncoderReversed = true;
-        public static final int kBack_left_driveAbsoluteEncoderPort = 2;
-        public static final boolean kBack_left_driveAbsoluteEncoderReversed = false;
-        public static final double kBack_left_driveAbsoluteEncoderOffsetRad = -1.252;
+        public static final int back_left_drive_id = 2;
+        public static final int back_left_turning_id = 1;
+        public static final boolean back_left_turning_encoder_reversed = true;
+        public static final boolean back_left_drive_encoder_reversed = true;
+        public static final int back_left_drive_absolute_encoder_port = 2;
+        public static final boolean back_left_drive_absolute_encoder_reversed = false;
+        public static final double back_left_drive_absolute_encoder_offset_rad = -1.252;
         
         // Front right module
         public static final int front_right_drive_id = 6;
@@ -67,7 +67,7 @@ public final class Constants {
         public static final boolean front_right_drive_absolute_encoder_reversed = false;
         public static final int front_right_drive_absolute_encoder_port = 1;
         public static final boolean front_right_drive_encoder_reversed = false;
-        public static final double front_right_drive_absolute_encoder_off_set_rad = -1.816;
+        public static final double front_right_drive_absolute_encoder_offset_rad = -1.816;
         
         // Back right module
         public static final int back_right_drive_id = 4;
@@ -76,7 +76,7 @@ public final class Constants {
         public static final boolean back_right_drive_encoder_reversed = false;
         public static final int back_right_drive_absolute_encoder_port = 3;
         public static final boolean back_right_drive_absolute_encoder_reversed = false;
-        public static final double back_right_drive_absolute_encoder_off_set_rad = -4.811;
+        public static final double back_right_drive_absolute_encoder_offset_rad = -4.811;
 
         public static final double physical_max_speed_meters_per_second = 5;
         public static final double physical_max_angular_speed_radians_per_second = 2 * 2 * Math.PI;
@@ -89,4 +89,12 @@ public final class Constants {
         public static final double deadband = 0.05;
     }
 
+    public static enum SwerveENUMS {
+
+        FRONT_RIGHT,
+        FRONT_LEFT,
+        BACK_RIGHT,
+        BACK_LEFT;
+    }
+    
 }

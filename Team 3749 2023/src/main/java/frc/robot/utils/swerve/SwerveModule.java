@@ -46,53 +46,53 @@ public class SwerveModule {
      * for the parameters, reversed means inverted
      * @param absoluteEncoderOffset The encoder value may be (a consistant amount) higher or lower than the actual rotation of the wheel. This is that measure
      */
-    public SwerveModule(SwerveENUMS modulePosition) {
-        int drive_motor_id;
-        int turning_motor_id;
-        boolean drive_motor_reversed;
-        boolean turning_motor_reversed;
-        int absolute_encoder_id;
-        double absolute_encoder_offset;
-        boolean absolute_encoder_reversed;
+    public SwerveModule(Constants.SwerveENUMS modulePosition) {
+        int drive_motor_id = 0;
+        int turning_motor_id = 0;
+        boolean drive_motor_reversed = false;
+        boolean turning_motor_reversed = false;
+        int absolute_encoder_id = 0;
+        double absolute_encoder_offset = 0;
+        boolean absolute_encoder_reversed = false;
 
         // Uses enums to set the variables to proper constants. Done here instead of in parameters for organization in the Drivetrain subsystem
-        switch(modulePosition){
+        switch(modulePosition){                
             case FRONT_LEFT:
                 drive_motor_id = Constants.Drivetrain.front_left_drive_id;
-                turning_motor_id = Constants.Drivetrain.front_left_Turning_id;
-                drive_motor_reversed = Constants.Drivetrain.front_left_DriveEncoderReversed
-                turning_motor_reversed = Constants.Drivetrain.front_left_TurningEncoderReversed;
-                absolute_encoder_id = Constants.Drivetrain.front_left_driveAbsoluteEncoderPort;
-                absolute_encoder_offset = Constants.Drivetrain.front_left_driveAbsoluteEncoderOffsetRConstants.Drivetrain.ad;
-                absoluteEncoderReversed = Constants.Drivetrain.front_left_AbsoluteEncoderReversed;
+                turning_motor_id = Constants.Drivetrain.front_left_turning_id;
+                drive_motor_reversed = Constants.Drivetrain.front_left_drive_encoder_reversed;
+                turning_motor_reversed = Constants.Drivetrain.front_left_turning_encoder_reversed;
+                absolute_encoder_id = Constants.Drivetrain.front_left_drive_absolute_encoder_port;
+                absolute_encoder_offset = Constants.Drivetrain.front_left_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.Drivetrain.front_left_drive_absolute_encoder_reversed;
             case FRONT_RIGHT:
                 drive_motor_id = Constants.Drivetrain.front_right_drive_id;
-                turning_motor_id = Constants.Drivetrain.front_right_Turning_id;
-                drive_motor_reversed = Constants.Drivetrain.front_right_DriveEncoderReversed
-                turning_motor_reversed = Constants.Drivetrain.front_right_TurningEncoderReversed;
-                absolute_encoder_id = Constants.Drivetrain.front_right_driveAbsoluteEncoderPort;
-                absolute_encoder_offset = Constants.Drivetrain.front_right_driveAbsoluteEncoderOffsetRad;
-                absoluteEncoderReversed = Constants.Drivetrain.front_right_AbsoluteEncoderReversed;
+                turning_motor_id = Constants.Drivetrain.front_right_turning_id;
+                drive_motor_reversed = Constants.Drivetrain.front_right_drive_encoder_reversed;
+                turning_motor_reversed = Constants.Drivetrain.front_right_turning_encoder_reversed;
+                absolute_encoder_id = Constants.Drivetrain.front_right_drive_absolute_encoder_port;
+                absolute_encoder_offset = Constants.Drivetrain.front_right_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.Drivetrain.front_right_drive_absolute_encoder_reversed;
             case BACK_LEFT:
                 drive_motor_id = Constants.Drivetrain.back_left_drive_id;
-                turning_motor_id = Constants.Drivetrain.back_left_Turning_id;
-                drive_motor_reversed = Constants.Drivetrain.back_left_DriveEncoderReversed
-                turning_motor_reversed = Constants.Drivetrain.back_left_TurningEncoderReversed;
-                absolute_encoder_id = Constants.Drivetrain.back_left_driveAbsoluteEncoderPort;
-                absolute_encoder_offset = Constants.Drivetrain.back_left_driveAbsoluteEncoderOffsetRad;
-                absoluteEncoderReversed = Constants.Drivetrain.back_left_AbsoluteEncoderReversed;
+                turning_motor_id = Constants.Drivetrain.back_left_turning_id;
+                drive_motor_reversed = Constants.Drivetrain.back_left_drive_encoder_reversed;
+                turning_motor_reversed = Constants.Drivetrain.back_left_turning_encoder_reversed;
+                absolute_encoder_id = Constants.Drivetrain.back_left_drive_absolute_encoder_port;
+                absolute_encoder_offset = Constants.Drivetrain.back_left_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.Drivetrain.back_left_drive_absolute_encoder_reversed;
             case BACK_RIGHT:
                 drive_motor_id = Constants.Drivetrain.back_right_drive_id;
                 turning_motor_id = Constants.Drivetrain.back_right_turning_id;
                 drive_motor_reversed = Constants.Drivetrain.back_right_drive_encoder_reversed;
                 turning_motor_reversed = Constants.Drivetrain.back_right_turning_encoder_reversed;
                 absolute_encoder_id = Constants.Drivetrain.back_right_drive_absolute_encoder_port;
-                absolute_encoder_offset = Constants.Drivetrain.back_right_drive_absolute_encoder_off_set_rad;
-                absoluteEncoderReversed = Constants.Drivetrain.back_right_drive_absolute_encoder_reversed;
+                absolute_encoder_offset = Constants.Drivetrain.back_right_drive_absolute_encoder_offset_rad;
+                absolute_encoder_reversed = Constants.Drivetrain.back_right_drive_absolute_encoder_reversed;
         }
 
         this.absoluteEncoderOffsetRad = absolute_encoder_offset;
-        this.absoluteEncoderReversed = absoluteEncoderReversed;
+        this.absoluteEncoderReversed = absolute_encoder_reversed;
 
         absoluteEncoder = new AnalogInput(absolute_encoder_id);
 
