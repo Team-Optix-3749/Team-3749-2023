@@ -10,9 +10,9 @@ import frc.robot.utils.Constants;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
@@ -37,8 +37,8 @@ public class SwerveTeleopNew extends CommandBase {
     this.ySpdFunction = ySpdFunction;
     this.turningSpdFunction = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
-    this.xLimiter = new SlewRateLimiter(Constants.DrivetrainOld.tele_drive_max_acceleration_units_per_second);
-    this.yLimiter = new SlewRateLimiter(Constants.DrivetrainOld.tele_drive_max_acceleration_units_per_second);
+    this.xLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
+    this.yLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
     this.turningLimiter = new SlewRateLimiter(
         Constants.DrivetrainOld.tele_drive_max_angular_acceleration_units_per_second);
     addRequirements(swerveSubsystem);
@@ -52,41 +52,24 @@ public class SwerveTeleopNew extends CommandBase {
   // Run every 20 ms
   @Override
   public void execute() {
-        // 1. Get real-time joystick inputs
-        double xSpeed = xSpdFunction.getAsDouble();
-        double ySpeed = ySpdFunction.getAsDouble();
-        double turningSpeed = turningSpdFunction.getAsDouble();
+    final var xSpeed = -xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.getAsDouble(), 0.02))
+        * Constants.DrivetrainNew.max_speed;
 
-        // 2. Apply deadband
-        xSpeed = Math.abs(xSpeed) > Constants.DrivetrainOld.deadband ? xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > Constants.DrivetrainOld.deadband ? ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > Constants.DrivetrainOld.deadband ? turningSpeed : 0.0;
+    // Get the y speed or sideways/strafe speed. We are inverting this because
+    // we want a positive value when we pull to the left. Xbox controllers
+    // return positive values when you pull to the right by default.
+    final var ySpeed = -yLimiter.calculate(MathUtil.applyDeadband(ySpdFunction.getAsDouble(), 0.02))
+        * Constants.DrivetrainNew.max_speed;
 
-        // 3. Make the driving smoother by limiting acceleration
-        xSpeed = xLimiter.calculate(xSpeed) * Constants.DrivetrainOld.tele_drive_max_speed_meters_per_second;
-        ySpeed = yLimiter.calculate(ySpeed) * Constants.DrivetrainOld.tele_drive_max_speed_meters_per_second;
-        turningSpeed = turningLimiter.calculate(turningSpeed)
-                * Constants.DrivetrainOld.tele_drive_max_angular_acceleration_units_per_second;
+    // Get the rate of angular rotation. We are inverting this because we want a
+    // positive value when we pull to the left (remember, CCW is positive in
+    // mathematics). Xbox controllers return positive values when you pull to
+    // the right by default.
+    final var rot = -turningLimiter.calculate(MathUtil.applyDeadband(turningSpdFunction.getAsDouble(), 0.02))
+        * Constants.DrivetrainNew.max_angular_speed;
 
-        // 4. Construct desired chassis speeds
-        ChassisSpeeds chassisSpeeds;
-        if (fieldOrientedFunction.getAsBoolean()) {
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-
-        }
-        
-        else {
-            // Relative to robot
-            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-        }
-
-        // 5. Convert chassis speeds to individual module states
-        SwerveModuleState[] moduleStates = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
-
-        // 6. Output each module states to wheels
-        swerveSubsystem.setModuleStates(moduleStates);
+    // 4. Send processed inputs to the drive() function
+    swerveSubsystem.drive(xSpeed, ySpeed, rot, fieldOrientedFunction.getAsBoolean());
   }
 
   // Run on command finish

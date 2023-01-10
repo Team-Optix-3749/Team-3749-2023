@@ -16,9 +16,6 @@ import frc.robot.utils.swerve.SwerveModuleNew;
 
 /** Represents a swerve drive style drivetrain. */
 public class DrivetrainNew extends SubsystemBase {
-    public static final double kMaxSpeed = 3.0; // 3 meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-
     // Locations for the swerve drive modules relative to the robot center.
     private final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
     private final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
@@ -75,7 +72,7 @@ public class DrivetrainNew extends SubsystemBase {
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(SwerveModuleStates, kMaxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(SwerveModuleStates, Constants.DrivetrainNew.max_speed);
         frontLeft.setDesiredState(SwerveModuleStates[0]);
         frontRight.setDesiredState(SwerveModuleStates[1]);
         backLeft.setDesiredState(SwerveModuleStates[2]);
