@@ -61,30 +61,30 @@ public final class Constants {
         public static final double kBack_left_driveAbsoluteEncoderOffsetRad = -1.252;
         
         // Front right module
-        public static final int frontRightdrive_id = 6;
-        public static final int frontRightTurning_id = 5;
-        public static final boolean frontRightTurningEncoderReversed = true;
-        public static final boolean frontRightdriveAbsoluteEncoderReversed = false;
-        public static final int frontRightdriveAbsoluteEncoderPort = 1;
-        public static final boolean frontRightdriveEncoderReversed = false;
-        public static final double frontRightdriveAbsoluteEncoderOffsetRad = -1.816;
+        public static final int front_right_drive_id = 6;
+        public static final int front_right_turning_id = 5;
+        public static final boolean front_right_turning_encoder_reversed = true;
+        public static final boolean front_right_drive_absolute_encoder_reversed = false;
+        public static final int front_right_drive_absolute_encoder_port = 1;
+        public static final boolean front_right_drive_encoder_reversed = false;
+        public static final double front_right_drive_absolute_encoder_off_set_rad = -1.816;
         
         // Back right module
-        public static final int kBackRightdrive_id = 4;
-        public static final int kBackRightTurning_id = 3;
-        public static final boolean kBackRightTurningEncoderReversed = true;
-        public static final boolean kBackRightdriveEncoderReversed = false;
-        public static final int kBackRightdriveAbsoluteEncoderPort = 3;
-        public static final boolean kBackRightdriveAbsoluteEncoderReversed = false;
-        public static final double kBackRightdriveAbsoluteEncoderOffsetRad = -4.811;
+        public static final int back_right_drive_id = 4;
+        public static final int back_right_turning_id = 3;
+        public static final boolean back_right_turning_encoder_reversed = true;
+        public static final boolean back_right_drive_encoder_reversed = false;
+        public static final int back_right_drive_absolute_encoder_port = 3;
+        public static final boolean back_right_drive_absolute_encoder_reversed = false;
+        public static final double back_right_drive_absolute_encoder_off_set_rad = -4.811;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
-        public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+        public static final double physical_max_speed_meters_per_second = 5;
+        public static final double physical_max_angular_speed_radians_per_second = 2 * 2 * Math.PI;
 
-        public static final double kTeledriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
-        public static final double kTeledriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
-        public static final double kTeledriveMaxAccelerationUnitsPerSecond = 3;
-        public static final double kTeledriveMaxAngularAccelerationUnitsPerSecond = 3;
+        public static final double tele_drive_max_speed_meters_per_second = physical_max_speed_meters_per_second / 4;
+        public static final double tele_drive_max_angular_speed_radians_per_second = physical_max_speed_meters_per_second / 4;
+        public static final double tele_drive_max_acceleration_units_per_second = 3;
+        public static final double tele_drive_max_angular_acceleration_units_per_second = 3;
 
         public static final double deadband = 0.05;
     }
