@@ -49,14 +49,26 @@ public final class Constants {
     public static final class DrivetrainNew {
         public static final double max_speed = 3.0; // 3 meters per second
         public static final double max_angular_speed = Math.PI; // 1/2 rotation per second
+
+        // Distance between two wheels on opposite sides
+        public static final double track_width = Units.inchesToMeters(18);
+        // Distance between right and left wheels
+        public static final double wheel_base = Units.inchesToMeters(18);
+        // Distance between front and back wheels
+
+        public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+                new Translation2d(wheel_base / 2, -track_width / 2),
+                new Translation2d(wheel_base / 2, track_width / 2),
+                new Translation2d(-wheel_base / 2, -track_width / 2),
+                new Translation2d(-wheel_base / 2, track_width / 2));
     }
 
     public static final class DrivetrainOld {
 
         // Distance between two wheels on opposite sides
-        public static final double track_width = Units.inchesToMeters(21);
+        public static final double track_width = Units.inchesToMeters(18);
         // Distance between right and left wheels
-        public static final double wheel_base = Units.inchesToMeters(25.5);
+        public static final double wheel_base = Units.inchesToMeters(18);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
                 new Translation2d(wheel_base / 2, -track_width / 2),
