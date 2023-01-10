@@ -16,11 +16,6 @@ import frc.robot.utils.swerve.SwerveModuleNew;
 
 /** Represents a swerve drive style drivetrain. */
 public class DrivetrainNew extends SubsystemBase {
-    // Locations for the swerve drive modules relative to the robot center.
-    private final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
-    private final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
-    private final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
-    private final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
 
     private final SwerveModuleNew frontLeft = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_LEFT);
     private final SwerveModuleNew frontRight = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_RIGHT);
@@ -29,12 +24,8 @@ public class DrivetrainNew extends SubsystemBase {
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    // Creating my kinematics object using the module locations
-    private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-            frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
-
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
-            kinematics,
+            Constants.DrivetrainNew.kinematics,
             gyro.getRotation2d(),
             new SwerveModulePosition[] {
                     frontLeft.getPosition(),
@@ -67,7 +58,7 @@ public class DrivetrainNew extends SubsystemBase {
      *                      field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        var SwerveModuleStates = kinematics.toSwerveModuleStates(
+        var SwerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
