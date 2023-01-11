@@ -34,7 +34,7 @@ public final class Constants {
 
     public static final class SwerveModuleNew {
         public static final double wheel_radius = Units.inchesToMeters(2);
-        public static final double encoder_resolution = 42; // From rev data sheet
+        public static final double encoder_resolution = 4096; // From rev data sheet
 
         public static final double max_angular_velocity = DrivetrainNew.max_speed;
         public static final double max_angular_acceleration = 2 * Math.PI; // radians per second squared
