@@ -13,24 +13,20 @@ import frc.robot.utils.Constants;
  */
 
 public class Arm extends SubsystemBase {
-    private CANSparkMax neo_motor = new CANSparkMax(Constants.Arm.neo_motor_port, MotorType.kBrushless); // Check if this is actually brushless later
-    private CANSparkMax neo_motor_elevator = new CANSparkMax(Constants.Arm.neo_motor_elevator_port, MotorType.kBrushless); // Check if this is actually brushless later
+    private CANSparkMax neoMotorTelescope = new CANSparkMax(Constants.Arm.neo_motor_port, MotorType.kBrushless); // Check if this is actually brushless later
+    private CANSparkMax neoMotorElevator = new CANSparkMax(Constants.Arm.neo_motor_elevator_port, MotorType.kBrushless); // Check if this is actually brushless later
 
     public Arm() {
 
     }
 
-    public void setSpeed(double speed, CANSparkMax neomotor) {
-        neomotor.set(speed);
-    }
-    
-    // getters for neos
-    public CANSparkMax getNeo_motor() {
-        return neo_motor;
+    public void setSpeedTelescope(double speed) {
+        neoMotorTelescope.set(speed);
     }
 
-    public CANSparkMax getNeo_motor_elevator() {
-        return neo_motor_elevator;
+    public void setSpeedElevator(double speed) {
+        neoMotorElevator.set(speed);
     }
+
     
 }
