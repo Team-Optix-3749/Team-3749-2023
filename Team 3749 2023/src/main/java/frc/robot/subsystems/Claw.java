@@ -31,10 +31,15 @@ public class Claw extends SubsystemBase {
         Constants.Base.speed.set(new Double(16.90));
     }
 
+
+//two motor controller groups allow us to alter the speeds between each motor (on the claw)
+// this is important because both motors have to spin opposite directions
     private MotorControllerGroup left = new MotorControllerGroup(leftSide);
     private MotorControllerGroup right = new MotorControllerGroup(rightSide);
 
-    public void clawDrive (double right_speed, double left_speed){
+
+    //now set the speed of each motor (they will be the same but inverted)
+    public void clawCommand (double right_speed, double left_speed){
         right.set(right_speed);
         left.set(left_speed);
     }
