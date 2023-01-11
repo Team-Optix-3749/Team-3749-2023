@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Aditya Samavedam
+ * @author Don Tran
  * 
  */
 public class ArmMoveUpCommand extends CommandBase {
@@ -26,8 +27,11 @@ public class ArmMoveUpCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        
-    }
+        // set motors speed to 0 just in case
+        arm.setSpeed(0, arm.getNeo_motor1());
+        arm.setSpeed(0, arm.getNeo_motor2());
+        arm.setSpeed(0, arm.getNeo_motor_elevator());
+    }  
 
     // Run every 20 ms
     @Override
