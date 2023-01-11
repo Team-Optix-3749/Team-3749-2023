@@ -20,8 +20,8 @@ public final class Constants {
     public static final class SwerveModuleOld {
         public static final double wheel_diameter = Units.inchesToMeters(4); // in meters
         // make sure that gear ratios are updated
-        public static final double drive_motor_gear_ratio = 1 / 4096;
-        public static final double turning_motor_gear_ratio = 1 / 4096;
+        public static final double drive_motor_gear_ratio = 1 / 42;
+        public static final double turning_motor_gear_ratio = 1 / 42;
         public static final double drive_encoder_rotations_to_meter = drive_motor_gear_ratio * Math.PI * wheel_diameter;
         public static final double turning_encoder_rotations_to_meter = turning_motor_gear_ratio * 2 * Math.PI;
         public static final double drive_encoder_RPM_to_MPS = drive_encoder_rotations_to_meter / 60; // in meters per
@@ -34,7 +34,7 @@ public final class Constants {
 
     public static final class SwerveModuleNew {
         public static final double wheel_radius = Units.inchesToMeters(2);
-        public static final double encoder_resolution = 4096; // From rev data sheet
+        public static final double encoder_resolution = 42; // From rev data sheet
 
         public static final double max_angular_velocity = DrivetrainNew.max_speed;
         public static final double max_angular_acceleration = 2 * Math.PI; // radians per second squared
