@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -19,6 +20,8 @@ public class AutoBalancing extends CommandBase {
 
     DrivetrainOld drivetrain = new DrivetrainOld();
 
+    double angle = drivetrain.getVerticalTilt();
+
     // Initializes the BaseCommand
     public AutoBalancing(DrivetrainOld drivetrain) {
         this.drivetrain = drivetrain;
@@ -28,16 +31,22 @@ public class AutoBalancing extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
+        drivetrain.turnToForward();
         drivetrain.stopModules();
     }
 
     // Run every 20 ms
     @Override
     public void execute() {
-        
+        angle = drivetrain.getVerticalTilt();
+        double speed =  angle / 100; // PID Would be better, but this works for now.
+        speed = Math.abs(angle) > Constants.DrivetrainOld.min_balance_angle ? speed : 0.0; // no speed if it is level
 
-        // SwerveModuleState[] states = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
-        // drivetrain.setModuleStates(states);
+        // Set chassis speed to be only forward, relative to the field.
+        ChassisSpeeds chassisSpeeds;
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds( 0, speed, 0, drivetrain.getRotation2d());
+        SwerveModuleState[] states = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+        drivetrain.setModuleStates(states);
     }
 
     // Run on command finish

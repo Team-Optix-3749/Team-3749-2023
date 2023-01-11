@@ -20,8 +20,8 @@ public final class Constants {
     public static final class SwerveModuleOld {
         public static final double wheel_diameter = Units.inchesToMeters(4); // in meters
         // make sure that gear ratios are updated
-        public static final double drive_motor_gear_ratio = 1 / 5.8462;
-        public static final double turning_motor_gear_ratio = 1 / 18.0;
+        public static final double drive_motor_gear_ratio = 1 / 42;
+        public static final double turning_motor_gear_ratio = 1 / 42;
         public static final double drive_encoder_rotations_to_meter = drive_motor_gear_ratio * Math.PI * wheel_diameter;
         public static final double turning_encoder_rotations_to_meter = turning_motor_gear_ratio * 2 * Math.PI;
         public static final double drive_encoder_RPM_to_MPS = drive_encoder_rotations_to_meter / 60; // in meters per
@@ -91,7 +91,7 @@ public final class Constants {
         public static final boolean front_left_drive_encoder_reversed = true;
         public static final int front_left_drive_absolute_encoder_port = 0;
         public static final boolean front_left_drive_absolute_encoder_reversed = false;
-        public static final double front_left_drive_absolute_encoder_offset_rad = -0.254;
+        public static final double front_left_drive_absolute_encoder_offset_rad = 0.0;
 
         // Back _left_ module
         public static final int back_left_drive_id = 5;
@@ -100,7 +100,7 @@ public final class Constants {
         public static final boolean back_left_drive_encoder_reversed = true;
         public static final int back_left_drive_absolute_encoder_port = 2;
         public static final boolean back_left_drive_absolute_encoder_reversed = false;
-        public static final double back_left_drive_absolute_encoder_offset_rad = -1.252;
+        public static final double back_left_drive_absolute_encoder_offset_rad = 0;
 
         // Front right module
         public static final int front_right_drive_id = 3;
@@ -109,7 +109,7 @@ public final class Constants {
         public static final boolean front_right_drive_absolute_encoder_reversed = false;
         public static final int front_right_drive_absolute_encoder_port = 1;
         public static final boolean front_right_drive_encoder_reversed = false;
-        public static final double front_right_drive_absolute_encoder_offset_rad = -1.816;
+        public static final double front_right_drive_absolute_encoder_offset_rad = 0;
 
         // Back right module
         public static final int back_right_drive_id = 7;
@@ -118,7 +118,7 @@ public final class Constants {
         public static final boolean back_right_drive_encoder_reversed = false;
         public static final int back_right_drive_absolute_encoder_port = 3;
         public static final boolean back_right_drive_absolute_encoder_reversed = false;
-        public static final double back_right_drive_absolute_encoder_offset_rad = -4.811;
+        public static final double back_right_drive_absolute_encoder_offset_rad = 0;
 
         public static final double physical_max_speed_meters_per_second = 5;
         public static final double physical_max_angular_speed_radians_per_second = 2 * 2 * Math.PI;
@@ -130,6 +130,8 @@ public final class Constants {
         public static final double tele_drive_max_angular_acceleration_units_per_second = 3;
 
         public static final double deadband = 0.05;
+
+        public static final double min_balance_angle = 1.75;
     }
 
     public static enum SwerveENUMS {
