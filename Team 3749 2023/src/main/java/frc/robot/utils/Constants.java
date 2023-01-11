@@ -13,8 +13,8 @@ public final class Constants {
         public static final SmartData<Double> speed = new SmartData<Double>("Base Speed", 2.54);
     }
     public static final class Lights {
-        public static final int led_length = 20;
-        public static final int led_port = 0;
+        public static final int led_length = 20; //change this value
+        public static final int led_port = 0; //change this value
         public static final int[] light1 = {0, 255, 0};
         public static final int[] light2 = {255, 255, 255};
     }
