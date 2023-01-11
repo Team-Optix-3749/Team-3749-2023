@@ -71,6 +71,7 @@ public class DrivetrainOld extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
     }
 
+    
     // public Pose2d getPose() {
     // return odometer.getPoseMeters();
     // }
@@ -81,6 +82,9 @@ public class DrivetrainOld extends SubsystemBase {
 
     // monitor robot heading value and display location and heading in
     // smartdashboard
+
+
+
     @Override
     public void periodic() {
         // odometer.update(getRotation2d(), front_left.getState(),
@@ -109,11 +113,13 @@ public class DrivetrainOld extends SubsystemBase {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
                 Constants.DrivetrainOld.physical_max_speed_meters_per_second);
-        // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates,
-        // Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+
+        Constants.DrivetrainOld.driveKinematics.desaturateWheelSpeeds(desiredStates,
+            Constants.DrivetrainOld.physical_max_speed_meters_per_second);
         front_left.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         back_left.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
     }
+
 }
