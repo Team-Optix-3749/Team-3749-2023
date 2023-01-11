@@ -19,6 +19,8 @@ public class ClawCommand extends CommandBase {
     Base base = new Base();
 
     // Initializes the ClawCommand
+
+    //THIS NEEDS TO BE CODED!!!
     public ClawCommand(Base base) {
         this.base = base;
         addRequirements(base);
