@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -83,6 +84,17 @@ public class DrivetrainOld extends SubsystemBase {
     // monitor robot heading value and display location and heading in
     // smartdashboard
 
+    public void turnToForward(){
+        double heading = getHeading();
+        double speed =  heading / 360; // PID Would be better, but this works for now.
+
+        // Set chassis speed to be only forward, relative to the field.
+        ChassisSpeeds chassisSpeeds;
+        // SPEED DEF NEEDS TO BE DIFFERENT
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds( 0, 0, speed, getRotation2d());
+        SwerveModuleState[] states = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+        setModuleStates(states);
+    }
 
 
     @Override

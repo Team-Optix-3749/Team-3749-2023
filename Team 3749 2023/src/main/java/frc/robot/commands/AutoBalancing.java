@@ -31,6 +31,7 @@ public class AutoBalancing extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
+        drivetrain.turnToForward();
         drivetrain.stopModules();
     }
 
