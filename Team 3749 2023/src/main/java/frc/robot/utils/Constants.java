@@ -25,6 +25,7 @@ public final class Constants {
         public static final int neo_motor_elevator_port = 0; // Change this value later
         public static final int neo_motor1_speed = 1; // Change this value later
         public static final int neo_motor2_speed = 1; // Change this value later
+        public static final int neo_motor_speed = 1; // this is to fix an error in arm mvoe down
         public static final int neo_motor_elevator_speed = 1; // Change this value later
     }
 }
