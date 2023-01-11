@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Aditya Samavedam
  * 
  */
-public class ArmCommand extends CommandBase {
+public class ArmMoveUpCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     Arm arm = new Arm();
 
     // Initializes the ArmCommand
-    public ArmCommand(Arm arm) {
+    public ArmMoveUpCommand(Arm arm) {
         this.arm = arm;
         addRequirements(arm);
     }
@@ -33,6 +33,7 @@ public class ArmCommand extends CommandBase {
     @Override
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
+        arm.setSpeed(Constants.Arm.neo_motor_speed, arm.getNeo_motor1());
     }
 
     // Run on command finish
