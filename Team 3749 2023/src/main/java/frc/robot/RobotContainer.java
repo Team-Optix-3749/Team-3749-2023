@@ -10,19 +10,28 @@ import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
 public class RobotContainer {
+
+  // Controllers
+  private final Xbox pilot = new Xbox(0);
+  private final Xbox operator = new Xbox(1);
+
+  private final POV pilotPOV = new POV(pilot);
+  private final POV operatorPOV = new POV(operator);
+
+  // Subsystems
+
+  // Commands
+
   public RobotContainer() {
-    configureBindings();
+    configureButtonBindings();
+    configureDefaultCommands();
   }
 
-  private void configureBindings() {
-    final Xbox pilot = new Xbox(0);
-    final Xbox operator = new Xbox(1);
+  private void configureDefaultCommands() {}
 
-    final POV pilotPOV = new POV(pilot);
-    final POV operatorPOV = new POV(operator);
-  }
+  private void configureButtonBindings() {}
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
-  }
+  }  
 }
