@@ -20,6 +20,9 @@ public class Arm extends SubsystemBase {
 
     }
 
+    public void setSpeed(double speed, CANSparkMax neomotor) {
+        neomotor.set(speed);
+    }
     
     
 }
