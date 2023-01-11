@@ -102,6 +102,10 @@ public class DrivetrainOld extends SubsystemBase {
         backRight.stop();
     }
 
+    public double getVerticalTilt(){
+        return gyro.getYaw(); // Yaw may not be the correct angle
+    }
+
     /***
      * 
      * @param desiredStates a set of 4 swerve module states that will all be
