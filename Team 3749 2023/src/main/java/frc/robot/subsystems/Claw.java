@@ -31,6 +31,14 @@ public class Claw extends SubsystemBase {
         Constants.Base.speed.set(new Double(16.90));
     }
 
+    private MotorControllerGroup left = new MotorControllerGroup(leftSide);
+    private MotorControllerGroup right = new MotorControllerGroup(rightSide);
+
+    public void clawDrive (double right_speed, double left_speed){
+        right.set(right_speed);
+        left.set(left_speed);
+    }
+
     /***
      * Sets the speed. Value is between -1.0 and 1.0
      * 
