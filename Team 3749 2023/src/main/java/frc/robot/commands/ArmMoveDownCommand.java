@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Aditya Samavedam
+ * @author Don Tran
  * 
  */
 public class ArmMoveDownCommand extends CommandBase {
@@ -26,7 +27,9 @@ public class ArmMoveDownCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        
+        // set motors speed to 0 just in case
+        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_stop);
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
     }
 
     // Run every 20 ms
@@ -34,12 +37,13 @@ public class ArmMoveDownCommand extends CommandBase {
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
         //neo motor speed isn't a constant yet
-        arm.setSpeed(Constants.Arm.neo_motor_speed*-1, arm.getNeo_motor());
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed*-1);
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
     }
 
     // Returns true when the command should end

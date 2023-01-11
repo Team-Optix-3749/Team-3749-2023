@@ -28,20 +28,21 @@ public class ArmMoveUpCommand extends CommandBase {
     @Override
     public void initialize() {
         // set motors speed to 0 just in case
-        arm.setSpeedTelescope(0);
-        arm.setSpeedElevator(0);
+        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_stop);
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
     }  
 
     // Run every 20 ms
     @Override
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
-        arm.setSpeedElevator(Constants.Arm.neo_motor_speed);
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
     }
 
     // Returns true when the command should end
