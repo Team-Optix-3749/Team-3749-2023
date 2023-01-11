@@ -28,8 +28,7 @@ public class ArmMoveUpCommand extends CommandBase {
     @Override
     public void initialize() {
         // set motors speed to 0 just in case
-        arm.setSpeed(0, arm.getNeo_motor1());
-        arm.setSpeed(0, arm.getNeo_motor2());
+        arm.setSpeed(0, arm.getNeo_motor());
         arm.setSpeed(0, arm.getNeo_motor_elevator());
     }  
 
@@ -37,7 +36,7 @@ public class ArmMoveUpCommand extends CommandBase {
     @Override
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
-        arm.setSpeed(Constants.Arm.neo_motor_speed, arm.getNeo_motor1());
+        arm.setSpeed(Constants.Arm.neo_motor_speed, arm.getNeo_motor());
     }
 
     // Run on command finish
