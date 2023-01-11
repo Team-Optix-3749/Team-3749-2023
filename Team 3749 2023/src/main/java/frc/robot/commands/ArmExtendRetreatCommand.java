@@ -1,4 +1,12 @@
 package frc.robot.commands;
-public class ArmExtendRetreatCommand {
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+/***
+ * 
+ * @author Don Tran
+ */
+
+public class ArmExtendRetreatCommand extends CommandBase{
     
 }
