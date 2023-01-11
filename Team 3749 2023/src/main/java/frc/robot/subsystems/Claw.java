@@ -32,7 +32,7 @@ public class Claw extends SubsystemBase {
     }
 
 
-//two motor controller groups allow us to alter the speeds between each motor (on the claw)
+// two motor controller groups allow us to alter the speeds between each motor (on the claw)
 // this is important because both motors have to spin opposite directions
     private MotorControllerGroup left = new MotorControllerGroup(leftSide);
     private MotorControllerGroup right = new MotorControllerGroup(rightSide);
