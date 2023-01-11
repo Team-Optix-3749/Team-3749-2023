@@ -18,4 +18,9 @@ public final class Constants {
         public static final int[] light1 = {0, 255, 0};
         public static final int[] light2 = {255, 255, 255};
     }
+
+    public static final class Arm {
+        public static final int neo_motor1_port = 0; // Change this value later
+        public static final int neo_motor2_port = 0; // Change this value later
+    }
 }
