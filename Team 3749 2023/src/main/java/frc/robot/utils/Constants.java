@@ -54,6 +54,8 @@ public final class Constants {
         public static final double max_speed = 3.0; // 3 meters per second
         public static final double max_angular_speed = Math.PI; // 1/2 rotation per second
 
+        public static final boolean gyro_reversed = false;
+
         // Distance between two wheels on opposite sides
         public static final double track_width = Units.inchesToMeters(18);
         // Distance between right and left wheels
