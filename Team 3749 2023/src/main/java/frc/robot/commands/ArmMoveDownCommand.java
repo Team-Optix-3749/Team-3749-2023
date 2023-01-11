@@ -33,7 +33,7 @@ public class ArmMoveDownCommand extends CommandBase {
     @Override
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
-        arm.setSpeed(Constants.Arm.neo_motor_speed*-1, arm.getNeo_motor1());
+        arm.setSpeed((Constants.Arm.neo_motor_speed * -1), arm.getNeo_motor1());
     }
 
     // Run on command finish
