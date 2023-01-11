@@ -16,12 +16,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ClawCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    Base base = new Base();
+    Claw claw = new Claw();
 
     // Initializes the ClawCommand
-    public ClawCommand(Base base) {
-        this.base = base;
-        addRequirements(base);
+    public ClawCommand(Claw claw) {
+        this.claw = claw;
+        addRequirements(claw);
     }
 
     // Run on command init
@@ -32,7 +32,7 @@ public class ClawCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        base.set(Constants.Base.speed.get().doubleValue()); //set speed
+        // claw.set(Constants.claw.speed.get().doubleValue()); //set speed
     }
 
     // Run on command finish
