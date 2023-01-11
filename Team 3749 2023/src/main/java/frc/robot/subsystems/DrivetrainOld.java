@@ -84,7 +84,7 @@ public class DrivetrainOld extends SubsystemBase {
     // monitor robot heading value and display location and heading in
     // smartdashboard
 
-    public void turnToForward(){
+    public void turnToZeroHeading(){
         double heading = getHeading();
         double speed =  heading / 360; // PID Would be better, but this works for now.
 

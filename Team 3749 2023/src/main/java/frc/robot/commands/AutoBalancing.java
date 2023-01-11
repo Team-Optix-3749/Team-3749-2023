@@ -31,22 +31,30 @@ public class AutoBalancing extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        drivetrain.turnToForward();
         drivetrain.stopModules();
     }
 
     // Run every 20 ms
     @Override
     public void execute() {
-        angle = drivetrain.getVerticalTilt();
-        double speed =  angle / 100; // PID Would be better, but this works for now.
-        speed = Math.abs(angle) > Constants.DrivetrainOld.min_balance_angle ? speed : 0.0; // no speed if it is level
 
-        // Set chassis speed to be only forward, relative to the field.
-        ChassisSpeeds chassisSpeeds;
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds( 0, speed, 0, drivetrain.getRotation2d());
-        SwerveModuleState[] states = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
-        drivetrain.setModuleStates(states);
+        if (Math.abs(drivetrain.getHeading())>1){
+            drivetrain.turnToZeroHeading();
+
+        }
+        else{
+            angle = drivetrain.getVerticalTilt();
+            double speed =  angle / 100; // PID Would be better, but this works for now.
+            speed = Math.abs(angle) > Constants.DrivetrainOld.min_balance_angle ? speed : 0.0; // no speed if it is level
+    
+            // Set chassis speed to be only forward, relative to the field.
+            ChassisSpeeds chassisSpeeds;
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds( 0, speed, 0, drivetrain.getRotation2d());
+            SwerveModuleState[] states = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+            drivetrain.setModuleStates(states);
+        }
+
+
     }
 
     // Run on command finish
