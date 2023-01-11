@@ -15,5 +15,7 @@ public final class Constants {
     public static final class Lights {
         public static final int led_length = 20;
         public static final int led_port = 0;
+        public static final int[] light1 = {0, 255, 0};
+        public static final int[] light2 = {255, 255, 255};
     }
 }

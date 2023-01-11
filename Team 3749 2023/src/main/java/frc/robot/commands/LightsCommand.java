@@ -41,10 +41,10 @@ public class LightsCommand extends CommandBase {
         // Checks if in the first 1/50 of a second to change color
         if (timer.get() % 1000 <= 20) {
             if (settings) {
-                lights.setRGBOfStrip(255, 255, 255, 0, 255, 0);
+                lights.setRGBOfStrip(Constants.Lights.light1, Constants.Lights.light2);
                 settings = false;
             } else {
-                lights.setRGBOfStrip(0, 255, 0, 255, 255, 255);
+                lights.setRGBOfStrip(Constants.Lights.light2, Constants.Lights.light1);
                 settings = true;
             }
         }
