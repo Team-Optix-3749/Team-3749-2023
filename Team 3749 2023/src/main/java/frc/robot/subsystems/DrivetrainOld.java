@@ -34,16 +34,16 @@ public class DrivetrainOld extends SubsystemBase {
     // gyro for to measure current angles and tilt
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    // private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
-    // Constants.Drivetrain.driveKinematics,
-    // new Rotation2d(0),
-    // new SwerveModulePosition[] {
-    // front_left.getState(),
-    // frontRight.getState(),
-    // back_left.getPosition(),
-    // backRight.getPosition()
-    // }
-    // );
+    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
+    Constants.DrivetrainOld.driveKinematics,
+    new Rotation2d(0),
+    new SwerveModulePosition[] {
+    front_left.getPosition(),
+    frontRight.getPosition(),
+    back_left.getPosition(),
+    backRight.getPosition()
+    }
+    );
 
     public DrivetrainOld() {
         // reset the gyro, but wait 1 second so that it can turn on and configure
@@ -71,24 +71,24 @@ public class DrivetrainOld extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
     }
 
-    // public Pose2d getPose() {
-    // return odometer.getPoseMeters();
-    // }
+    public Pose2d getPose() {
+    return odometer.getPoseMeters();
+    }
 
     // public void resetOdometry(Pose2d pose) {
     // odometer.resetPosition(pose, getRotation2d());
     // }
 
-    // monitor robot heading value and display location and heading in
-    // smartdashboard
-    @Override
-    public void periodic() {
-        // odometer.update(getRotation2d(), front_left.getState(),
-        // frontRight.getState(), back_left.getState(),backRight.getState());
-        SmartDashboard.putNumber("Robot Heading", getHeading());
-        // SmartDashboard.putString("Robot Location",
-        // getPose().getTranslation().toString());
-    }
+    // // monitor robot heading value and display location and heading in
+    // // smartdashboard
+    // @Override
+    // public void periodic() {
+    //     odometer.update(getRotation2d(), front_left.getState(),
+    //     frontRight.getState(), back_left.getState(),backRight.getState());
+    //     SmartDashboard.putNumber("Robot Heading", getHeading());
+    //     SmartDashboard.putString("Robot Location",
+    //     getPose().getTranslation().toString());
+    // }
 
     // stops swerve
     public void stopModules() {
