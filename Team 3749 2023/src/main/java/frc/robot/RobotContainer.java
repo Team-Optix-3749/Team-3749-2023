@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ArmExtendRetractCommand;
 import frc.robot.commands.ArmMoveDownCommand;
 import frc.robot.commands.ArmMoveUpCommand;
-
+import frc.robot.commands.ArmExtendRetractCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
@@ -22,7 +22,7 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final ArmMoveUpCommand armMoveUpCommand = new ArmMoveUpCommand(arm);
   private final ArmMoveDownCommand armMoveDownCommand = new ArmMoveDownCommand(arm);
-  private final ArmExtendRetractCommand armMoveExtendRetreatCommand = new ArmExtendRetractCommand(arm);
+  private final ArmExtendRetractCommand armExtendRetractCommand = new ArmExtendRetractCommand(arm);
   
   private final Xbox pilot = new Xbox(0);
   private final Xbox operator = new Xbox(1);
