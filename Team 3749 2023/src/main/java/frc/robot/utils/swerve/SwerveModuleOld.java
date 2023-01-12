@@ -58,8 +58,7 @@ public class SwerveModuleOld {
 
         // Uses enums to set the variables to proper constants. Done here instead of in
         // parameters for organization in the Drivetrain subsystem
-        switch (modulePosition) {
-            case FRONT_LEFT:
+        if (modulePosition == Constants.SwerveENUMS.FRONT_LEFT) {
                 drive_motor_id = Constants.DrivetrainOld.front_left_drive_id;
                 turning_motor_id = Constants.DrivetrainOld.front_left_turning_id;
                 drive_motor_reversed = Constants.DrivetrainOld.front_left_drive_encoder_reversed;
@@ -67,7 +66,8 @@ public class SwerveModuleOld {
                 absolute_encoder_id = Constants.DrivetrainOld.front_left_drive_absolute_encoder_port;
                 absolute_encoder_offset = Constants.DrivetrainOld.front_left_drive_absolute_encoder_offset_rad;
                 absolute_encoder_reversed = Constants.DrivetrainOld.front_left_drive_absolute_encoder_reversed;
-            case FRONT_RIGHT:
+        }
+        else if (modulePosition == Constants.SwerveENUMS.FRONT_RIGHT) {
                 drive_motor_id = Constants.DrivetrainOld.front_right_drive_id;
                 turning_motor_id = Constants.DrivetrainOld.front_right_turning_id;
                 drive_motor_reversed = Constants.DrivetrainOld.front_right_drive_encoder_reversed;
@@ -75,7 +75,8 @@ public class SwerveModuleOld {
                 absolute_encoder_id = Constants.DrivetrainOld.front_right_drive_absolute_encoder_port;
                 absolute_encoder_offset = Constants.DrivetrainOld.front_right_drive_absolute_encoder_offset_rad;
                 absolute_encoder_reversed = Constants.DrivetrainOld.front_right_drive_absolute_encoder_reversed;
-            case BACK_LEFT:
+        }
+        else if (modulePosition == Constants.SwerveENUMS.BACK_LEFT) {
                 drive_motor_id = Constants.DrivetrainOld.back_left_drive_id;
                 turning_motor_id = Constants.DrivetrainOld.back_left_turning_id;
                 drive_motor_reversed = Constants.DrivetrainOld.back_left_drive_encoder_reversed;
@@ -83,7 +84,8 @@ public class SwerveModuleOld {
                 absolute_encoder_id = Constants.DrivetrainOld.back_left_drive_absolute_encoder_port;
                 absolute_encoder_offset = Constants.DrivetrainOld.back_left_drive_absolute_encoder_offset_rad;
                 absolute_encoder_reversed = Constants.DrivetrainOld.back_left_drive_absolute_encoder_reversed;
-            case BACK_RIGHT:
+        }
+        else if (modulePosition == Constants.SwerveENUMS.BACK_RIGHT){
                 drive_motor_id = Constants.DrivetrainOld.back_right_drive_id;
                 turning_motor_id = Constants.DrivetrainOld.back_right_turning_id;
                 drive_motor_reversed = Constants.DrivetrainOld.back_right_drive_encoder_reversed;
@@ -91,7 +93,12 @@ public class SwerveModuleOld {
                 absolute_encoder_id = Constants.DrivetrainOld.back_right_drive_absolute_encoder_port;
                 absolute_encoder_offset = Constants.DrivetrainOld.back_right_drive_absolute_encoder_offset_rad;
                 absolute_encoder_reversed = Constants.DrivetrainOld.back_right_drive_absolute_encoder_reversed;
-        }
+    }
+    else{
+            System.out.println("end end sekjahr");
+        
+    }
+        
 
         this.absoluteEncoderOffsetRad = absolute_encoder_offset;
         this.absoluteEncoderReversed = absolute_encoder_reversed;

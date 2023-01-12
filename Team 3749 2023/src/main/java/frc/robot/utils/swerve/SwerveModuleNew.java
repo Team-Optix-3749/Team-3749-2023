@@ -140,7 +140,7 @@ public class SwerveModuleNew {
      *
      * @param desiredState Desired state with speed and angle.
      */
-    public void setDesiredState(SwerveModuleState desiredState) {
+    public double[] setDesiredState(SwerveModuleState desiredState) {
         // Optimize the reference state to avoid spinning further than 90 degrees
         SwerveModuleState state = SwerveModuleState.optimize(desiredState,
                 new Rotation2d(turningEncoder.getPosition()));
@@ -150,8 +150,6 @@ public class SwerveModuleNew {
 
         final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
-        SmartDashboard.putNumber("drive feed forward", driveFeedforward);
-        SmartDashboard.putNumber("drive output", driveOutput);
 
         // Calculate the turning motor output from the turning PID controller.
         final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(),
@@ -159,10 +157,10 @@ public class SwerveModuleNew {
 
         final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
-        SmartDashboard.putNumber("turn feed forward", turnFeedforward);
-        SmartDashboard.putNumber("turn output", turnOutput);
         
         setVoltage(driveOutput*0.00001 + driveFeedforward, turnOutput*0.00001 + turnFeedforward);
+
+        return new double[] {driveFeedforward,driveOutput,turnFeedforward,turnOutput};
     }
 
     public void setVoltage(double drive_voltage, double turn_voltage) {

@@ -100,10 +100,29 @@ public class DrivetrainNew extends SubsystemBase {
             System.out.println(swerveModuleStates[i]);
         }
 
-        frontLeft.setDesiredState(swerveModuleStates[0]);
         frontRight.setDesiredState(swerveModuleStates[1]);
         backLeft.setDesiredState(swerveModuleStates[2]);
         backRight.setDesiredState(swerveModuleStates[3]);
+        SmartDashboard.putNumber("drive feed forward 0",frontLeft.setDesiredState(swerveModuleStates[0])[0]);
+        SmartDashboard.putNumber("drive feed forward 1",frontLeft.setDesiredState(swerveModuleStates[1])[0]);
+        SmartDashboard.putNumber("drive feed forward 2",frontLeft.setDesiredState(swerveModuleStates[2])[0]);
+        SmartDashboard.putNumber("drive feed forward 3",frontLeft.setDesiredState(swerveModuleStates[3])[0]);
+        SmartDashboard.putNumber("drive output 0",frontLeft.setDesiredState(swerveModuleStates[0])[1]);
+        SmartDashboard.putNumber("drive output 1",frontLeft.setDesiredState(swerveModuleStates[1])[1]);
+        SmartDashboard.putNumber("drive output 2",frontLeft.setDesiredState(swerveModuleStates[2])[1]);
+        SmartDashboard.putNumber("drive output 3",frontLeft.setDesiredState(swerveModuleStates[3])[1]);
+        SmartDashboard.putNumber("turn feed forward 0",frontLeft.setDesiredState(swerveModuleStates[0])[2]);
+        SmartDashboard.putNumber("turn feed forward 1",frontLeft.setDesiredState(swerveModuleStates[1])[2]);
+        SmartDashboard.putNumber("turn feed forward 2",frontLeft.setDesiredState(swerveModuleStates[2])[2]);
+        SmartDashboard.putNumber("turn feed forward 3",frontLeft.setDesiredState(swerveModuleStates[3])[2]);
+        SmartDashboard.putNumber("turn output 0",frontLeft.setDesiredState(swerveModuleStates[0])[3]);
+        SmartDashboard.putNumber("turn output 1",frontLeft.setDesiredState(swerveModuleStates[1])[3]);
+        SmartDashboard.putNumber("turn output 2",frontLeft.setDesiredState(swerveModuleStates[2])[3]);
+        SmartDashboard.putNumber("turn output 3",frontLeft.setDesiredState(swerveModuleStates[3])[3]);
+
+
+
+
     }
 
     /**
