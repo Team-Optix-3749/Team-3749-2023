@@ -99,7 +99,7 @@ public class DrivetrainNew extends SubsystemBase {
             System.out.println(swerveModuleStates[i]);
         }
 
-        logModuleStates(swerveModuleStates);
+        // logModuleStates(swerveModuleStates);
 
         double[][] states = new double[4][4];
         states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
@@ -111,7 +111,7 @@ public class DrivetrainNew extends SubsystemBase {
         String[] moduleNames = {"FR","FL","BR","BL"};
         String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
         for (int modIndex = 0; modIndex <4; modIndex++){
-            for (int valIndex = 0; valIndex <4; valIndex++){
+            for (int valIndex = 0; valIndex <6; valIndex++){
 
             SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
             }

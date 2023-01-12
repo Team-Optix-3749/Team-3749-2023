@@ -57,9 +57,9 @@ public final class Constants {
         public static final boolean gyro_reversed = false;
 
         // Distance between two wheels on opposite sides
-        public static final double track_width = Units.inchesToMeters(18);
+        public static final double track_width = Units.inchesToMeters(17.5);
         // Distance between right and left wheels
-        public static final double wheel_base = Units.inchesToMeters(18);
+        public static final double wheel_base = Units.inchesToMeters(17.5);
         // Distance between front and back wheels
 
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(

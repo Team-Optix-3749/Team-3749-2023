@@ -75,7 +75,7 @@ public class SwerveTeleopNew extends CommandBase {
                 SmartDashboard.putNumber("rotationSpeed", rot);
 
                 // 4. Send processed inputs to the drive() function
-                swerveSubsystem.drive(xSpeed, ySpeed, rot, fieldOrientedFunction.getAsBoolean());
+                swerveSubsystem.drive(xSpeed, ySpeed, rot, false);
         }
 
         // Run on command finish
