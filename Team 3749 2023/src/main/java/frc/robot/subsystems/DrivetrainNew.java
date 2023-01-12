@@ -88,7 +88,6 @@ public class DrivetrainNew extends SubsystemBase {
      *                      field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -99,69 +98,30 @@ public class DrivetrainNew extends SubsystemBase {
         for (int i = 0; i < swerveModuleStates.length; i++) {
             System.out.println(swerveModuleStates[i]);
         }
-        
-        // logModuleStates(swerveModuleStates);
-        logModuleStatesFast(swerveModuleStates);
-    }
 
-    /**
-     * Method to log all FF and Output values of a SwerveModuleState[] efficiently
-     *
-     * @param swerveModuleStates
-     */
-    public void logModuleStatesFast(SwerveModuleState[] swerveModuleStates) {
+        logModuleStates(swerveModuleStates);
+
         double[][] states = new double[4][4];
-        String[] keys = {"Drive FF ", "Drive Output ", "Turn FF ", "Turn Output "};
-
         states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
         states[1]=frontLeft.setDesiredState(swerveModuleStates[1]);
         states[2]=backRight.setDesiredState(swerveModuleStates[2]);
         states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
+        
+        // Smart dashboard logging
+        String[] moduleNames = {"FR","FL","BR","BL"};
+        String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
+        for (int modIndex = 0; modIndex <4; modIndex++){
+            for (int valIndex = 0; valIndex <4; valIndex++){
 
-        for (int i = 0; i < states.length; i++) {   
-            for (int n = 0; n < states[i].length; n++) {
-                SmartDashboard.putNumber(keys[i] + n, states[n][i]);
+            SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
             }
         }
+        SmartDashboard.putNumber("YAW",gyro.getYaw());
+        SmartDashboard.putNumber("PITCH",gyro.getPitch());
+        SmartDashboard.putNumber("ROLL",gyro.getRoll());
 
-        /*
-         * Tested code & output
-         * 
-         *  public static void main(String[] args) {
-         *      double[][] states = {{1,2,3,4},{5,6,7,8},{9,10,12,13},{14,15,16,17}};
-         *      String[] keys = {"Drive FF ", "Drive Output ", "Turn FF ", "Turn Output "};
-         *
-         *      for (int i = 0; i < states.length; i++) {   
-         *          for (int n = 0; n < states[i].length; n++) {
-         *              System.out.println(keys[i] + (n+1) + ":" + states[n][i]);  
-         *          }
-         *      }
-         * 
-         *  Output:
-         *  Drive FF 1:1.0
-         *  Drive FF 2:5.0
-         *  Drive FF 3:9.0
-         *  Drive FF 4:14.0
-         *  Drive Output 1:2.0
-         *  Drive Output 2:6.0
-         *  Drive Output 3:10.0
-         *  Drive Output 4:15.0
-         *  Turn FF 1:3.0
-         *  Turn FF 2:7.0
-         *  Turn FF 3:12.0
-         *  Turn FF 4:16.0
-         *  Turn Output 1:4.0
-         *  Turn Output 2:8.0
-         *  Turn Output 3:13.0
-         *  Turn Output 4:17.0
-        */
     }
 
-    /**
-     * Lame method to log all FF and Output values of a SwerveModuleState[] efficiently
-     *
-     * @param swerveModuleStates
-     */
     public void logModuleStates(SwerveModuleState[] swerveModuleStates) {
         double[][] states = new double[4][4];
         states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
@@ -184,7 +144,6 @@ public class DrivetrainNew extends SubsystemBase {
         SmartDashboard.putNumber("turn output 1",states[1][3]);
         SmartDashboard.putNumber("turn output 2",states[2][3]);
         SmartDashboard.putNumber("turn output 3",states[3][3]);
-
     }
 
     /**
