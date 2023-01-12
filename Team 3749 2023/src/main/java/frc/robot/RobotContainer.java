@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.ArmExtendRetractCommand;
 import frc.robot.commands.ArmMoveDownCommand;
 import frc.robot.commands.ArmMoveUpCommand;
 import frc.robot.commands.ArmExtendRetractCommand;
@@ -40,6 +43,9 @@ public class RobotContainer {
 
   private void configureButtonBindings()
   {
+    POV pov = new POV(operator);
+    POVButton upButton = pov.up();
+    POVButton downButton = pov.down();
     
   }
 
