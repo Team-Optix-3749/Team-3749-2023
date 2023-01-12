@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -89,13 +90,40 @@ public class DrivetrainOld extends SubsystemBase {
     //     SmartDashboard.putString("Robot Location",
     //     getPose().getTranslation().toString());
     // }
+    // monitor robot heading value and display location and heading in
+    // smartdashboard
 
+    public void turnToZeroHeading(){
+        double heading = getHeading();
+        double speed =  heading / 360; // PID Would be better, but this works for now.
+
+        // Set chassis speed to be only forward, relative to the field.
+        ChassisSpeeds chassisSpeeds;
+        // SPEED DEF NEEDS TO BE DIFFERENT
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds( 0, 0, speed, getRotation2d());
+        SwerveModuleState[] states = Constants.DrivetrainOld.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+        setModuleStates(states);
+    }
+
+
+    @Override
+    public void periodic() {
+        // odometer.update(getRotation2d(), front_left.getState(),
+        // frontRight.getState(), back_left.getState(),backRight.getState());
+        SmartDashboard.putNumber("Robot Heading", getHeading());
+        // SmartDashboard.putString("Robot Location",
+        // getPose().getTranslation().toString());
+    }
     // stops swerve
     public void stopModules() {
         front_left.stop();
         frontRight.stop();
         back_left.stop();
         backRight.stop();
+    }
+
+    public double getVerticalTilt(){
+        return gyro.getYaw(); // Yaw may not be the correct angle
     }
 
     /***
@@ -109,11 +137,13 @@ public class DrivetrainOld extends SubsystemBase {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
                 Constants.DrivetrainOld.physical_max_speed_meters_per_second);
-        // SwerveModuleKinematics.normalizeWheelSpeeds(desiredStates,
-        // Constants.Drivetrain.kPhysicalMaxSpeedMetersPerSecond);
+
+        Constants.DrivetrainOld.driveKinematics.desaturateWheelSpeeds(desiredStates,
+            Constants.DrivetrainOld.physical_max_speed_meters_per_second);
         front_left.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         back_left.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
     }
+
 }

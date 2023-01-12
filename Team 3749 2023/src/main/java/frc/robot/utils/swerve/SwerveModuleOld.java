@@ -155,7 +155,9 @@ public class SwerveModuleOld {
         // drive is zero while the turrning motor is rotated the amount of degrees it
         // needs (wheel's angle).
         driveEncoder.setPosition(0);
-        turningEncoder.setPosition(getAbsoluteEncoderRad());
+        // turningEncoder.setPosition(getAbsoluteEncoderRad());
+        turningEncoder.setPosition(0);
+
     }
 
     // returns an interatable object that contains the information of swerves

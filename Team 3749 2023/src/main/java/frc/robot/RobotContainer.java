@@ -6,9 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.SwerveTeleopNew;
-import frc.robot.commands.SwerveTeleopOld;
-import frc.robot.subsystems.DrivetrainOld;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
@@ -35,11 +34,12 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         drivetrain.setDefaultCommand(new SwerveTeleopOld(drivetrain, pilot::getLeftY, pilot::getLeftY, pilot::getRightX,
                 pilot.leftStick()::getAsBoolean));
-        // drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftY,
-        // pilot::getLeftY, pilot::getRightX , pilot.leftStick()::getAsBoolean));
     }
 
     private void configureButtonBindings() {
+        // hold A for autobalance on charging station
+        pilot.a().whileTrue(new AutoBalancing(drivetrain));
+
     }
 
     public Command getAutonomousCommand() {
