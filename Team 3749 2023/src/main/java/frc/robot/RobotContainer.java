@@ -33,7 +33,7 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         // drivetrain.setDefaultCommand(new SwerveTeleopOld(drivetrain, pilot::getLeftY, pilot::getLeftY, pilot::getRightX,
         //         pilot.leftStick()::getAsBoolean));
-        drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftY, pilot::getLeftY, pilot::getRightX,
+        drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
                 pilot.leftStick()::getAsBoolean));
     }
 
