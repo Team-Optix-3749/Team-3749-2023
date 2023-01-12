@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,18 +21,22 @@ public class Claw extends SubsystemBase {
 
     private MotorControllerGroup base = new MotorControllerGroup(neo, falcon);
 
-    CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless); 
+    CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless);
     // right side of the claw (the motor)
-    
+
     CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless);
     // left side of the claw (the motor)
 
     // Initializes the base subsystem
     public Claw() {
         neo.setInverted(true); // invert the motor to not break it
-        falcon.setNeutralMode(NeutralMode.Brake); // set falcon to be braked when not active
+        neo.setIdleMode(IdleMode.kBrake); // set neo to be braked when not active
 
-        Constants.Base.speed.set(new Double(16.90));
+        // set falcon to be braked when not active
+        // equivalent to neo.setIdleMode(IdleMode.kBrake)
+        falcon.setNeutralMode(NeutralMode.Brake);
+
+        // not sure what this is: Constants.Base.speed.set(new Double(16.90));
     }
 
     // two motor controller groups allow us to alter the speeds between each motor
