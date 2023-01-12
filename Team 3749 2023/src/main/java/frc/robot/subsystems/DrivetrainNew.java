@@ -88,7 +88,6 @@ public class DrivetrainNew extends SubsystemBase {
      *                      field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -105,7 +104,6 @@ public class DrivetrainNew extends SubsystemBase {
         states[2]=backRight.setDesiredState(swerveModuleStates[2]);
         states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
         
-
         // Smart dashboard logging
         String[] moduleNames = {"FR","FL","BR","BL"};
         String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output"};
@@ -114,11 +112,10 @@ public class DrivetrainNew extends SubsystemBase {
 
             SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
             }
-
         }
-
-
-
+        SmartDashboard.putNumber("YAW",gyro.getYaw());
+        SmartDashboard.putNumber("PITCH",gyro.getPitch());
+        SmartDashboard.putNumber("ROLL",gyro.getRoll());
 
     }
 
