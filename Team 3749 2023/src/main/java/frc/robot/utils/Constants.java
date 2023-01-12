@@ -64,7 +64,7 @@ public final class Constants {
 
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
                 new Translation2d(wheel_base / 2, -track_width / 2), // front right
-                new Translation2d(wheel_base / 2, track_width / 2), // front back
+                new Translation2d(wheel_base / 2, track_width / 2), // front left
                 new Translation2d(-wheel_base / 2, -track_width / 2), // back right
                 new Translation2d(-wheel_base / 2, track_width / 2)); // back left
         

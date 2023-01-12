@@ -161,7 +161,7 @@ public class SwerveModuleNew {
         
         setVoltage(driveOutput*0.00001 + driveFeedforward, turnOutput*0.00001 + turnFeedforward);
 
-        return new double[] {driveFeedforward,driveOutput,turnFeedforward,turnOutput};
+        return new double[] {driveFeedforward,driveOutput,turnFeedforward,turnOutput, state.speedMetersPerSecond,state.angle.getRadians()};
     }
 
     public void setVoltage(double drive_voltage, double turn_voltage) {

@@ -106,7 +106,7 @@ public class DrivetrainNew extends SubsystemBase {
         
         // Smart dashboard logging
         String[] moduleNames = {"FR","FL","BR","BL"};
-        String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output"};
+        String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
         for (int modIndex = 0; modIndex <4; modIndex++){
             for (int valIndex = 0; valIndex <4; valIndex++){
 
