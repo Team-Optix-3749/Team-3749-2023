@@ -50,7 +50,7 @@ public class RobotContainer {
     POVButton downButton = pov.down();*/
     pilotPOV.up().toggleOnTrue(armMoveUpCommand);
     pilotPOV.down().toggleOnTrue(armMoveDownCommand);
-    
+    pilot.x().toggleOnTrue(armExtendRetractCommand);
   }
 
   public Command getAutonomousCommand() {
