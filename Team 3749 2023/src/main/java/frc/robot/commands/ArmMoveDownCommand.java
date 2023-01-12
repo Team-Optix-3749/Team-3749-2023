@@ -27,17 +27,18 @@ public class ArmMoveDownCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        // set motors speed to 0 just in case
-        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_stop);
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed * -1);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            end(isFinished());
+        }
     }
 
     // Run every 20 ms
     @Override
     public void execute() {
-        //Base.set(Constants.Base.speed.get().doubleValue());
-        //neo motor speed isn't a constant yet
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed*-1);
+        // Base.set(Constants.Base.speed.get().doubleValue());
     }
 
     // Run on command finish
