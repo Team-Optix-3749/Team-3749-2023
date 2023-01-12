@@ -30,11 +30,14 @@ public class ArmMoveUpCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        // set motors speed to 0 just in case
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
+        if (arm.raiseLevel()) {
+            arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                end(isFinished());
+            }
+        } else {
             end(isFinished());
         }
     }

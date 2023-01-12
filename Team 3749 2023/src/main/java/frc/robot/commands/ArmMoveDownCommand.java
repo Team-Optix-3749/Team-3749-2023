@@ -27,10 +27,14 @@ public class ArmMoveDownCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed * -1);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
+        if (arm.raiseLevel()) {
+            arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed * -1);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                end(isFinished());
+            }
+        } else {
             end(isFinished());
         }
     }
