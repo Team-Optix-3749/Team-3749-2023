@@ -104,22 +104,18 @@ public class DrivetrainNew extends SubsystemBase {
         states[1]=frontLeft.setDesiredState(swerveModuleStates[1]);
         states[2]=backRight.setDesiredState(swerveModuleStates[2]);
         states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
-        SmartDashboard.putNumber("drive feed forward 0",states[0][0]);
-        SmartDashboard.putNumber("drive feed forward 1",states[1][0]);
-        SmartDashboard.putNumber("drive feed forward 2",states[2][0]);
-        SmartDashboard.putNumber("drive feed forward 3",states[3][0]);
-        SmartDashboard.putNumber("drive output 0",states[0][1]);
-        SmartDashboard.putNumber("drive output 1",states[1][1]);
-        SmartDashboard.putNumber("drive output 2",states[2][1]);
-        SmartDashboard.putNumber("drive output 3",states[3][1]);
-        SmartDashboard.putNumber("turn feed forward 0",states[0][2]);
-        SmartDashboard.putNumber("turn feed forward 1",states[1][2]);
-        SmartDashboard.putNumber("turn feed forward 2",states[2][2]);
-        SmartDashboard.putNumber("turn feed forward 3",states[3][2]);
-        SmartDashboard.putNumber("turn output 0",states[0][3]);
-        SmartDashboard.putNumber("turn output 1",states[1][3]);
-        SmartDashboard.putNumber("turn output 2",states[2][3]);
-        SmartDashboard.putNumber("turn output 3",states[3][3]);
+        
+
+        // Smart dashboard logging
+        String[] moduleNames = {"FR","FL","BR","BL"};
+        String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output"};
+        for (int modIndex = 0; modIndex <4; modIndex++){
+            for (int valIndex = 0; valIndex <4; valIndex++){
+
+            SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
+            }
+
+        }
 
 
 
