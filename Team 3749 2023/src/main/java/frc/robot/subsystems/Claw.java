@@ -39,7 +39,7 @@ public class Claw extends SubsystemBase {
 
 
     //now set the speed of each motor (they will be the same but inverted)
-    public void clawCommand (double right_speed, double left_speed){
+    public void setSpeed (double right_speed, double left_speed){
         right.set(right_speed);
         left.set(left_speed);
     }
