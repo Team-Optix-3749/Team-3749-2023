@@ -63,10 +63,10 @@ public final class Constants {
         // Distance between front and back wheels
 
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-                new Translation2d(wheel_base / 2, -track_width / 2),
-                new Translation2d(wheel_base / 2, track_width / 2),
-                new Translation2d(-wheel_base / 2, -track_width / 2),
-                new Translation2d(-wheel_base / 2, track_width / 2));
+                new Translation2d(wheel_base / 2, -track_width / 2), // front right
+                new Translation2d(wheel_base / 2, track_width / 2), // front back
+                new Translation2d(-wheel_base / 2, -track_width / 2), // back right
+                new Translation2d(-wheel_base / 2, track_width / 2)); // back left
         
         public static final SmartData<Double> driveKV = new SmartData<Double>("Drive kV", 3.0);
         public static final SmartData<Double> turningKV = new SmartData<Double>("Turning kV", 0.5);

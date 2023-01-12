@@ -99,10 +99,10 @@ public class DrivetrainNew extends SubsystemBase {
         for (int i = 0; i < swerveModuleStates.length; i++) {
             System.out.println(swerveModuleStates[i]);
         }
-        frontLeft.setDesiredState(swerveModuleStates[0]);
-        frontRight.setDesiredState(swerveModuleStates[1]);
-        backLeft.setDesiredState(swerveModuleStates[2]);
-        backRight.setDesiredState(swerveModuleStates[3]);
+        frontRight.setDesiredState(swerveModuleStates[0]);
+        frontLeft.setDesiredState(swerveModuleStates[1]);
+        backRight.setDesiredState(swerveModuleStates[2]);
+        backLeft.setDesiredState(swerveModuleStates[3]);
         SmartDashboard.putNumber("drive feed forward 0",frontLeft.setDesiredState(swerveModuleStates[0])[0]);
         SmartDashboard.putNumber("drive feed forward 1",frontLeft.setDesiredState(swerveModuleStates[1])[0]);
         SmartDashboard.putNumber("drive feed forward 2",frontLeft.setDesiredState(swerveModuleStates[2])[0]);
