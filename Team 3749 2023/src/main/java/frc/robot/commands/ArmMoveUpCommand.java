@@ -37,6 +37,8 @@ public class ArmMoveUpCommand extends CommandBase {
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
         arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
+        
+
     }
 
     // Run on command finish
