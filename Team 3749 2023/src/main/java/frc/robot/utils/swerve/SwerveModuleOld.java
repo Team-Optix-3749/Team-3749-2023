@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
@@ -172,11 +173,11 @@ public class SwerveModuleOld {
     // *
     // * @return The current position of the module.
     // */
-    // public SwerveModulePosition getPosition() {
-    // return new SwerveModulePosition(
-    // m_driveEncoder.getDistance(), new
-    // Rotation2d(m_turningEncoder.getDistance()));
-    // }
+    public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(
+    driveEncoder.getPosition(), new
+    Rotation2d(turningEncoder.getPosition()));
+    }
 
     /***
      * completetly defines the state of the swerve drive
