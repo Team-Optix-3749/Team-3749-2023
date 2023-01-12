@@ -23,14 +23,15 @@ public class Xbox extends GenericHID {
     public Xbox(final int port) {
         super(port);
 
-        leftBumper = new JoystickButton(this, XboxController.Button.kLeftBumper.value);
-        rightBumper = new JoystickButton(this, XboxController.Button.kRightBumper.value);
-        leftStick = new JoystickButton(this, XboxController.Button.kLeftStick.value);
-        rightStick = new JoystickButton(this, XboxController.Button.kRightStick.value);
-        a = new JoystickButton(this, XboxController.Button.kA.value);
-        b = new JoystickButton(this, XboxController.Button.kB.value);
-        x = new JoystickButton(this, XboxController.Button.kX.value);
-        y = new JoystickButton(this, XboxController.Button.kY.value);
+        JoystickButton leftBumper = new JoystickButton(this, XboxController.Button.kLeftBumper.value);
+        JoystickButton rightBumper = new JoystickButton(this, XboxController.Button.kRightBumper.value);
+        JoystickButton leftStick = new JoystickButton(this, XboxController.Button.kLeftStick.value);
+        JoystickButton rightStick = new JoystickButton(this, XboxController.Button.kRightStick.value);
+        JoystickButton a = new JoystickButton(this, XboxController.Button.kA.value);
+        JoystickButton b = new JoystickButton(this, XboxController.Button.kB.value);
+        JoystickButton x = new JoystickButton(this, XboxController.Button.kX.value);
+        JoystickButton y = new JoystickButton(this, XboxController.Button.kY.value);
+
 
     }
 

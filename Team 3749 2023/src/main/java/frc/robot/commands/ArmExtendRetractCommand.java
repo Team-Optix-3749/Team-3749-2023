@@ -1,24 +1,21 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
-import frc.robot.subsystems.*;
-import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Arm;
+import frc.robot.utils.Constants;
 
 /***
- * @author Aditya Samavedam
  * 
+ * @author Don Tran
  */
-public class ArmCommand extends CommandBase {
+
+public class ArmExtendRetractCommand extends CommandBase{
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     Arm arm = new Arm();
 
-    // Initializes the ArmCommand
-    public ArmCommand(Arm arm) {
+    // Initializes the BaseCommand
+    public ArmExtendRetractCommand(Arm arm) {
         this.arm = arm;
         addRequirements(arm);
     }
@@ -26,18 +23,19 @@ public class ArmCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        
+        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_stop);
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
     }
 
-    // Run every 20 ms
     @Override
     public void execute() {
-        //Base.set(Constants.Base.speed.get().doubleValue());
+        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_speed); // basic set speed, calculate exact movement wednesday
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
+        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_stop);
     }
 
     // Returns true when the command should end
