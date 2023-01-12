@@ -16,9 +16,7 @@ public class Arm extends SubsystemBase {
     private CANSparkMax neoMotorTelescope = new CANSparkMax(Constants.Arm.neo_motor_telescope_port, MotorType.kBrushless); // Check if this is actually brushless later
     private CANSparkMax neoMotorElevator = new CANSparkMax(Constants.Arm.neo_motor_elevator_port, MotorType.kBrushless); // Check if this is actually brushless later
 
-    public Arm() {
-
-    }
+    public Arm() {}
 
     public void setSpeedTelescope(double speed) {
         neoMotorTelescope.set(speed);
