@@ -99,26 +99,27 @@ public class DrivetrainNew extends SubsystemBase {
         for (int i = 0; i < swerveModuleStates.length; i++) {
             System.out.println(swerveModuleStates[i]);
         }
-        frontRight.setDesiredState(swerveModuleStates[0]);
-        frontLeft.setDesiredState(swerveModuleStates[1]);
-        backRight.setDesiredState(swerveModuleStates[2]);
-        backLeft.setDesiredState(swerveModuleStates[3]);
-        SmartDashboard.putNumber("drive feed forward 0",frontLeft.setDesiredState(swerveModuleStates[0])[0]);
-        SmartDashboard.putNumber("drive feed forward 1",frontLeft.setDesiredState(swerveModuleStates[1])[0]);
-        SmartDashboard.putNumber("drive feed forward 2",frontLeft.setDesiredState(swerveModuleStates[2])[0]);
-        SmartDashboard.putNumber("drive feed forward 3",frontLeft.setDesiredState(swerveModuleStates[3])[0]);
-        SmartDashboard.putNumber("drive output 0",frontLeft.setDesiredState(swerveModuleStates[0])[1]);
-        SmartDashboard.putNumber("drive output 1",frontLeft.setDesiredState(swerveModuleStates[1])[1]);
-        SmartDashboard.putNumber("drive output 2",frontLeft.setDesiredState(swerveModuleStates[2])[1]);
-        SmartDashboard.putNumber("drive output 3",frontLeft.setDesiredState(swerveModuleStates[3])[1]);
-        SmartDashboard.putNumber("turn feed forward 0",frontLeft.setDesiredState(swerveModuleStates[0])[2]);
-        SmartDashboard.putNumber("turn feed forward 1",frontLeft.setDesiredState(swerveModuleStates[1])[2]);
-        SmartDashboard.putNumber("turn feed forward 2",frontLeft.setDesiredState(swerveModuleStates[2])[2]);
-        SmartDashboard.putNumber("turn feed forward 3",frontLeft.setDesiredState(swerveModuleStates[3])[2]);
-        SmartDashboard.putNumber("turn output 0",frontLeft.setDesiredState(swerveModuleStates[0])[3]);
-        SmartDashboard.putNumber("turn output 1",frontLeft.setDesiredState(swerveModuleStates[1])[3]);
-        SmartDashboard.putNumber("turn output 2",frontLeft.setDesiredState(swerveModuleStates[2])[3]);
-        SmartDashboard.putNumber("turn output 3",frontLeft.setDesiredState(swerveModuleStates[3])[3]);
+        double[][] states = new double[4][4];
+        states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
+        states[1]=frontLeft.setDesiredState(swerveModuleStates[1]);
+        states[2]=backRight.setDesiredState(swerveModuleStates[2]);
+        states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
+        SmartDashboard.putNumber("drive feed forward 0",states[0][0]);
+        SmartDashboard.putNumber("drive feed forward 1",states[1][0]);
+        SmartDashboard.putNumber("drive feed forward 2",states[2][0]);
+        SmartDashboard.putNumber("drive feed forward 3",states[3][0]);
+        SmartDashboard.putNumber("drive output 0",states[0][1]);
+        SmartDashboard.putNumber("drive output 1",states[1][1]);
+        SmartDashboard.putNumber("drive output 2",states[2][1]);
+        SmartDashboard.putNumber("drive output 3",states[3][1]);
+        SmartDashboard.putNumber("turn feed forward 0",states[0][2]);
+        SmartDashboard.putNumber("turn feed forward 1",states[1][2]);
+        SmartDashboard.putNumber("turn feed forward 2",states[2][2]);
+        SmartDashboard.putNumber("turn feed forward 3",states[3][2]);
+        SmartDashboard.putNumber("turn output 0",states[0][3]);
+        SmartDashboard.putNumber("turn output 1",states[1][3]);
+        SmartDashboard.putNumber("turn output 2",states[2][3]);
+        SmartDashboard.putNumber("turn output 3",states[3][3]);
 
 
 
