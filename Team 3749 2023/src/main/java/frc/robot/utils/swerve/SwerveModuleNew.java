@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 
 /***
@@ -41,8 +42,10 @@ public class SwerveModuleNew {
                     Constants.SwerveModuleNew.max_angular_acceleration));
 
     // Gains are for example purposes only - must be determined for your own robot!
-    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, Constants.DrivetrainNew.driveKV.get());
-    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, Constants.DrivetrainNew.turningKV.get());
+    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(.5,
+            Constants.DrivetrainNew.driveKV.get());
+    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(.5,
+            Constants.DrivetrainNew.turningKV.get());
 
     /**
      * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
@@ -55,29 +58,34 @@ public class SwerveModuleNew {
         boolean drive_motor_reversed = false;
         boolean turning_motor_reversed = false;
 
+        System.out.println("ting ting ting");
+
         // Uses enums to set the variables to proper constants. Done here instead of in
         // parameters for organization in the Drivetrain subsystem
-        switch (modulePosition) {
-            case FRONT_LEFT:
-                drive_motor_id = Constants.DrivetrainOld.front_left_drive_id;
-                turning_motor_id = Constants.DrivetrainOld.front_left_turning_id;
-                drive_motor_reversed = Constants.DrivetrainOld.front_left_drive_encoder_reversed;
-                turning_motor_reversed = Constants.DrivetrainOld.front_left_turning_encoder_reversed;
-            case FRONT_RIGHT:
-                drive_motor_id = Constants.DrivetrainOld.front_right_drive_id;
-                turning_motor_id = Constants.DrivetrainOld.front_right_turning_id;
-                drive_motor_reversed = Constants.DrivetrainOld.front_right_drive_encoder_reversed;
-                turning_motor_reversed = Constants.DrivetrainOld.front_right_turning_encoder_reversed;
-            case BACK_LEFT:
-                drive_motor_id = Constants.DrivetrainOld.back_left_drive_id;
-                turning_motor_id = Constants.DrivetrainOld.back_left_turning_id;
-                drive_motor_reversed = Constants.DrivetrainOld.back_left_drive_encoder_reversed;
-                turning_motor_reversed = Constants.DrivetrainOld.back_left_turning_encoder_reversed;
-            case BACK_RIGHT:
-                drive_motor_id = Constants.DrivetrainOld.back_right_drive_id;
-                turning_motor_id = Constants.DrivetrainOld.back_right_turning_id;
-                drive_motor_reversed = Constants.DrivetrainOld.back_right_drive_encoder_reversed;
-                turning_motor_reversed = Constants.DrivetrainOld.back_right_turning_encoder_reversed;
+        if (modulePosition == Constants.SwerveENUMS.FRONT_LEFT) {
+            drive_motor_id = Constants.DrivetrainOld.front_left_drive_id;
+            turning_motor_id = Constants.DrivetrainOld.front_left_turning_id;
+            drive_motor_reversed = Constants.DrivetrainOld.front_left_drive_encoder_reversed;
+            turning_motor_reversed = Constants.DrivetrainOld.front_left_turning_encoder_reversed;
+        } else if (modulePosition == Constants.SwerveENUMS.FRONT_RIGHT) {
+            drive_motor_id = Constants.DrivetrainOld.front_right_drive_id;
+            turning_motor_id = Constants.DrivetrainOld.front_right_turning_id;
+            drive_motor_reversed = Constants.DrivetrainOld.front_right_drive_encoder_reversed;
+            turning_motor_reversed = Constants.DrivetrainOld.front_right_turning_encoder_reversed;
+        } else if (modulePosition == Constants.SwerveENUMS.BACK_LEFT) {
+            drive_motor_id = Constants.DrivetrainOld.back_left_drive_id;
+            turning_motor_id = Constants.DrivetrainOld.back_left_turning_id;
+            drive_motor_reversed = Constants.DrivetrainOld.back_left_drive_encoder_reversed;
+            turning_motor_reversed = Constants.DrivetrainOld.back_left_turning_encoder_reversed;
+        } else if (modulePosition == Constants.SwerveENUMS.BACK_RIGHT) {
+            System.out.println(
+                    "awkjfgkausdgfliuGSIFJGAIPUDFGUISDFGADFUOG " + Constants.DrivetrainOld.back_right_drive_id);
+            drive_motor_id = Constants.DrivetrainOld.back_right_drive_id;
+            turning_motor_id = Constants.DrivetrainOld.back_right_turning_id;
+            drive_motor_reversed = Constants.DrivetrainOld.back_right_drive_encoder_reversed;
+            turning_motor_reversed = Constants.DrivetrainOld.back_right_turning_encoder_reversed;
+        } else {
+            System.out.println("end end sekjahr");
         }
 
         driveMotor = new CANSparkMax(drive_motor_id, MotorType.kBrushless);
@@ -142,16 +150,22 @@ public class SwerveModuleNew {
 
         final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
+        SmartDashboard.putNumber("drive feed forward", driveFeedforward);
+        SmartDashboard.putNumber("drive output", driveOutput);
+
         // Calculate the turning motor output from the turning PID controller.
         final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(),
                 state.angle.getRadians());
 
         final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
-        setVoltage(driveOutput + driveFeedforward, turnOutput + turnFeedforward);
+        SmartDashboard.putNumber("turn feed forward", turnFeedforward);
+        SmartDashboard.putNumber("turn output", turnOutput);
+        
+        setVoltage(driveOutput*0.00001 + driveFeedforward, turnOutput*0.00001 + turnFeedforward);
     }
 
-    public void setVoltage(double drive_voltage, double turn_voltage){
+    public void setVoltage(double drive_voltage, double turn_voltage) {
         driveMotor.setVoltage(drive_voltage);
         turningMotor.setVoltage(turn_voltage);
     }

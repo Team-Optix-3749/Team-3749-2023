@@ -31,7 +31,7 @@ public class SwerveModuleOld {
     private final PIDController turningPidController;
 
     // This looks at the offset position of the turn motor
-    private final AnalogInput absoluteEncoder;
+    // private final AnalogInput absoluteEncoder;
     // if its on an opposing channel the encoder is reversed
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
@@ -95,7 +95,7 @@ public class SwerveModuleOld {
         this.absoluteEncoderOffsetRad = absolute_encoder_offset;
         this.absoluteEncoderReversed = absolute_encoder_reversed;
 
-        absoluteEncoder = new AnalogInput(absolute_encoder_id);
+        // absoluteEncoder = new AnalogInput(absolute_encoder_id);
 
         driveMotor = new CANSparkMax(drive_motor_id, MotorType.kBrushless);
         turningMotor = new CANSparkMax(turning_motor_id, MotorType.kBrushless);
@@ -139,14 +139,16 @@ public class SwerveModuleOld {
     // Get the absolute encoder value in radians
     public double getAbsoluteEncoderRad() {
 
+        return 0;
+
         // Gets percentage of rotation read by encoder
-        double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
+        // double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
         // convert to radians
-        angle *= 2.0 * Math.PI;
-        // subtracts the offset to get the wheel calibrated
-        angle -= absoluteEncoderOffsetRad;
-        // multiplies by -1 if motor is inverted
-        return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+        // angle *= 2.0 * Math.PI;
+        // // subtracts the offset to get the wheel calibrated
+        // angle -= absoluteEncoderOffsetRad;
+        // // multiplies by -1 if motor is inverted
+        // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
     // sets relative encoders to the position of the absolute encoder
@@ -198,7 +200,6 @@ public class SwerveModuleOld {
         // pid to calculate turning position,
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         // SmartDashboard logging
-        SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
     }
 
     public void stop() {

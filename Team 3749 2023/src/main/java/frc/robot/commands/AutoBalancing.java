@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutoBalancing extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    DrivetrainOld drivetrain = new DrivetrainOld();
+    DrivetrainOld drivetrain;
 
     double angle = drivetrain.getVerticalTilt();
 

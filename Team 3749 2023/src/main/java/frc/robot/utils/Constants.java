@@ -94,8 +94,8 @@ public final class Constants {
         public static final double front_left_drive_absolute_encoder_offset_rad = 0.0;
 
         // Back _left_ module
-        public static final int back_left_drive_id = 5;
-        public static final int back_left_turning_id = 6;
+        public static final int back_left_drive_id = 7;
+        public static final int back_left_turning_id = 8;
         public static final boolean back_left_turning_encoder_reversed = true;
         public static final boolean back_left_drive_encoder_reversed = true;
         public static final int back_left_drive_absolute_encoder_port = 2;
@@ -112,8 +112,8 @@ public final class Constants {
         public static final double front_right_drive_absolute_encoder_offset_rad = 0;
 
         // Back right module
-        public static final int back_right_drive_id = 7;
-        public static final int back_right_turning_id = 8;
+        public static final int back_right_drive_id = 5;
+        public static final int back_right_turning_id = 6;
         public static final boolean back_right_turning_encoder_reversed = true;
         public static final boolean back_right_drive_encoder_reversed = false;
         public static final int back_right_drive_absolute_encoder_port = 3;

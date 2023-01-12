@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.swerve.SwerveModuleNew;
@@ -39,6 +40,7 @@ public class DrivetrainNew extends SubsystemBase {
 
     @Override
     public void periodic() {
+        
         // Update the odometry in the periodic block
         odometry.update(
                 gyro.getRotation2d(),
@@ -86,12 +88,18 @@ public class DrivetrainNew extends SubsystemBase {
      *                      field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
+
+        for (int i = 0; i < swerveModuleStates.length; i++) {
+            System.out.println(swerveModuleStates[i]);
+        }
+
         frontLeft.setDesiredState(swerveModuleStates[0]);
         frontRight.setDesiredState(swerveModuleStates[1]);
         backLeft.setDesiredState(swerveModuleStates[2]);
@@ -142,4 +150,5 @@ public class DrivetrainNew extends SubsystemBase {
     public double getTurnRate() {
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
     }
+
 }
