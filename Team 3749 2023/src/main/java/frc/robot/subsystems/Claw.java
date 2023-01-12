@@ -20,26 +20,28 @@ public class Claw extends SubsystemBase {
 
     private MotorControllerGroup base = new MotorControllerGroup(neo, falcon);
 
-    CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless); // right side of the claw (the motor)
-    CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless); // left side of the claw (the motor)
+    CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless); 
+    // right side of the claw (the motor)
+    
+    CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless);
+    // left side of the claw (the motor)
 
     // Initializes the base subsystem
     public Claw() {
-        neo.setInverted(true); //invert the motor to not break it
-        falcon.setNeutralMode(NeutralMode.Brake); //set falcon to be braked when not active
+        neo.setInverted(true); // invert the motor to not break it
+        falcon.setNeutralMode(NeutralMode.Brake); // set falcon to be braked when not active
 
         Constants.Base.speed.set(new Double(16.90));
     }
 
-
-// two motor controller groups allow us to alter the speeds between each motor (on the claw)
-// this is important because both motors have to spin opposite directions
+    // two motor controller groups allow us to alter the speeds between each motor
+    // (on the claw)
+    // this is important because both motors have to spin opposite directions
     private MotorControllerGroup left = new MotorControllerGroup(leftSide);
     private MotorControllerGroup right = new MotorControllerGroup(rightSide);
 
-
-    //now set the speed of each motor (they will be the same but inverted)
-    public void setSpeed (double right_speed, double left_speed){
+    // now set the speed of each motor (they will be the same but inverted)
+    public void setSpeed(double right_speed, double left_speed) {
         right.set(right_speed);
         left.set(left_speed);
     }
