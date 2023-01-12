@@ -139,19 +139,20 @@ public class SwerveModuleNew {
      * Sets the desired state for the module.
      *
      * @param desiredState Desired state with speed and angle.
+     * @return returns a double[] of the different outputs and feedforwards. Drive, then turn. Feedforward, then PID
      */
-    public double[] setDesiredState(SwerveModuleState desiredState) {
-        // Optimize the reference state to avoid spinning further than 90 degrees
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState,
-                new Rotation2d(turningEncoder.getPosition()));
+        public double[] setDesiredState(SwerveModuleState desiredState) {
+            // Optimize the reference state to avoid spinning further than 90 degrees
+            SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+                    new Rotation2d(turningEncoder.getPosition()));
 
-        // Calculate the drive output from the drive PID controller.
-        final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
+            // Calculate the drive output from the drive PID controller.
+            final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
-        final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
+            final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
 
-        // Calculate the turning motor output from the turning PID controller.
+            // Calculate the turning motor output from the turning PID controller.
         final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(),
                 state.angle.getRadians());
 

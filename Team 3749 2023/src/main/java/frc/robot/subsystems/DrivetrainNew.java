@@ -99,7 +99,7 @@ public class DrivetrainNew extends SubsystemBase {
         for (int i = 0; i < swerveModuleStates.length; i++) {
             System.out.println(swerveModuleStates[i]);
         }
-
+        frontLeft.setDesiredState(swerveModuleStates[0]);
         frontRight.setDesiredState(swerveModuleStates[1]);
         backLeft.setDesiredState(swerveModuleStates[2]);
         backRight.setDesiredState(swerveModuleStates[3]);

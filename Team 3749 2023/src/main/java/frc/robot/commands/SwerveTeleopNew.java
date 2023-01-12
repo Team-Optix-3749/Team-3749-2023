@@ -50,6 +50,7 @@ public class SwerveTeleopNew extends CommandBase {
         }
 
         // Run every 20 ms
+        // TESTING CHANGES: Multiply speeds by 0.1 BEFORE limiter. Smart dashboard
         @Override
         public void execute() {
                 final var xSpeed = -xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.getAsDouble()*0.1, 0.02))
