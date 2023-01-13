@@ -191,4 +191,16 @@ public class DrivetrainNew extends SubsystemBase {
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
     }
 
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+        var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
+            chassisSpeeds
+        );
+
+        frontLeft.setDesiredState(swerveModuleStates[0]);
+        frontRight.setDesiredState(swerveModuleStates[1]);
+        backLeft.setDesiredState(swerveModuleStates[2]);
+        backRight.setDesiredState(swerveModuleStates[3]);
+
+    }
+
 }
