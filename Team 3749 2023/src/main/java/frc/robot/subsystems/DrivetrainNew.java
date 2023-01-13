@@ -99,7 +99,7 @@ public class DrivetrainNew extends SubsystemBase {
             System.out.println(swerveModuleStates[i]);
         }
 
-        logModuleStates(swerveModuleStates);
+        // logModuleStates(swerveModuleStates);
 
         double[][] states = new double[4][4];
         states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
@@ -111,7 +111,7 @@ public class DrivetrainNew extends SubsystemBase {
         String[] moduleNames = {"FR","FL","BR","BL"};
         String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
         for (int modIndex = 0; modIndex <4; modIndex++){
-            for (int valIndex = 0; valIndex <4; valIndex++){
+            for (int valIndex = 0; valIndex <6; valIndex++){
 
             SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
             }
@@ -189,6 +189,18 @@ public class DrivetrainNew extends SubsystemBase {
      */
     public double getTurnRate() {
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
+    }
+
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+        var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
+            chassisSpeeds
+        );
+
+        frontLeft.setDesiredState(swerveModuleStates[0]);
+        frontRight.setDesiredState(swerveModuleStates[1]);
+        backLeft.setDesiredState(swerveModuleStates[2]);
+        backRight.setDesiredState(swerveModuleStates[3]);
+
     }
 
 }

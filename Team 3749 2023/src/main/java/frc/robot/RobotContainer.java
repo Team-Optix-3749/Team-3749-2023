@@ -38,9 +38,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // hold A for autobalance on charging station
-        // pilot.a().whileTrue(new AutoBalancing(drivetrain));
-
+      pilot.a().whileTrue(new Forward(drivetrain));
     }
 
     public Command getAutonomousCommand() {
