@@ -44,7 +44,7 @@ public class Arm extends SubsystemBase {
         if (level > 0) {
             level -= 1;
             return false;
-        } //else { Same reasoning as above
+        } //else { Same reasoning as above 
             return true;
         //}
     }
