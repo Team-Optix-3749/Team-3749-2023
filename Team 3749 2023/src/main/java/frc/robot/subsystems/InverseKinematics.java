@@ -19,14 +19,24 @@ public class InverseKinematics {
         this.length2 = length2;
     }
 
-    public int[] calculate(double x, double y) {
+    public double[] calculate(double x, double y) {
         
-        int[] optimal = new int[2];
+        double[] optimal = new double[2];
+        double mindist = Double.MAX_VALUE;
 
-        for (int i = 1; i < 361; i++) {
-            for (int j = 1; j < 361; j++) {
-                if (x == length1 * Math.cos(i) + length2 * Math.cos(i + j) && y == length1 * Math.sin(i) + length2 * Math.sin(i + j)) {
-                    
+
+        for (double radi = 1; radi < 91; radi++) {
+            double i = Math.toDegrees(radi);
+            for (double radj = 1; radj < 361; radj++) {
+                double j = Math.toDegrees(radj);
+                double deltax = length1 * Math.cos(i) + length2 * Math.cos(i + j) - x;
+                double deltay = length1 * Math.sin(i) + length2 * Math.sin(i + j) - y;
+                double distance = Math.pow(deltax, 2) + Math.pow(deltay, 2);
+                if (distance < mindist)
+                {
+                    mindist = distance;
+                    optimal[0] = i;
+                    optimal[1] = j;
                 }
             }
         } 
