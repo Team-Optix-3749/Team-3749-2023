@@ -16,7 +16,7 @@ public final class Constants {
 
     // all values set to zero because we don't know them yet
     public static final int right_side = 0; // right side of the claw (the motor)
-    public static final int left_side = 0; // left side of the claw (the motor)
+    public static final int left_side = 1; // left side of the claw (the motor)
 
     public static final int speed = 0; // number for the speed
 
