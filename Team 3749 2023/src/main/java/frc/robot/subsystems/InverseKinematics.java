@@ -18,7 +18,7 @@ public class InverseKinematics {
     
     private double length1;
     private double length2;
-    InverseKinematics(double length1, double length2, double theta1, double theta2) {
+    InverseKinematics(double length1, double length2) {
         this.length1 = length1;
         this.length2 = length2;
     }
@@ -29,12 +29,12 @@ public class InverseKinematics {
         double mindist = Double.MAX_VALUE;
 
         // Iterate over 1-360 degrees for both joints
-        for (double radi = 1; radi < 91; radi++) {
+        for (double radi = 1; radi < Math.PI + 1; radi++) {
             double i = Math.toDegrees(radi);
-            for (double radj = 1; radj < 361; radj++) {
+            for (double radj = 1; radj < 2 * Math.PI + 1; radj++) {
                 double j = Math.toDegrees(radj);
-                double deltax = length1 * Math.cos(i) + length2 * Math.cos(i + j) - x;
-                double deltay = length1 * Math.sin(i) + length2 * Math.sin(i + j) - y;
+                double deltax = length1 * Math.cos(radi) + length2 * Math.cos(radi + radj) - x;
+                double deltay = length1 * Math.sin(radi) + length2 * Math.sin(radi + radj) - y;
                 double distance = Math.pow(deltax, 2) + Math.pow(deltay, 2);
                 if (distance < mindist)
                 {
@@ -45,5 +45,11 @@ public class InverseKinematics {
             }
         } 
         return optimal;
+    }
+
+    public static void main(String[] args) {
+        InverseKinematics test1 = new InverseKinematics(4, 6);
+        double[] solution1 = test1.calculate(5,5);
+        System.out.println(solution1[0] + " " + solution1[1]);
     }
 }
