@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ArmMoveUpCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    private Arm arm = new Arm();
+    private Arm arm;
 
     // Initializes the ArmCommand
     public ArmMoveUpCommand(Arm arm) {

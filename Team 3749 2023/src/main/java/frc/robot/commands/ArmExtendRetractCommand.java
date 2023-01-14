@@ -12,7 +12,7 @@ import frc.robot.utils.Constants;
 public class ArmExtendRetractCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    Arm arm = new Arm();
+    private Arm arm;
 
     // Initializes the BaseCommand
     public ArmExtendRetractCommand(Arm arm) {
