@@ -20,13 +20,22 @@ public final class Constants {
     }
 
     public static final class Arm {
+        public static final int neo_motor_telescope_port = 13; // Change this value later
+        public static final int neo_motor_elevator_port = 15; // Change this value later
+
         public static final int neo_motor_lower_port = 0; // Change this value later
         public static final int neo_motor_upper_port = 1; // Change this value later
+
+        public static final int neo_motor_telescope_speed = 1; // Change this value later
+        public static final int neo_motor_elevator_speed = 1; // Change this value later
 
         public static final int neo_motor_lower_speed = 1; // Change this value later
         public static final int neo_motor_upper_speed = 1; // Change this value later
 
         public static final int neo_motor_lower_stop = 0; // Change this value later
         public static final int neo_motor_upper_stop = 0; // Change this value later
+
+        public static final int neo_motor_telescope_stop = 0; // Change this value later
+        public static final int neo_motor_elevator_stop = 0; // Change this value later
     }
 }
