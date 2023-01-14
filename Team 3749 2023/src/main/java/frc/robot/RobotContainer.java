@@ -6,8 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+import frc.robot.commands.ClawOuttakeCommand;
+import frc.robot.commands.ClawIntakeCommand;
+
 
 public class RobotContainer {
 
@@ -30,10 +36,10 @@ public class RobotContainer {
   private void configureDefaultCommands() {}
 
   private void configureButtonBindings() {
-    JoystickButton A = new JoystickButton(Pilot, Button.kA.value);
-    JoystickButton B = new JoystickButton(Pilot, Button.kB.value);
-    A.whenHeld(ClawIntakeCommand);
-    B.whenHeld(ClawOuttakeCommand);
+
+    pilot.a().whileTrue(new ClawIntakeCommand(null));
+    pilot.b().whileTrue(new ClawOuttakeCommand(null));
+
   }
 
   public Command getAutonomousCommand() {
