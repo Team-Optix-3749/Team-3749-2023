@@ -17,7 +17,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ClawOuttakeCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
+    // public Claw claw;
+    // private Claw claw;
+    Claw claw;
+
+    public ClawOuttakeCommand(Claw claw) {
+        this.claw = claw;
         addRequirements(claw);
+    }
 
     // Run on command init
     @Override
