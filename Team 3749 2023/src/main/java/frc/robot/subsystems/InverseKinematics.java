@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 /*
  * @author Bailey Say
+ * @author Raymond Sheng
  * 
  * Inverse kinematics, how fun
  * 
