@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
@@ -15,6 +16,7 @@ import frc.robot.commands.MoveUpperUpDown;
 import frc.robot.commands.MoveLowerDown;
 import frc.robot.commands.MoveLowerUp;
 import frc.robot.subsystems.Arm;
+import frc.robot.utils.Constants;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
@@ -30,7 +32,10 @@ public class RobotContainer {
   private final Xbox operator = new Xbox(1);
   private final POV pilotPOV = new POV(pilot);
   private final POV operatorPOV = new POV(operator);
-  private final XboxController joystick = new XboxController(0);
+  private final XboxController xboxController = new XboxController(0);
+
+  // joystick
+  private final Joystick joystick = new Joystick(Constants.Controller.joystick_port);
 
   // Subsystems
 
