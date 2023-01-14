@@ -24,6 +24,7 @@ public class InverseKinematics {
 
     public double[] calculate(double x, double y) {
         
+        // Define XE_RHS and YE_RHS as a function of lengths and thetas
         double XE_RHS = length1 * Math.cos(this.theta1) + length2 * Math.cos(this.theta1 + this.theta2);
         double YE_RHS = length1 * Math.sin(this.theta1) + length2 * Math.sin(this.theta1 + this.theta2);
         return new double[2];
