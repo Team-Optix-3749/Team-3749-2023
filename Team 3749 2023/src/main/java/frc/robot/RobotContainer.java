@@ -23,7 +23,7 @@ public class RobotContainer {
   private final POV pilotPOV = new POV(pilot);
   private final POV operatorPOV = new POV(operator);
 
-  private Claw claw;
+  private final Claw claw = new Claw();
 
   // Subsystems
 
