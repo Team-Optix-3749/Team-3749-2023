@@ -30,16 +30,18 @@ public class ArmMoveUpCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        if (arm.raiseLevel()) {
-            arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                end(isFinished());
-            }
-        } else {
-            end(isFinished());
-        }
+        System.out.println("e");
+        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
+    //    if (arm.raiseLevel()) {
+    //         arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
+    //         // try {
+    //         //     Thread.sleep(1000);
+    //         // } catch (InterruptedException e) {
+    //         //     end(isFinished());
+    //         // }
+    //     } else {
+    //         end(isFinished());
+    //     }
     }
 
     // Run every 20 ms
