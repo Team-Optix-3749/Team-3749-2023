@@ -13,13 +13,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Don Tran
  * 
  */
-public class ArmMoveDownCommand extends CommandBase {
+public class MoveLowerUp extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     private Arm arm;
 
     // Initializes the ArmCommand
-    public ArmMoveDownCommand(Arm arm) {
+    public MoveLowerUp(Arm arm) {
         this.arm = arm;
         addRequirements(arm);
     }
@@ -27,28 +27,24 @@ public class ArmMoveDownCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        if (arm.raiseLevel()) {
-            arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed * -1);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                end(isFinished());
-            }
-        } else {
-            end(isFinished());
-        }
-    }
+        // set motors speed to 0 just in case
+        arm.setSpeedUpper(Constants.Arm.neo_motor_upper_stop);
+        arm.setSpeedLower(Constants.Arm.neo_motor_lower_stop);
+    }  
 
     // Run every 20 ms
     @Override
     public void execute() {
-        // Base.set(Constants.Base.speed.get().doubleValue());
+        //Base.set(Constants.Base.speed.get().doubleValue());
+        arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed);
+        
+
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
+        arm.setSpeedLower(Constants.Arm.neo_motor_lower_stop);
     }
 
     // Returns true when the command should end
