@@ -23,6 +23,8 @@ public class RobotContainer {
   private final POV pilotPOV = new POV(pilot);
   private final POV operatorPOV = new POV(operator);
 
+  private Claw claw;
+
   // Subsystems
 
   // Commands
@@ -37,8 +39,8 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    pilot.a().whileTrue(new ClawIntakeCommand(null));
-    pilot.b().whileTrue(new ClawOuttakeCommand(null));
+    pilot.a().whileTrue(new ClawIntakeCommand(claw));
+    pilot.b().whileTrue(new ClawOuttakeCommand(claw));
 
   }
 
