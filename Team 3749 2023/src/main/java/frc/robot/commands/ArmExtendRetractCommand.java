@@ -9,10 +9,10 @@ import frc.robot.utils.Constants;
  * @author Don Tran
  */
 
-public class ArmExtendRetractCommand extends CommandBase{
+public class ArmExtendRetractCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    Arm arm = new Arm();
+    private Arm arm;
 
     // Initializes the BaseCommand
     public ArmExtendRetractCommand(Arm arm) {
@@ -23,13 +23,16 @@ public class ArmExtendRetractCommand extends CommandBase{
     // Run on command init
     @Override
     public void initialize() {
-        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_stop);
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
+        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_speed);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            end(isFinished());
+        }
     }
 
     @Override
     public void execute() {
-        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_speed); // basic set speed, calculate exact movement wednesday
     }
 
     // Run on command finish

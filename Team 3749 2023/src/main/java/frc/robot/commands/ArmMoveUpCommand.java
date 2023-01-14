@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
+
+import java.sql.Time;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
@@ -16,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ArmMoveUpCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    Arm arm = new Arm();
+    private Arm arm;
 
     // Initializes the ArmCommand
     public ArmMoveUpCommand(Arm arm) {
@@ -27,18 +30,22 @@ public class ArmMoveUpCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        // set motors speed to 0 just in case
-        arm.setSpeedTelescope(Constants.Arm.neo_motor_telescope_stop);
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_stop);
-    }  
+        if (arm.raiseLevel()) {
+            arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                end(isFinished());
+            }
+        } else {
+            end(isFinished());
+        }
+    }
 
     // Run every 20 ms
     @Override
     public void execute() {
-        //Base.set(Constants.Base.speed.get().doubleValue());
-        arm.setSpeedElevator(Constants.Arm.neo_motor_elevator_speed);
-        
-
+        // Base.set(Constants.Base.speed.get().doubleValue());
     }
 
     // Run on command finish

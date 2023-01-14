@@ -25,9 +25,9 @@ public class RobotContainer {
   private final ArmMoveUpCommand armMoveUpCommand = new ArmMoveUpCommand(arm);
   private final ArmMoveDownCommand armMoveDownCommand = new ArmMoveDownCommand(arm);
   private final ArmExtendRetractCommand armExtendRetractCommand = new ArmExtendRetractCommand(arm);
-  
-  private final Xbox pilot = new Xbox(0);
-  private final Xbox operator = new Xbox(1);
+
+  private final Xbox pilot = new Xbox(16);
+  private final Xbox operator = new Xbox(17);
   private final POV pilotPOV = new POV(pilot);
   private final POV operatorPOV = new POV(operator);
   private final XboxController joystick = new XboxController(0);
@@ -41,19 +41,22 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-  private void configureDefaultCommands() {}
+  private void configureDefaultCommands() {
+  }
 
-  private void configureButtonBindings()
-  {
-    /*POV pov = new POV(operator);
-    POVButton upButton = pov.up();
-    POVButton downButton = pov.down();*/
-    pilotPOV.up().toggleOnTrue(armMoveUpCommand);
-    pilotPOV.down().toggleOnTrue(armMoveDownCommand);
-    pilot.x().toggleOnTrue(armExtendRetractCommand);
+  private void configureButtonBindings() {
+    /*
+     * POV pov = new POV(operator);
+     * POVButton upButton = pov.up();
+     * POVButton downButton = pov.down();
+     */
+
+    // pilotPOV.up().toggleOnTrue(armMoveUpCommand);
+    // pilotPOV.down().toggleOnTrue(armMoveDownCommand);
+    // pilot.x().toggleOnTrue(armExtendRetractCommand);
   }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
-  }  
+  }
 }
