@@ -14,19 +14,22 @@ public class InverseKinematics {
     
     private double length1;
     private double length2;
-    private double theta1;
-    private double theta2;
-
     InverseKinematics(double length1, double length2, double theta1, double theta2) {
         this.length1 = length1;
         this.length2 = length2;
     }
 
-    public double[] calculate(double x, double y) {
+    public int[] calculate(double x, double y) {
         
-        // Define XE_RHS and YE_RHS as a function of lengths and thetas
-        double XE_RHS = length1 * Math.cos(this.theta1) + length2 * Math.cos(this.theta1 + this.theta2);
-        double YE_RHS = length1 * Math.sin(this.theta1) + length2 * Math.sin(this.theta1 + this.theta2);
-        return new double[2];
+        int[] optimal = new int[2];
+
+        for (int i = 1; i < 361; i++) {
+            for (int j = 1; j < 361; j++) {
+                if (x == length1 * Math.cos(i) + length2 * Math.cos(i + j) && y == length1 * Math.sin(i) + length2 * Math.sin(i + j)) {
+                    
+                }
+            }
+        } 
+        return optimal;
     }
 }
