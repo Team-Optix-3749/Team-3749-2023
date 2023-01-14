@@ -4,10 +4,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
@@ -18,6 +21,7 @@ import frc.robot.utils.Constants;
  */
 
 public class Arm extends SubsystemBase {
+    // Motors, PIDS, Encoders, and other variables & instantiations 
     private CANSparkMax lowerNeoMotor = new CANSparkMax(Constants.Arm.neo_motor_lower_port, MotorType.kBrushless); // Check if this is actually brushless later
     private CANSparkMax upperNeoMotor = new CANSparkMax(Constants.Arm.neo_motor_upper_port, MotorType.kBrushless); // Check if this is actually brushless later
     
@@ -34,6 +38,16 @@ public class Arm extends SubsystemBase {
     private final RelativeEncoder topEncoder = upperNeoMotor.getEncoder();
     private final RelativeEncoder bottomEncoder = lowerNeoMotor.getEncoder();
 
+    // Simulation Code
+    private final SingleJointedArmSim arm_top_sim = new SingleJointedArmSim(armGearbox, Constants.Simulation.arm_reduction, SingleJointedArmSim.estimateMOI(Constants.Simulation.arm_top_length, Constants.Simulation.arm_top_mass),
+            Constants.Simulation.arm_top_length,
+            Units.degreesToRadians(Constants.Simulation.arm_top_min_angle),
+            Units.degreesToRadians(Constants.Simulation.arm_top_max_angle),
+            Constants.Simulation.arm_top_mass,
+            false,
+            VecBuilder.fill(Constants.Simulation.arm_encoder_dist_per_pulse)); // Add noise with a std-dev of 1 tick);
+
+    // Actual Arm Code
     public Arm() {}
 
     public void setSpeedLower(double speed) {
