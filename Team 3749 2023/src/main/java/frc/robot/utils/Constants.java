@@ -47,7 +47,7 @@ public final class Constants {
         public static final int max_acceleration = 5;
     }
 
-    public static final class Simulation {
+    public static final class Simulation { // these values are going to need to change (along with simulation)
         // Simulation classes help us simulate what's going on, including gravity.
         private static final double arm_reduction = 600;
         private static final double arm_top_mass = 10.0; // Kilograms
@@ -59,6 +59,25 @@ public final class Constants {
         private static final int arm_top_max_angle = 260; 
         private static final int arm_bottom_min_angle = 30; 
         private static final int arm_bottom_max_angle = 150; 
+
+        //SETPOINTS FOR PRESETS MODE (Uses Virtual 4 Bar Mode for smooth movement)
+        private static final int stowedBottom = 90;
+        private static final int stowedTop = 260;
+
+        private static final int intakeBottom = 135;
+        private static final int intakeTop = 265;
+
+        private static final int doubleSubstationBottom = 60;
+        private static final int doubleSubstationTop = 185;
+
+        private static final int scoreFloorBottom = 120;
+        private static final int scoreFloorTop = 255;
+
+        private static final int scoreMidBottom = 95;
+        private static final int scoreMidTop = 195;
+
+        private static final int scoreHighBottom = 135;
+        private static final int scoreHighTop = 160;
     }
 
     public static final class Controller {
