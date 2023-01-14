@@ -35,18 +35,18 @@ public class Arm extends SubsystemBase {
         if (level < 4) {
             level += 1;
             return false;
-        } else {
+        } //else {  We're already returning, the code ends there, however i'm leaving this here incase this leads to an error
             return true;
-        }
+        //}
     }
 
     public boolean lowerLevel() {
         if (level > 0) {
             level -= 1;
             return false;
-        } else {
+        } //else { Same reasoning as above
             return true;
-        }
+        //}
     }
 
 }
