@@ -47,6 +47,5 @@ public final class Constants {
 
     public static final class Controller {
         public static final int joystick_port = 0;
-        private static final int kMotorPort = 0; //fix
     }
 }

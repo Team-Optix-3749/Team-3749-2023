@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
@@ -17,14 +18,11 @@ import frc.robot.utils.Constants;
  */
 
 public class Arm extends SubsystemBase {
+    private CANSparkMax lowerNeoMotor = new CANSparkMax(Constants.Arm.neo_motor_lower_port, MotorType.kBrushless); // Check if this is actually brushless later
+    private CANSparkMax upperNeoMotor = new CANSparkMax(Constants.Arm.neo_motor_upper_port, MotorType.kBrushless); // Check if this is actually brushless later
     
-    private CANSparkMax neo_motor_lower = new CANSparkMax(Constants.Arm.neo_motor_lower_port, MotorType.kBrushless); // Check if this is actually brushless later
-    private CANSparkMax neo_motor_upper = new CANSparkMax(Constants.Arm.neo_motor_upper_port, MotorType.kBrushless); // Check if this is actually brushless later
-    private CANSparkMax neo_motor_telescope = new CANSparkMax(Constants.Arm.neo_motor_telescope_port,
-    MotorType.kBrushless); // Check if this is actually brushless later
-private CANSparkMax neo_motor_elevator = new CANSparkMax(Constants.Arm.neo_motor_elevator_port,
-    MotorType.kBrushless); // Check if this is actually brushless later
-private int level = 0;
+    // level (temporary might change later)
+    private int level = 0;
 
     private final DCMotor armGearbox = DCMotor.getNEO(Constants.Arm.number_of_motors);
         
@@ -33,21 +31,20 @@ private int level = 0;
     private final ProfiledPIDController bottomController = new ProfiledPIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd, new TrapezoidProfile.Constraints(Constants.Arm.max_velocity, Constants.Arm.max_acceleration));
     
     // Relative Encoders
-    private final RelativeEncoder topEncoder = neo_motor_upper.getEncoder();
-    private final RelativeEncoder bottomEncoder = neo_motor_lower.getEncoder();
+    private final RelativeEncoder topEncoder = upperNeoMotor.getEncoder();
+    private final RelativeEncoder bottomEncoder = lowerNeoMotor.getEncoder();
+
+    private final PWMSparkMax topMotor = new PWMSparkMax(Constants.Arm.neo_motor_upper_port); //??
+    private final PWMSparkMax bottomMotor = new PWMSparkMax(Constants.Arm.neo_motor_lower_port); //??
 
     public Arm() {}
 
     public void setSpeedLower(double speed) {
-        neo_motor_lower.set(speed);
+        lowerNeoMotor.set(speed);
     }
 
     public void setSpeedUpper(double speed) {
-        neo_motor_upper.set(speed);
-    }
-
-    public void setSpeedTelescope(double speed) {
-        neo_motor_telescope.set(speed);
+        upperNeoMotor.set(speed);
     }
 
     public boolean raiseLevel() {
