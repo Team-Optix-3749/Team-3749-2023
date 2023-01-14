@@ -29,7 +29,12 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {}
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton A = new JoystickButton(Pilot, Button.kA.value);
+    JoystickButton B = new JoystickButton(Pilot, Button.kB.value);
+    A.whenHeld(ClawIntakeCommand);
+    B.whenHeld(ClawOuttakeCommand);
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
