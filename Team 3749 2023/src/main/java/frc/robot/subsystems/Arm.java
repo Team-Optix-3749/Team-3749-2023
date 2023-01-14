@@ -34,9 +34,6 @@ public class Arm extends SubsystemBase {
     private final RelativeEncoder topEncoder = upperNeoMotor.getEncoder();
     private final RelativeEncoder bottomEncoder = lowerNeoMotor.getEncoder();
 
-    private final PWMSparkMax topMotor = new PWMSparkMax(Constants.Arm.neo_motor_upper_port); //??
-    private final PWMSparkMax bottomMotor = new PWMSparkMax(Constants.Arm.neo_motor_lower_port); //??
-
     public Arm() {}
 
     public void setSpeedLower(double speed) {
@@ -65,8 +62,4 @@ public class Arm extends SubsystemBase {
         //}
     
     }
-
-
-    
-    
 }

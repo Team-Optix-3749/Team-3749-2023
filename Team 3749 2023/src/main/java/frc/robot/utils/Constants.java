@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import edu.wpi.first.math.util.Units;
+
 /***
  * Stores constant variables within subclasses for different subsystems.
  * Such constant values can include motor IDs, motor speed, PID
@@ -43,6 +45,20 @@ public final class Constants {
 
         public static final int max_velocity = 2;
         public static final int max_acceleration = 5;
+    }
+
+    public static final class Simulation {
+        // Simulation classes help us simulate what's going on, including gravity.
+        private static final double arm_reduction = 600;
+        private static final double arm_top_mass = 10.0; // Kilograms
+        private static final double arm_top_length = Units.inchesToMeters(38.5);
+        private static final double arm_bottom_mass = 4.0; // Kilograms
+        private static final double arm_bottom_length = Units.inchesToMeters(27);
+
+        private static final int arm_top_min_angle = -75; 
+        private static final int arm_top_max_angle = 260; 
+        private static final int arm_bottom_min_angle = 30; 
+        private static final int arm_bottom_max_angle = 150; 
     }
 
     public static final class Controller {
