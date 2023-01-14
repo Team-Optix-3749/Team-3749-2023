@@ -26,7 +26,7 @@ public class RobotContainer {
   private final ArmMoveDownCommand armMoveDownCommand = new ArmMoveDownCommand(arm);
   private final ArmExtendRetractCommand armExtendRetractCommand = new ArmExtendRetractCommand(arm);
 
-  private final Xbox pilot = new Xbox(0);
+  private final Xbox pilot = new Xbox(16);
   private final Xbox operator = new Xbox(1);
   private final POV pilotPOV = new POV(pilot);
   private final POV operatorPOV = new POV(operator);
