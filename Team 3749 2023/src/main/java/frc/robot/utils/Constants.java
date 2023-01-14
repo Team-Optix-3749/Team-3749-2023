@@ -20,4 +20,8 @@ public final class Constants {
 
     public static final int speed = 0; // number for the speed
 
+    // find ultrasonic docs: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/sensors/ultrasonics-software.html
+    public static final int UltrasonicPingPort = 0; // ping measures the round-trip echo time of ultrasonic sound to determine how far away an object is
+    public static final int UltrasonicEchoPort = 1; // echo sends out ultrasonic signal
+
 }

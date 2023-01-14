@@ -10,15 +10,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Rohin Sood
- * @author Ryan McWeeny
  * 
  *         Serves as a template to format commands
  */
 public class ClawOuttakeCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    // public Claw claw;
-    // private Claw claw;
     Claw claw;
 
     public ClawOuttakeCommand(Claw claw) {
