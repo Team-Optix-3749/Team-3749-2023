@@ -34,7 +34,7 @@ public class ClawOuttakeCommand extends CommandBase {
     @Override
     public void execute() {
         claw.setSpeed(Constants.speed, Constants.speed);
-        
+
     }
 
     // Run on command finish

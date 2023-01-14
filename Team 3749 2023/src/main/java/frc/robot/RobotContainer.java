@@ -14,7 +14,6 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.ClawOuttakeCommand;
 import frc.robot.commands.ClawIntakeCommand;
 
-
 public class RobotContainer {
 
   // Controllers
@@ -35,7 +34,8 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-  private void configureDefaultCommands() {}
+  private void configureDefaultCommands() {
+  }
 
   private void configureButtonBindings() {
 
@@ -46,5 +46,5 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
-  }  
+  }
 }
