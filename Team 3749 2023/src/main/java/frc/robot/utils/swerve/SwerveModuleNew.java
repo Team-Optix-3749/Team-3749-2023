@@ -160,9 +160,9 @@ public class SwerveModuleNew {
 
         // We add feed forward and PID. PID handles correcting where we are, Feedforward
         // handles where we are going, adding them sets it up for the best of both
-        setVoltage(driveOutput * 0.00001 + driveFeedforward, turnOutput * 0.00001 + turnFeedforward);
+        setVoltage(driveOutput + driveFeedforward, turnOutput  + turnFeedforward);
 
-        return new double[] { driveFeedforward, driveOutput * 0.00001, turnFeedforward, turnOutput * 0.00001,
+        return new double[] { driveFeedforward, driveOutput, turnFeedforward, turnOutput,
                 state.speedMetersPerSecond, state.angle.getRadians() };
     }
 
