@@ -24,20 +24,23 @@ public class RobotContainer {
 
   // Controllers
   private final Arm arm = new Arm();
-  private final MoveLowerUp MoveLowerUpCommand = new MoveLowerUp(arm);
-  private final MoveLowerDown MoveLowerDownCommand = new MoveLowerDown(arm);
-  private final MoveUpperUpDown MoveUpperUpDownCommand = new MoveUpperUpDown(arm);
+  // private final MoveLowerUp MoveLowerUpCommand = new MoveLowerUp(arm);
+  // private final MoveLowerDown MoveLowerDownCommand = new MoveLowerDown(arm);
+  // private final MoveUpperUpDown MoveUpperUpDownCommand = new MoveUpperUpDown(arm);
   
-  private final Xbox pilot = new Xbox(0);
-  private final Xbox operator = new Xbox(1);
-  private final POV pilotPOV = new POV(pilot);
-  private final POV operatorPOV = new POV(operator);
-  private final XboxController xboxController = new XboxController(0);
+  // private final Xbox pilot = new Xbox(0);
+  // private final Xbox operator = new Xbox(1);
+  // private final POV pilotPOV = new POV(pilot);
+  // private final POV operatorPOV = new POV(operator);
+  // private final XboxController xboxController = new XboxController(0);
 
   // joystick
   private final Joystick joystick = new Joystick(Constants.Controller.joystick_port);
 
   // Subsystems
+  public Arm getArm(){
+    return this.arm;
+  }
 
   // Commands
 
@@ -53,9 +56,9 @@ public class RobotContainer {
     /*POV pov = new POV(operator);
     POVButton upButton = pov.up();
     POVButton downButton = pov.down();*/
-    pilotPOV.up().toggleOnTrue(MoveLowerUpCommand); //if up button on Dpad is pressed, run MoveLowerUpCommand
-    pilotPOV.down().toggleOnTrue(MoveLowerDownCommand); //if down button on Dpad is pressed, run MoveLowerDownCommand 
-    pilot.x().toggleOnTrue(MoveUpperUpDownCommand); //if x button is pressed, run MoveUpperUpDownCommand
+    // pilotPOV.up().toggleOnTrue(MoveLowerUpCommand); //if up button on Dpad is pressed, run MoveLowerUpCommand
+    // pilotPOV.down().toggleOnTrue(MoveLowerDownCommand); //if down button on Dpad is pressed, run MoveLowerDownCommand 
+    // pilot.x().toggleOnTrue(MoveUpperUpDownCommand); //if x button is pressed, run MoveUpperUpDownCommand
   }
 
   public Command getAutonomousCommand() {

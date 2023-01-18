@@ -75,10 +75,10 @@ public final class Constants {
         public static final int double_substation_top = 185;
 
         public static final int score_floor_bottom = 120;
-        public static final int scoreFloorTop = 255;
+        public static final int score_floor_top = 255;
 
         public static final int score_mid_bottom = 95;
-        public static final int scoreMidTop = 195;
+        public static final int score_mid_top = 195;
 
         public static final int score_high_bottom = 135;
         public static final int score_high_top = 160;
