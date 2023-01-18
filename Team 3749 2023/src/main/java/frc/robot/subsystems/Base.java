@@ -25,7 +25,7 @@ public class Base extends SubsystemBase {
         neo.setInverted(true);
         falcon.setNeutralMode(NeutralMode.Brake);
 
-        Constants.Base.speed.set(new Double(16.90));
+        // what does this do; Constants.Base.speed.set(new Double(16.90));
     }
 
     /***
