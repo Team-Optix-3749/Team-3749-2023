@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /***
  * @author Aditya Samavedam
  * @author Don Tran
+ * @author Bailey Say
  * 
  */
 public class ArmCommand extends CommandBase {
@@ -27,8 +28,8 @@ public class ArmCommand extends CommandBase {
     @Override
     public void initialize() {
         // set motors speed to 0 just in case
-        arm.setSpeedUpper(0);
-        arm.setSpeedLower(0);
+        arm.setSpeed(arm.getMotorLowerLeft(), 0);
+        arm.setSpeed(arm.getMotorLowerRight(), 0);
     }
 
     // Run every 20 ms
@@ -36,7 +37,7 @@ public class ArmCommand extends CommandBase {
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
         //neo motor speed isn't a constant yet
-        arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1);
+        arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1, );
     }
 
     // Run on command finish

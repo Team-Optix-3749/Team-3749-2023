@@ -60,13 +60,18 @@ public class Arm extends SubsystemBase {
     // Actual Arm Code
     public Arm() {}
 
-    public void setSpeedLower(double speed) {
-        neo_motor_lower_left.set(speed); //fix
+    // Sets speed of a motor
+    // Pass in a motor and a speed to set that motor's speed
+    public void setSpeed(CANSparkMax motor, double speed) {
+        motor.set(speed); // says "fix" here but not sure what it's referring to
     }
 
-    public void setSpeedUpper(double speed) {
-        neo_motor_lower_right.set(speed); //fix
+    public CANSparkMax getMotorLowerLeft() {
+        return this.neo_motor_lower_left;
     }
-    
-    
+
+    public CANSparkMax getMotorLowerRight() {
+        return this.neo_motor_lower_right;
+    }
+
 }
