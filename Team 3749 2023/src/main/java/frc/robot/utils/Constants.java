@@ -32,7 +32,7 @@ public final class Constants {
         public static final int neo_motor_upper_id_2 = 3; // Change this value later
 
         //public static final int neo_motor_lower_left_speed = 1; // Change this value later
-        //public static final int neo_motor_lower_right_speed = 1; //Change this value later
+        //public static final int neo_motor_lower_right_speed = 1; //Change this val later
 
         // These speeds apply for both lower motors and both upper motors respectively
         public static final int neo_motor_lower_speed = 1; // Change this value later
