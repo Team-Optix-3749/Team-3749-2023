@@ -49,7 +49,7 @@ public class Arm extends SubsystemBase {
     private CANSparkMax neo_motor_upper2 = new CANSparkMax(Constants.Arm.neo_motor_upper_id_2, MotorType.kBrushless); // Check if this is actually brushless later
 
     private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(neo_motor_lower1, neo_motor_lower2, null);
-    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(neo_motor_lower1, neo_motor_lower2, null);
+    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(neo_motor_upper1, neo_motor_upper2, null);
 
     private final DCMotor armGearbox = DCMotor.getNEO(Constants.Arm.number_of_motors);
         
@@ -63,15 +63,6 @@ public class Arm extends SubsystemBase {
     private final RelativeEncoder lowerEncoder2 = neo_motor_lower2.getEncoder();
     private final RelativeEncoder upperEncoder1 = neo_motor_upper1.getEncoder(); 
     private final RelativeEncoder upperEncoder2 = neo_motor_upper2.getEncoder();
-
-    // Simulation Code
-    private final SingleJointedArmSim arm_top_sim = new SingleJointedArmSim(armGearbox, Constants.Simulation.arm_reduction, SingleJointedArmSim.estimateMOI(Constants.Simulation.arm_top_length, Constants.Simulation.arm_top_mass),
-            Constants.Simulation.arm_top_length,
-            Units.degreesToRadians(Constants.Simulation.arm_top_min_angle),
-            Units.degreesToRadians(Constants.Simulation.arm_top_max_angle),
-            Constants.Simulation.arm_top_mass,
-            false,
-            VecBuilder.fill(Constants.Simulation.arm_encoder_dist_per_pulse)); // Add noise with a std-dev of 1 tick);
 
     // Actual Arm Code
     public Arm() {}
