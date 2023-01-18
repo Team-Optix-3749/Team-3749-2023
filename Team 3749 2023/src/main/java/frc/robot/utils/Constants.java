@@ -26,13 +26,15 @@ public final class Constants {
     }
 
     public static final class Arm {
-        public static final int neo_motor_lower_left_port = 0; // Change this value later
-        public static final int neo_motor_lower_right_port = 1; //Change this value later
-        public static final int neo_motor_lower = 2;
-        public static final int neo_motor_upper_port = 3; // Change this value later
+        public static final int neo_motor_lower_id_1 = 0; // Change this value later
+        public static final int neo_motor_lower_id_2 = 1; //Change this value later
+        public static final int neo_motor_upper_id_1 = 2;
+        public static final int neo_motor_upper_id_2 = 3; // Change this value later
 
         //public static final int neo_motor_lower_left_speed = 1; // Change this value later
         //public static final int neo_motor_lower_right_speed = 1; //Change this value later
+
+        // These speeds apply for both lower motors and both upper motors respectively
         public static final int neo_motor_lower_speed = 1;
         public static final int neo_motor_upper_speed = 1; // Change this value later
         

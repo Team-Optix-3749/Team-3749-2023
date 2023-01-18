@@ -31,24 +31,33 @@ import frc.robot.utils.Constants;
  * @author Bailey Say
  * 
  * Code for the arm of the robot. This does not include the claw at the end
+ * 
+ * Naming convention:
+ * neo_motor_lower 1 and 2 refer to bottom two motors controlling the lower joint
+ * neo_motor_upper 1 and 2 refer to upper two motors controlling the upper joint
  */
 
 public class Arm extends SubsystemBase {
     
 
     // Someone fix this
-    private CANSparkMax neo_motor_lower_left = new CANSparkMax(Constants.Arm.neo_motor_lower_left_port, MotorType.kBrushless); // Check if this is actually brushless later
-    private CANSparkMax neo_motor_lower_right = new CANSparkMax(Constants.Arm.neo_motor_lower_right_port, MotorType.kBrushless); // Check if this is actually brushless later
+    private CANSparkMax neo_motor_lower1 = new CANSparkMax(Constants.Arm.neo_motor_lower_id_1, MotorType.kBrushless); // Check if this is actually brushless later
+    private CANSparkMax neo_motor_lower2 = new CANSparkMax(Constants.Arm.neo_motor_lower_id_2, MotorType.kBrushless); // Check if this is actually brushless later
+    private CANSparkMax neo_motor_upper1 = new CANSparkMax(Constants.Arm.neo_motor_upper_id_1, MotorType.kBrushless); // Check if this is actually brushless later
+    private CANSparkMax neo_motor_upper2 = new CANSparkMax(Constants.Arm.neo_motor_upper_id_2, MotorType.kBrushless); // Check if this is actually brushless later
 
     private final DCMotor armGearbox = DCMotor.getNEO(Constants.Arm.number_of_motors);
         
     // Standard classes for controlling our arm
+    // Not sure if same values for k values from Constants.Arm should be used for PIDs of upper and lower. Check this later
     private final ProfiledPIDController topController = new ProfiledPIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd, new TrapezoidProfile.Constraints(Constants.Arm.max_velocity, Constants.Arm.max_acceleration));
     private final ProfiledPIDController bottomController = new ProfiledPIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd, new TrapezoidProfile.Constraints(Constants.Arm.max_velocity, Constants.Arm.max_acceleration));
     
     // Relative Encoders
-    private final RelativeEncoder topEncoder = neo_motor_lower_left.getEncoder(); // change
-    private final RelativeEncoder bottomEncoder = neo_motor_lower_right.getEncoder();
+    private final RelativeEncoder lowerEncoder1 = neo_motor_lower1.getEncoder(); 
+    private final RelativeEncoder lowerEncoder2 = neo_motor_lower2.getEncoder();
+    private final RelativeEncoder upperEncoder1 = neo_motor_upper1.getEncoder(); 
+    private final RelativeEncoder upperEncoder2 = neo_motor_upper2.getEncoder();
 
     // Simulation Code
     private final SingleJointedArmSim arm_top_sim = new SingleJointedArmSim(armGearbox, Constants.Simulation.arm_reduction, SingleJointedArmSim.estimateMOI(Constants.Simulation.arm_top_length, Constants.Simulation.arm_top_mass),
@@ -68,12 +77,15 @@ public class Arm extends SubsystemBase {
         motor.set(speed); // says "fix" here but not sure what it's referring to
     }
 
-    public CANSparkMax getMotorLowerLeft() {
-        return this.neo_motor_lower_left;
-    }
+    // Fix speed later
+    // public CANSparkMax getMotorLower() {
+    //     if (i == 1) {
+    //         return this.neo_motor_lower_left;
+    //     }
+    // }
 
-    public CANSparkMax getMotorLowerRight() {
-        return this.neo_motor_lower_right;
-    }
+    // public CANSparkMax getMotorUpper() {
+    //     return this.neo_motor_lower_right;
+    // }
 
 }
