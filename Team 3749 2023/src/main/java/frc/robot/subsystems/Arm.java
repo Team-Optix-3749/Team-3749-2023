@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -55,8 +56,8 @@ public class Arm extends SubsystemBase {
         
     // Standard classes for controlling our arm
     // Not sure if same values for k values from Constants.Arm should be used for PIDs of upper and lower. Check this later
-    private final ProfiledPIDController topController = new ProfiledPIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd, new TrapezoidProfile.Constraints(Constants.Arm.max_velocity, Constants.Arm.max_acceleration));
-    private final ProfiledPIDController bottomController = new ProfiledPIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd, new TrapezoidProfile.Constraints(Constants.Arm.max_velocity, Constants.Arm.max_acceleration));
+    private final PIDController topController = new PIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd);
+    private final PIDController bottomController = new PIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd);
     
     // Relative Encoders
     private final RelativeEncoder lowerEncoder1 = neo_motor_lower1.getEncoder(); 
