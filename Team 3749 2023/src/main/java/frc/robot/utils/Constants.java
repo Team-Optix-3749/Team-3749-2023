@@ -40,11 +40,11 @@ public final class Constants {
         
         public static final int number_of_motors = 2;
 
-        public static final int kp = 40;
+        public static final double kp = 0.5;
 
         // Note: ki must be set to 0 to avoid integral windup, feedforward will be used to account for the error instead
-        public static final int ki = 0;
-        public static final int kd = 0;
+        public static final double ki = 0;
+        public static final double kd = 0;
 
         public static final int max_velocity = 2;
         public static final int max_acceleration = 5;
