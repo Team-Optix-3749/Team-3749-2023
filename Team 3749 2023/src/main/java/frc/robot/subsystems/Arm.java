@@ -78,5 +78,10 @@ public class Arm extends SubsystemBase {
         lowerMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
     }
     
+    // PID + feedforward implementation; should return the needed voltage
+    // also add calculateLower()
+    public double calculateUpper() {
+        return 
+    }
 
 }
