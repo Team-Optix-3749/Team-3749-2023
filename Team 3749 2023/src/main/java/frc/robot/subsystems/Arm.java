@@ -32,6 +32,7 @@ import frc.robot.utils.Constants;
 
 /*
  * @author Bailey Say
+ * @author Raymond Sheng
  * 
  * Code for the arm of the robot. This does not include the claw at the end
  * 
