@@ -48,8 +48,8 @@ public class Arm extends SubsystemBase {
     private CANSparkMax neo_motor_upper1 = new CANSparkMax(Constants.Arm.neo_motor_upper_id_1, MotorType.kBrushless); // Check if this is actually brushless later
     private CANSparkMax neo_motor_upper2 = new CANSparkMax(Constants.Arm.neo_motor_upper_id_2, MotorType.kBrushless); // Check if this is actually brushless later
 
-    private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(neo_motor_lower1, neo_motor_lower2, null);
-    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(neo_motor_upper1, neo_motor_upper2, null);
+    private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(neo_motor_upper1, neo_motor_upper2, null);
+    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(neo_motor_lower1, neo_motor_lower2, null);
 
     private final DCMotor armGearbox = DCMotor.getNEO(Constants.Arm.number_of_motors);
         
@@ -73,7 +73,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void setSpeedLower(double speed) {
-        upperMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
+        lowerMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
     }
     
 
