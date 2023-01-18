@@ -36,7 +36,7 @@ public class ArmCommand extends CommandBase {
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
         //neo motor speed isn't a constant yet
-        arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1);
+        //arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1);
     }
 
     // Run on command finish
