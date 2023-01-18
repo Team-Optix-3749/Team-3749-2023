@@ -67,12 +67,10 @@ public class Arm extends SubsystemBase {
     // Actual Arm Code
     public Arm() {}
 
-    // Sets speed of a motor
-    // Pass in a motor and a speed to set that motor's speed
+    // Sets speed of a motor controller group
     public void setSpeedUpper(double speed) {
         upperMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
     }
-
 
     public void setSpeedLower(double speed) {
         upperMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
