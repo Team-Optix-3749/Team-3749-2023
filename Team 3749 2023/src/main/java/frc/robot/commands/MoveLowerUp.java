@@ -36,7 +36,7 @@ public class MoveLowerUp extends CommandBase {
     @Override
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
-        arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed);
+        arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1);
         
 
     }
