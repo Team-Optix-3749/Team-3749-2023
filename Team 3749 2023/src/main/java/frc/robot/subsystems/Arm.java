@@ -35,6 +35,8 @@ import frc.robot.utils.Constants;
 
 public class Arm extends SubsystemBase {
     
+
+    // Someone fix this
     private CANSparkMax neo_motor_lower_left = new CANSparkMax(Constants.Arm.neo_motor_lower_left_port, MotorType.kBrushless); // Check if this is actually brushless later
     private CANSparkMax neo_motor_lower_right = new CANSparkMax(Constants.Arm.neo_motor_lower_right_port, MotorType.kBrushless); // Check if this is actually brushless later
 

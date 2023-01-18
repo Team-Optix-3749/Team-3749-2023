@@ -37,13 +37,15 @@ public class ArmCommand extends CommandBase {
     public void execute() {
         //Base.set(Constants.Base.speed.get().doubleValue());
         //neo motor speed isn't a constant yet
-        arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1, );
+
+        // I have no idea what this code is trying to do, please be careful when running it
+        arm.setSpeed(arm.getMotorLowerLeft(), Constants.Arm.neo_motor_lower_speed*-1);
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        arm.setSpeedLower(0);
+        arm.setSpeed(arm.getMotorLowerLeft(), 0);
     }
 
     // Returns true when the command should end
