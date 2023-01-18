@@ -27,8 +27,8 @@ public class ArmCommand extends CommandBase {
     @Override
     public void initialize() {
         // set motors speed to 0 just in case
-        arm.setSpeedUpper(Constants.Arm.neo_motor_upper_stop);
-        arm.setSpeedLower(Constants.Arm.neo_motor_lower_stop);
+        arm.setSpeedUpper(0);
+        arm.setSpeedLower(0);
     }
 
     // Run every 20 ms
@@ -42,7 +42,7 @@ public class ArmCommand extends CommandBase {
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        arm.setSpeedLower(Constants.Arm.neo_motor_lower_stop);
+        arm.setSpeedLower(0);
     }
 
     // Returns true when the command should end

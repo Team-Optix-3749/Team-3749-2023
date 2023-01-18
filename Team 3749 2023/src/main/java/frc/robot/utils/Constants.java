@@ -35,10 +35,7 @@ public final class Constants {
         //public static final int neo_motor_lower_right_speed = 1; //Change this value later
         public static final int neo_motor_lower_speed = 1;
         public static final int neo_motor_upper_speed = 1; // Change this value later
-
-        public static final int neo_motor_lower_stop = 0; // Change this value later
-        public static final int neo_motor_upper_stop = 0; // Change this value later
-
+        
         public static final int number_of_motors = 2;
 
         public static final int kp = 40;
