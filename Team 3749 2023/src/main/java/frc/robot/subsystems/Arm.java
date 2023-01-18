@@ -12,6 +12,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
@@ -46,6 +48,9 @@ public class Arm extends SubsystemBase {
     private CANSparkMax neo_motor_upper1 = new CANSparkMax(Constants.Arm.neo_motor_upper_id_1, MotorType.kBrushless); // Check if this is actually brushless later
     private CANSparkMax neo_motor_upper2 = new CANSparkMax(Constants.Arm.neo_motor_upper_id_2, MotorType.kBrushless); // Check if this is actually brushless later
 
+    private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(neo_motor_lower1, neo_motor_lower2, null);
+    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(neo_motor_lower1, neo_motor_lower2, null);
+
     private final DCMotor armGearbox = DCMotor.getNEO(Constants.Arm.number_of_motors);
         
     // Standard classes for controlling our arm
@@ -73,19 +78,14 @@ public class Arm extends SubsystemBase {
 
     // Sets speed of a motor
     // Pass in a motor and a speed to set that motor's speed
-    public void setSpeed(CANSparkMax motor, double speed) {
-        motor.set(speed); // says "fix" here but not sure what it's referring to
+    public void setSpeedUpper(double speed) {
+        upperMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
     }
 
-    // Fix speed later
-    // public CANSparkMax getMotorLower() {
-    //     if (i == 1) {
-    //         return this.neo_motor_lower_left;
-    //     }
-    // }
 
-    // public CANSparkMax getMotorUpper() {
-    //     return this.neo_motor_lower_right;
-    // }
+    public void setSpeedLower(double speed) {
+        upperMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
+    }
+    
 
 }

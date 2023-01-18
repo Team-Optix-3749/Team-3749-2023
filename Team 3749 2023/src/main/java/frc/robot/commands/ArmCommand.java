@@ -27,25 +27,24 @@ public class ArmCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        // set motors speed to 0 just in case
-        arm.setSpeed(arm.getMotorLowerLeft(), 0);
-        arm.setSpeed(arm.getMotorLowerRight(), 0);
     }
 
     // Run every 20 ms
     @Override
-    public void execute() {
+    public void execute() { // we will figure this out later
         //Base.set(Constants.Base.speed.get().doubleValue());
         //neo motor speed isn't a constant yet
 
         // I have no idea what this code is trying to do, please be careful when running it
-        arm.setSpeed(arm.getMotorLowerLeft(), Constants.Arm.neo_motor_lower_speed*-1);
+        // arm.setSpeedUpper(Constants.Arm.neo_motor_lower_speed*-1);
+        // arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1);
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        arm.setSpeed(arm.getMotorLowerLeft(), 0);
+        arm.setSpeedLower(0);
+        arm.setSpeedUpper(0);
     }
 
     // Returns true when the command should end
