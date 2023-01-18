@@ -22,7 +22,6 @@ public class RobotContainer {
   // private final POV pilotPOV = new POV(pilot);
   // private final POV operatorPOV = new POV(operator);
 
-
   // STOP DELETING THIS!!!! declares claw subsystem so it can be called later
   private final Claw claw = new Claw();
 
@@ -39,10 +38,11 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    pilot.a().whileTrue(new ClawIntakeCommand(claw)); // while a is held, intake
+    pilot.b().whileTrue(new ClawOuttakeCommand(claw)); // while b is held, outtake
 
-    pilot.a().whileTrue(new ClawIntakeCommand(claw));
-    pilot.b().whileTrue(new ClawOuttakeCommand(claw));
-
+    // note that isHeld() doesn't work
+    // it's now whileTrue()
   }
 
   public Command getAutonomousCommand() {
