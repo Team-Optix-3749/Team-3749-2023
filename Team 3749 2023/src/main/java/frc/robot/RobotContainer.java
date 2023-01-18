@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.MoveUpperUpDown;
-import frc.robot.commands.MoveLowerDown;
-import frc.robot.commands.MoveLowerUp;
+
+// Replace with ArmCommand.java later
+// import frc.robot.commands.MoveUpperUpDown;
+// import frc.robot.commands.MoveLowerDown;
+// import frc.robot.commands.MoveLowerUp;
 import frc.robot.subsystems.Arm;
 import frc.robot.utils.Constants;
 import frc.robot.utils.POV;
@@ -28,9 +30,11 @@ public class RobotContainer {
 
   // Controllers
   private final Arm arm = new Arm();
-  private final MoveLowerUp MoveLowerUpCommand = new MoveLowerUp(arm);
-  private final MoveLowerDown MoveLowerDownCommand = new MoveLowerDown(arm);
-  private final MoveUpperUpDown MoveUpperUpDownCommand = new MoveUpperUpDown(arm);
+
+  // Replace with 
+  // private final MoveLowerUp MoveLowerUpCommand = new MoveLowerUp(arm);
+  // private final MoveLowerDown MoveLowerDownCommand = new MoveLowerDown(arm);
+  // private final MoveUpperUpDown MoveUpperUpDownCommand = new MoveUpperUpDown(arm);
   
   private final Xbox pilot = new Xbox(0);
   private final Xbox operator = new Xbox(1);
@@ -57,9 +61,11 @@ public class RobotContainer {
     /*POV pov = new POV(operator);
     POVButton upButton = pov.up();
     POVButton downButton = pov.down();*/
-    pilotPOV.up().toggleOnTrue(MoveLowerUpCommand); //if up button on Dpad is pressed, run MoveLowerUpCommand
-    pilotPOV.down().toggleOnTrue(MoveLowerDownCommand); //if down button on Dpad is pressed, run MoveLowerDownCommand 
-    pilot.x().toggleOnTrue(MoveUpperUpDownCommand); //if x button is pressed, run MoveUpperUpDownCommand
+
+    // Replace with commands for ArmCommand.java
+    // pilotPOV.up().toggleOnTrue(MoveLowerUpCommand); //if up button on Dpad is pressed, run MoveLowerUpCommand
+    // pilotPOV.down().toggleOnTrue(MoveLowerDownCommand); //if down button on Dpad is pressed, run MoveLowerDownCommand 
+    // pilot.x().toggleOnTrue(MoveUpperUpDownCommand); //if x button is pressed, run MoveUpperUpDownCommand
   }
 
   public Command getAutonomousCommand() {
