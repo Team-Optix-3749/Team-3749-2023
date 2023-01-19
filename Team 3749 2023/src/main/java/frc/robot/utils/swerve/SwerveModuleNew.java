@@ -1,5 +1,8 @@
 package frc.robot.utils.swerve;
 
+import java.util.function.Supplier;
+
+import com.ctre.phoenixpro.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -27,24 +30,28 @@ public class SwerveModuleNew {
     private final CANSparkMax turningMotor;
 
     private final RelativeEncoder driveEncoder;
-    private final RelativeEncoder turningEncoder;
+    private final CANcoder turningEncoder;
+    // The absolute encoders do not have a regular get position, but seem to give back these suppliers
+
+    Supplier<Double> turningPositionSupplier;
+    Supplier<Double> turningVelocitySupplier;
 
     // Gains are for example purposes only - must be determined for your own robot!
-    private final PIDController drivePIDController = new PIDController(1, 0, 0);
+    private final PIDController drivePIDController = new PIDController(Constants.DrivetrainNew.driveKP.get(), Constants.DrivetrainNew.driveKI.get(), Constants.DrivetrainNew.driveKD.get());
 
     // Gains are for example purposes only - must be determined for your own robot!
     private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
-            0.2,
-            0.15,
-            0.001,
+        Constants.DrivetrainNew.turningKP.get(),
+        Constants.DrivetrainNew.turningKI.get(),
+        Constants.DrivetrainNew.turningKD.get(),
             new TrapezoidProfile.Constraints(
                     Constants.SwerveModuleNew.max_angular_velocity,
                     Constants.SwerveModuleNew.max_angular_acceleration));
 
     // Gains are for example purposes only - must be determined for your own robot!
-    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(.5,
+    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(Constants.DrivetrainNew.driveKS.get(),
             Constants.DrivetrainNew.driveKV.get());
-    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(.5,
+    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(Constants.DrivetrainNew.turningKS.get(),
             Constants.DrivetrainNew.turningKV.get());
 
     /** 
@@ -55,6 +62,7 @@ public class SwerveModuleNew {
 
         int drive_motor_id = 0;
         int turning_motor_id = 0;
+        int absolute_encoder_port = 0;
         boolean drive_motor_reversed = false;
         boolean turning_motor_reversed = false;
 
@@ -63,25 +71,30 @@ public class SwerveModuleNew {
         // Uses enums to set the variables to proper constants. Done here instead of in
         // parameters for organization in the Drivetrain subsystem
         if (modulePosition == Constants.SwerveENUMS.FRONT_LEFT) {
-            drive_motor_id = Constants.DrivetrainOld.front_left_drive_id;
-            turning_motor_id = Constants.DrivetrainOld.front_left_turning_id;
-            drive_motor_reversed = Constants.DrivetrainOld.front_left_drive_encoder_reversed;
-            turning_motor_reversed = Constants.DrivetrainOld.front_left_turning_encoder_reversed;
+            drive_motor_id = Constants.SwerveModuleNew.front_left_drive_id;
+            turning_motor_id = Constants.SwerveModuleNew.front_left_turning_id;
+            absolute_encoder_port = Constants.SwerveModuleNew.front_left_absolute_encoder_port;
+            drive_motor_reversed = Constants.SwerveModuleNew.front_left_drive_encoder_reversed;
+            turning_motor_reversed = Constants.SwerveModuleNew.front_left_turning_encoder_reversed;
         } else if (modulePosition == Constants.SwerveENUMS.FRONT_RIGHT) {
-            drive_motor_id = Constants.DrivetrainOld.front_right_drive_id;
-            turning_motor_id = Constants.DrivetrainOld.front_right_turning_id;
-            drive_motor_reversed = Constants.DrivetrainOld.front_right_drive_encoder_reversed;
-            turning_motor_reversed = Constants.DrivetrainOld.front_right_turning_encoder_reversed;
+            drive_motor_id = Constants.SwerveModuleNew.front_right_drive_id;
+            turning_motor_id = Constants.SwerveModuleNew.front_right_turning_id;
+            absolute_encoder_port = Constants.SwerveModuleNew.front_right_absolute_encoder_port;
+            drive_motor_reversed = Constants.SwerveModuleNew.front_right_drive_encoder_reversed;
+            turning_motor_reversed = Constants.SwerveModuleNew.front_right_turning_encoder_reversed;
         } else if (modulePosition == Constants.SwerveENUMS.BACK_LEFT) {
-            drive_motor_id = Constants.DrivetrainOld.back_left_drive_id;
-            turning_motor_id = Constants.DrivetrainOld.back_left_turning_id;
-            drive_motor_reversed = Constants.DrivetrainOld.back_left_drive_encoder_reversed;
-            turning_motor_reversed = Constants.DrivetrainOld.back_left_turning_encoder_reversed;
+            drive_motor_id = Constants.SwerveModuleNew.back_left_drive_id;
+            turning_motor_id = Constants.SwerveModuleNew.back_left_turning_id;
+            absolute_encoder_port = Constants.SwerveModuleNew.back_left_absolute_encoder_port;
+
+            drive_motor_reversed = Constants.SwerveModuleNew.back_left_drive_encoder_reversed;
+            turning_motor_reversed = Constants.SwerveModuleNew.back_left_turning_encoder_reversed;
         } else if (modulePosition == Constants.SwerveENUMS.BACK_RIGHT) {
-            drive_motor_id = Constants.DrivetrainOld.back_right_drive_id;
-            turning_motor_id = Constants.DrivetrainOld.back_right_turning_id;
-            drive_motor_reversed = Constants.DrivetrainOld.back_right_drive_encoder_reversed;
-            turning_motor_reversed = Constants.DrivetrainOld.back_right_turning_encoder_reversed;
+            drive_motor_id = Constants.SwerveModuleNew.back_right_drive_id;
+            turning_motor_id = Constants.SwerveModuleNew.back_right_turning_id;
+            absolute_encoder_port = Constants.SwerveModuleNew.back_right_absolute_encoder_port;
+            drive_motor_reversed = Constants.SwerveModuleNew.back_right_drive_encoder_reversed;
+            turning_motor_reversed = Constants.SwerveModuleNew.back_right_turning_encoder_reversed;
         }
 
         driveMotor = new CANSparkMax(drive_motor_id, MotorType.kBrushless);
@@ -91,24 +104,14 @@ public class SwerveModuleNew {
         turningMotor.setInverted(turning_motor_reversed);
 
         driveEncoder = driveMotor.getEncoder();
-        turningEncoder = turningMotor.getEncoder();
+        turningEncoder = new CANcoder(absolute_encoder_port);
 
-        // Set the distance per pulse for the drive encoder. We can simply use the
-        // distance traveled for one rotation of the wheel divided by the encoder
-        // resolution.
-        driveEncoder.setPositionConversionFactor(Constants.SwerveModuleNew.drive_encoder_rotations_to_meter);
-        turningEncoder.setVelocityConversionFactor(Constants.SwerveModuleNew.drive_encoder_RPM_to_MPS);
-
-        // Set the distance (in this case, angle) in radians per pulse for the turning
-        // encoder.
-        // This is the the angle through an entire rotation (2 * pi) divided by the
-        // encoder resolution.
-        turningEncoder.setPositionConversionFactor(Constants.SwerveModuleNew.turning_encoder_rotations_to_meter);
-        turningEncoder.setVelocityConversionFactor(Constants.SwerveModuleNew.turning_encoder_RPM_to_MPS);
-
+        turningPositionSupplier = turningEncoder.getPosition().asSupplier();
+        turningVelocitySupplier = turningEncoder.getVelocity().asSupplier();
         // Limit the PID Controller's input range between -pi and pi and set the input
         // to be continuous.
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
     }
 
     /**
@@ -116,9 +119,11 @@ public class SwerveModuleNew {
      *
      * @return The current state of the module.
      */
+
+
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                driveEncoder.getVelocity(), new Rotation2d(turningEncoder.getPosition()));
+                driveEncoder.getVelocity(), new Rotation2d(turningPositionSupplier.get()));
     }
 
     /**
@@ -128,7 +133,7 @@ public class SwerveModuleNew {
      */
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-                driveEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
+                driveEncoder.getPosition(), new Rotation2d(turningPositionSupplier.get()));
     }
 
     /**
@@ -140,16 +145,15 @@ public class SwerveModuleNew {
      */
     public double[] setDesiredState(SwerveModuleState desiredState) {
         // Optimize the reference state to avoid spinning further than 90 degrees
-        // SwerveModuleState state = SwerveModuleState.optimize(desiredState,
-        //         new Rotation2d(turningEncoder.getPosition()));
-        SwerveModuleState state = desiredState;
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+                new Rotation2d(turningPositionSupplier.get()));
         // Calculate the drive output from the drive PID controller.
         final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
         final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
         // Calculate the turning motor output from the turning PID controller.
-        final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(),
+        final double turnOutput = turningPIDController.calculate(turningPositionSupplier.get(),
                 state.angle.getRadians());
 
         final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
@@ -157,7 +161,7 @@ public class SwerveModuleNew {
         // We add feed forward and PID. PID handles correcting where we are, Feedforward
         // handles where we are going, adding them sets it up for the best of both
         setVoltage(driveOutput + driveFeedforward, turnOutput  + turnFeedforward);
-
+        // returns our output data, in case we want it
         return new double[] { driveFeedforward, driveOutput, turnFeedforward, turnOutput,
                 state.speedMetersPerSecond, state.angle.getRadians() };
     }
