@@ -35,6 +35,7 @@ public class ArmCommand extends CommandBase {
         //Base.set(Constants.Base.speed.get().doubleValue());
         //neo motor speed isn't a constant yet
 
+        arm.setSpeedUpper(0);
         // I have no idea what this code is trying to do, please be careful when running it
         // arm.setSpeedUpper(Constants.Arm.neo_motor_lower_speed*-1);
         // arm.setSpeedLower(Constants.Arm.neo_motor_lower_speed*-1);
