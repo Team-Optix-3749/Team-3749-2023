@@ -81,11 +81,13 @@ public class Arm extends SubsystemBase {
     // PID + feedforward implementation; should return the needed voltage
     // also add calculateLower()
     public double calculateUpper() {
+        motor.set(topController.calculate(upperEncoder1.getDistance(), setpoint));//taken from wpilib documentation: not too sure how this all works yet       
         return 
     }
 
     public double calculateLower()
     {
+        motor.set(bottomController.calculate(lowerEncoder1.getDistance(), setpoint));
         return;
     }
 
