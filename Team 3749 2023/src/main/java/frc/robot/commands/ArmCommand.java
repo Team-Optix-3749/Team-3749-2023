@@ -28,6 +28,8 @@ public class ArmCommand extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
+        arm.setSpeedLower(0);
+        arm.setSpeedUpper(0);
     }
 
     // Run every 20 ms
