@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
+import frc.robot.utils.Constants;
+
 /*
  * @author Bailey Say
  * 
  * Inverse kinematics, how fun
+ * It actually this is more like trig :skull:
  * 
  * Process:
  * 1. Define X and Y coordinates from length1, length2, theta1, theta 2
@@ -12,17 +15,11 @@ package frc.robot.subsystems;
  * 
  * Unfortunately original plan was scrapped
  * Now just do brute force to find all solutions and optimize solution
+ * 
  */
 public class InverseKinematics {
     
-    private double length1;
-    private double length2;
-    InverseKinematics(double length1, double length2) {
-        this.length1 = length1;
-        this.length2 = length2;
-    }
-
-    public double[] calculate(double x, double y) {
+    public static double[] calculate(double x, double y) {
         
         double[] optimal = new double[2];
         double mindist = Double.MAX_VALUE;
@@ -32,8 +29,8 @@ public class InverseKinematics {
             double i = Math.toRadians(degi);
             for (double degj = 1; degj < 361; degj += 0.5) {
                 double j = Math.toRadians(degj);
-                double deltax = length1 * Math.cos(i) + length2 * Math.cos(i + j) - x;
-                double deltay = length1 * Math.sin(j) + length2 * Math.sin(i + j) - y;
+                double deltax = Constants.Arm.lower_length * Math.cos(i) + Constants.Arm.upper_length * Math.cos(i + j) - x; 
+                double deltay = Constants.Arm.lower_length * Math.sin(j) + Constants.Arm.upper_length * Math.sin(i + j) - y;
                 double distance = Math.pow(deltax, 2) + Math.pow(deltay, 2);
                 if (distance < mindist)
                 {
@@ -47,8 +44,7 @@ public class InverseKinematics {
     }
 
     public static void main(String[] args) {
-        InverseKinematics test1 = new InverseKinematics(10, 20);
-        double[] solution1 = test1.calculate(20,20);
+        double[] solution1 = calculate(20,20);
         System.out.println(solution1[0] + " " + solution1[1]);
     }
 }

@@ -56,10 +56,11 @@ public class Arm extends SubsystemBase {
 
     // PID + feedforward implementation; should return the needed voltage, need to do feedforward
     // desired posiiton and make sure position values are good for both
-    public void setVoltageUpper(double setpoint) { 
-        upperMotorControllerGroup.setVoltage(topController.calculate(upperEncoder1.getPosition(), setpoint));//taken from wpilib documentation: not too sure how this all works yet
+    public void setVoltageUpper(double x, double y) { 
+        upperMotorControllerGroup.setVoltage(topController.calculate(upperEncoder1.getPosition(), InverseKinematics.calculate(x, y)[0]));//taken from wpilib documentation: not too sure how this all works yet
     }
-    public void setVoltageLower(double setpoint) {
-        lowerMotorControllerGroup.setVoltage(bottomController.calculate(lowerEncoder1.getPosition(), setpoint));
+
+    public void setVoltageLower(double x, double y) {
+        lowerMotorControllerGroup.setVoltage(bottomController.calculate(lowerEncoder1.getPosition(), InverseKinematics.calculate(x, y)[1])); // index idk if we want to clean this up lmao
     }
 }
