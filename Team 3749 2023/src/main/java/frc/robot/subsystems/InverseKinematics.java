@@ -27,13 +27,13 @@ public class InverseKinematics {
         double[] optimal = new double[2];
         double mindist = Double.MAX_VALUE;
 
-
-        for (double radi = 1; radi < 91; radi++) {
+        // Iterate over 1-360 degrees for both joints
+        for (double radi = 1; radi < Math.PI + 1; radi++) {
             double i = Math.toDegrees(radi);
-            for (double radj = 1; radj < 361; radj++) {
+            for (double radj = 1; radj < 2 * Math.PI + 1; radj++) {
                 double j = Math.toDegrees(radj);
-                double deltax = length1 * Math.cos(i) + length2 * Math.cos(i + j) - x;
-                double deltay = length1 * Math.sin(i) + length2 * Math.sin(i + j) - y;
+                double deltax = length1 * Math.cos(radi) + length2 * Math.cos(radi + radj) - x;
+                double deltay = length1 * Math.sin(radi) + length2 * Math.sin(radi + radj) - y;
                 double distance = Math.pow(deltax, 2) + Math.pow(deltay, 2);
                 if (distance < mindist)
                 {
@@ -46,10 +46,9 @@ public class InverseKinematics {
         return optimal;
     }
 
-    public static void main(String[] args){
-        InverseKinematics x = new InverseKinematics(10, 10);
-        double[] smth = x.calculate(20, 20);
-        System.out.println(smth[0]);
-        System.out.println(smth[1]);
+    public static void main(String[] args) {
+        InverseKinematics test1 = new InverseKinematics(10, 20);
+        double[] solution1 = test1.calculate(20,20);
+        System.out.println(solution1[0] + " " + solution1[1]);
     }
 }
