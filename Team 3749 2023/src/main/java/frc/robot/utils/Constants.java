@@ -46,7 +46,7 @@ public final class Constants {
         public static final double ki = 0;
         public static final double kd = 0;
 
-        public static final int max_velocity = 2;
-        public static final int max_acceleration = 5;
+        public static final double lower_length = 20; // inches
+        public static final double upper_length = 20; // inches
     }
 }

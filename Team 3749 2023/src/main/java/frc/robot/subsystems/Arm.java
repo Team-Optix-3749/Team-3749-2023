@@ -54,16 +54,12 @@ public class Arm extends SubsystemBase {
         lowerMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
     }
 
-    // PID + feedforward implementation; should return the needed voltage
-    // also add calculateLower()
-    public double calculateUpper() {
-        // upperMotorControllerGroup.set(topController.calculate(upperEncoder1.getDistance(), setpoint));//taken from wpilib documentation: not too sure how this all works yet       
-        return 0;
+    // PID + feedforward implementation; should return the needed voltage, need to do feedforward
+    // desired posiiton and make sure position values are good for both
+    public void setVoltageUpper(double setpoint) { 
+        upperMotorControllerGroup.setVoltage(topController.calculate(upperEncoder1.getPosition(), setpoint));//taken from wpilib documentation: not too sure how this all works yet
     }
-
-    public double calculateLower() {
-        // lowerMotorControllerGroup.set(bottomController.calculate(lowerEncoder1.getDistance(), setpoint));
-        return 0;
+    public void setVoltageLower(double setpoint) {
+        lowerMotorControllerGroup.setVoltage(bottomController.calculate(lowerEncoder1.getPosition(), setpoint));
     }
-
 }
