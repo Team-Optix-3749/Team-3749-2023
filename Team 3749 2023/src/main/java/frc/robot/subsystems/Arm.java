@@ -42,6 +42,8 @@ public class Arm extends SubsystemBase {
     public Arm() {
         neo_motor_lower2.setInverted(true);
         neo_motor_upper2.setInverted(true);
+
+        lowerEncoder1.setPositionConversionFactor(0);
     }
 
     // Sets speed of a motor controller group (dk if we neeed these)
@@ -61,5 +63,10 @@ public class Arm extends SubsystemBase {
 
     public void setVoltageLower(double x, double y) {
         lowerMotorControllerGroup.setVoltage(bottomController.calculate(lowerEncoder1.getPosition(), InverseKinematics.calculate(x, y)[1])); // index idk if we want to clean this up lmao
+    }
+
+    public void setDegreesUpper(double anlge) {
+        lowerEncoder1.setPosition(anlge);
+
     }
 }
