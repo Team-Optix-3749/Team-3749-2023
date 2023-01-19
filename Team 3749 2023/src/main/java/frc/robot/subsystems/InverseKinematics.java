@@ -28,18 +28,18 @@ public class InverseKinematics {
         double mindist = Double.MAX_VALUE;
 
         // Iterate over 1-360 degrees for both joints
-        for (double radi = 1; radi < Math.PI + 1; radi++) {
-            double i = Math.toDegrees(radi);
-            for (double radj = 1; radj < 2 * Math.PI + 1; radj++) {
-                double j = Math.toDegrees(radj);
-                double deltax = length1 * Math.cos(radi) + length2 * Math.cos(radi + radj) - x;
-                double deltay = length1 * Math.sin(radi) + length2 * Math.sin(radi + radj) - y;
+        for (double degi = 1; degi < 181; degi += 0.5) {
+            double i = Math.toRadians(degi);
+            for (double degj = 1; degj < 361; degj += 0.5) {
+                double j = Math.toRadians(degj);
+                double deltax = length1 * Math.cos(i) + length2 * Math.cos(i + j) - x;
+                double deltay = length1 * Math.sin(j) + length2 * Math.sin(i + j) - y;
                 double distance = Math.pow(deltax, 2) + Math.pow(deltay, 2);
                 if (distance < mindist)
                 {
                     mindist = distance;
-                    optimal[0] = i;
-                    optimal[1] = j;
+                    optimal[0] = degi;
+                    optimal[1] = degj;
                 }
             }
         } 
