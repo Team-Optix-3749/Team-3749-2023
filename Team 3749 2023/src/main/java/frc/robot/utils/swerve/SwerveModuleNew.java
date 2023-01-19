@@ -34,9 +34,9 @@ public class SwerveModuleNew {
 
     // Gains are for example purposes only - must be determined for your own robot!
     private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
-            1,
-            0,
-            0,
+            0.2,
+            0.15,
+            0.001,
             new TrapezoidProfile.Constraints(
                     Constants.SwerveModuleNew.max_angular_velocity,
                     Constants.SwerveModuleNew.max_angular_acceleration));
@@ -47,7 +47,7 @@ public class SwerveModuleNew {
     private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(.5,
             Constants.DrivetrainNew.turningKV.get());
 
-    /**
+    /** 
      * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
      * and turning encoder.
      */
@@ -78,14 +78,10 @@ public class SwerveModuleNew {
             drive_motor_reversed = Constants.DrivetrainOld.back_left_drive_encoder_reversed;
             turning_motor_reversed = Constants.DrivetrainOld.back_left_turning_encoder_reversed;
         } else if (modulePosition == Constants.SwerveENUMS.BACK_RIGHT) {
-            System.out.println(
-                    "awkjfgkausdgfliuGSIFJGAIPUDFGUISDFGADFUOG " + Constants.DrivetrainOld.back_right_drive_id);
             drive_motor_id = Constants.DrivetrainOld.back_right_drive_id;
             turning_motor_id = Constants.DrivetrainOld.back_right_turning_id;
             drive_motor_reversed = Constants.DrivetrainOld.back_right_drive_encoder_reversed;
             turning_motor_reversed = Constants.DrivetrainOld.back_right_turning_encoder_reversed;
-        } else {
-            System.out.println("end end sekjahr");
         }
 
         driveMotor = new CANSparkMax(drive_motor_id, MotorType.kBrushless);

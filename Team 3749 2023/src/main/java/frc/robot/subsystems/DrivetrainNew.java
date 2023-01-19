@@ -88,18 +88,15 @@ public class DrivetrainNew extends SubsystemBase {
      *                      field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
+
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
 
-        for (int i = 0; i < swerveModuleStates.length; i++) {
-            System.out.println(swerveModuleStates[i]);
-        }
-
-        // logModuleStates(swerveModuleStates);
 
         double[][] states = new double[4][4];
         states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
@@ -107,6 +104,11 @@ public class DrivetrainNew extends SubsystemBase {
         states[2]=backRight.setDesiredState(swerveModuleStates[2]);
         states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
         
+
+        logModuleStates(states);
+    }
+
+    public void logModuleStates(double[][] states) {
         // Smart dashboard logging
         String[] moduleNames = {"FR","FL","BR","BL"};
         String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
@@ -119,31 +121,6 @@ public class DrivetrainNew extends SubsystemBase {
         SmartDashboard.putNumber("YAW",gyro.getYaw());
         SmartDashboard.putNumber("PITCH",gyro.getPitch());
         SmartDashboard.putNumber("ROLL",gyro.getRoll());
-
-    }
-
-    public void logModuleStates(SwerveModuleState[] swerveModuleStates) {
-        double[][] states = new double[4][4];
-        states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
-        states[1]=frontLeft.setDesiredState(swerveModuleStates[1]);
-        states[2]=backRight.setDesiredState(swerveModuleStates[2]);
-        states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
-        SmartDashboard.putNumber("drive feed forward 0",states[0][0]);
-        SmartDashboard.putNumber("drive feed forward 1",states[1][0]);
-        SmartDashboard.putNumber("drive feed forward 2",states[2][0]);
-        SmartDashboard.putNumber("drive feed forward 3",states[3][0]);
-        SmartDashboard.putNumber("drive output 0",states[0][1]);
-        SmartDashboard.putNumber("drive output 1",states[1][1]);
-        SmartDashboard.putNumber("drive output 2",states[2][1]);
-        SmartDashboard.putNumber("drive output 3",states[3][1]);
-        SmartDashboard.putNumber("turn feed forward 0",states[0][2]);
-        SmartDashboard.putNumber("turn feed forward 1",states[1][2]);
-        SmartDashboard.putNumber("turn feed forward 2",states[2][2]);
-        SmartDashboard.putNumber("turn feed forward 3",states[3][2]);
-        SmartDashboard.putNumber("turn output 0",states[0][3]);
-        SmartDashboard.putNumber("turn output 1",states[1][3]);
-        SmartDashboard.putNumber("turn output 2",states[2][3]);
-        SmartDashboard.putNumber("turn output 3",states[3][3]);
     }
 
     /**
