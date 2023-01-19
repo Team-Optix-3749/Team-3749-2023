@@ -28,7 +28,7 @@ public class InverseKinematics {
         double[] optimal = new double[2];
         double mindist = Double.MAX_VALUE;
 
-        // Iterate over 1-360 degrees for both joints
+        // Iterate over possible degrees for both joints
         for (double degi = 1; degi < 181; degi += 0.5) {
             double i = Math.toRadians(degi);
             for (double degj = 1; degj < 361; degj += 0.5) {
