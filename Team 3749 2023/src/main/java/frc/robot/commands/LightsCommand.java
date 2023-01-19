@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /***
  * @author Jonathan Liu
  * @author Bailey Say
+ * @author Raymond Sheng
  *         
  */
 public class LightsCommand extends CommandBase {
