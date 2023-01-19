@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.testing;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -12,10 +12,11 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.SwerveENUMS;
 import frc.robot.utils.swerve.SwerveModuleNew;
 
 /** Represents a swerve drive style drivetrain. */
-public class DrivetrainNew extends SubsystemBase {
+public class DrivetrainTesting extends SubsystemBase {
 
     private final SwerveModuleNew frontLeft = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_LEFT);
     private final SwerveModuleNew frontRight = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_RIGHT);
@@ -34,7 +35,7 @@ public class DrivetrainNew extends SubsystemBase {
                     backRight.getPosition()
             });
 
-    public DrivetrainNew() {
+    public DrivetrainTesting() {
         gyro.reset();
     }
 
@@ -87,7 +88,7 @@ public class DrivetrainNew extends SubsystemBase {
      * @param fieldRelative Whether the provided x and y speeds are relative to the
      *                      field.
      */
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative, Constants.SwerveENUMS modulePosition) {
 
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
@@ -96,27 +97,34 @@ public class DrivetrainNew extends SubsystemBase {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
-
-
-        double[][] states = new double[4][4];
-        states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
-        states[1]=frontLeft.setDesiredState(swerveModuleStates[1]);
-        states[2]=backRight.setDesiredState(swerveModuleStates[2]);
-        states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
+        double[] state = new double[6];
+        if (modulePosition == SwerveENUMS.FRONT_LEFT){
+            state = frontLeft.setDesiredState(swerveModuleStates[1]);
+            logModuleState(state);
+        }
         
+        else if (modulePosition == SwerveENUMS.FRONT_RIGHT){
+            state = frontRight.setDesiredState(swerveModuleStates[0]);
+            logModuleState(state);
+        }
 
-        logModuleStates(states);
+        else if (modulePosition == SwerveENUMS.BACK_LEFT){
+            state = backLeft.setDesiredState(swerveModuleStates[3]);
+            logModuleState(state);
+
+        }
+        else if (modulePosition == SwerveENUMS.BACK_RIGHT){
+            state = backRight.setDesiredState(swerveModuleStates[2]);
+            logModuleState(state);
+        }
+        
     }
 
-    public void logModuleStates(double[][] states) {
+    public void logModuleState(double[] state) {
         // Smart dashboard logging
-        String[] moduleNames = {"FR","FL","BR","BL"};
         String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
-        for (int modIndex = 0; modIndex <4; modIndex++){
-            for (int valIndex = 0; valIndex <6; valIndex++){
-
-            SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
-            }
+        for (int valIndex = 0; valIndex <6; valIndex++){
+            SmartDashboard.putNumber(valueNames[valIndex], state[valIndex]);
         }
         SmartDashboard.putNumber("YAW",gyro.getYaw());
         SmartDashboard.putNumber("PITCH",gyro.getPitch());

@@ -38,7 +38,6 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-      pilot.a().whileTrue(new Forward(drivetrain));
     }
 
     public Command getAutonomousCommand() {
