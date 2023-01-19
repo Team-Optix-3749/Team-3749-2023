@@ -33,25 +33,24 @@ public class Arm extends SubsystemBase {
     private final PIDController topController = new PIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd);
     private final PIDController bottomController = new PIDController(Constants.Arm.kp, Constants.Arm.ki, Constants.Arm.kd);
     
-    // Relative Encoders
+    // Relative Encoders (dk if we need all of these)
     private final RelativeEncoder lowerEncoder1 = neo_motor_lower1.getEncoder(); 
     private final RelativeEncoder lowerEncoder2 = neo_motor_lower2.getEncoder();
     private final RelativeEncoder upperEncoder1 = neo_motor_upper1.getEncoder(); 
     private final RelativeEncoder upperEncoder2 = neo_motor_upper2.getEncoder();
 
-    // Actual Arm Code
     public Arm() {
         neo_motor_lower2.setInverted(true);
         neo_motor_upper2.setInverted(true);
     }
 
-    // Sets speed of a motor controller group
+    // Sets speed of a motor controller group (dk if we neeed these)
     public void setSpeedUpper(double speed) {
-        upperMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
+        upperMotorControllerGroup.set(speed); 
     }
 
     public void setSpeedLower(double speed) {
-        lowerMotorControllerGroup.set(speed); // says "fix" here but not sure what it's referring to
+        lowerMotorControllerGroup.set(speed);
     }
 
     // PID + feedforward implementation; should return the needed voltage, need to do feedforward
