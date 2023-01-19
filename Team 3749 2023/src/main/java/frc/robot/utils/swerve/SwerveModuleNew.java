@@ -31,15 +31,13 @@ public class SwerveModuleNew {
 
     private final RelativeEncoder driveEncoder;
     private final CANcoder turningEncoder;
-    // The absolute encoders do not have a regular get position, but seem to give back these suppliers
 
+    // The absolute encoder do not have a regular get position, but seem to give back these suppliers
     Supplier<Double> turningPositionSupplier;
     Supplier<Double> turningVelocitySupplier;
 
-    // Gains are for example purposes only - must be determined for your own robot!
     private final PIDController drivePIDController = new PIDController(Constants.DrivetrainNew.driveKP.get(), Constants.DrivetrainNew.driveKI.get(), Constants.DrivetrainNew.driveKD.get());
 
-    // Gains are for example purposes only - must be determined for your own robot!
     private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
         Constants.DrivetrainNew.turningKP.get(),
         Constants.DrivetrainNew.turningKI.get(),
@@ -48,7 +46,6 @@ public class SwerveModuleNew {
                     Constants.SwerveModuleNew.max_angular_velocity,
                     Constants.SwerveModuleNew.max_angular_acceleration));
 
-    // Gains are for example purposes only - must be determined for your own robot!
     private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(Constants.DrivetrainNew.driveKS.get(),
             Constants.DrivetrainNew.driveKV.get());
     private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(Constants.DrivetrainNew.turningKS.get(),
@@ -66,7 +63,6 @@ public class SwerveModuleNew {
         boolean drive_motor_reversed = false;
         boolean turning_motor_reversed = false;
 
-        System.out.println("ting ting ting");
 
         // Uses enums to set the variables to proper constants. Done here instead of in
         // parameters for organization in the Drivetrain subsystem
@@ -103,9 +99,10 @@ public class SwerveModuleNew {
         driveMotor.setInverted(drive_motor_reversed);
         turningMotor.setInverted(turning_motor_reversed);
 
+        // Drive motor is relative, turning is absolute
         driveEncoder = driveMotor.getEncoder();
         turningEncoder = new CANcoder(absolute_encoder_port);
-
+        
         turningPositionSupplier = turningEncoder.getPosition().asSupplier();
         turningVelocitySupplier = turningEncoder.getVelocity().asSupplier();
         // Limit the PID Controller's input range between -pi and pi and set the input
