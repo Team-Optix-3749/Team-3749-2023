@@ -84,4 +84,9 @@ public class Arm extends SubsystemBase {
         return 
     }
 
+    public double calculateLower()
+    {
+        return;
+    }
+
 }
