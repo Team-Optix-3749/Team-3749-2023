@@ -22,8 +22,6 @@ import frc.robot.utils.Constants;
  */
 
 public class Arm extends SubsystemBase {
-    
-
     // Someone fix this
     private CANSparkMax neo_motor_lower1 = new CANSparkMax(Constants.Arm.neo_motor_lower_id_1, MotorType.kBrushless); // Check if this is actually brushless later
     private CANSparkMax neo_motor_lower2 = new CANSparkMax(Constants.Arm.neo_motor_lower_id_2, MotorType.kBrushless); // Check if this is actually brushless later
