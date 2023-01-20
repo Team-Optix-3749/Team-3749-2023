@@ -15,8 +15,11 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.SwerveENUMS;
 import frc.robot.testing.SwerveModuleTesting;
 
-/** Represents a swerve drive style drivetrain. */
-public class DrivetrainTesting extends SubsystemBase {
+/***
+ * @author Noah Simon
+ * 
+ *          the Test Drivetrain subsystem
+ */public class DrivetrainTesting extends SubsystemBase {
 
     private final SwerveModuleTesting frontLeft = new SwerveModuleTesting(Constants.SwerveENUMS.FRONT_LEFT);
     private final SwerveModuleTesting frontRight = new SwerveModuleTesting(Constants.SwerveENUMS.FRONT_RIGHT);

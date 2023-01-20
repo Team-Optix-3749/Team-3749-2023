@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Rohin Sood
+ * @author Noah Simon
+ * @author Harkirat
  * 
  *         Controlling the DrivetrainNew subsystem through use of joysticks
  */

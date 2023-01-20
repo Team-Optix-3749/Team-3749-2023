@@ -18,10 +18,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 
 /***
- * @author Rohin Sood
+ * @author Noah Simon
  * 
  *         Code to manage each swerve drive module, which contains two motors,
- *         two relative encoders, and an absolute encoder
+ *         two relative encoders, and an absolute encoder. Testing version
  */
 
 public class SwerveModuleTesting {

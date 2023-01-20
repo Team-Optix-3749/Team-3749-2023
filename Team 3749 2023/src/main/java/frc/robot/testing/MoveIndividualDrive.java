@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
- * @author Rohin Sood
+ * @author Noah Simon
  * 
- *         Controlling the DrivetrainNew subsystem through use of joysticks
+ *         Controlling the Test Drivetrain subsystem through use of joysticks, drive motors only
  */
 public class MoveIndividualDrive extends CommandBase {
         @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })

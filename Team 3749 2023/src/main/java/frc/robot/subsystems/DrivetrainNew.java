@@ -14,8 +14,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.swerve.SwerveModuleNew;
 
-/** Represents a swerve drive style drivetrain. */
-public class DrivetrainNew extends SubsystemBase {
+/***
+ * @author Noah Simon
+ * @author Rohin Sood
+ * @author Harkirat
+ * 
+ *         Controlling the Drivetrain subsystem through use of joysticks, drive motors only
+ */public class DrivetrainNew extends SubsystemBase {
 
     private final SwerveModuleNew frontLeft = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_LEFT);
     private final SwerveModuleNew frontRight = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_RIGHT);

@@ -19,7 +19,8 @@ import frc.robot.utils.Constants;
 
 /***
  * @author Rohin Sood
- * 
+ * @author Noah Simon
+ * @author Harkirat
  *         Code to manage each swerve drive module, which contains two motors,
  *         two relative encoders, and an absolute encoder
  */

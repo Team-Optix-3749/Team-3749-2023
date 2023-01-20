@@ -8,6 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.testing.DrivetrainTesting;
+import frc.robot.testing.MoveIndividualDrive;
+import frc.robot.testing.MoveIndividualModule;
+import frc.robot.testing.MoveIndividualTurning;
+import frc.robot.utils.Constants;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
@@ -21,8 +26,8 @@ public class RobotContainer {
     private final POV operatorPOV = new POV(operator);
 
     // Subsystems
-    private final DrivetrainNew drivetrain = new DrivetrainNew();
-
+    // private final DrivetrainNew drivetrain = new DrivetrainNew();
+    private final DrivetrainTesting drivetrain= new DrivetrainTesting();
     // Commands
 
     public RobotContainer() {
@@ -31,8 +36,22 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-                pilot.leftStick()::getAsBoolean));
+
+        // regular
+        // drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
+        //         pilot.leftStick()::getAsBoolean));
+
+        // Drive and
+        // drivetrain.setDefaultCommand(new MoveIndividualModule(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
+        //         pilot.leftStick()::getAsBoolean, Constants.SwerveENUMS.FRONT_LEFT));
+
+
+        // drivetrain.setDefaultCommand(new MoveIndividualDrive(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
+        //         pilot.leftStick()::getAsBoolean, Constants.SwerveENUMS.FRONT_LEFT));
+
+
+        drivetrain.setDefaultCommand(new MoveIndividualTurning(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
+                pilot.leftStick()::getAsBoolean,Constants.SwerveENUMS.FRONT_LEFT));
     }
 
     private void configureButtonBindings() {
