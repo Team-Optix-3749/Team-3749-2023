@@ -13,15 +13,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.SwerveENUMS;
-import frc.robot.utils.swerve.SwerveModuleNew;
+import frc.robot.testing.SwerveModuleTesting;
 
 /** Represents a swerve drive style drivetrain. */
 public class DrivetrainTesting extends SubsystemBase {
 
-    private final SwerveModuleNew frontLeft = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_LEFT);
-    private final SwerveModuleNew frontRight = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_RIGHT);
-    private final SwerveModuleNew backLeft = new SwerveModuleNew(Constants.SwerveENUMS.BACK_LEFT);
-    private final SwerveModuleNew backRight = new SwerveModuleNew(Constants.SwerveENUMS.BACK_RIGHT);
+    private final SwerveModuleTesting frontLeft = new SwerveModuleTesting(Constants.SwerveENUMS.FRONT_LEFT);
+    private final SwerveModuleTesting frontRight = new SwerveModuleTesting(Constants.SwerveENUMS.FRONT_RIGHT);
+    private final SwerveModuleTesting backLeft = new SwerveModuleTesting(Constants.SwerveENUMS.BACK_LEFT);
+    private final SwerveModuleTesting backRight = new SwerveModuleTesting(Constants.SwerveENUMS.BACK_RIGHT);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
@@ -41,7 +41,7 @@ public class DrivetrainTesting extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+
         // Update the odometry in the periodic block
         odometry.update(
                 gyro.getRotation2d(),
@@ -88,7 +88,8 @@ public class DrivetrainTesting extends SubsystemBase {
      * @param fieldRelative Whether the provided x and y speeds are relative to the
      *                      field.
      */
-    public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative, Constants.SwerveENUMS modulePosition) {
+    public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative,
+            Constants.SwerveENUMS modulePosition, boolean drive, boolean turning) {
 
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
@@ -98,39 +99,58 @@ public class DrivetrainTesting extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
         double[] state = new double[6];
-        if (modulePosition == SwerveENUMS.FRONT_LEFT){
-            state = frontLeft.setDesiredState(swerveModuleStates[1]);
-            logModuleState(state);
-        }
-        
-        else if (modulePosition == SwerveENUMS.FRONT_RIGHT){
-            state = frontRight.setDesiredState(swerveModuleStates[0]);
-            logModuleState(state);
+        if (modulePosition == SwerveENUMS.FRONT_LEFT) {
+            if (drive && turning) {
+                state = frontLeft.setDesiredState(swerveModuleStates[1]);
+            } else if (drive) {
+                state = frontLeft.setDesiredDrive(swerveModuleStates[1]);
+            } else if (turning) {
+                state = frontLeft.setDesiredTurning(swerveModuleStates[1]);
+            }
         }
 
-        else if (modulePosition == SwerveENUMS.BACK_LEFT){
-            state = backLeft.setDesiredState(swerveModuleStates[3]);
-            logModuleState(state);
+        else if (modulePosition == SwerveENUMS.FRONT_RIGHT) {
+            if (drive && turning) {
+                state = frontRight.setDesiredState(swerveModuleStates[0]);
+            } else if (drive) {
+                state = frontRight.setDesiredDrive(swerveModuleStates[0]);
+            } else if (turning) {
+                state = frontRight.setDesiredTurning(swerveModuleStates[0]);
+            }
+        }
 
+        else if (modulePosition == SwerveENUMS.BACK_LEFT) {
+            if (drive && turning) {
+                state = backLeft.setDesiredState(swerveModuleStates[3]);
+            } else if (drive) {
+                state = backLeft.setDesiredDrive(swerveModuleStates[3]);
+            } else if (turning) {
+                state = backLeft.setDesiredTurning(swerveModuleStates[3]);
+            }
+        } else if (modulePosition == SwerveENUMS.BACK_RIGHT) {
+            if (drive && turning) {
+                state = backRight.setDesiredState(swerveModuleStates[2]);
+            } else if (drive) {
+                state = backRight.setDesiredDrive(swerveModuleStates[2]);
+            } else if (turning) {
+                state = backRight.setDesiredTurning(swerveModuleStates[2]);
+            }
         }
-        else if (modulePosition == SwerveENUMS.BACK_RIGHT){
-            state = backRight.setDesiredState(swerveModuleStates[2]);
-            logModuleState(state);
-        }
-        
+        logModuleState(state);
+
     }
 
     public void logModuleState(double[] state) {
         // Smart dashboard logging
-        String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
-        for (int valIndex = 0; valIndex <6; valIndex++){
+        String[] valueNames = { " drive feed forward", " drive output", " turn feed forward", " turn output",
+                "state meters per second", "state radians" };
+        for (int valIndex = 0; valIndex < 6; valIndex++) {
             SmartDashboard.putNumber(valueNames[valIndex], state[valIndex]);
         }
-        SmartDashboard.putNumber("YAW",gyro.getYaw());
-        SmartDashboard.putNumber("PITCH",gyro.getPitch());
-        SmartDashboard.putNumber("ROLL",gyro.getRoll());
+        SmartDashboard.putNumber("YAW", gyro.getYaw());
+        SmartDashboard.putNumber("PITCH", gyro.getPitch());
+        SmartDashboard.putNumber("ROLL", gyro.getRoll());
     }
-
 
     /** Resets the drive encoders to currently read a position of 0. */
     public void resetEncoders() {
@@ -162,6 +182,5 @@ public class DrivetrainTesting extends SubsystemBase {
     public double getTurnRate() {
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
     }
-
 
 }

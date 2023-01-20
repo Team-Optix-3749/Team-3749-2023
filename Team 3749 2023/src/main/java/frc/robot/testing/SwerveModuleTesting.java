@@ -168,6 +168,47 @@ public class SwerveModuleTesting {
         turningMotor.setVoltage(turn_voltage);
     }
 
+        /**
+     * Sets the desired state for the module.
+     *
+     * @param desiredState Desired state with speed and angle.
+     * @return returns a double[] of the different outputs and feedforwards. Drive,
+     *         then turn. Feedforward, then PID
+     */
+    public double[] setDesiredDrive(SwerveModuleState desiredState) {
+        // Optimize the reference state to avoid spinning further than 90 degrees
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+                new Rotation2d(turningPositionSupplier.get()));
+        // Calculate the drive output from the drive PID controller.
+        final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
+
+        final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
+
+        // We add feed forward and PID. PID handles correcting where we are, Feedforward
+        // handles where we are going, adding them sets it up for the best of both
+        setVoltage(driveOutput + driveFeedforward, 0);
+        // returns our output data, in case we want it
+        return new double[] { driveFeedforward, driveOutput, 0, 0,
+                state.speedMetersPerSecond, state.angle.getRadians() };
+    }
+    public double[] setDesiredTurning(SwerveModuleState desiredState) {
+        // Optimize the reference state to avoid spinning further than 90 degrees
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+                new Rotation2d(turningPositionSupplier.get()));
+
+        // Calculate the turning motor output from the turning PID controller.
+        final double turnOutput = turningPIDController.calculate(turningPositionSupplier.get(),
+                state.angle.getRadians());
+
+        final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
+
+        // We add feed forward and PID. PID handles correcting where we are, Feedforward
+        // handles where we are going, adding them sets it up for the best of both
+        setVoltage(0, turnOutput  + turnFeedforward);
+        // returns our output data, in case we want it
+        return new double[] { 0, 0, turnFeedforward, turnOutput,
+                state.speedMetersPerSecond, state.angle.getRadians() };
+    }
     public void resetEncoders() {
         // drive is zero while the turrning motor is rotated the amount of degrees it
         // needs (wheel's angle).

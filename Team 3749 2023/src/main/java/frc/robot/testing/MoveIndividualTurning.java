@@ -6,6 +6,7 @@ package frc.robot.testing;
 
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.SwerveENUMS;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -23,15 +24,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class MoveIndividualTurning extends CommandBase {
         @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-        private final DrivetrainNew swerveSubsystem;
+        private final DrivetrainTesting swerveSubsystem;
         private final DoubleSupplier xSpdFunction, ySpdFunction, turningSpdFunction;
         private final BooleanSupplier fieldOrientedFunction;
         private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+        private final SwerveENUMS moduleENUM;
 
         // Initializes the BaseCommand
-        public MoveIndividualTurning(DrivetrainNew swerveSubsystem,
+        public MoveIndividualTurning(DrivetrainTesting swerveSubsystem,
                         DoubleSupplier xSpdFunction, DoubleSupplier ySpdFunction, DoubleSupplier turningSpdFunction,
-                        BooleanSupplier fieldOrientedFunction) {
+                        BooleanSupplier fieldOrientedFunction, SwerveENUMS moduleENUM) {
                 this.swerveSubsystem = swerveSubsystem;
                 this.xSpdFunction = xSpdFunction;
                 this.ySpdFunction = ySpdFunction;
@@ -41,6 +43,7 @@ public class MoveIndividualTurning extends CommandBase {
                 this.yLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
                 this.turningLimiter = new SlewRateLimiter(
                                 Constants.DrivetrainNew.max_angular_speed);
+                this.moduleENUM = moduleENUM;
                 addRequirements(swerveSubsystem);
         }
 
@@ -53,13 +56,13 @@ public class MoveIndividualTurning extends CommandBase {
         // TESTING CHANGES: Multiply speeds by 0.1 BEFORE limiter. Smart dashboard
         @Override
         public void execute() {
-                final var xSpeed = -xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.getAsDouble()*0.1, 0.02))
+                final var xSpeed = -xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.getAsDouble(), 0.02))
                                 * Constants.DrivetrainNew.max_speed;
 
                 // Get the y speed or sideways/strafe speed. We are inverting this because
                 // we want a positive value when we pull to the left. Xbox controllers
                 // return positive values when you pull to the right by default.
-                final var ySpeed = -yLimiter.calculate(MathUtil.applyDeadband(ySpdFunction.getAsDouble()*0.1, 0.02))
+                final var ySpeed = -yLimiter.calculate(MathUtil.applyDeadband(ySpdFunction.getAsDouble(), 0.02))
                                 * Constants.DrivetrainNew.max_speed;
 
                 // Get the rate of angular rotation. We are inverting this because we want a
@@ -67,7 +70,7 @@ public class MoveIndividualTurning extends CommandBase {
                 // mathematics). Xbox controllers return positive values when you pull to
                 // the right by default.
                 final var rot = -turningLimiter
-                                .calculate(MathUtil.applyDeadband(turningSpdFunction.getAsDouble()*0.1, 0.02))
+                                .calculate(MathUtil.applyDeadband(turningSpdFunction.getAsDouble(), 0.02))
                                 * Constants.DrivetrainNew.max_angular_speed;
 
                 SmartDashboard.putNumber("xSpeed", xSpeed);
@@ -75,7 +78,7 @@ public class MoveIndividualTurning extends CommandBase {
                 SmartDashboard.putNumber("rotationSpeed", rot);
 
                 // 4. Send processed inputs to the drive() function
-                swerveSubsystem.drive(xSpeed, ySpeed, rot, false);
+                swerveSubsystem.moveIndividualModule(xSpeed, ySpeed, rot, false, moduleENUM, false, true);
         }
 
         // Run on command finish
