@@ -118,10 +118,15 @@ public final class Constants {
     }
 
     public static enum SwerveENUMS {
-        FRONT_RIGHT,
-        FRONT_LEFT,
-        BACK_RIGHT,
-        BACK_LEFT;
+        FRONT_RIGHT("front_right"),
+        FRONT_LEFT("front_left"),
+        BACK_RIGHT("back_right"),
+        BACK_LEFT("back_left");
+
+        public final String name;
+        SwerveENUMS (String name){
+            this.name = name;
+        }
     }
 
 }

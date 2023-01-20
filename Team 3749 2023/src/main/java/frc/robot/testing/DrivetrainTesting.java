@@ -90,7 +90,7 @@ public class DrivetrainTesting extends SubsystemBase {
      */
     public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative,
             Constants.SwerveENUMS modulePosition, boolean drive, boolean turning) {
-
+        SmartDashboard.putString("Module Moving", modulePosition.name);
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -147,9 +147,7 @@ public class DrivetrainTesting extends SubsystemBase {
         for (int valIndex = 0; valIndex < 6; valIndex++) {
             SmartDashboard.putNumber(valueNames[valIndex], state[valIndex]);
         }
-        SmartDashboard.putNumber("YAW", gyro.getYaw());
-        SmartDashboard.putNumber("PITCH", gyro.getPitch());
-        SmartDashboard.putNumber("ROLL", gyro.getRoll());
+
     }
 
     /** Resets the drive encoders to currently read a position of 0. */

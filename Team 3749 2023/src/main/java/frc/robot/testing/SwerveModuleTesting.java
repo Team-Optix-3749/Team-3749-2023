@@ -32,26 +32,30 @@ public class SwerveModuleTesting {
     private final RelativeEncoder driveEncoder;
     private final CANcoder turningEncoder;
 
-    // The absolute encoder do not have a regular get position, but seem to give back these suppliers
+    // The absolute encoder do not have a regular get position, but seem to give
+    // back these suppliers
     Supplier<Double> turningPositionSupplier;
     Supplier<Double> turningVelocitySupplier;
 
-    private final PIDController drivePIDController = new PIDController(Constants.DrivetrainNew.driveKP.get(), Constants.DrivetrainNew.driveKI.get(), Constants.DrivetrainNew.driveKD.get());
+    private final PIDController drivePIDController = new PIDController(Constants.DrivetrainNew.driveKP.get(),
+            Constants.DrivetrainNew.driveKI.get(), Constants.DrivetrainNew.driveKD.get());
 
     private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
-        Constants.DrivetrainNew.turningKP.get(),
-        Constants.DrivetrainNew.turningKI.get(),
-        Constants.DrivetrainNew.turningKD.get(),
+            Constants.DrivetrainNew.turningKP.get(),
+            Constants.DrivetrainNew.turningKI.get(),
+            Constants.DrivetrainNew.turningKD.get(),
             new TrapezoidProfile.Constraints(
                     Constants.SwerveModuleNew.max_angular_velocity,
                     Constants.SwerveModuleNew.max_angular_acceleration));
 
-    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(Constants.DrivetrainNew.driveKS.get(),
+    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(
+            Constants.DrivetrainNew.driveKS.get(),
             Constants.DrivetrainNew.driveKV.get());
-    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(Constants.DrivetrainNew.turningKS.get(),
+    private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(
+            Constants.DrivetrainNew.turningKS.get(),
             Constants.DrivetrainNew.turningKV.get());
 
-    /** 
+    /**
      * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
      * and turning encoder.
      */
@@ -62,7 +66,6 @@ public class SwerveModuleTesting {
         int absolute_encoder_port = 0;
         boolean drive_motor_reversed = false;
         boolean turning_motor_reversed = false;
-
 
         // Uses enums to set the variables to proper constants. Done here instead of in
         // parameters for organization in the Drivetrain subsystem
@@ -102,7 +105,7 @@ public class SwerveModuleTesting {
         // Drive motor is relative, turning is absolute
         driveEncoder = driveMotor.getEncoder();
         turningEncoder = new CANcoder(absolute_encoder_port);
-        
+
         turningPositionSupplier = turningEncoder.getPosition().asSupplier();
         turningVelocitySupplier = turningEncoder.getVelocity().asSupplier();
         // Limit the PID Controller's input range between -pi and pi and set the input
@@ -116,7 +119,6 @@ public class SwerveModuleTesting {
      *
      * @return The current state of the module.
      */
-
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(
@@ -157,7 +159,7 @@ public class SwerveModuleTesting {
 
         // We add feed forward and PID. PID handles correcting where we are, Feedforward
         // handles where we are going, adding them sets it up for the best of both
-        setVoltage(driveOutput + driveFeedforward, turnOutput  + turnFeedforward);
+        setVoltage(driveOutput + driveFeedforward, turnOutput + turnFeedforward);
         // returns our output data, in case we want it
         return new double[] { driveFeedforward, driveOutput, turnFeedforward, turnOutput,
                 state.speedMetersPerSecond, state.angle.getRadians() };
@@ -168,7 +170,7 @@ public class SwerveModuleTesting {
         turningMotor.setVoltage(turn_voltage);
     }
 
-        /**
+    /**
      * Sets the desired state for the module.
      *
      * @param desiredState Desired state with speed and angle.
@@ -191,6 +193,7 @@ public class SwerveModuleTesting {
         return new double[] { driveFeedforward, driveOutput, 0, 0,
                 state.speedMetersPerSecond, state.angle.getRadians() };
     }
+
     public double[] setDesiredTurning(SwerveModuleState desiredState) {
         // Optimize the reference state to avoid spinning further than 90 degrees
         SwerveModuleState state = SwerveModuleState.optimize(desiredState,
@@ -204,11 +207,12 @@ public class SwerveModuleTesting {
 
         // We add feed forward and PID. PID handles correcting where we are, Feedforward
         // handles where we are going, adding them sets it up for the best of both
-        setVoltage(0, turnOutput  + turnFeedforward);
+        setVoltage(0, turnOutput + turnFeedforward);
         // returns our output data, in case we want it
         return new double[] { 0, 0, turnFeedforward, turnOutput,
                 state.speedMetersPerSecond, state.angle.getRadians() };
     }
+
     public void resetEncoders() {
         // drive is zero while the turrning motor is rotated the amount of degrees it
         // needs (wheel's angle).

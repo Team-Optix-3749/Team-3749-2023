@@ -40,7 +40,7 @@ public class DrivetrainNew extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+
         // Update the odometry in the periodic block
         odometry.update(
                 gyro.getRotation2d(),
@@ -97,32 +97,30 @@ public class DrivetrainNew extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
 
-
         double[][] states = new double[4][4];
-        states[0]=frontRight.setDesiredState(swerveModuleStates[0]);
-        states[1]=frontLeft.setDesiredState(swerveModuleStates[1]);
-        states[2]=backRight.setDesiredState(swerveModuleStates[2]);
-        states[3]=backLeft.setDesiredState(swerveModuleStates[3]);
-        
+        states[0] = frontRight.setDesiredState(swerveModuleStates[0]);
+        states[1] = frontLeft.setDesiredState(swerveModuleStates[1]);
+        states[2] = backRight.setDesiredState(swerveModuleStates[2]);
+        states[3] = backLeft.setDesiredState(swerveModuleStates[3]);
 
         logModuleStates(states);
     }
 
     public void logModuleStates(double[][] states) {
         // Smart dashboard logging
-        String[] moduleNames = {"FR","FL","BR","BL"};
-        String[] valueNames = {" drive feed forward", " drive output", " turn feed forward", " turn output", "state meters per second", "state radians"};
-        for (int modIndex = 0; modIndex <4; modIndex++){
-            for (int valIndex = 0; valIndex <6; valIndex++){
+        String[] moduleNames = { "FR", "FL", "BR", "BL" };
+        String[] valueNames = { " drive feed forward", " drive output", " turn feed forward", " turn output",
+                "state meters per second", "state radians" };
+        for (int modIndex = 0; modIndex < 4; modIndex++) {
+            for (int valIndex = 0; valIndex < 6; valIndex++) {
 
-            SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
+                SmartDashboard.putNumber(valueNames[valIndex] + moduleNames[modIndex], states[modIndex][valIndex]);
             }
         }
-        SmartDashboard.putNumber("YAW",gyro.getYaw());
-        SmartDashboard.putNumber("PITCH",gyro.getPitch());
-        SmartDashboard.putNumber("ROLL",gyro.getRoll());
+        SmartDashboard.putNumber("YAW", gyro.getYaw());
+        SmartDashboard.putNumber("PITCH", gyro.getPitch());
+        SmartDashboard.putNumber("ROLL", gyro.getRoll());
     }
-
 
     /** Resets the drive encoders to currently read a position of 0. */
     public void resetEncoders() {
@@ -154,6 +152,5 @@ public class DrivetrainNew extends SubsystemBase {
     public double getTurnRate() {
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
     }
-
 
 }
