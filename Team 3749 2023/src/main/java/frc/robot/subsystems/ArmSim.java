@@ -36,74 +36,78 @@ public class ArmSim extends SubsystemBase {
     private final DCMotor armGearbox = DCMotor.getNEO(2);
 
     // Standard classes for controlling our arm
-    private final ProfiledPIDController forearmController = new ProfiledPIDController(40.0, 0.0, 0.0,
+    private final ProfiledPIDController elbowController = new ProfiledPIDController(40.0, 0.0, 0.0,
             new TrapezoidProfile.Constraints(2, 5));
-    private final ProfiledPIDController bicepController = new ProfiledPIDController(40.0, 0.0, 0.0,
+    private final ProfiledPIDController shoulderController = new ProfiledPIDController(40.0, 0.0, 0.0,
             new TrapezoidProfile.Constraints(2, 5));
-    private final Encoder forearmEncoder = new Encoder(0, 1);
-    private final Encoder bicepEncoder = new Encoder(2, 3);
+    private final Encoder elbowEncoder = new Encoder(0, 1);
+    private final Encoder shoulderEncoder = new Encoder(2, 3);
 
-    private final CANSparkMax forearmMotor = new CANSparkMax(0, MotorType.kBrushless);
-    private final CANSparkMax bicepMotor = new CANSparkMax(0 + 1, MotorType.kBrushless);
+    private final CANSparkMax leftelbowMotor = new CANSparkMax(15, MotorType.kBrushless);
+    private final CANSparkMax rightelbowMotor = new CANSparkMax(16, MotorType.kBrushless);
+
+    private final CANSparkMax leftshoulderMotor = new CANSparkMax(17, MotorType.kBrushless);
+    private final CANSparkMax rightshoulderMotor = new CANSparkMax(18 + 1, MotorType.kBrushless);
+
 
     // Simulation classes help us simulate what's going on, including gravity.
     private static final double armReduction = 600;
-    private static final double forearmMass = 10.0; // Kilograms
-    private static final double forearmLength = Units.inchesToMeters(38.5);
-    private static final double bicepMass = 4.0; // Kilograms
-    private static final double bicepLength = Units.inchesToMeters(27);
+    private static final double elbowMass = 10.0; // Kilograms
+    private static final double elbowLength = Units.inchesToMeters(38.5);
+    private static final double shoulderMass = 4.0; // Kilograms
+    private static final double shoulderLength = Units.inchesToMeters(27);
 
-    private static final int forearm_min_angle = -75;
-    private static final int forearm_max_angle = 260;
-    private static final int bicep_min_angle = 30;
-    private static final int bicep_max_angle = 150;
+    private static final int elbow_min_angle = -75;
+    private static final int elbow_max_angle = 260;
+    private static final int shoulder_min_angle = 30;
+    private static final int shoulder_max_angle = 150;
 
     // SETPOINTS FOR PRESETS MODE (Uses Virtual 4 Bar Mode for smooth movement)
-    private static final int stowedBicep = 90;
-    private static final int stowedForearm = 260;
+    private static final int stowedshoulder = 90;
+    private static final int stowedelbow = 260;
 
-    private static final int intakeBicep = 135;
-    private static final int intakeForearm = 265;
+    private static final int intakeshoulder = 135;
+    private static final int intakeelbow = 265;
 
-    private static final int doubleSubstationBicep = 60;
-    private static final int doubleSubstationForearm = 185;
+    private static final int doubleSubstationshoulder = 60;
+    private static final int doubleSubstationelbow = 185;
 
-    private static final int scoreFloorBicep = 120;
-    private static final int scoreFloorForearm = 255;
+    private static final int scoreFloorshoulder = 120;
+    private static final int scoreFloorelbow = 255;
 
-    private static final int scoreMidBicep = 95;
-    private static final int scoreMidForearm = 195;
+    private static final int scoreMidshoulder = 95;
+    private static final int scoreMidelbow = 195;
 
-    private static final int scoreHighBicep = 135;
-    private static final int scoreHighForearm = 160;
+    private static final int scoreHighshoulder = 135;
+    private static final int scoreHighelbow = 160;
 
     // This arm sim represents an arm that can travel from -75 degrees (rotated down
     // front)
     // to 255 degrees (rotated down in the back).
-    private final SingleJointedArmSim forearmSim = new SingleJointedArmSim(
+    private final SingleJointedArmSim elbowSim = new SingleJointedArmSim(
             armGearbox,
             armReduction,
-            SingleJointedArmSim.estimateMOI(forearmLength, forearmMass),
-            forearmLength,
-            Units.degreesToRadians(forearm_min_angle),
-            Units.degreesToRadians(forearm_max_angle),
-            forearmMass,
+            SingleJointedArmSim.estimateMOI(elbowLength, elbowMass),
+            elbowLength,
+            Units.degreesToRadians(elbow_min_angle),
+            Units.degreesToRadians(elbow_max_angle),
+            elbowMass,
             false,
             VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
     );
-    private final SingleJointedArmSim bicepSim = new SingleJointedArmSim(
+    private final SingleJointedArmSim shoulderSim = new SingleJointedArmSim(
             armGearbox,
             armReduction,
-            SingleJointedArmSim.estimateMOI(bicepLength, bicepMass),
-            bicepLength,
-            Units.degreesToRadians(bicep_min_angle),
-            Units.degreesToRadians(bicep_max_angle),
-            bicepMass,
+            SingleJointedArmSim.estimateMOI(shoulderLength, shoulderMass),
+            shoulderLength,
+            Units.degreesToRadians(shoulder_min_angle),
+            Units.degreesToRadians(shoulder_max_angle),
+            shoulderMass,
             true,
             VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
     );
-    private final EncoderSim forearmEncoderSim = new EncoderSim(forearmEncoder);
-    private final EncoderSim bicepEncoderSim = new EncoderSim(bicepEncoder);
+    private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
+    private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
     SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
     SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
@@ -113,10 +117,10 @@ public class ArmSim extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        forearmEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
-        bicepEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
-        SmartDashboard.putNumber("Setpoint forearm (degrees)", 90);
-        SmartDashboard.putNumber("Setpoint bicep (degrees)", 90);
+        elbowEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
+        shoulderEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
+        SmartDashboard.putNumber("Setpoint elbow (degrees)", 90);
+        SmartDashboard.putNumber("Setpoint shoulder (degrees)", 90);
         controlMode.setDefaultOption("Presets (Setpoints)", 0);
         controlMode.addOption("Virtual Four Bar", 1);
         controlMode.addOption("Manual Angle Adjust", 2);
@@ -134,21 +138,21 @@ public class ArmSim extends SubsystemBase {
 
         // In this method, we update our simulation of what our arm is doing
         // First, we set our "inputs" (voltages)
-        forearmSim.setInput(forearmMotor.get() * RobotController.getBatteryVoltage());
-        bicepSim.setInput(bicepMotor.get() * RobotController.getBatteryVoltage());
+        elbowSim.setInput(leftelbowMotor.get() * RobotController.getBatteryVoltage());
+        shoulderSim.setInput(leftshoulderMotor.get() * RobotController.getBatteryVoltage());
 
         // Next, we update it. The standard loop time is 20ms.
-        forearmSim.update(0.020);
-        bicepSim.update(0.020);
+        elbowSim.update(0.020);
+        shoulderSim.update(0.020);
 
         // Finally, we set our simulated encoder's readings and simulated battery
         // voltage
-        forearmEncoderSim.setDistance(forearmSim.getAngleRads());
-        bicepEncoderSim.setDistance(bicepSim.getAngleRads());
+        elbowEncoderSim.setDistance(elbowSim.getAngleRads());
+        shoulderEncoderSim.setDistance(shoulderSim.getAngleRads());
         // SimBattery estimates loaded battery voltages
         RoboRioSim.setVInVoltage(
                 BatterySim.calculateDefaultBatteryLoadedVoltage(
-                        forearmSim.getCurrentDrawAmps() + bicepSim.getCurrentDrawAmps()));
+                        elbowSim.getCurrentDrawAmps() + shoulderSim.getCurrentDrawAmps()));
     }
 
 }

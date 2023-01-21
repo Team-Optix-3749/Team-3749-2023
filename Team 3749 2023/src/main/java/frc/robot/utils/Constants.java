@@ -24,10 +24,13 @@ public final class Constants {
     }
 
     public static final class Arm {
-        public static final int left_bicep_id = 15; 
-        public static final int right_bicep_id = 16; 
-        public static final int left_forearm_id = 17; 
-        public static final int right_forearm_id = 18; 
+        public static final int left_shoulder_id = 15; 
+        public static final int right_shoulder_id = 16; 
+        public static final int left_elbow_id = 17; 
+        public static final int right_elbow_id = 18; 
+
+        // public static final double shoulder_reduction = ;
+        public static final double elbow_reduction = 1 / 250;
 
         // These speeds apply for both lower motors and both upper motors respectively
         public static final int neo_motor_lower_speed = 1; // Change this value later
@@ -42,13 +45,26 @@ public final class Constants {
         public static final double kd = 0;
 
         public static final double bicep_length = 25; // inches
-        public static final double forearm_length = 26 + 13; // forearm + claw length
+        public static final double forearm_length = 26 + 13; // elbow + claw length
 
-        public static final double bicep_min_angle = 0;
-        public static final double bicep_max_angle = 0;
+        public static final double shoulder_min_angle = 0;
+        public static final double shoulder_max_angle = 0;
 
-        public static final double forearm_min_angle = 0;
-        public static final double forearm_max_angle = 0;
+        public static final double elbow_min_angle = 0;
+        public static final double elbow_max_angle = 0;
+
+        // degrees
+        public static class Setpoints {
+            public static final double shoulder_angle = 33;
+
+            // public static final double stowed_shoulder_angle = ;
+            // public static final double stowed_elbow_angle = ;
+
+            // 81 absolute angle
+            public static final double ground_shoulder_angle = 132;
+            public static final double ground_elbow_angle = 111;
+
+        }
 
     }
 

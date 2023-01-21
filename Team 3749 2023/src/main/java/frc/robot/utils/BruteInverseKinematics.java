@@ -23,7 +23,7 @@ public class BruteInverseKinematics {
     /**
      * Calculate the desired angle of the arm motors from the coordinate pair
      * 
-     * @return [desired bicep angle, desired forearm angle] (radians)
+     * @return [desired shoulder angle, desired elbow angle] (radians)
      */
     public static double[] calculate(double x, double y) {
 
@@ -31,18 +31,18 @@ public class BruteInverseKinematics {
         double minimum_distance = Double.MAX_VALUE;
 
         // Iterate over possible degrees for both joints
-        for (double bicep_deg = Arm.bicep_min_angle; bicep_deg < Arm.bicep_max_angle
-                + 1; bicep_deg += 0.5) {
-            double bicep_rad = Math.toRadians(bicep_deg);
-            for (double forearm_deg = Arm.forearm_min_angle; forearm_deg < Arm.forearm_max_angle
-                    + 1; forearm_deg += 0.5) {
-                double forearm_rad = Math.toRadians(forearm_deg);
+        for (double shoulder_deg = Arm.shoulder_min_angle; shoulder_deg < Arm.shoulder_max_angle
+                + 1; shoulder_deg += 0.5) {
+            double shoulder_rad = Math.toRadians(shoulder_deg);
+            for (double elbow_deg = Arm.elbow_min_angle; elbow_deg < Arm.elbow_max_angle
+                    + 1; elbow_deg += 0.5) {
+                double elbow_rad = Math.toRadians(elbow_deg);
 
                 // Change between point and current angle
-                double delta_x = (Constants.Arm.bicep_length * Math.cos(bicep_rad)
-                        + Constants.Arm.forearm_length * Math.cos(bicep_rad + forearm_rad)) - x;
-                double delta_y = (Constants.Arm.bicep_length * Math.sin(forearm_rad)
-                        + Constants.Arm.forearm_length * Math.sin(bicep_rad + forearm_rad)) - y;
+                double delta_x = (Constants.Arm.bicep_length * Math.cos(shoulder_rad)
+                        + Constants.Arm.forearm_length * Math.cos(shoulder_rad + elbow_rad)) - x;
+                double delta_y = (Constants.Arm.bicep_length * Math.sin(elbow_rad)
+                        + Constants.Arm.forearm_length * Math.sin(shoulder_rad + elbow_rad)) - y;
                 double distance = Math.pow(delta_x, 2) + Math.pow(delta_y, 2);
 
                 // Once the distance surpasses the minimum_distance, exit the for loop
@@ -50,8 +50,8 @@ public class BruteInverseKinematics {
                     break;
 
                 minimum_distance = distance;
-                angles[0] = bicep_deg;
-                angles[1] = forearm_deg;
+                angles[0] = shoulder_deg;
+                angles[1] = elbow_deg;
             }
         }
         return angles;
