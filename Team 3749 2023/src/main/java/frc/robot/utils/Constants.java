@@ -31,7 +31,7 @@ public final class Constants {
 
         public static final int setpoint = 0;
 
-        //
+        //ColorSensor
         public static String Object = null;
     }
 

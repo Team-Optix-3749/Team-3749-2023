@@ -21,13 +21,15 @@ public class ColorSensor{
     m_colorMatcher.addColorMatch(YELLOW);
     m_colorMatcher.addColorMatch(PURPLE);
 
-    // Intializes string stating object obtained (possible objects: "Cone", "Cube", None) is in the claw (returned in "gamePiece" method)
-    public String Constants.Claw.Object;
-
+    // Constants.Claw.Object is a String (see Constants.java)
+    // States object obtained (possible objects: "Cone", "Cube", None) 
+    // is in the claw (returned in "gamePiece" method)
+    
     public static String gamePiece(){
-        // .getColor gets RGB values at the current time
+        // .getColor gets RGB values at the current time (what the sensor sees)
         Color detectedColor = m_colorSensor.getColor();
-        //.matchClosestColor() caluclates the closest color (with some line of margin) from the listed colors in Color Matcher array
+
+        //.matchClosestColor() caluclates the closest color from the listed colors in Color Matcher array
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
         if (match.color == YELLOW) {
@@ -42,7 +44,7 @@ public class ColorSensor{
             //If color detected falls out of line of margin from .matchClosestColor(), then nothing is detected
             Constants.Claw.Object = None
         }
-     return Object
-     //return object detected (None, Cube, Cone)
+        return Object
+        //return object detected (None, Cube, Cone)
     }
 }
