@@ -19,17 +19,17 @@ import frc.robot.utils.BruteInverseKinematics;
  */
 
 public class Arm extends SubsystemBase {
-    private CANSparkMax leftshoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
-    private CANSparkMax rightshoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
-    private CANSparkMax leftelbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-    private CANSparkMax rightelbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
+    private CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
+    private CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
+    private CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
+    private CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
 
     // set leaders and followers using .follow() in the constructor so you can
     // control the encoders of both motor controllers
-    private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(leftshoulderMotor, rightshoulderMotor,
+    private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(leftShoulderMotor, rightShoulderMotor,
             null);
-    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(leftelbowMotor,
-            rightelbowMotor, null);
+    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(leftElbowMotor,
+            rightElbowMotor, null);
 
     // Standard classes for controlling our arm
     // Not sure if same values for k values from Constants.Arm should be used for
@@ -40,17 +40,18 @@ public class Arm extends SubsystemBase {
             Constants.Arm.kd);
 
     // Relative Encoders (dk if we need all of these)
-    private final RelativeEncoder leftshoulderEncoder = leftelbowMotor.getEncoder();
-    private final RelativeEncoder rightshoulderEncoder = rightelbowMotor.getEncoder();
-    private final RelativeEncoder leftelbowEncoder = leftshoulderMotor.getEncoder();
-    private final RelativeEncoder rightelbowEncoder = rightshoulderMotor.getEncoder();
+    private final RelativeEncoder leftShoulderEncoder = leftElbowMotor.getEncoder();
+    private final RelativeEncoder rightShoulderEncoder = rightElbowMotor.getEncoder();
+    private final RelativeEncoder leftElbowEncoder = leftShoulderMotor.getEncoder();
+    private final RelativeEncoder rightElbowEncoder = rightShoulderMotor.getEncoder();
 
     public Arm() {
-        rightelbowMotor.setInverted(true);
-        rightshoulderMotor.setInverted(true);
+        rightElbowMotor.setInverted(true);
+        rightShoulderMotor.setInverted(true);
 
-        // conversion factor is ((1/(gear reduction)) * (2 * Math.pi))
-        leftshoulderEncoder.setPositionConversionFactor(0);
+        // conversion factor is ((gear ratio)/(encoder resolution) * 360) degrees
+        leftShoulderEncoder.setPositionConversionFactor(250/2048*360);
+        leftElbowEncoder.setPositionConversionFactor(250/2048*36);
     }
 
     // Sets speed of a motor controller group (dk if we neeed these)
@@ -69,7 +70,7 @@ public class Arm extends SubsystemBase {
 
         // this sets voltage to degrees (not good)
         upperMotorControllerGroup.setVoltage(
-                elbowController.calculate(leftelbowEncoder.getPosition(),
+                elbowController.calculate(leftElbowEncoder.getPosition(),
                         BruteInverseKinematics.calculate(x, y)[0]));
         // taken from wpilib documentation: not too sure how this all works yet
     }
@@ -78,13 +79,13 @@ public class Arm extends SubsystemBase {
 
         // this sets voltage to degrees (not good)
         lowerMotorControllerGroup.setVoltage(
-                shoulderController.calculate(leftshoulderEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
+                shoulderController.calculate(leftShoulderEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
         // index idk if we want to clean this up lmao
     }
 
     public void setDegreesUpper(double anlge) {
         // NEED PID TO CONTROL ACCURATELY
         // would work if the conversion factor was correctly set
-        leftshoulderEncoder.setPosition(anlge);
+        leftShoulderEncoder.setPosition(anlge);
     }
 }
