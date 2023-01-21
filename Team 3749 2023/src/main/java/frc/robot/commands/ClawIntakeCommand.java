@@ -32,7 +32,8 @@ public class ClawIntakeCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        //claw.setSpeed(-Constants.speed, -Constants.speed);
+        claw.setSpeed(Constants.Claw.speed);
+        
     }
 
     // Run on command finish

@@ -33,10 +33,8 @@ public class Claw extends SubsystemBase {
     }
 
     /**
-     * set the speed for the motors
-     * @param right_speed
-     * @param left_speed
-     * 
+     * set speed for motor
+     * @param speed
      */
     public void setSpeed(double speed) {
         clawMotors.set(speed);
