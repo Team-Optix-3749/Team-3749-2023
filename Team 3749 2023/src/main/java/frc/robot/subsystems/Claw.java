@@ -20,10 +20,10 @@ public class Claw extends SubsystemBase {
     private MotorControllerGroup base = new MotorControllerGroup(neo, falcon);
 
     // right side of the claw (the motor)
-    CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless);
+    private CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless);
 
     // left side of the claw (the motor)
-    CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless);
+    private CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless);
 
     // Initializes the base subsystem
     public Claw() {
