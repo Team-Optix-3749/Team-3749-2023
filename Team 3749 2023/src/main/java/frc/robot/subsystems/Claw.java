@@ -18,6 +18,9 @@ public class Claw extends SubsystemBase {
 
     // left side of the claw (the motor)
     private CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless);
+    
+    //motor controller group for both sides
+    private MotorControllerGroup clawMotors = new MotorControllerGroup(leftSide, rightSide);
 
     // Initializes the base subsystem
     public Claw() {
@@ -29,42 +32,14 @@ public class Claw extends SubsystemBase {
         // not sure what this is: Constants.Base.speed.set(new Double(16.90));
     }
 
-    // two motor controller groups allow us to alter the speeds between each motor
-    // (on the claw)
-    // this is important because both motors have to spin opposite directions
-    private MotorControllerGroup left = new MotorControllerGroup(leftSide);
-    private MotorControllerGroup right = new MotorControllerGroup(rightSide);
-
-    // now set the speed of each motor (they will be the same but inverted)
-    public void setSpeed(double right_speed, double left_speed) {
-        right.set(right_speed);
-        left.set(left_speed);
-    }
-
-    /***
-     * Sets the speed. Value is between -1.0 and 1.0
+    /**
+     * set the speed for the motors
+     * @param right_speed
+     * @param left_speed
      * 
-     * @param percent_speed
      */
-    public void set(double percent_speed) {
-        left.set(percent_speed);
-        right.set(percent_speed);
-    }
-
-    /***
-     * Gets the speed. Value is between -1.0 and 1.0
-     * 
-     * @return speed of the first motor in the motor controller group (neo)
-     */
-    public double get() {
-        return left.get();
-        //return right.get();
-    }
-
-    // Runs every 20 ms
-    @Override
-    public void periodic() {
-
+    public void setSpeed(double speed) {
+        clawMotors.set(speed);
     }
 
 }
