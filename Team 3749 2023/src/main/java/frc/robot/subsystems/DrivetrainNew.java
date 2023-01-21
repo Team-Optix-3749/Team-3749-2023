@@ -18,9 +18,11 @@ import frc.robot.utils.swerve.SwerveModuleNew;
  * @author Noah Simon
  * @author Rohin Sood
  * @author Harkirat
- * 
- *         Controlling the Drivetrain subsystem through use of joysticks, drive motors only
- */public class DrivetrainNew extends SubsystemBase {
+ * @summary
+ *          Controlling the Drivetrain subsystem through use of joysticks, drive
+ *          motors only
+ */
+public class DrivetrainNew extends SubsystemBase {
 
     private final SwerveModuleNew frontLeft = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_LEFT);
     private final SwerveModuleNew frontRight = new SwerveModuleNew(Constants.SwerveENUMS.FRONT_RIGHT);
@@ -158,7 +160,7 @@ import frc.robot.utils.swerve.SwerveModuleNew;
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
     }
 
-    public void toggleIdleMode(){
+    public void toggleIdleMode() {
         frontLeft.toggleIdleMode();
         frontRight.toggleIdleMode();
         backLeft.toggleIdleMode();

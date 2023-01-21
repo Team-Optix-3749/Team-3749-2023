@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Rohin Sood
  * @author Noah Simon
  * @author Harkirat
- * 
- *         Controlling the DrivetrainNew subsystem through use of joysticks
+ * @summary
+ *          Controlling the DrivetrainNew subsystem through use of joysticks
  */
 public class SwerveTeleopNew extends CommandBase {
         @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -55,13 +55,15 @@ public class SwerveTeleopNew extends CommandBase {
         // TESTING CHANGES: Multiply speeds by 0.1 BEFORE limiter. Smart dashboard
         @Override
         public void execute() {
-                final var xSpeed = -xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.getAsDouble(), Constants.DrivetrainNew.deadband))
+                final var xSpeed = -xLimiter.calculate(
+                                MathUtil.applyDeadband(xSpdFunction.getAsDouble(), Constants.DrivetrainNew.deadband))
                                 * Constants.DrivetrainNew.max_speed;
 
                 // Get the y speed or sideways/strafe speed. We are inverting this because
                 // we want a positive value when we pull to the left. Xbox controllers
                 // return positive values when you pull to the right by default.
-                final var ySpeed = -yLimiter.calculate(MathUtil.applyDeadband(ySpdFunction.getAsDouble(), Constants.DrivetrainNew.deadband))
+                final var ySpeed = -yLimiter.calculate(
+                                MathUtil.applyDeadband(ySpdFunction.getAsDouble(), Constants.DrivetrainNew.deadband))
                                 * Constants.DrivetrainNew.max_speed;
 
                 // Get the rate of angular rotation. We are inverting this because we want a
@@ -69,7 +71,8 @@ public class SwerveTeleopNew extends CommandBase {
                 // mathematics). Xbox controllers return positive values when you pull to
                 // the right by default.
                 final var rot = -turningLimiter
-                                .calculate(MathUtil.applyDeadband(turningSpdFunction.getAsDouble(), Constants.DrivetrainNew.deadband))
+                                .calculate(MathUtil.applyDeadband(turningSpdFunction.getAsDouble(),
+                                                Constants.DrivetrainNew.deadband))
                                 * Constants.DrivetrainNew.max_angular_speed;
 
                 SmartDashboard.putNumber("xSpeed", xSpeed);

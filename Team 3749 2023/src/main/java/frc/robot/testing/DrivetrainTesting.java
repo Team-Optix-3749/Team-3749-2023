@@ -7,20 +7,19 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.SwerveENUMS;
-import frc.robot.testing.SwerveModuleTesting;
 
 /***
  * @author Noah Simon
- * 
+ * @summary
  *          the Test Drivetrain subsystem
- */public class DrivetrainTesting extends SubsystemBase {
+ */
+public class DrivetrainTesting extends SubsystemBase {
 
     private final SendableChooser<Constants.SwerveENUMS> moduleChooser = new SendableChooser<>();
     private final SendableChooser<Constants.DriveTypeTestingENUMS> driveTypeChooser = new SendableChooser<>();
@@ -110,7 +109,7 @@ import frc.robot.testing.SwerveModuleTesting;
     public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         selected_module = moduleChooser.getSelected();
         selected_drive_type = driveTypeChooser.getSelected();
-        
+
         SmartDashboard.putString("Module Moving", selected_module.name);
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
@@ -202,7 +201,7 @@ import frc.robot.testing.SwerveModuleTesting;
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
     }
 
-    public void toggleIdleMode(){
+    public void toggleIdleMode() {
         frontLeft.toggleIdleMode();
         frontRight.toggleIdleMode();
         backLeft.toggleIdleMode();

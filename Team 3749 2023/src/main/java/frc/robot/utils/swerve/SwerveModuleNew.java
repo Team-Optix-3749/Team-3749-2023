@@ -22,8 +22,9 @@ import frc.robot.utils.Constants;
  * @author Rohin Sood
  * @author Noah Simon
  * @author Harkirat
- *         Code to manage each swerve drive module, which contains two motors,
- *         two relative encoders, and an absolute encoder
+ * @summary
+ *          Code to manage each swerve drive module, which contains two motors,
+ *          two relative encoders, and an absolute encoder
  */
 
 public class SwerveModuleNew {
@@ -108,7 +109,7 @@ public class SwerveModuleNew {
         driveEncoder = driveMotor.getEncoder();
         driveEncoder.setPositionConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
         driveEncoder.setVelocityConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
-        
+
         turningEncoder = new CANcoder(absolute_encoder_port);
 
         turningPositionSupplier = turningEncoder.getPosition().asSupplier();
@@ -183,19 +184,18 @@ public class SwerveModuleNew {
         turningEncoder.setPosition(0);
     }
 
-    public IdleMode getIdleMode(){
+    public IdleMode getIdleMode() {
         return driveMotor.getIdleMode();
     }
 
-    public void toggleIdleMode(){
-        if (getIdleMode()==IdleMode.kBrake){
+    public void toggleIdleMode() {
+        if (getIdleMode() == IdleMode.kBrake) {
             driveMotor.setIdleMode(IdleMode.kCoast);
             turningMotor.setIdleMode(IdleMode.kCoast);
-        }
-        else{
+        } else {
             driveMotor.setIdleMode(IdleMode.kBrake);
             turningMotor.setIdleMode(IdleMode.kBrake);
         }
-        
+
     }
 }
