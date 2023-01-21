@@ -15,9 +15,7 @@ import frc.robot.utils.BruteInverseKinematics;
  * 
  * Code for the arm of the robot. This does not include the claw at the end
  * 
- * Naming convention:
- * neo_motor_lower 1 and 2 refer to bottom two motors controlling the lower joint
- * neo_motor_upper 1 and 2 refer to upper two motors controlling the upper joint
+ * 
  */
 
 public class Arm extends SubsystemBase {
