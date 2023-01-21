@@ -22,7 +22,7 @@ public class ColorSensor{
     m_colorMatcher.addColorMatch(PURPLE);
 
     // Intializes string stating object obtained (possible objects: "Cone", "Cube", None) is in the claw (returned in "gamePiece" method)
-    public String Object;
+    public String Constants.Claw.Object;
 
     public static String gamePiece(){
         // .getColor gets RGB values at the current time
@@ -32,17 +32,17 @@ public class ColorSensor{
 
         if (match.color == YELLOW) {
             //If yellow detected, it is yellow cone
-            Object = "Cone";
-    }   else if (match.color == PURPLE) {
+            Constants.Claw.Object = "Cone";
+        }
+        else if (match.color == PURPLE) {
             //If purple detected, it is purple cube
-            Object = "Cube";
-    }   else {
+            Constants.Claw.Object = "Cube";
+        }
+        else {
             //If color detected falls out of line of margin from .matchClosestColor(), then nothing is detected
-            Object = None
-    }
+            Constants.Claw.Object = None
+        }
      return Object
      //return object detected (None, Cube, Cone)
     }
-
-    
 }
