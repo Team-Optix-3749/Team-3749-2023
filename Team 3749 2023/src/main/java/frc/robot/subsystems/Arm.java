@@ -49,8 +49,9 @@ public class Arm extends SubsystemBase {
         rightForearmMotor.setInverted(true);
         rightBicepMotor.setInverted(true);
 
-        // conversion factor is ((1/(gear reduction)) * (2 * Math.pi))
-        leftBicepEncoder.setPositionConversionFactor(0);
+        // conversion factor is ((gear ratio)/(encoder resolution) * 360) degrees
+        leftBicepEncoder.setPositionConversionFactor(250/2048*360);
+        leftForearmEncoder.setPositionConversionFactor(250/2048*36);
     }
 
     // Sets speed of a motor controller group (dk if we neeed these)
