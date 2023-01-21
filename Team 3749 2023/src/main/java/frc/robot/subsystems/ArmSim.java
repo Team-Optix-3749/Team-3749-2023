@@ -47,58 +47,58 @@ public class ArmSim extends SubsystemBase {
     private final CANSparkMax bicepMotor = new CANSparkMax(0 + 1, MotorType.kBrushless);
 
     // Simulation classes help us simulate what's going on, including gravity.
-    private static final double m_armReduction = 600;
-    private static final double m_forearmMass = 10.0; // Kilograms
-    private static final double m_forearmLength = Units.inchesToMeters(38.5);
-    private static final double m_bicepMass = 4.0; // Kilograms
-    private static final double m_bicepLength = Units.inchesToMeters(27);
+    private static final double armReduction = 600;
+    private static final double forearmMass = 10.0; // Kilograms
+    private static final double forearmLength = Units.inchesToMeters(38.5);
+    private static final double bicepMass = 4.0; // Kilograms
+    private static final double bicepLength = Units.inchesToMeters(27);
 
-    private static final int m_foremin_angle = -75;
-    private static final int m_foremax_angle = 260;
-    private static final int m_bicep_min_angle = 30;
-    private static final int m_bicep_max_angle = 150;
+    private static final int forearm_min_angle = -75;
+    private static final int forearm_max_angle = 260;
+    private static final int bicep_min_angle = 30;
+    private static final int bicep_max_angle = 150;
 
     // SETPOINTS FOR PRESETS MODE (Uses Virtual 4 Bar Mode for smooth movement)
-    private static final int stowedbicep = 90;
-    private static final int stowedforearm = 260;
+    private static final int stowedBicep = 90;
+    private static final int stowedForearm = 260;
 
-    private static final int intakebicep = 135;
-    private static final int intakeforearm = 265;
+    private static final int intakeBicep = 135;
+    private static final int intakeForearm = 265;
 
-    private static final int doubleSubstationbicep = 60;
-    private static final int doubleSubstationforearm = 185;
+    private static final int doubleSubstationBicep = 60;
+    private static final int doubleSubstationForearm = 185;
 
-    private static final int scoreFloorbicep = 120;
-    private static final int scoreFloorforearm = 255;
+    private static final int scoreFloorBicep = 120;
+    private static final int scoreFloorForearm = 255;
 
-    private static final int scoreMidbicep = 95;
-    private static final int scoreMidforearm = 195;
+    private static final int scoreMidBicep = 95;
+    private static final int scoreMidForearm = 195;
 
-    private static final int scoreHighbicep = 135;
-    private static final int scoreHighforearm = 160;
+    private static final int scoreHighBicep = 135;
+    private static final int scoreHighForearm = 160;
 
     // This arm sim represents an arm that can travel from -75 degrees (rotated down
     // front)
     // to 255 degrees (rotated down in the back).
     private final SingleJointedArmSim forearmSim = new SingleJointedArmSim(
             armGearbox,
-            m_armReduction,
-            SingleJointedArmSim.estimateMOI(m_forearmLength, m_forearmMass),
-            m_forearmLength,
-            Units.degreesToRadians(m_foremin_angle),
-            Units.degreesToRadians(m_foremax_angle),
-            m_forearmMass,
+            armReduction,
+            SingleJointedArmSim.estimateMOI(forearmLength, forearmMass),
+            forearmLength,
+            Units.degreesToRadians(forearm_min_angle),
+            Units.degreesToRadians(forearm_max_angle),
+            forearmMass,
             false,
             VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
     );
     private final SingleJointedArmSim bicepSim = new SingleJointedArmSim(
             armGearbox,
-            m_armReduction,
-            SingleJointedArmSim.estimateMOI(m_bicepLength, m_bicepMass),
-            m_bicepLength,
-            Units.degreesToRadians(m_bicep_min_angle),
-            Units.degreesToRadians(m_bicep_max_angle),
-            m_bicepMass,
+            armReduction,
+            SingleJointedArmSim.estimateMOI(bicepLength, bicepMass),
+            bicepLength,
+            Units.degreesToRadians(bicep_min_angle),
+            Units.degreesToRadians(bicep_max_angle),
+            bicepMass,
             true,
             VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
     );

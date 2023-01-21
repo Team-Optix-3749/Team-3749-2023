@@ -41,7 +41,19 @@ public final class Constants {
         public static final double ki = 0;
         public static final double kd = 0;
 
-        public static final double bicep_length = 25; // 
+        public static final double bicep_length = 25; // inches
         public static final double forearm_length = 26 + 13; // forearm + claw length
+
+        public static final double bicep_min_angle = 0;
+        public static final double bicep_max_angle = 0;
+
+        public static final double forearm_min_angle = 0;
+        public static final double forearm_max_angle = 0;
+
+    }
+
+    public static enum RobotMode {
+        REAL,
+        SIMULATION
     }
 }
