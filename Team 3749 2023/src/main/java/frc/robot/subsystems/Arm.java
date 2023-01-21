@@ -21,33 +21,13 @@ import frc.robot.utils.BruteInverseKinematics;
  */
 
 public class Arm extends SubsystemBase {
-    private CANSparkMax leftBicepMotor = new CANSparkMax(Constants.Arm.left_bicep_id, MotorType.kBrushless); // Check if
-                                                                                                             // this is
-                                                                                                             // actually
-                                                                                                             // brushless
-                                                                                                             // later
-    private CANSparkMax rightBicepMotor = new CANSparkMax(Constants.Arm.right_bicep_id, MotorType.kBrushless); // Check
-                                                                                                               // if
-                                                                                                               // this
-                                                                                                               // is
-                                                                                                               // actually
-                                                                                                               // brushless
-                                                                                                               // later
-    private CANSparkMax leftForearmMotor = new CANSparkMax(Constants.Arm.left_forearm_id, MotorType.kBrushless); // Check
-                                                                                                                 // if
-                                                                                                                 // this
-                                                                                                                 // is
-                                                                                                                 // actually
-                                                                                                                 // brushless
-                                                                                                                 // later
-    private CANSparkMax rightForearmMotor = new CANSparkMax(Constants.Arm.right_forearm_id, MotorType.kBrushless); // Check
-                                                                                                                   // if
-                                                                                                                   // this
-                                                                                                                   // is
-                                                                                                                   // actually
-                                                                                                                   // brushless
-                                                                                                                   // later
+    private CANSparkMax leftBicepMotor = new CANSparkMax(Constants.Arm.left_bicep_id, MotorType.kBrushless);
+    private CANSparkMax rightBicepMotor = new CANSparkMax(Constants.Arm.right_bicep_id, MotorType.kBrushless);
+    private CANSparkMax leftForearmMotor = new CANSparkMax(Constants.Arm.left_forearm_id, MotorType.kBrushless);
+    private CANSparkMax rightForearmMotor = new CANSparkMax(Constants.Arm.right_forearm_id, MotorType.kBrushless);
 
+    // set leaders and followers using .follow() in the constructor so you can
+    // control the encoders of both motor controllers
     private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(leftBicepMotor, rightBicepMotor,
             null);
     private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(leftForearmMotor,
@@ -71,6 +51,7 @@ public class Arm extends SubsystemBase {
         rightForearmMotor.setInverted(true);
         rightBicepMotor.setInverted(true);
 
+        // conversion factor is ((1/(gear reduction)) * (2 * Math.pi))
         leftBicepEncoder.setPositionConversionFactor(0);
     }
 
@@ -87,12 +68,17 @@ public class Arm extends SubsystemBase {
     // do feedforward
     // desired posiiton and make sure position values are good for both
     public void setForearmVoltage(double x, double y) {
+
+        // this sets voltage to degrees (not good)
         upperMotorControllerGroup.setVoltage(
-                forearmController.calculate(leftForearmEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[0]));
+                forearmController.calculate(leftForearmEncoder.getPosition(),
+                        BruteInverseKinematics.calculate(x, y)[0]));
         // taken from wpilib documentation: not too sure how this all works yet
     }
 
     public void setBicepVoltage(double x, double y) {
+
+        // this sets voltage to degrees (not good)
         lowerMotorControllerGroup.setVoltage(
                 bicepController.calculate(leftBicepEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
         // index idk if we want to clean this up lmao
@@ -100,6 +86,5 @@ public class Arm extends SubsystemBase {
 
     public void setDegreesUpper(double anlge) {
         leftBicepEncoder.setPosition(anlge);
-
     }
 }
