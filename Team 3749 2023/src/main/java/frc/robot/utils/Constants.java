@@ -1,4 +1,5 @@
 package frc.robot.utils;
+
 import edu.wpi.first.wpilibj.util.Color;
 
 /***
@@ -19,13 +20,15 @@ public final class Constants {
         // all values set to zero because we don't know them yet
         public static final int right_side = 0; // right side of the claw (the motor)
         public static final int left_side = 1; // left side of the claw (the motor)
-    
+
         public static final int speed = 0; // number for the speed
         public static final int stop = 0; // speed 0 = motors stop
     }
 
-    // find ultrasonic docs: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/sensors/ultrasonics-software.html
-    public static final int Ultrasonic_Ping_Port = 0; // ping measures the round-trip echo time of ultrasonic sound to determine how far away an object is
+    // find ultrasonic docs:
+    // https://docs.wpilib.org/en/stable/docs/software/hardware-apis/sensors/ultrasonics-software.html
+    public static final int Ultrasonic_Ping_Port = 0; // ping measures the round-trip echo time of ultrasonic sound to
+                                                      // determine how far away an object is
     public static final int Ultrasonic_Echo_Port = 1; // echo sends out ultrasonic signal
 
     // colors for the color sensor
