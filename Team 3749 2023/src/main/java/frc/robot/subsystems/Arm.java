@@ -60,11 +60,11 @@ public class Arm extends SubsystemBase {
     }
 
     // Sets speed of a motor controller group (dk if we neeed these)
-    public void setSpeedUpper(double speed) {
+    public void setSpeedElbow(double speed) {
         leftElbowMotor.set(speed);
     }
 
-    public void setSpeedLower(double speed) {
+    public void setSpeedShoulder(double speed) {
         leftShoulderMotor.set(speed);
     }
 
@@ -88,17 +88,17 @@ public class Arm extends SubsystemBase {
     //     // index idk if we want to clean this up lmao
     // }
 
-    // public void setDegreesUpper(double anlge) {
-    //     // NEED PID TO CONTROL ACCURATELY
-    //     // would work if the conversion factor was correctly set
-    //     leftBicepEncoder.setPosition(anlge);
-    // }
-
-    public void setForearmPosition(){
-
+    public void setDegreesShoulder(double x, double y) {
+        // NEED PID TO CONTROL ACCURATELY
+        // would work if the conversion factor was correctly set
+        // need to change where it gets the calculated angle
+        leftShoulderEncoder.setPosition(shoulderController.calculate(leftShoulderEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
     }
 
-    public void setBicepPosition(){
-
+    public void setDegreesElbow(double x, double y) {
+        // NEED PID TO CONTROL ACCURATELY
+        // would work if the conversion factor was correctly set
+        // need to change where it gets the calculated angle
+        leftElbowEncoder.setPosition(elbowController.calculate(leftElbowEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
     }
 }
