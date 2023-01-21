@@ -238,6 +238,12 @@ public class SwerveModuleTesting {
                         driveMotor.setIdleMode(IdleMode.kBrake);
                         turningMotor.setIdleMode(IdleMode.kBrake);
                 }
-
+        }
+        
+        public double getAbsoluteEncoderValue(){
+                return turningPositionSupplier.get();
+        }
+        public double getAbsoluteEncoderVelocity(){
+                return turningVelocitySupplier.get();
         }
 }

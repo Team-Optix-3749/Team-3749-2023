@@ -206,6 +206,13 @@ public class DrivetrainTesting extends SubsystemBase {
         frontRight.toggleIdleMode();
         backLeft.toggleIdleMode();
         backRight.toggleIdleMode();
+    }
+
+    public void logAbsoluteEncoderValues(){
+        SmartDashboard.putNumber("Front Left Absolute Encoder", frontLeft.getAbsoluteEncoderValue());
+        SmartDashboard.putNumber("Front Right Absolute Encoder", frontRight.getAbsoluteEncoderValue());
+        SmartDashboard.putNumber("Back Left Absolute Encoder", backLeft.getAbsoluteEncoderValue());
+        SmartDashboard.putNumber("Back Right Absolute Encoder", backRight.getAbsoluteEncoderValue());
 
     }
 
