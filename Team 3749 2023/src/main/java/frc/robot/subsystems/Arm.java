@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.BruteInverseKinematics;
 
-/*
+/**
  * @author Bailey Say
  * @author Raymond Sheng
  * 
@@ -85,6 +85,8 @@ public class Arm extends SubsystemBase {
     }
 
     public void setDegreesUpper(double anlge) {
+        // NEED PID TO CONTROL ACCURATELY
+        // would work if the conversion factor was correctly set
         leftBicepEncoder.setPosition(anlge);
     }
 }
