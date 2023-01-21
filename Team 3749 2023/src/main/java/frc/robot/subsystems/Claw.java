@@ -1,3 +1,6 @@
+//Claw.java creates objects, dependencies, and motor controller groups
+//to allow us to set the speed of each motor for intake and outtake
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -9,11 +12,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
-/***
- * @author NAME
- * 
- *         Serves as a template to format subsystems
- */
 public class Claw extends SubsystemBase {
 
     private CANSparkMax neo = new CANSparkMax(Constants.Base.neo_id, MotorType.kBrushless);
@@ -21,11 +19,11 @@ public class Claw extends SubsystemBase {
 
     private MotorControllerGroup base = new MotorControllerGroup(neo, falcon);
 
-    CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless);
     // right side of the claw (the motor)
+    CANSparkMax rightSide = new CANSparkMax(Constants.right_side, MotorType.kBrushless);
 
-    CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless);
     // left side of the claw (the motor)
+    CANSparkMax leftSide = new CANSparkMax(Constants.left_side, MotorType.kBrushless);
 
     // Initializes the base subsystem
     public Claw() {
@@ -59,6 +57,7 @@ public class Claw extends SubsystemBase {
     public void set(double percent_speed) {
         base.set(percent_speed);
     }
+
     /***
      * Gets the speed. Value is between -1.0 and 1.0
      * 
