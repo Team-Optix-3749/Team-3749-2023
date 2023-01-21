@@ -246,4 +246,10 @@ public class SwerveModuleTesting {
         public double getAbsoluteEncoderVelocity(){
                 return turningVelocitySupplier.get();
         }
+        public double getDriveEncoderValue(){
+                return driveEncoder.getPosition();
+        }
+        public double getDriveEncoderVelocity(){
+                return driveEncoder.getVelocity();
+        }
 }

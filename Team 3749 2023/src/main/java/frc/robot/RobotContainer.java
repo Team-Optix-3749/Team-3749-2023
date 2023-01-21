@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.testing.DrivetrainTesting;
 import frc.robot.testing.MoveIndividualModule;
-import frc.robot.testing.TestCANCoderValues;
+import frc.robot.testing.TestEncoderValues;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
@@ -48,7 +48,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         pilot.a().onTrue(new InstantCommand(drivetrain::toggleIdleMode));
-        pilot.b().whileTrue(new TestCANCoderValues(drivetrain));
+        pilot.b().whileTrue(new TestEncoderValues(drivetrain));
     }
 
     public Command getAutonomousCommand() {

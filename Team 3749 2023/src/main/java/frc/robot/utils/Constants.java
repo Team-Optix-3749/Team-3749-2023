@@ -19,20 +19,23 @@ public final class Constants {
 
     public static final class SwerveModuleNew {
         public static final double wheel_radius = Units.inchesToMeters(3.5/2);
-        public static final double encoder_resolution = 42; // From rev data sheet
+        public static final double drive_encoder_conversion_factor = 1/12.8;
 
         public static final double max_angular_velocity = DrivetrainNew.max_speed;
         public static final double max_angular_acceleration = 2 * Math.PI; // radians per second squared
 
-        // meters
-        public static final double drive_encoder_rotations_to_meter = 2 * Math.PI
-                * Constants.SwerveModuleNew.wheel_radius / Constants.SwerveModuleNew.encoder_resolution;
-        public static final double turning_encoder_rotations_to_meter = 2 * Math.PI
-                / Constants.SwerveModuleNew.encoder_resolution;
 
-        // meters per second
-        public static final double drive_encoder_RPM_to_MPS = drive_encoder_rotations_to_meter / 60;
-        public static final double turning_encoder_RPM_to_MPS = turning_encoder_rotations_to_meter / 60;
+
+        // meters
+        // public static final double drive_encoder_rotations_to_meter = 2 * Math.PI
+        //         * wheel_radius * drive_encoder_conversion_factor;
+        // public static final double turning_encoder_rotations_to_meter = 2 * Math.PI
+        //         / drive_encoder_conversion_factor;
+
+        // // meters per second
+        // public static final double drive_encoder_RPM_to_MPS = drive_encoder_rotations_to_meter / 60;
+        // public static final double turning_encoder_RPM_to_MPS = turning_encoder_rotations_to_meter / 60;
+
 
         // Front _left_ module
         public static final int front_left_drive_id = 1;
@@ -74,7 +77,6 @@ public final class Constants {
         public static final double physical_max_speed_meters_per_second = 5;
         public static final double physical_max_angular_speed_radians_per_second = 2 * 2 * Math.PI;
 
-        public static final double drive_encoder_conversion_factor = 1/12.8;
 
     }
 
@@ -96,10 +98,12 @@ public final class Constants {
                 new Translation2d(-wheel_base / 2, -track_width / 2), // back right
                 new Translation2d(-wheel_base / 2, track_width / 2)); // back left
             
-        public static final double tele_drive_max_speed_meters_per_second = SwerveModuleNew.physical_max_speed_meters_per_second / 4;
-        public static final double tele_drive_max_angular_speed_radians_per_second = SwerveModuleNew.physical_max_speed_meters_per_second;
-        public static final double tele_drive_max_acceleration_units_per_second = 3;
-        public static final double tele_drive_max_angular_acceleration_units_per_second = 3;
+
+                
+        // public static final double tele_drive_max_speed_meters_per_second = SwerveModuleNew.physical_max_speed_meters_per_second / 4;
+        // public static final double tele_drive_max_angular_speed_radians_per_second = SwerveModuleNew.physical_max_speed_meters_per_second;
+        // public static final double tele_drive_max_acceleration_units_per_second = 3;
+        // public static final double tele_drive_max_angular_acceleration_units_per_second = 3;
 
         public static final double deadband = 0.025;
 

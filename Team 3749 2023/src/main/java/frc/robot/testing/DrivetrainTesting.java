@@ -216,4 +216,11 @@ public class DrivetrainTesting extends SubsystemBase {
 
     }
 
+    public void logDriveEncoderValues(){
+        SmartDashboard.putNumber("Front Left Drive Encoder", frontLeft.getDriveEncoderValue());
+        SmartDashboard.putNumber("Front Right Drive Encoder", frontRight.getDriveEncoderValue());
+        SmartDashboard.putNumber("Back Left Drive Encoder", backLeft.getDriveEncoderValue());
+        SmartDashboard.putNumber("Back Right Drive Encoder", backRight.getDriveEncoderValue());
+    }
+
 }

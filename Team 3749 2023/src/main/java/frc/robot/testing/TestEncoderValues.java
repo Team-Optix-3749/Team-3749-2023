@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  *          Controlling the Test Drivetrain subsystem through use of joysticks,
  *          drive and turning motors
  */
-public class TestCANCoderValues extends CommandBase {
+public class TestEncoderValues extends CommandBase {
         @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
         DrivetrainTesting swerveSubsystem;
 
         // Initializes the BaseCommand
-        public TestCANCoderValues(DrivetrainTesting swerveSubsystem) {
+        public TestEncoderValues(DrivetrainTesting swerveSubsystem) {
                 this.swerveSubsystem=swerveSubsystem;
                 addRequirements(swerveSubsystem);
         }
@@ -31,8 +31,8 @@ public class TestCANCoderValues extends CommandBase {
         // TESTING CHANGES: Multiply speeds by 0.1 BEFORE limiter. Smart dashboard
         @Override
         public void execute() {
-               swerveSubsystem.logAbsoluteEncoderValues();
-
+                swerveSubsystem.logAbsoluteEncoderValues();
+                swerveSubsystem.logDriveEncoderValues();
         }
 
         // Run on command finish
