@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
 /***
- * @author Rohin Sood
+ * @author NAME
  * 
  *         Serves as a template to format subsystems
  */
