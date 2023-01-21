@@ -52,7 +52,7 @@ public class Arm extends SubsystemBase {
 
         // right motors are follower motors for left motors
         rightBicepMotor.follow(leftBicepMotor);
-        rightForearmMotor.follow(leftBicepMotor);
+        rightForearmMotor.follow(leftForearmMotor);
 
         // conversion factor is ((gear ratio)/(encoder resolution) * 360) degrees
         leftBicepEncoder.setPositionConversionFactor(250/2048*360);
@@ -61,11 +61,11 @@ public class Arm extends SubsystemBase {
 
     // Sets speed of a motor controller group (dk if we neeed these)
     public void setSpeedUpper(double speed) {
-        upperMotorControllerGroup.set(speed);
+        leftForearmMotor.set(speed);
     }
 
     public void setSpeedLower(double speed) {
-        lowerMotorControllerGroup.set(speed);
+        leftBicepMotor.set(speed);
     }
 
     // PID + feedforward implementation; should return the needed voltage, need to
