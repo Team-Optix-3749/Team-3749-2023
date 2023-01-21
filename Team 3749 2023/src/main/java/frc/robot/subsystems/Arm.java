@@ -26,10 +26,10 @@ public class Arm extends SubsystemBase {
 
     // set leaders and followers using .follow() in the constructor so you can
     // control the encoders of both motor controllers
-    private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(leftShoulderMotor, rightShoulderMotor,
-            null);
-    private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(leftElbowMotor,
-            rightElbowMotor, null);
+    // private MotorControllerGroup upperMotorControllerGroup = new MotorControllerGroup(leftBicepMotor, rightBicepMotor,
+    //         null);
+    // private MotorControllerGroup lowerMotorControllerGroup = new MotorControllerGroup(leftForearmMotor,
+    //         rightForearmMotor, null);
 
     // Standard classes for controlling our arm
     // Not sure if same values for k values from Constants.Arm should be used for
@@ -40,14 +40,19 @@ public class Arm extends SubsystemBase {
             Constants.Arm.kd);
 
     // Relative Encoders (dk if we need all of these)
-    private final RelativeEncoder leftShoulderEncoder = leftElbowMotor.getEncoder();
-    private final RelativeEncoder rightShoulderEncoder = rightElbowMotor.getEncoder();
-    private final RelativeEncoder leftElbowEncoder = leftShoulderMotor.getEncoder();
-    private final RelativeEncoder rightElbowEncoder = rightShoulderMotor.getEncoder();
+    private final RelativeEncoder leftShoulderEncoder = leftShoulderMotor.getEncoder();
+    private final RelativeEncoder rightShoulderEncoder = rightShoulderMotor.getEncoder();
+    private final RelativeEncoder leftElbowEncoder = leftElbowMotor.getEncoder();
+    private final RelativeEncoder rightElbowEncoder = rightElbowMotor.getEncoder();
 
     public Arm() {
+        // inverted right motors
         rightElbowMotor.setInverted(true);
         rightShoulderMotor.setInverted(true);
+
+        // right motors are follower motors for left motors
+        rightShoulderMotor.follow(leftShoulderMotor);
+        rightElbowMotor.follow(leftElbowMotor);
 
         // conversion factor is ((gear ratio)/(encoder resolution) * 360) degrees
         leftShoulderEncoder.setPositionConversionFactor(250/2048*360);
@@ -56,36 +61,44 @@ public class Arm extends SubsystemBase {
 
     // Sets speed of a motor controller group (dk if we neeed these)
     public void setSpeedUpper(double speed) {
-        upperMotorControllerGroup.set(speed);
+        leftElbowMotor.set(speed);
     }
 
     public void setSpeedLower(double speed) {
-        lowerMotorControllerGroup.set(speed);
+        leftShoulderMotor.set(speed);
     }
 
     // PID + feedforward implementation; should return the needed voltage, need to
     // do feedforward
     // desired posiiton and make sure position values are good for both
-    public void setelbowVoltage(double x, double y) {
+    // public void setForearmVoltage(double x, double y) {
 
-        // this sets voltage to degrees (not good)
-        upperMotorControllerGroup.setVoltage(
-                elbowController.calculate(leftElbowEncoder.getPosition(),
-                        BruteInverseKinematics.calculate(x, y)[0]));
-        // taken from wpilib documentation: not too sure how this all works yet
+    //     // this sets voltage to degrees (not good)
+    //     upperMotorControllerGroup.setVoltage(
+    //             forearmController.calculate(leftForearmEncoder.getPosition(),
+    //                     BruteInverseKinematics.calculate(x, y)[0]));
+    //     // taken from wpilib documentation: not too sure how this all works yet
+    // }
+
+    // public void setBicepVoltage(double x, double y) {
+
+    //     // this sets voltage to degrees (not good)
+    //     lowerMotorControllerGroup.setVoltage(
+    //             bicepController.calculate(leftBicepEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
+    //     // index idk if we want to clean this up lmao
+    // }
+
+    // public void setDegreesUpper(double anlge) {
+    //     // NEED PID TO CONTROL ACCURATELY
+    //     // would work if the conversion factor was correctly set
+    //     leftBicepEncoder.setPosition(anlge);
+    // }
+
+    public void setForearmPosition(){
+
     }
 
-    public void setshoulderVoltage(double x, double y) {
+    public void setBicepPosition(){
 
-        // this sets voltage to degrees (not good)
-        lowerMotorControllerGroup.setVoltage(
-                shoulderController.calculate(leftShoulderEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
-        // index idk if we want to clean this up lmao
-    }
-
-    public void setDegreesUpper(double anlge) {
-        // NEED PID TO CONTROL ACCURATELY
-        // would work if the conversion factor was correctly set
-        leftShoulderEncoder.setPosition(anlge);
     }
 }
