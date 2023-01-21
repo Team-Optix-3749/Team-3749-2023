@@ -25,8 +25,8 @@ public final class Constants {
     }
 
     // find ultrasonic docs: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/sensors/ultrasonics-software.html
-    public static final int UltrasonicPingPort = 0; // ping measures the round-trip echo time of ultrasonic sound to determine how far away an object is
-    public static final int UltrasonicEchoPort = 1; // echo sends out ultrasonic signal
+    public static final int Ultrasonic_Ping_Port = 0; // ping measures the round-trip echo time of ultrasonic sound to determine how far away an object is
+    public static final int Ultrasonic_Echo_Port = 1; // echo sends out ultrasonic signal
 
     // colors for the color sensor
     public static final Color PURPLE = new Color(0.349, 0.207, 0.658);
