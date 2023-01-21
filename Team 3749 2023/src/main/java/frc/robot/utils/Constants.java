@@ -42,6 +42,6 @@ public final class Constants {
     // public static final int Ultrasonic_Echo_Port = 1; // echo sends out ultrasonic signal
 
     // colors for the color sensor
-    public static final Color PURPLE = new Color(0.349, 0.207, 0.658);
-    public static final Color YELLOW = new Color(0.937, 0.643, 0.015);
+    public static final Color cube_color = new Color(0.349, 0.207, 0.658);
+    public static final Color cone_color = new Color(0.937, 0.643, 0.015);
 }

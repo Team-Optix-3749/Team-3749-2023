@@ -18,8 +18,8 @@ public class ColorSensor{
     private final ColorMatch m_colorMatcher = new ColorMatch();
 
     // adds colors from constants to array with all colors
-    m_colorMatcher.addColorMatch(YELLOW);
-    m_colorMatcher.addColorMatch(PURPLE);
+    m_colorMatcher.addColorMatch(cone_color);
+    m_colorMatcher.addColorMatch(cube_color);
 
     // Constants.Claw.Object is a String (see Constants.java)
     // States object obtained (possible objects: "Cone", "Cube", None) 
@@ -32,19 +32,20 @@ public class ColorSensor{
         //.matchClosestColor() caluclates the closest color from the listed colors in Color Matcher array
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-        if (match.color == YELLOW) {
-            //If yellow detected, it is yellow cone
+        if (match.color == cone_color) {
+            //If cone_color detected, it is  cone
             Constants.Claw.Object = "Cone";
         }
-        else if (match.color == PURPLE) {
-            //If purple detected, it is purple cube
+        else if (match.color == cube_color) {
+            //If cube_color detected, it is  cube
             Constants.Claw.Object = "Cube";
         }
         else {
             //If color detected falls out of line of margin from .matchClosestColor(), then nothing is detected
-            Constants.Claw.Object = None
+            Constants.Claw.Object = "None";
         }
-        return Object
+
         //return object detected (None, Cube, Cone)
+        return Object;
     }
 }
