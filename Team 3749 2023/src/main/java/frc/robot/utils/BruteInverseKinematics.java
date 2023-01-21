@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import frc.robot.utils.Constants.Arm;
+
 /**
  * Inverse kinematics, how fun
  * It actually this is more like trig :skull:
@@ -29,16 +31,18 @@ public class BruteInverseKinematics {
         double minimum_distance = Double.MAX_VALUE;
 
         // Iterate over possible degrees for both joints
-        for (double bicep_deg = 1; bicep_deg < 181; bicep_deg += 0.5) {
-            double i = Math.toRadians(bicep_deg);
-            for (double forearm_deg = 1; forearm_deg < 361; forearm_deg += 0.5) {
-                double j = Math.toRadians(forearm_deg);
+        for (double bicep_deg = Arm.bicep_min_angle; bicep_deg < Arm.bicep_max_angle
+                + 1; bicep_deg += 0.5) {
+            double bicep_rad = Math.toRadians(bicep_deg);
+            for (double forearm_deg = Arm.forearm_min_angle; forearm_deg < Arm.forearm_max_angle
+                    + 1; forearm_deg += 0.5) {
+                double forearm_rad = Math.toRadians(forearm_deg);
 
                 // Change between point and current angle
-                double delta_x = (Constants.Arm.bicep_length * Math.cos(i)
-                        + Constants.Arm.forearm_length * Math.cos(i + j)) - x;
-                double delta_y = (Constants.Arm.bicep_length * Math.sin(j)
-                        + Constants.Arm.forearm_length * Math.sin(i + j)) - y;
+                double delta_x = (Constants.Arm.bicep_length * Math.cos(bicep_rad)
+                        + Constants.Arm.forearm_length * Math.cos(bicep_rad + forearm_rad)) - x;
+                double delta_y = (Constants.Arm.bicep_length * Math.sin(forearm_rad)
+                        + Constants.Arm.forearm_length * Math.sin(bicep_rad + forearm_rad)) - y;
                 double distance = Math.pow(delta_x, 2) + Math.pow(delta_y, 2);
 
                 // Once the distance surpasses the minimum_distance, exit the for loop
