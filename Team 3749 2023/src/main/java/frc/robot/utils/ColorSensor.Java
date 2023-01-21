@@ -9,6 +9,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj2.Constants;
 //Note that this ultility is currently unused in claw code. But is ready for possible future use (use the gamePiece Function)
+//Rearranged code from RevRobotics
 
 public class ColorSensor{
     // defines color sensor
@@ -23,7 +24,7 @@ public class ColorSensor{
     // Intializes string stating object obtained (possible objects: "Cone", "Cube", None) is in the claw (returned in "gamePiece" method)
     public String Object;
 
-    public static gamePiece(){
+    public static String gamePiece(){
         // .getColor gets RGB values at the current time
         Color detectedColor = m_colorSensor.getColor();
         //.matchClosestColor() caluclates the closest color (with some line of margin) from the listed colors in Color Matcher array
