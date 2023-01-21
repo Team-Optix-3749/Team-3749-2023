@@ -78,7 +78,7 @@ public class MoveIndividualTurning extends CommandBase {
                 SmartDashboard.putNumber("rotationSpeed", rot);
 
                 // 4. Send processed inputs to the drive() function
-                swerveSubsystem.moveIndividualModule(xSpeed, ySpeed, rot, false, moduleENUM, false, true);
+                swerveSubsystem.moveIndividualModule(xSpeed, ySpeed, rot, false);
         }
 
         // Run on command finish

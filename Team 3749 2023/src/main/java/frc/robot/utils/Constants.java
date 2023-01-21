@@ -130,5 +130,14 @@ public final class Constants {
             this.name = name;
         }
     }
+    public static enum DriveTypeTestingENUMS {
+        DRIVE_AND_TURNING("drive_and_turning"),
+        DRIVE("drive"),
+        TURNING("turning");
 
+        public final String name;
+        DriveTypeTestingENUMS (String name){
+            this.name = name;
+        }
+    }
 }

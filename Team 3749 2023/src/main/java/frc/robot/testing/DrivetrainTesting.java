@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -20,6 +21,11 @@ import frc.robot.testing.SwerveModuleTesting;
  * 
  *          the Test Drivetrain subsystem
  */public class DrivetrainTesting extends SubsystemBase {
+
+    private final SendableChooser<Constants.SwerveENUMS> moduleChooser = new SendableChooser<>();
+    private final SendableChooser<Constants.DriveTypeTestingENUMS> driveTypeChooser = new SendableChooser<>();
+    private Constants.SwerveENUMS selected_module;
+    private Constants.DriveTypeTestingENUMS selected_drive_type;
 
     private final SwerveModuleTesting frontLeft = new SwerveModuleTesting(Constants.SwerveENUMS.FRONT_LEFT);
     private final SwerveModuleTesting frontRight = new SwerveModuleTesting(Constants.SwerveENUMS.FRONT_RIGHT);
@@ -39,6 +45,16 @@ import frc.robot.testing.SwerveModuleTesting;
             });
 
     public DrivetrainTesting() {
+        moduleChooser.setDefaultOption("Front Left", Constants.SwerveENUMS.FRONT_LEFT);
+        moduleChooser.addOption("Front Right", Constants.SwerveENUMS.FRONT_RIGHT);
+        moduleChooser.addOption("Back Left", Constants.SwerveENUMS.BACK_LEFT);
+        moduleChooser.addOption("Back Right", Constants.SwerveENUMS.BACK_RIGHT);
+        SmartDashboard.putData("Test Module Chooser", moduleChooser);
+        driveTypeChooser.setDefaultOption("Drive and Turning", Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING);
+        driveTypeChooser.addOption("Drive", Constants.DriveTypeTestingENUMS.DRIVE);
+        driveTypeChooser.addOption("Turning", Constants.DriveTypeTestingENUMS.TURNING);
+        SmartDashboard.putData("Test Drive Type Chooser", driveTypeChooser);
+
         gyro.reset();
     }
 
@@ -89,11 +105,13 @@ import frc.robot.testing.SwerveModuleTesting;
      * @param ySpeed        Speed of the robot in the y direction (sideways).
      * @param rot           Angular rate of the robot.
      * @param fieldRelative Whether the provided x and y speeds are relative to the
-     *                      field.
+     *                      field_
      */
-    public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative,
-            Constants.SwerveENUMS modulePosition, boolean drive, boolean turning) {
-        SmartDashboard.putString("Module Moving", modulePosition.name);
+    public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+        selected_module = moduleChooser.getSelected();
+        selected_drive_type = driveTypeChooser.getSelected();
+        
+        SmartDashboard.putString("Module Moving", selected_module.name);
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -102,40 +120,40 @@ import frc.robot.testing.SwerveModuleTesting;
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
         double[] state = new double[6];
-        if (modulePosition == SwerveENUMS.FRONT_LEFT) {
-            if (drive && turning) {
+        if (selected_module == SwerveENUMS.FRONT_LEFT) {
+            if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = frontLeft.setDesiredState(swerveModuleStates[1]);
-            } else if (drive) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE) {
                 state = frontLeft.setDesiredDrive(swerveModuleStates[1]);
-            } else if (turning) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = frontLeft.setDesiredTurning(swerveModuleStates[1]);
             }
         }
 
-        else if (modulePosition == SwerveENUMS.FRONT_RIGHT) {
-            if (drive && turning) {
+        else if (selected_module == SwerveENUMS.FRONT_RIGHT) {
+            if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = frontRight.setDesiredState(swerveModuleStates[0]);
-            } else if (drive) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE) {
                 state = frontRight.setDesiredDrive(swerveModuleStates[0]);
-            } else if (turning) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = frontRight.setDesiredTurning(swerveModuleStates[0]);
             }
         }
 
-        else if (modulePosition == SwerveENUMS.BACK_LEFT) {
-            if (drive && turning) {
+        else if (selected_module == SwerveENUMS.BACK_LEFT) {
+            if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = backLeft.setDesiredState(swerveModuleStates[3]);
-            } else if (drive) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE) {
                 state = backLeft.setDesiredDrive(swerveModuleStates[3]);
-            } else if (turning) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = backLeft.setDesiredTurning(swerveModuleStates[3]);
             }
-        } else if (modulePosition == SwerveENUMS.BACK_RIGHT) {
-            if (drive && turning) {
+        } else if (selected_module == SwerveENUMS.BACK_RIGHT) {
+            if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = backRight.setDesiredState(swerveModuleStates[2]);
-            } else if (drive) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE) {
                 state = backRight.setDesiredDrive(swerveModuleStates[2]);
-            } else if (turning) {
+            } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = backRight.setDesiredTurning(swerveModuleStates[2]);
             }
         }
