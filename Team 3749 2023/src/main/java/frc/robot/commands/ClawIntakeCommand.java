@@ -33,6 +33,7 @@ public class ClawIntakeCommand extends CommandBase {
     @Override
     public void execute() {
         claw.setSpeed(-Constants.Claw.speed);
+        
     }
 
     // Run on command finish

@@ -23,6 +23,13 @@ public final class Constants {
 
         public static final int speed = 0; // number for the speed
         public static final int stop = 0; // speed 0 = motors stop
+
+        //PID values
+        public static final int claw_kP = 0;
+        public static final int claw_kI = 0;
+        public static final int claw_kD = 0;
+
+        public static final int setpoint = 0;
     }
 
     // find ultrasonic docs:
