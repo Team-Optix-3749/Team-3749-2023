@@ -44,16 +44,8 @@ public class RobotContainer {
         // drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
         //         pilot.leftStick()::getAsBoolean));
 
-        // Drive and
-        // drivetrain.setDefaultCommand(new MoveIndividualModule(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-        //         pilot.leftStick()::getAsBoolean));
-
-
-        // drivetrain.setDefaultCommand(new MoveIndividualDrive(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-        //         pilot.leftStick()::getAsBoolean));
-
-
-        drivetrain.setDefaultCommand(new MoveIndividualTurning(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
+        // TESTING
+        drivetrain.setDefaultCommand(new MoveIndividualModule(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
                 pilot.leftStick()::getAsBoolean));
     }
 
