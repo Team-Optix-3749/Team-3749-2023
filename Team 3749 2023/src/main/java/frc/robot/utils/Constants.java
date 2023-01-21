@@ -74,6 +74,8 @@ public final class Constants {
         public static final double physical_max_speed_meters_per_second = 5;
         public static final double physical_max_angular_speed_radians_per_second = 2 * 2 * Math.PI;
 
+        public static final double drive_encoder_conversion_factor = 1/12.8;
+
     }
 
     public static final class DrivetrainNew {

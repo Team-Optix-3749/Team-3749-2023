@@ -184,4 +184,12 @@ import frc.robot.testing.SwerveModuleTesting;
         return gyro.getRate() * (Constants.DrivetrainNew.gyro_reversed ? -1.0 : 1.0);
     }
 
+    public void toggleIdleMode(){
+        frontLeft.toggleIdleMode();
+        frontRight.toggleIdleMode();
+        backLeft.toggleIdleMode();
+        backRight.toggleIdleMode();
+
+    }
+
 }

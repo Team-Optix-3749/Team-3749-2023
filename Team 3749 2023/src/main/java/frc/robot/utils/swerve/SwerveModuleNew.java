@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenixpro.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -105,10 +106,14 @@ public class SwerveModuleNew {
 
         // Drive motor is relative, turning is absolute
         driveEncoder = driveMotor.getEncoder();
+        driveEncoder.setPositionConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
+        driveEncoder.setVelocityConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
+        
         turningEncoder = new CANcoder(absolute_encoder_port);
 
         turningPositionSupplier = turningEncoder.getPosition().asSupplier();
         turningVelocitySupplier = turningEncoder.getVelocity().asSupplier();
+
         // Limit the PID Controller's input range between -pi and pi and set the input
         // to be continuous.
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -176,5 +181,21 @@ public class SwerveModuleNew {
         // needs (wheel's angle).
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(0);
+    }
+
+    public IdleMode getIdleMode(){
+        return driveMotor.getIdleMode();
+    }
+
+    public void toggleIdleMode(){
+        if (getIdleMode()==IdleMode.kBrake){
+            driveMotor.setIdleMode(IdleMode.kCoast);
+            turningMotor.setIdleMode(IdleMode.kCoast);
+        }
+        else{
+            driveMotor.setIdleMode(IdleMode.kBrake);
+            turningMotor.setIdleMode(IdleMode.kBrake);
+        }
+        
     }
 }
