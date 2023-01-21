@@ -17,15 +17,14 @@ public class Claw extends SubsystemBase {
     // Creates a PIDController with gains kP, kI, and kD
     PIDController claw_PID = new PIDController(Constants.Claw.claw_kP, Constants.Claw.claw_kI, Constants.Claw.claw_kD);
 
-    // right side of the claw (the motor)
+    // left and right side of the claw (the motor)
     private CANSparkMax right_motor = new CANSparkMax(Constants.Claw.right_side, MotorType.kBrushless);
-
-    // left side of the claw (the motor)
     private CANSparkMax left_motor = new CANSparkMax(Constants.Claw.left_side, MotorType.kBrushless);
 
     // motor controller group for both sides
     private MotorControllerGroup clawMotors = new MotorControllerGroup(left_motor, right_motor);
 
+    // relative encoder
     private final RelativeEncoder claw_encoder = right_motor.getEncoder();
 
     // Initializes the base subsystem
