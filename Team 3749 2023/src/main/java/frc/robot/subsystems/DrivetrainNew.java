@@ -95,15 +95,17 @@ public class DrivetrainNew extends SubsystemBase {
      *                      field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-
+        // converts speeds to chassis speeds and then chassis speeds to module states
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
+        // makes all module speeds proportional to the max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
-
+        // states array is just for logging. set desired state is what's really doing
+        // the job here
         double[][] states = new double[4][4];
         states[0] = frontRight.setDesiredState(swerveModuleStates[0]);
         states[1] = frontLeft.setDesiredState(swerveModuleStates[1]);

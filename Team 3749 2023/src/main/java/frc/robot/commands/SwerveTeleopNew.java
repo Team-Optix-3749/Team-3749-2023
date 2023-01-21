@@ -55,6 +55,8 @@ public class SwerveTeleopNew extends CommandBase {
         // TESTING CHANGES: Multiply speeds by 0.1 BEFORE limiter. Smart dashboard
         @Override
         public void execute() {
+                // the joystick value, 0 to 1, exlcuding the deadband, times max speed, then the
+                // limiter applied
                 final var xSpeed = -xLimiter.calculate(
                                 MathUtil.applyDeadband(xSpdFunction.getAsDouble(), Constants.DrivetrainNew.deadband))
                                 * Constants.DrivetrainNew.max_speed;

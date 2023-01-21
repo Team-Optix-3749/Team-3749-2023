@@ -87,8 +87,8 @@ public class SwerveModuleNew {
         } else if (modulePosition == Constants.SwerveENUMS.BACK_LEFT) {
             drive_motor_id = Constants.SwerveModuleNew.back_left_drive_id;
             turning_motor_id = Constants.SwerveModuleNew.back_left_turning_id;
-            absolute_encoder_port = Constants.SwerveModuleNew.back_left_absolute_encoder_port;
 
+            absolute_encoder_port = Constants.SwerveModuleNew.back_left_absolute_encoder_port;
             drive_motor_reversed = Constants.SwerveModuleNew.back_left_drive_encoder_reversed;
             turning_motor_reversed = Constants.SwerveModuleNew.back_left_turning_encoder_reversed;
         } else if (modulePosition == Constants.SwerveENUMS.BACK_RIGHT) {
@@ -105,13 +105,14 @@ public class SwerveModuleNew {
         driveMotor.setInverted(drive_motor_reversed);
         turningMotor.setInverted(turning_motor_reversed);
 
-        // Drive motor is relative, turning is absolute
+        // Drive motor is relative, turning is absolute. Drive needs a converstion
+        // factor, absolute is already 1-1
         driveEncoder = driveMotor.getEncoder();
         driveEncoder.setPositionConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
         driveEncoder.setVelocityConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
 
+        // turning encoder required suppliers to read the values
         turningEncoder = new CANcoder(absolute_encoder_port);
-
         turningPositionSupplier = turningEncoder.getPosition().asSupplier();
         turningVelocitySupplier = turningEncoder.getVelocity().asSupplier();
 

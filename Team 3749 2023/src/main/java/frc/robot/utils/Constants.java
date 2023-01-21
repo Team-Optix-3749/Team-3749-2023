@@ -97,8 +97,6 @@ public final class Constants {
                 new Translation2d(wheel_base / 2, track_width / 2), // front left
                 new Translation2d(-wheel_base / 2, -track_width / 2), // back right
                 new Translation2d(-wheel_base / 2, track_width / 2)); // back left
-            
-
                 
         // public static final double tele_drive_max_speed_meters_per_second = SwerveModuleNew.physical_max_speed_meters_per_second / 4;
         // public static final double tele_drive_max_angular_speed_radians_per_second = SwerveModuleNew.physical_max_speed_meters_per_second;
