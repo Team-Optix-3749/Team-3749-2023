@@ -28,12 +28,11 @@ public class MoveIndividualDrive extends CommandBase {
         private final DoubleSupplier xSpdFunction, ySpdFunction, turningSpdFunction;
         private final BooleanSupplier fieldOrientedFunction;
         private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
-        private final SwerveENUMS moduleENUM;
 
         // Initializes the BaseCommand
         public MoveIndividualDrive(DrivetrainTesting swerveSubsystem,
                         DoubleSupplier xSpdFunction, DoubleSupplier ySpdFunction, DoubleSupplier turningSpdFunction,
-                        BooleanSupplier fieldOrientedFunction, SwerveENUMS moduleENUM) {
+                        BooleanSupplier fieldOrientedFunction) {
                 this.swerveSubsystem = swerveSubsystem;
                 this.xSpdFunction = xSpdFunction;
                 this.ySpdFunction = ySpdFunction;
@@ -43,7 +42,6 @@ public class MoveIndividualDrive extends CommandBase {
                 this.yLimiter = new SlewRateLimiter(Constants.DrivetrainNew.max_speed);
                 this.turningLimiter = new SlewRateLimiter(
                                 Constants.DrivetrainNew.max_angular_speed);
-                this.moduleENUM = moduleENUM;
                 addRequirements(swerveSubsystem);
         }
 

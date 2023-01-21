@@ -46,15 +46,15 @@ public class RobotContainer {
 
         // Drive and
         // drivetrain.setDefaultCommand(new MoveIndividualModule(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-        //         pilot.leftStick()::getAsBoolean, Constants.SwerveENUMS.FRONT_LEFT));
+        //         pilot.leftStick()::getAsBoolean));
 
 
         // drivetrain.setDefaultCommand(new MoveIndividualDrive(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-        //         pilot.leftStick()::getAsBoolean, Constants.SwerveENUMS.FRONT_LEFT));
+        //         pilot.leftStick()::getAsBoolean));
 
 
         drivetrain.setDefaultCommand(new MoveIndividualTurning(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-                pilot.leftStick()::getAsBoolean,Constants.SwerveENUMS.FRONT_LEFT));
+                pilot.leftStick()::getAsBoolean));
     }
 
 
