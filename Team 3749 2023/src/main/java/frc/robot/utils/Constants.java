@@ -56,6 +56,8 @@ public final class Constants {
         public static final double elbow_max_angle = 0;
 
         public static enum ShoulderSetpoints {
+            ZERO(0),
+            STOWED(0),
             GROUND_INTAKE(132.0);
 
             public final double angle;
@@ -67,6 +69,8 @@ public final class Constants {
         }
 
         public static enum ElbowSetpoints {
+            ZERO(0),
+            STOWED(0),
             GROUND_INTAKE(111.0);
 
             public final double angle;
