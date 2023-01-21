@@ -38,6 +38,7 @@ public class ClawIntakeCommand extends CommandBase {
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
+        claw.setSpeed(Constants.stop, Constants.stop);
     }
 
     // Returns true when the command should end
