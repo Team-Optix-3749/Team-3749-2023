@@ -15,12 +15,14 @@ public final class Constants {
 
     }
 
-    // all values set to zero because we don't know them yet
-    public static final int right_side = 0; // right side of the claw (the motor)
-    public static final int left_side = 1; // left side of the claw (the motor)
-
-    public static final int speed = 0; // number for the speed
-    public static final int stop = 0; // speed 0 = motors stop
+    public static final class Claw {
+        // all values set to zero because we don't know them yet
+        public static final int right_side = 0; // right side of the claw (the motor)
+        public static final int left_side = 1; // left side of the claw (the motor)
+    
+        public static final int speed = 0; // number for the speed
+        public static final int stop = 0; // speed 0 = motors stop
+    }
 
     // find ultrasonic docs: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/sensors/ultrasonics-software.html
     public static final int UltrasonicPingPort = 0; // ping measures the round-trip echo time of ultrasonic sound to determine how far away an object is

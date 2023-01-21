@@ -31,13 +31,13 @@ public class ClawOuttakeCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        claw.setSpeed(Constants.speed, Constants.speed);
+        claw.setSpeed(Constants.Claw.speed);
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        claw.setSpeed(Constants.stop, Constants.stop);
+        claw.setSpeed(Constants.Claw.stop);
     }
 
     // Returns true when the command should end
