@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.SwerveTeleopNew;
+import frc.robot.subsystems.DrivetrainNew;
 import frc.robot.testing.DrivetrainTesting;
 import frc.robot.testing.MoveIndividualModule;
 import frc.robot.testing.TestEncoderValues;
@@ -22,33 +25,48 @@ public class RobotContainer {
     private final POV pilotPOV = new POV(pilot);
     private final POV operatorPOV = new POV(operator);
 
-    
+    private final SendableChooser<String> runModeChooser = new SendableChooser<>();
 
     // Subsystems
     // private final DrivetrainNew drivetrain = new DrivetrainNew();
-    private final DrivetrainTesting drivetrain= new DrivetrainTesting();
+    private DrivetrainTesting drivetrainTesting = null;
+    private DrivetrainNew drivetrain = null;
     // Commands
 
     public RobotContainer() {
+        runModeChooser.setDefaultOption("Default", "default");
+        runModeChooser.addOption("Test", "test");
+        String run_mode = runModeChooser.getSelected();
+        if (run_mode == "test") {
+            drivetrainTesting = new DrivetrainTesting();
+            // regular
+            drivetrain.setDefaultCommand(
+                    new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
+                            pilot.leftStick()::getAsBoolean));
+        } else {
+            drivetrain = new DrivetrainNew();
+            // TESTING
+            drivetrainTesting.setDefaultCommand(
+                    new MoveIndividualModule(drivetrainTesting, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
+                            pilot.leftStick()::getAsBoolean));
+        }
+
         configureButtonBindings();
         configureDefaultCommands();
     }
 
     private void configureDefaultCommands() {
 
-        // regular
-        // drivetrain.setDefaultCommand(new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-        //         pilot.leftStick()::getAsBoolean));
-
-        // TESTING
-        drivetrain.setDefaultCommand(new MoveIndividualModule(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
-                pilot.leftStick()::getAsBoolean));
     }
 
-
     private void configureButtonBindings() {
-        pilot.a().onTrue(new InstantCommand(drivetrain::toggleIdleMode));
-        pilot.b().whileTrue(new TestEncoderValues(drivetrain));
+        String run_mode = runModeChooser.getSelected();
+        if (run_mode == "test") {
+            pilot.a().onTrue(new InstantCommand(drivetrainTesting::toggleIdleMode));
+            pilot.b().whileTrue(new TestEncoderValues(drivetrainTesting));
+        } else {
+            pilot.a().onTrue(new InstantCommand(drivetrain::toggleIdleMode));
+        }
     }
 
     public Command getAutonomousCommand() {
