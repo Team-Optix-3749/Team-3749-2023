@@ -59,7 +59,6 @@ public class Claw extends SubsystemBase {
     public void set(double percent_speed) {
         base.set(percent_speed);
     }
-
     /***
      * Gets the speed. Value is between -1.0 and 1.0
      * 

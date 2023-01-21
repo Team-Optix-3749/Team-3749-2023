@@ -1,4 +1,5 @@
 package frc.robot.utils;
+import edu.wpi.first.wpilibj.util.Color;
 
 /***
  * Stores constant variables within subclasses for different subsystems.
@@ -24,4 +25,7 @@ public final class Constants {
     public static final int UltrasonicPingPort = 0; // ping measures the round-trip echo time of ultrasonic sound to determine how far away an object is
     public static final int UltrasonicEchoPort = 1; // echo sends out ultrasonic signal
 
+    // colors for the color sensor
+    public static final Color PURPLE = new Color(0.349, 0.207, 0.658);
+    public static final Color YELLOW = new Color(0.937, 0.643, 0.015);
 }
