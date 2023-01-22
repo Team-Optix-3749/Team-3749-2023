@@ -33,7 +33,7 @@ public class ColorSensor{
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
         if (match.color == cone_color) {
-            //If cone_color detected, it is  cone
+            //If cone_color detected, it is cone
             Constants.Claw.Object = "Cone";
         }
         else if (match.color == cube_color) {
