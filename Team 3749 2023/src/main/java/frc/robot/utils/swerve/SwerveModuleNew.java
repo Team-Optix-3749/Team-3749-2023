@@ -178,6 +178,11 @@ public class SwerveModuleNew {
         turningMotor.setVoltage(turn_voltage);
     }
 
+    public void stop(){
+        driveMotor.setVoltage(0);
+        turningMotor.setVoltage(0);
+    }
+
     public void resetEncoders() {
         // drive is zero while the turrning motor is rotated the amount of degrees it
         // needs (wheel's angle).

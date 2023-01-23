@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -33,7 +34,7 @@ public class DrivetrainNew extends SubsystemBase {
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
             Constants.DrivetrainNew.kinematics,
-            gyro.getRotation2d(),
+            getRotation2d(),
             new SwerveModulePosition[] {
                     frontLeft.getPosition(),
                     frontRight.getPosition(),
@@ -50,7 +51,7 @@ public class DrivetrainNew extends SubsystemBase {
 
         // Update the odometry in the periodic block
         odometry.update(
-                gyro.getRotation2d(),
+                getRotation2d(),
                 new SwerveModulePosition[] {
                         frontLeft.getPosition(),
                         frontRight.getPosition(),
@@ -75,7 +76,7 @@ public class DrivetrainNew extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(
-                gyro.getRotation2d(),
+                getRotation2d(),
                 new SwerveModulePosition[] {
                         frontLeft.getPosition(),
                         frontRight.getPosition(),
@@ -85,6 +86,15 @@ public class DrivetrainNew extends SubsystemBase {
                 pose);
     }
 
+    public Rotation2d getRotation2d() {	
+        return gyro.getRotation2d();	
+    }
+
+    public double getHeading() {	
+        // loops around 360 degrees	
+        return Math.IEEEremainder(gyro.getAngle(), 360);	
+    }
+    
     /**
      * Method to drive the robot using joystick info.
      *
@@ -98,7 +108,7 @@ public class DrivetrainNew extends SubsystemBase {
         // converts speeds to chassis speeds and then chassis speeds to module states
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
         // makes all module speeds proportional to the max speed
@@ -113,6 +123,47 @@ public class DrivetrainNew extends SubsystemBase {
         states[3] = backLeft.setDesiredState(swerveModuleStates[3]);
 
         logModuleStates(states);
+    }
+
+    public void turnToZeroHeading() {
+        double heading = getHeading();
+        double speed = heading / 360; // PID Would be better, but this works for now.
+
+        // Set chassis speed to be only forward, relative to the field.
+        ChassisSpeeds chassisSpeeds;
+        // SPEED DEF NEEDS TO BE DIFFERENT
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, speed, getRotation2d());
+        SwerveModuleState[] states = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(chassisSpeeds);
+        setModuleStates(states);
+    }
+
+    public void stopModules() {
+        frontLeft.stop();
+        frontRight.stop();
+        backLeft.stop();
+        backRight.stop();
+    }
+
+    public double getVerticalTilt() {
+        return gyro.getPitch();
+    }
+
+    /***
+     * 
+     * @param desiredStates a set of 4 swerve module states that will all be
+     *                      normalized and set to the proper modules
+     */
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
+        // Normalize speeds so that two motors at different speeds, but both greater
+        // than max speed, will run at proportionate speeds
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
+                Constants.DrivetrainNew.max_speed);
+
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
     }
 
     public void logModuleStates(double[][] states) {
@@ -144,14 +195,6 @@ public class DrivetrainNew extends SubsystemBase {
         gyro.reset();
     }
 
-    /**
-     * Returns the heading of the robot.
-     *
-     * @return the robot's heading in degrees, from -180 to 180
-     */
-    public double getHeading() {
-        return gyro.getRotation2d().getDegrees();
-    }
 
     /**
      * Returns the turn rate of the robot.
