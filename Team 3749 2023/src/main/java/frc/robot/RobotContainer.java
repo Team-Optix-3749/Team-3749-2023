@@ -37,15 +37,15 @@ public class RobotContainer {
         runModeChooser.setDefaultOption("Default", "default");
         runModeChooser.addOption("Test", "test");
         String run_mode = runModeChooser.getSelected();
-        if (run_mode == "test") {
-            drivetrainTesting = new DrivetrainTesting();
+        if (run_mode != "test") {
+            drivetrain = new DrivetrainNew();
             // regular
             drivetrain.setDefaultCommand(
                     new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
                             pilot.leftStick()::getAsBoolean));
         } else {
-            drivetrain = new DrivetrainNew();
             // TESTING
+            drivetrainTesting = new DrivetrainTesting();
             drivetrainTesting.setDefaultCommand(
                     new MoveIndividualModule(drivetrainTesting, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
                             pilot.leftStick()::getAsBoolean));

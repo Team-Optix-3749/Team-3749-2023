@@ -105,8 +105,6 @@ public final class Constants {
 
         public static final double deadband = 0.025;
 
-        public static final double min_balance_angle = 1.75;
-
         public static final SmartData<Double> driveKP = new SmartData("driveKP",0);
         public static final SmartData<Double> driveKI = new SmartData("driveKI",0);
         public static final SmartData<Double> driveKD = new SmartData("driveKD",0);
@@ -118,6 +116,11 @@ public final class Constants {
         public static final SmartData<Double> turningKD = new SmartData("turningKD",0.001);
         public static final SmartData<Double> turningKS = new SmartData("turningKS",0);
         public static final SmartData<Double> turningKV = new SmartData("turningKV",0);
+
+    }
+    public static final class AutoBalancing{
+        public static final double max_yaw_offset = 1;
+        public static final double max_pitch_offset = 2;
 
     }
 

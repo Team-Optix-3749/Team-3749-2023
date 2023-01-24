@@ -38,14 +38,14 @@ public class AutoBalancing extends CommandBase {
     @Override
     public void execute() {
          // make 1 a constant. But it's supposed to be how much of not straight forward we'll allow, Should prob be lower than 1 degree if possible
-        if (Math.abs(drivetrain.getHeading())>1){
+        if (Math.abs(drivetrain.getHeading())>Constants.AutoBalancing.max_yaw_offset){
             drivetrain.turnToZeroHeading();
 
         }
         else{
             angle = drivetrain.getVerticalTilt();
             double speed =  angle / 100; // PID Would be better, but this works for now.
-            speed = Math.abs(angle) > Constants.DrivetrainNew.min_balance_angle ? speed : 0.0; // no speed if it is level
+            speed = Math.abs(angle) > Constants.AutoBalancing.max_pitch_offset ? speed : 0.0; // no speed if it is level
     
             // Set chassis speed to be only forward, relative to the field.
             ChassisSpeeds chassisSpeeds;
