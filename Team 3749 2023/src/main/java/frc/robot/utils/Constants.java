@@ -7,6 +7,7 @@ package frc.robot.utils;
  */
 public final class Constants {
 
+    public static final RobotMode robotState = RobotMode.REAL;
     public static final class Base {
         public static final int neo_id = 3749;
         public static final int falcon_id = 6328;
@@ -30,30 +31,36 @@ public final class Constants {
         public static final int left_elbow_id = 17;
         public static final int right_elbow_id = 18;
 
-        // public static final double shoulder_reduction = ;
-        public static final double elbow_reduction = 1 / 250;
-
-        // These speeds apply for both lower motors and both upper motors respectively
-        public static final int neo_motor_lower_speed = 1; // Change this value later
-        public static final int neo_motor_upper_speed = 1; // Change this value later
+        public static final double shoulder_reduction = 200;
+        public static final double elbow_reduction = 250;
+        
+        // inches
+        public static final double bicep_length = 25; // hypotenuse
+        public static final double forearm_length = 26;
+        public static final double claw_length = 13;
+        
+        // kilograms
+        public static final double bicep_mass = 2.26796; // 5 lbs
+        public static final double forearm_mass = 11.3398093; // forearm + claw mass (20 + 5 lbs)
 
         public static final int number_of_motors = 2;
 
         public static final double kp = 0.5;
+
+        public static SmartData<Double> elbowSetpoint = new SmartData<Double>("Elbow Setpoint", -90.0);
+        public static SmartData<Double> shoulderSetpoint = new SmartData<Double>("Shoulder Setpoint", -90.0);
 
         // Note: ki must be set to 0 to avoid integral windup, feedforward will be used
         // to account for the error instead
         public static final double ki = 0;
         public static final double kd = 0;
 
-        public static final double bicep_length = 25; // inches
-        public static final double forearm_length = 26 + 13; // elbow + claw length
 
-        public static final double shoulder_min_angle = 0;
-        public static final double shoulder_max_angle = 0;
+        public static final double shoulder_min_angle = 30;
+        public static final double shoulder_max_angle = 150;
 
-        public static final double elbow_min_angle = 0;
-        public static final double elbow_max_angle = 0;
+        public static final double elbow_min_angle = -75;
+        public static final double elbow_max_angle = 260;
 
         public static enum ShoulderSetpoints {
             ZERO(0),
