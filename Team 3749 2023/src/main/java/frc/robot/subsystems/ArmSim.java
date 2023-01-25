@@ -102,7 +102,7 @@ public class ArmSim extends SubsystemBase {
 			new MechanismLigament2d(
 					"bicep",
 					Constants.Arm.bicep_length,
-					Units.radiansToDegrees(shoulderSim.getAngleRads()),
+					Constants.Arm.shoulder_min_angle,
 					10,
 					new Color8Bit(Color.kGold)));
 
