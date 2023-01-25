@@ -83,7 +83,7 @@ public class ArmSimulationCommand extends CommandBase {
                             Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
         armSim.setShoulderVoltage(pidOutputShoulder);
         break;
-      case 2:
+        case 2:
         pidOutputElbow = elbowController
             .calculate(
                 armSim.getElbowEncoderDistance(), Units
