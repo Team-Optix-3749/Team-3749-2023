@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -130,8 +131,8 @@ public class ArmSim extends SubsystemBase {
         rightShoulderMotor.setInverted(true);
 
         // right motors are follower motors for left motors
-        rightShoulderMotor.follow(leftShoulderMotor);
-        rightElbowMotor.follow(leftElbowMotor);
+        // rightShoulderMotor.follow(leftShoulderMotor);
+        // rightElbowMotor.follow(leftElbowMotor);
 
 		// Put Mechanism 2d to SmartDashboard
 		SmartDashboard.putData("Arm Sim", mech2d);
@@ -197,7 +198,8 @@ public class ArmSim extends SubsystemBase {
 										  Constants.Arm.shoulder_min_angle,
 										  Constants.Arm.shoulder_max_angle),
 								  Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
-								  this.setElbowVoltage(pidOutputElbow);
+			  
+			  this.setElbowVoltage(pidOutputElbow);
 	  
 			  double pidOutputShoulder = shoulderController
 				  .calculate(
@@ -210,7 +212,7 @@ public class ArmSim extends SubsystemBase {
 										  Constants.Arm.shoulder_min_angle,
 										  Constants.Arm.shoulder_max_angle),
 								  Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
-								  this.setShoulderVoltage(pidOutputShoulder);
+			  this.setShoulderVoltage(pidOutputShoulder);
 			  break;
 			case 2:
 			  pidOutputElbow = elbowController
@@ -265,18 +267,16 @@ public class ArmSim extends SubsystemBase {
 			  }
 			  SmartDashboard.putNumber("Elbow Setpoint", elbowSetpoint);
 			  SmartDashboard.putNumber("Shoulder Setpoint", shoulderSetpoint);
-	  
+			  
 			  // Here, we run PID control where the arm moves to the selected setpoint.
 			  pidOutputElbow = elbowController.calculate(this.getElbowEncoderDistance(),
 				  Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
 			  elbowPIDOutput.set(pidOutputElbow);
-	  
 			  this.setElbowVoltage(pidOutputElbow);
 	  
 			  pidOutputShoulder = shoulderController.calculate(this.getShoulderEncoderDistance(),
 				  Units.degreesToRadians(shoulderSetpoint));
 			  shoulderPIDOutput.set(pidOutputShoulder);
-	  
 			  this.setShoulderVoltage(pidOutputShoulder);
 			  break;
 		  }
@@ -303,6 +303,7 @@ public class ArmSim extends SubsystemBase {
 	}
 
 	public void updateSim() {
+		System.out.println("running");
 		// In this method, we update our simulation of what our arm is doing
 		// First, we set our "inputs" (voltages)
 		elbowSim.setInput(leftElbowMotor.get() * RobotController.getBatteryVoltage());
