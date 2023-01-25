@@ -10,13 +10,6 @@ import edu.wpi.first.math.util.Units;
  * constants, etc...
  */
 public final class Constants {
-
-    public static final class Base {
-        public static final int neo_id = 3749;
-        public static final int falcon_id = 6328;
-        public static final SmartData<Double> speed = new SmartData<Double>("Base Speed", 2.54);
-    }
-
     public static final class SwerveModuleNew {
         public static final double wheel_radius = Units.inchesToMeters(3.5/2);
         public static final double drive_encoder_conversion_factor = 1/12.8;
@@ -105,7 +98,7 @@ public final class Constants {
 
         public static final double deadband = 0.025;
 
-        public static final SmartData<Double> driveKP = new SmartData("driveKP",0);
+        public static final SmartData<Double> driveKP = new SmartData("driveKP",0.2);
         public static final SmartData<Double> driveKI = new SmartData("driveKI",0);
         public static final SmartData<Double> driveKD = new SmartData("driveKD",0);
         public static final SmartData<Double> driveKS = new SmartData("driveKS",0);

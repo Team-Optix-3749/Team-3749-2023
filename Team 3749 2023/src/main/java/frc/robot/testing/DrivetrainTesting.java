@@ -1,7 +1,5 @@
 package frc.robot.testing;
-
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -53,15 +51,11 @@ public class DrivetrainTesting extends SubsystemBase {
         driveTypeChooser.addOption("Drive", Constants.DriveTypeTestingENUMS.DRIVE);
         driveTypeChooser.addOption("Turning", Constants.DriveTypeTestingENUMS.TURNING);
         SmartDashboard.putData("Test Drive Type Chooser", driveTypeChooser);
-        SmartDashboard.putData("Module Chooser", moduleChooser);
-        System.out.println("DAAAAASHHHHHHHHHH BBOOOOOOOOOOOOOOAAAAARRRRDDDDDDDDDD");
         gyro.reset();
     }
 
     @Override
     public void periodic() {
-        logAbsoluteEncoderValues();
-        logDriveEncoderValues();
         // Update the odometry in the periodic block
         odometry.update(
                 gyro.getRotation2d(),
@@ -111,8 +105,6 @@ public class DrivetrainTesting extends SubsystemBase {
     public void moveIndividualModule(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         selected_module = moduleChooser.getSelected();
         selected_drive_type = driveTypeChooser.getSelected();
-
-        SmartDashboard.putString("Module Moving", selected_module.name);
         var swerveModuleStates = Constants.DrivetrainNew.kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -120,15 +112,19 @@ public class DrivetrainTesting extends SubsystemBase {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
+
         double[] state = new double[6];
         if (selected_module == SwerveENUMS.FRONT_LEFT) {
             if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = frontLeft.setDesiredState(swerveModuleStates[1]);
+
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE) {
                 state = frontLeft.setDesiredDrive(swerveModuleStates[1]);
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = frontLeft.setDesiredTurning(swerveModuleStates[1]);
             }
+            SmartDashboard.putNumber("Absolute Encoder", frontLeft.getAbsoluteEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", frontLeft.getDriveEncoderValue());
         }
 
         else if (selected_module == SwerveENUMS.FRONT_RIGHT) {
@@ -139,6 +135,8 @@ public class DrivetrainTesting extends SubsystemBase {
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = frontRight.setDesiredTurning(swerveModuleStates[0]);
             }
+            SmartDashboard.putNumber("Absolute Encoder", frontRight.getAbsoluteEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", frontRight.getDriveEncoderValue());
         }
 
         else if (selected_module == SwerveENUMS.BACK_LEFT) {
@@ -149,6 +147,8 @@ public class DrivetrainTesting extends SubsystemBase {
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = backLeft.setDesiredTurning(swerveModuleStates[3]);
             }
+            SmartDashboard.putNumber("Absolute Encoder", backLeft.getAbsoluteEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", backLeft.getDriveEncoderValue());
         } else if (selected_module == SwerveENUMS.BACK_RIGHT) {
             if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = backRight.setDesiredState(swerveModuleStates[2]);
@@ -157,6 +157,8 @@ public class DrivetrainTesting extends SubsystemBase {
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
                 state = backRight.setDesiredTurning(swerveModuleStates[2]);
             }
+            SmartDashboard.putNumber("Absolute Encoder", backRight.getAbsoluteEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", backRight.getDriveEncoderValue());
         }
         logModuleState(state);
 

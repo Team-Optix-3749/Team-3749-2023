@@ -1,7 +1,5 @@
 package frc.robot.testing;
 
-import java.util.function.Supplier;
-
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -235,17 +233,20 @@ public class SwerveModuleTesting {
                         turningMotor.setIdleMode(IdleMode.kBrake);
                 }
         }
-        
-        public double getAbsoluteEncoderValue(){
+
+        public double getAbsoluteEncoderValue() {
                 return turningEncoder.getPosition();
         }
-        public double getAbsoluteEncoderVelocity(){
+
+        public double getAbsoluteEncoderVelocity() {
                 return turningEncoder.getPosition();
         }
-        public double getDriveEncoderValue(){
+
+        public double getDriveEncoderValue() {
                 return driveEncoder.getPosition();
         }
-        public double getDriveEncoderVelocity(){
+
+        public double getDriveEncoderVelocity() {
                 return driveEncoder.getVelocity();
         }
 }
