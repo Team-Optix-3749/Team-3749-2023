@@ -54,7 +54,7 @@ private final SwerveModule backRight = new SwerveModule(
     DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
 private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0), null);
+// private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0), null);
 
 public SwerveSubsystem() {
 new Thread(() -> {
@@ -78,19 +78,25 @@ public Rotation2d getRotation2d() {
 return Rotation2d.fromDegrees(getHeading());
 }
 
-public Pose2d getPose() {
-return odometer.getPoseMeters();
-}
+// public Pose2d getPose() {
+// return odometer.getPoseMeters();
+// }
 
-public void resetOdometry(Pose2d pose) {
-  odometer.resetPosition(getRotation2d(), null, pose);
-}
+// public void resetOdometry(Pose2d pose) {
+//   odometer.resetPosition(getRotation2d(), null, pose);
+// }
 
 @Override
 public void periodic() {
-odometer.update(getRotation2d(), null);
+// odometer.update(getRotation2d(), null);
 SmartDashboard.putNumber("Robot Heading", getHeading());
 // SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+
+    SmartDashboard.putNumber("frontLeft abs", frontLeft.getAboslutePosition());
+    SmartDashboard.putNumber("frontRight abs", frontRight.getAboslutePosition());
+    SmartDashboard.putNumber("backLeft abs", backLeft.getAboslutePosition());
+    SmartDashboard.putNumber("backRight abs", backRight.getAboslutePosition());
+
 }
 
 public void stopModules() {
