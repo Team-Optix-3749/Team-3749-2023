@@ -99,7 +99,7 @@ public final class Constants {
         public static final double deadband = 0.025;
 
         public static final SmartData<Double> driveKP = new SmartData("driveKP",0.2); // ??
-        public static final SmartData<Double> driveKI = new SmartData("driveKI",0); // ??
+        public static final SmartData<Double> driveKI = new SmartData("driveKI",0.01); // ??
         public static final SmartData<Double> driveKD = new SmartData("driveKD",0); // ??
         public static final SmartData<Double> driveKS = new SmartData("driveKS",0); // ??
         public static final SmartData<Double> driveKV = new SmartData("driveKV",0); // ??

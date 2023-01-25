@@ -120,10 +120,12 @@ public class DrivetrainTesting extends SubsystemBase {
         if (selected_module == SwerveENUMS.FRONT_LEFT) {
             if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = frontLeft.setDesiredState(swerveModuleStates[1]);
-
+                System.out.println("BBOOOOOOOOOOOOTHHHHHHHHHHH");
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE) {
+                System.out.println("DRIIIIIIIIIIVEEEEEEEEEE");
                 state = frontLeft.setDesiredDrive(swerveModuleStates[1]);
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
+                System.out.println("TUUUUUUURRRRRRRRRNNNNNNNNN");
                 state = frontLeft.setDesiredTurning(swerveModuleStates[1]);
             }
         }
@@ -230,16 +232,16 @@ public class DrivetrainTesting extends SubsystemBase {
     public void logIndividualModuleEncoderValues() {
         if (moduleChooser.getSelected() == SwerveENUMS.FRONT_LEFT) {
             SmartDashboard.putNumber("Absolute Encoder", frontLeft.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", frontLeft.getDriveEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", frontLeft.getDriveEncoderVelocity());
         } else if (moduleChooser.getSelected() == SwerveENUMS.FRONT_RIGHT) {
             SmartDashboard.putNumber("Absolute Encoder", frontRight.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", frontRight.getDriveEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", frontRight.getDriveEncoderVelocity());
         } else if (moduleChooser.getSelected() == SwerveENUMS.BACK_LEFT) {
             SmartDashboard.putNumber("Absolute Encoder", backLeft.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", backLeft.getDriveEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", backLeft.getDriveEncoderVelocity());
         } else if (moduleChooser.getSelected() == SwerveENUMS.BACK_RIGHT) {
             SmartDashboard.putNumber("Absolute Encoder", backRight.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", backRight.getDriveEncoderValue());
+            SmartDashboard.putNumber("Drive Encoder", backRight.getDriveEncoderVelocity());
         }
     }
 

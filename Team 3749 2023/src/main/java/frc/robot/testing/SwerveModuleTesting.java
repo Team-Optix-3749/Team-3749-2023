@@ -199,10 +199,14 @@ public class SwerveModuleTesting {
                                 state.speedMetersPerSecond);
 
                 final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
+                
+
 
                 // We add feed forward and PID. PID handles correcting where we are, Feedforward
                 // handles where we are going, adding them sets it up for the best of both
-                setVoltage(driveOutput + driveFeedforward, 0);
+                // setVoltage(driveOutput + driveFeedforward, 0);
+                setVoltage(0.25,0.25);
+                System.out.println("RUNNNNNNNNN");
                 // returns our output data, in case we want it
                 return new double[] { driveFeedforward, driveOutput, 0, 0,
                                 state.speedMetersPerSecond, state.angle.getRadians() };
@@ -258,7 +262,7 @@ public class SwerveModuleTesting {
         }
 
         public double getDriveEncoderValue() {
-                return driveEncoder.getPosition();
+                return driveEncoder.getVelocity();
         }
 
         public double getDriveEncoderVelocity() {
