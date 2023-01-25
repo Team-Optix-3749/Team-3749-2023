@@ -98,15 +98,15 @@ public final class Constants {
 
         public static final double deadband = 0.025;
 
-        public static final SmartData<Double> driveKP = new SmartData("driveKP",0.2);
-        public static final SmartData<Double> driveKI = new SmartData("driveKI",0);
-        public static final SmartData<Double> driveKD = new SmartData("driveKD",0);
-        public static final SmartData<Double> driveKS = new SmartData("driveKS",0);
-        public static final SmartData<Double> driveKV = new SmartData("driveKV",0);
+        public static final SmartData<Double> driveKP = new SmartData("driveKP",0.2); // ??
+        public static final SmartData<Double> driveKI = new SmartData("driveKI",0); // ??
+        public static final SmartData<Double> driveKD = new SmartData("driveKD",0); // ??
+        public static final SmartData<Double> driveKS = new SmartData("driveKS",0); // ??
+        public static final SmartData<Double> driveKV = new SmartData("driveKV",0); // ??
 
         public static final SmartData<Double> turningKP = new SmartData("turningKP",0.2);
-        public static final SmartData<Double> turningKI = new SmartData("turningKI",0.15);
-        public static final SmartData<Double> turningKD = new SmartData("turningKD",0.001);
+        public static final SmartData<Double> turningKI = new SmartData("turningKI",0); // .15?
+        public static final SmartData<Double> turningKD = new SmartData("turningKD",0); // 0.0001? 
         public static final SmartData<Double> turningKS = new SmartData("turningKS",0);
         public static final SmartData<Double> turningKV = new SmartData("turningKV",0);
 
