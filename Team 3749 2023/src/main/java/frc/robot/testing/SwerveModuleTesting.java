@@ -163,6 +163,21 @@ public class SwerveModuleTesting {
                                 state.speedMetersPerSecond, state.angle.getRadians() };
         }
 
+        public void TurnToDegrees(double radians){
+                
+                // Calculate the turning motor output from the turning PID controller.
+                final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(),
+                                radians);
+
+                final double turnFeedforward = this.turnFeedforward
+                                .calculate(turningPIDController.getSetpoint().velocity);
+
+                // We add feed forward and PID. PID handles correcting where we are, Feedforward
+                // handles where we are going, adding them sets it up for the best of both
+                setVoltage(0, turnOutput + turnFeedforward);
+                // returns our output data, in case we want it
+        }
+
         public void setVoltage(double drive_voltage, double turn_voltage) {
                 driveMotor.setVoltage(drive_voltage);
                 turningMotor.setVoltage(turn_voltage);

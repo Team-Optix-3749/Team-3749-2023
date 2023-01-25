@@ -13,6 +13,8 @@ import frc.robot.commands.SwerveTeleopNew;
 import frc.robot.subsystems.DrivetrainNew;
 import frc.robot.testing.DrivetrainTesting;
 import frc.robot.testing.MoveIndividualModule;
+import frc.robot.testing.TurnTo0Degrees;
+import frc.robot.testing.TurnTo90Degrees;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
@@ -67,6 +69,9 @@ public class RobotContainer {
         String run_mode = runModeChooser.getSelected();
         if (run_mode == "test") {
             pilot.a().onTrue(new InstantCommand(drivetrainTesting::toggleIdleMode));
+            pilot.b().onTrue(new TurnTo0Degrees(drivetrainTesting));
+            pilot.x().onTrue(new TurnTo90Degrees(drivetrainTesting));
+
         } else {
             pilot.a().onTrue(new InstantCommand(drivetrain::toggleIdleMode));
         }

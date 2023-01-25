@@ -107,8 +107,8 @@ public final class Constants {
         public static final SmartData<Double> turningKP = new SmartData("turningKP",0.2);
         public static final SmartData<Double> turningKI = new SmartData("turningKI",0); // .15?
         public static final SmartData<Double> turningKD = new SmartData("turningKD",0); // 0.0001? 
-        public static final SmartData<Double> turningKS = new SmartData("turningKS",0);
-        public static final SmartData<Double> turningKV = new SmartData("turningKV",0);
+        public static final SmartData<Double> turningKS = new SmartData("turningKS",0); // ??
+        public static final SmartData<Double> turningKV = new SmartData("turningKV",0); // ??
 
     }
     public static final class AutoBalancing{

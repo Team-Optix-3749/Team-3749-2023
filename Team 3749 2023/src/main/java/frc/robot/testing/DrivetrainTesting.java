@@ -162,6 +162,23 @@ public class DrivetrainTesting extends SubsystemBase {
 
     }
 
+    public void TurnToDegrees(double radians) {
+        if (selected_module == SwerveENUMS.FRONT_LEFT) {
+            frontLeft.TurnToDegrees(radians);
+        }
+        else if (selected_module == SwerveENUMS.FRONT_RIGHT) {
+            frontRight.TurnToDegrees(radians);
+        }
+        else if (selected_module == SwerveENUMS.BACK_LEFT) {
+            backLeft.TurnToDegrees(radians);
+        } 
+        else if (selected_module == SwerveENUMS.BACK_RIGHT) {
+            backRight.TurnToDegrees(radians);
+        }
+
+    }
+
+
     public void logModuleState(double[] state) {
         // Smart dashboard logging
         String[] valueNames = { " drive feed forward", " drive output", " turn feed forward", " turn output",
