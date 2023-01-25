@@ -45,10 +45,10 @@ public class ArmSim extends SubsystemBase {
 	private final CANSparkMax rightShoulderMotor = new CANSparkMax(18, MotorType.kBrushless);
 
 	private final Encoder shoulderEncoder = new Encoder(0, 1);
-	private final Encoder elbowEncoder = new Encoder(2, 3);
+	private final Encoder elbowEncoder = new Encoder(4, 5);
 
-	private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
 	private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
+	private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
 
 	public SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
 	public SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
@@ -129,8 +129,8 @@ public class ArmSim extends SubsystemBase {
 		rightShoulderMotor.setInverted(true);
 
 		// right motors are follower motors for left motors
-		// rightShoulderMotor.follow(leftShoulderMotor);
-		// rightElbowMotor.follow(leftElbowMotor);
+		rightShoulderMotor.follow(leftShoulderMotor);
+		rightElbowMotor.follow(leftElbowMotor);
 
 		// Put Mechanism 2d to SmartDashboard
 		SmartDashboard.putData("Arm Sim", mech2d);
@@ -158,27 +158,6 @@ public class ArmSim extends SubsystemBase {
 		SmartDashboard.putData(presetChooser);
 	}
 
-	private final SmartData<Double> elbowPIDOutput = new SmartData<Double>("elbowPIDOutput", 0.0);
-	private final SmartData<Double> shoulderPIDOutput = new SmartData<Double>("shoulderPIDOutput", 0.0);
-
-	private static final double stowedBottom = 90;
-	private static final double stowedTop = 260;
-
-	private static final double intakeBottom = 135;
-	private static final double intakeTop = 265;
-
-	private static final double doubleSubstationBottom = 60;
-	private static final double doubleSubstationTop = 185;
-
-	private static final double scoreFloorBottom = 120;
-	private static final double scoreFloorTop = 255;
-
-	private static final double scoreMidBottom = 95;
-	private static final double scoreMidTop = 195;
-
-	private static final double scoreHighBottom = 135;
-	private static final double scoreHighTop = 160;
-
 	@Override
 	public void simulationPeriodic() {
 		updateSim();
@@ -195,18 +174,25 @@ public class ArmSim extends SubsystemBase {
 	public void setElbowVoltage(double voltage) {
 		leftElbowMotor.setVoltage(voltage);
 		rightElbowMotor.setVoltage(voltage);
+
+		SmartDashboard.putNumber("elbow angle", elbowEncoder.getRaw());
 	}
 
 	public void setShoulderVoltage(double voltage) {
 		leftShoulderMotor.setVoltage(voltage);
 		rightShoulderMotor.setVoltage(voltage);
+
+		SmartDashboard.putNumber("shoulder angle", shoulderEncoder.getRaw());
 	}
 
 	public void updateSim() {
 		// In this method, we update our simulation of what our arm is doing
 		// First, we set our "inputs" (voltages)
-		elbowSim.setInput(leftElbowMotor.get() * RobotController.getBatteryVoltage());
-		shoulderSim.setInput(leftShoulderMotor.get() * RobotController.getBatteryVoltage());
+		elbowSim.setInputVoltage(leftElbowMotor.get() * RobotController.getBatteryVoltage());
+		shoulderSim.setInputVoltage(leftShoulderMotor.get() * RobotController.getBatteryVoltage());
+
+		SmartDashboard.putNumber("elbowSIm", Units.radiansToDegrees(elbowSim.getAngleRads()));
+		SmartDashboard.putNumber("shoulderSim", Units.radiansToDegrees(shoulderSim.getAngleRads()));
 
 		// Next, we update it. The standard loop time is 20ms.
 		elbowSim.update(0.020);
