@@ -42,6 +42,7 @@ public class Claw extends SubsystemBase {
      * 
      * @param speed
      */
+
     public void setSpeed(double speed) {
         clawMotors.set(speed);
     }
@@ -49,8 +50,11 @@ public class Claw extends SubsystemBase {
     // Runs every 20 ms
     @Override
     public void periodic() {
-        // Calculates the output of the PID algorithm based on the sensor reading
-        // and sends it to a motor
+        /*
+         * Calculates the output of the PID algorithm based on the sensor reading
+         * sends it to a motor
+         * uses calculate()
+         */
         right_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
         left_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
     }

@@ -8,11 +8,7 @@ import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/***
- * @author Rohin Sood
- * 
- *         Serves as a template to format commands
- */
+
 public class ClawOuttakeCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
@@ -37,7 +33,7 @@ public class ClawOuttakeCommand extends CommandBase {
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        claw.setSpeed(Constants.Claw.stop);
+        claw.setSpeed(Constants.Claw.stop); //set speed to 0 (stop)
     }
 
     // Returns true when the command should end
