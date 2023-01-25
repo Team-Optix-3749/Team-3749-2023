@@ -12,6 +12,7 @@ import frc.robot.utils.BruteInverseKinematics;
 /**
  * @author Bailey Say
  * @author Raymond Sheng
+ * @author Don Tran
  * 
  * Code for the arm of the robot. This does not include the claw at the end
  * 
