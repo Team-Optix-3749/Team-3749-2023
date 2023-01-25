@@ -48,8 +48,8 @@ public class RobotContainer {
 
   private void configureButtonBindings()
   {
-    // JoystickButton A = new JoystickButton(xbox, Button.kA.value);
-    // A.toggleOnTrue(new ArmSimulationCommand(armSim)); 
+    JoystickButton A = new JoystickButton(xbox, Button.kA.value);
+    A.toggleOnTrue(new ArmSimulationCommand(armSim)); 
   }
 
   public Command getAutonomousCommand() {
