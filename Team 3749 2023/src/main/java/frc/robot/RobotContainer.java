@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -12,7 +13,6 @@ import frc.robot.commands.SwerveTeleopNew;
 import frc.robot.subsystems.DrivetrainNew;
 import frc.robot.testing.DrivetrainTesting;
 import frc.robot.testing.MoveIndividualModule;
-import frc.robot.testing.TestEncoderValues;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
@@ -34,18 +34,22 @@ public class RobotContainer {
     // Commands
 
     public RobotContainer() {
-        runModeChooser.setDefaultOption("Default", "default");
-        runModeChooser.addOption("Test", "test");
+        SmartDashboard.putData("RUN MODE CHOOSER", runModeChooser);
+        runModeChooser.setDefaultOption("Test", "test");
         String run_mode = runModeChooser.getSelected();
         if (run_mode != "test") {
+            System.out.println("NEW MODE AAAAAAAAAAAAAAAAA");
             drivetrain = new DrivetrainNew();
-            // regular
+            // testing
             drivetrain.setDefaultCommand(
                     new SwerveTeleopNew(drivetrain, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
                             pilot.leftStick()::getAsBoolean));
         } else {
-            // TESTING
+            System.out.println("TEST MODE AAAAAAAAAAAAAAA");
+
             drivetrainTesting = new DrivetrainTesting();
+
+            // regular
             drivetrainTesting.setDefaultCommand(
                     new MoveIndividualModule(drivetrainTesting, pilot::getLeftX, pilot::getLeftY, pilot::getRightX,
                             pilot.leftStick()::getAsBoolean));
@@ -63,7 +67,6 @@ public class RobotContainer {
         String run_mode = runModeChooser.getSelected();
         if (run_mode == "test") {
             pilot.a().onTrue(new InstantCommand(drivetrainTesting::toggleIdleMode));
-            pilot.b().whileTrue(new TestEncoderValues(drivetrainTesting));
         } else {
             pilot.a().onTrue(new InstantCommand(drivetrain::toggleIdleMode));
         }
