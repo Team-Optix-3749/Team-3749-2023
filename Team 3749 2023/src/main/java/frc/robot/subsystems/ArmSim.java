@@ -182,7 +182,6 @@ public class ArmSim extends SubsystemBase {
 
 	@Override
 	public void simulationPeriodic() {
-		updateSim();
 		switch (this.controlMode.getSelected()) {
 			case 1:
 			  // Here, we run PID control where the top arm acts like a four-bar relative to
@@ -281,6 +280,8 @@ public class ArmSim extends SubsystemBase {
 			  this.setShoulderVoltage(pidOutputShoulder);
 			  break;
 		  }
+
+		  updateSim();
 	}
 
 	public double getElbowEncoderDistance() {

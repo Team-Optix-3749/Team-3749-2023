@@ -40,8 +40,8 @@ public final class Constants {
         public static final double claw_length = 13;
         
         // kilograms
-        public static final double bicep_mass = 2.26796; // 5 lbs
-        public static final double forearm_mass = 11.3398093; // forearm + claw mass (20 + 5 lbs)
+        public static final double bicep_mass = 2; // 5 lbs
+        public static final double forearm_mass = 2; // forearm + claw mass (20 + 5 lbs)
 
         public static final int number_of_motors = 2;
 
