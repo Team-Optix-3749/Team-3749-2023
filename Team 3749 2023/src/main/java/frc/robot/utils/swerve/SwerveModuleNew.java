@@ -2,7 +2,7 @@ package frc.robot.utils.swerve;
 
 import java.util.function.Supplier;
 
-import com.ctre.phoenixpro.hardware.CANcoder;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -33,12 +33,7 @@ public class SwerveModuleNew {
     private final CANSparkMax turningMotor;
 
     private final RelativeEncoder driveEncoder;
-    private final CANcoder turningEncoder;
-
-    // The absolute encoder do not have a regular get position, but seem to give
-    // back these suppliers
-    Supplier<Double> turningPositionSupplier;
-    Supplier<Double> turningVelocitySupplier;
+    private final CANCoder turningEncoder;
 
     private final PIDController drivePIDController = new PIDController(Constants.DrivetrainNew.driveKP.get(),
             Constants.DrivetrainNew.driveKI.get(), Constants.DrivetrainNew.driveKD.get());
@@ -111,11 +106,8 @@ public class SwerveModuleNew {
         driveEncoder.setPositionConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
         driveEncoder.setVelocityConversionFactor(Constants.SwerveModuleNew.drive_encoder_conversion_factor);
 
-        // turning encoder required suppliers to read the values
-        turningEncoder = new CANcoder(absolute_encoder_port);
-        turningPositionSupplier = turningEncoder.getPosition().asSupplier();
-        turningVelocitySupplier = turningEncoder.getVelocity().asSupplier();
-
+        turningEncoder = new CANCoder(absolute_encoder_port);
+        resetEncoders();
         // Limit the PID Controller's input range between -pi and pi and set the input
         // to be continuous.
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -130,7 +122,7 @@ public class SwerveModuleNew {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                driveEncoder.getVelocity(), new Rotation2d(turningPositionSupplier.get()));
+                driveEncoder.getVelocity(), new Rotation2d(turningEncoder.getPosition()));
     }
 
     /**
@@ -140,7 +132,7 @@ public class SwerveModuleNew {
      */
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-                driveEncoder.getPosition(), new Rotation2d(turningPositionSupplier.get()));
+                driveEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
     }
 
     /**
@@ -153,14 +145,14 @@ public class SwerveModuleNew {
     public double[] setDesiredState(SwerveModuleState desiredState) {
         // Optimize the reference state to avoid spinning further than 90 degrees
         SwerveModuleState state = SwerveModuleState.optimize(desiredState,
-                new Rotation2d(turningPositionSupplier.get()));
+                new Rotation2d(turningEncoder.getPosition()));
         // Calculate the drive output from the drive PID controller.
         final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
         final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
         // Calculate the turning motor output from the turning PID controller.
-        final double turnOutput = turningPIDController.calculate(turningPositionSupplier.get(),
+        final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(),
                 state.angle.getRadians());
 
         final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);

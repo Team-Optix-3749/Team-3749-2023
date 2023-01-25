@@ -53,13 +53,15 @@ public class DrivetrainTesting extends SubsystemBase {
         driveTypeChooser.addOption("Drive", Constants.DriveTypeTestingENUMS.DRIVE);
         driveTypeChooser.addOption("Turning", Constants.DriveTypeTestingENUMS.TURNING);
         SmartDashboard.putData("Test Drive Type Chooser", driveTypeChooser);
-
+        SmartDashboard.putData("Module Chooser", moduleChooser);
+        System.out.println("DAAAAASHHHHHHHHHH BBOOOOOOOOOOOOOOAAAAARRRRDDDDDDDDDD");
         gyro.reset();
     }
 
     @Override
     public void periodic() {
-
+        logAbsoluteEncoderValues();
+        logDriveEncoderValues();
         // Update the odometry in the periodic block
         odometry.update(
                 gyro.getRotation2d(),
