@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
-public class Claw extends SubsystemBase {
+public class ClawSim extends SubsystemBase {
     // Creates a PIDController with gains kP, kI, and kD
     PIDController claw_PID = new PIDController(Constants.Claw.claw_kP, Constants.Claw.claw_kI, Constants.Claw.claw_kD);
 
@@ -28,7 +28,7 @@ public class Claw extends SubsystemBase {
     private final RelativeEncoder claw_encoder = right_motor.getEncoder();
 
     // Initializes the base subsystem
-    public Claw() {
+    public ClawSim() {
         right_motor.setInverted(true); // invert the motor to not break it
 
         right_motor.setIdleMode(IdleMode.kBrake); // set neo to be braked when not active
