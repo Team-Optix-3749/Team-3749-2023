@@ -6,7 +6,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ArmSim;
 import frc.robot.utils.Constants;
 import frc.robot.utils.SmartData;
@@ -35,13 +34,15 @@ public class ArmSimulationCommand extends CommandBase {
 
   private static final double scoreFloorBottom = 120;
   private static final double scoreFloorTop = 255;
-
+  
   private static final double scoreMidBottom = 95;
   private static final double scoreMidTop = 195;
-
+  
   private static final double scoreHighBottom = 135;
   private static final double scoreHighTop = 160;
-
+  
+  private double elbowSetpoint, shoulderSetpoint;
+  
   public ArmSimulationCommand(ArmSim armSim) {
     this.armSim = armSim;
     addRequirements(armSim);
@@ -103,7 +104,6 @@ public class ArmSimulationCommand extends CommandBase {
         armSim.setShoulderVoltage(pidOutputShoulder);
         break;
       default: // also case 0
-        double elbowSetpoint, shoulderSetpoint;
         switch (armSim.presetChooser.getSelected()) {
           case 0:
             elbowSetpoint = stowedTop;
@@ -134,8 +134,8 @@ public class ArmSimulationCommand extends CommandBase {
             shoulderSetpoint = stowedBottom;
             break;
         }
-        SmartDashboard.putNumber("Elbow Setpoint", elbowSetpoint);
-        SmartDashboard.putNumber("Shoulder Setpoint", shoulderSetpoint);
+        Constants.Arm.elbowSetpoint.set(this.elbowSetpoint);
+        Constants.Arm.shoulderSetpoint.set(this.shoulderSetpoint);
 
         // Here, we run PID control where the arm moves to the selected setpoint.
         pidOutputElbow = elbowController.calculate(armSim.getElbowEncoderDistance(),

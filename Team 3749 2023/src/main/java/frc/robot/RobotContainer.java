@@ -44,7 +44,11 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-  private void configureDefaultCommands() {}
+  private void configureDefaultCommands() {
+    armSim.setDefaultCommand(
+      new ArmSimulationCommand(armSim)
+    );
+  }
 
   private void configureButtonBindings()
   {

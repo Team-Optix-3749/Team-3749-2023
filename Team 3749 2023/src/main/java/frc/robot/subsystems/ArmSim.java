@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -46,10 +45,10 @@ public class ArmSim extends SubsystemBase {
 	private final CANSparkMax rightShoulderMotor = new CANSparkMax(18, MotorType.kBrushless);
 
 	private final Encoder shoulderEncoder = new Encoder(0, 1);
-	private final Encoder elbowEncoder = new Encoder(2, 3);
+	private final Encoder elbowEncoder = new Encoder(4, 5);
 
-	private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
 	private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
+	private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
 
 	public SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
 	public SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
@@ -127,11 +126,11 @@ public class ArmSim extends SubsystemBase {
 
 	public ArmSim() {
 		rightElbowMotor.setInverted(true);
-        rightShoulderMotor.setInverted(true);
+		rightShoulderMotor.setInverted(true);
 
-        // right motors are follower motors for left motors
-        rightShoulderMotor.follow(leftShoulderMotor);
-        rightElbowMotor.follow(leftElbowMotor);
+		// right motors are follower motors for left motors
+		rightShoulderMotor.follow(leftShoulderMotor);
+		rightElbowMotor.follow(leftElbowMotor);
 
 		// Put Mechanism 2d to SmartDashboard
 		SmartDashboard.putData("Arm Sim", mech2d);
@@ -159,129 +158,9 @@ public class ArmSim extends SubsystemBase {
 		SmartDashboard.putData(presetChooser);
 	}
 
-	private final SmartData<Double> elbowPIDOutput = new SmartData<Double>("elbowPIDOutput", 0.0);
-  private final SmartData<Double> shoulderPIDOutput = new SmartData<Double>("shoulderPIDOutput", 0.0);
-
-  private static final double stowedBottom = 90;
-  private static final double stowedTop = 260;
-
-  private static final double intakeBottom = 135;
-  private static final double intakeTop = 265;
-
-  private static final double doubleSubstationBottom = 60;
-  private static final double doubleSubstationTop = 185;
-
-  private static final double scoreFloorBottom = 120;
-  private static final double scoreFloorTop = 255;
-
-  private static final double scoreMidBottom = 95;
-  private static final double scoreMidTop = 195;
-
-  private static final double scoreHighBottom = 135;
-  private static final double scoreHighTop = 160;
-
 	@Override
 	public void simulationPeriodic() {
-		switch (this.controlMode.getSelected()) {
-			case 1:
-			  // Here, we run PID control where the top arm acts like a four-bar relative to
-			  // the bottom.
-			  double pidOutputElbow = elbowController
-				  .calculate(
-					this.getElbowEncoderDistance(), Units
-						  .degreesToRadians(
-							  MathUtil.clamp(
-								  Constants.Arm.shoulderSetpoint.get()
-									  - MathUtil.clamp(
-										  Constants.Arm.elbowSetpoint.get(),
-										  Constants.Arm.shoulder_min_angle,
-										  Constants.Arm.shoulder_max_angle),
-								  Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
-								  this.setElbowVoltage(pidOutputElbow);
-	  
-			  double pidOutputShoulder = shoulderController
-				  .calculate(
-					this.getElbowEncoderDistance(), Units
-						  .degreesToRadians(
-							  MathUtil.clamp(
-								  Constants.Arm.shoulderSetpoint.get()
-									  - MathUtil.clamp(
-										  Constants.Arm.elbowSetpoint.get(),
-										  Constants.Arm.shoulder_min_angle,
-										  Constants.Arm.shoulder_max_angle),
-								  Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
-								  this.setShoulderVoltage(pidOutputShoulder);
-			  break;
-			case 2:
-			  pidOutputElbow = elbowController
-				  .calculate(
-					this.getElbowEncoderDistance(), Units
-						  .degreesToRadians(
-							  MathUtil.clamp(
-								  Constants.Arm.elbowSetpoint.get(),
-								  Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
-								  this.setElbowVoltage(pidOutputElbow);
-	  
-			  pidOutputShoulder = shoulderController
-				  .calculate(
-					this.getElbowEncoderDistance(), Units
-						  .degreesToRadians(
-							  MathUtil.clamp(
-								  Constants.Arm.shoulderSetpoint.get(),
-								  Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_max_angle)));
-			  this.setShoulderVoltage(pidOutputShoulder);
-			  break;
-			default: // also case 0
-			  double elbowSetpoint, shoulderSetpoint;
-			  switch (this.presetChooser.getSelected()) {
-				case 0:
-				  elbowSetpoint = stowedTop;
-				  shoulderSetpoint = stowedBottom;
-				  break;
-				case 1:
-				  elbowSetpoint = intakeTop;
-				  shoulderSetpoint = intakeBottom;
-				  break;
-				case 2:
-				  elbowSetpoint = doubleSubstationTop;
-				  shoulderSetpoint = doubleSubstationBottom;
-				  break;
-				case 3:
-				  elbowSetpoint = scoreFloorTop;
-				  shoulderSetpoint = scoreFloorBottom;
-				  break;
-				case 4:
-				  elbowSetpoint = scoreMidTop;
-				  shoulderSetpoint = scoreMidBottom;
-				  break;
-				case 5:
-				  elbowSetpoint = scoreHighTop;
-				  shoulderSetpoint = scoreHighBottom;
-				  break;
-				default:
-				  elbowSetpoint = stowedTop;
-				  shoulderSetpoint = stowedBottom;
-				  break;
-			  }
-			  SmartDashboard.putNumber("Elbow Setpoint", elbowSetpoint);
-			  SmartDashboard.putNumber("Shoulder Setpoint", shoulderSetpoint);
-	  
-			  // Here, we run PID control where the arm moves to the selected setpoint.
-			  pidOutputElbow = elbowController.calculate(this.getElbowEncoderDistance(),
-				  Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
-			  elbowPIDOutput.set(pidOutputElbow);
-	  
-			  this.setElbowVoltage(pidOutputElbow);
-	  
-			  pidOutputShoulder = shoulderController.calculate(this.getShoulderEncoderDistance(),
-				  Units.degreesToRadians(shoulderSetpoint));
-			  shoulderPIDOutput.set(pidOutputShoulder);
-	  
-			  this.setShoulderVoltage(pidOutputShoulder);
-			  break;
-		  }
-
-		  updateSim();
+		updateSim();
 	}
 
 	public double getElbowEncoderDistance() {
@@ -295,18 +174,25 @@ public class ArmSim extends SubsystemBase {
 	public void setElbowVoltage(double voltage) {
 		leftElbowMotor.setVoltage(voltage);
 		rightElbowMotor.setVoltage(voltage);
+
+		SmartDashboard.putNumber("elbow angle", elbowEncoder.getRaw());
 	}
 
 	public void setShoulderVoltage(double voltage) {
 		leftShoulderMotor.setVoltage(voltage);
 		rightShoulderMotor.setVoltage(voltage);
+
+		SmartDashboard.putNumber("shoulder angle", shoulderEncoder.getRaw());
 	}
 
 	public void updateSim() {
 		// In this method, we update our simulation of what our arm is doing
 		// First, we set our "inputs" (voltages)
-		elbowSim.setInput(leftElbowMotor.get() * RobotController.getBatteryVoltage());
-		shoulderSim.setInput(leftShoulderMotor.get() * RobotController.getBatteryVoltage());
+		elbowSim.setInputVoltage(leftElbowMotor.get() * RobotController.getBatteryVoltage());
+		shoulderSim.setInputVoltage(leftShoulderMotor.get() * RobotController.getBatteryVoltage());
+
+		SmartDashboard.putNumber("elbowSIm", Units.radiansToDegrees(elbowSim.getAngleRads()));
+		SmartDashboard.putNumber("shoulderSim", Units.radiansToDegrees(shoulderSim.getAngleRads()));
 
 
 		System.out.println(RobotController.getBatteryVoltage());
