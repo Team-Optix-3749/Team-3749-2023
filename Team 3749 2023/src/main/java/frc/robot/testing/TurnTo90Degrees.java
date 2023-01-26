@@ -32,7 +32,7 @@ public class TurnTo90Degrees extends CommandBase {
         @Override
         public void execute() {
             // 4. Send processed inputs to the drive() function
-            swerveSubsystem.TurnToDegrees(0);
+            swerveSubsystem.TurnToDegrees(Math.PI/2);
         }
 
         // Run on command finish

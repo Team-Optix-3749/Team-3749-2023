@@ -115,17 +115,15 @@ public class DrivetrainTesting extends SubsystemBase {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, Constants.DrivetrainNew.max_speed);
-
+        System.out.println(swerveModuleStates[1].speedMetersPerSecond);
         double[] state = new double[6];
+        stopAllExcept(selected_module);
         if (selected_module == SwerveENUMS.FRONT_LEFT) {
             if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE_AND_TURNING) {
                 state = frontLeft.setDesiredState(swerveModuleStates[1]);
-                System.out.println("BBOOOOOOOOOOOOTHHHHHHHHHHH");
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.DRIVE) {
-                System.out.println("DRIIIIIIIIIIVEEEEEEEEEE");
                 state = frontLeft.setDesiredDrive(swerveModuleStates[1]);
             } else if (selected_drive_type == Constants.DriveTypeTestingENUMS.TURNING) {
-                System.out.println("TUUUUUUURRRRRRRRRNNNNNNNNN");
                 state = frontLeft.setDesiredTurning(swerveModuleStates[1]);
             }
         }
@@ -232,16 +230,16 @@ public class DrivetrainTesting extends SubsystemBase {
     public void logIndividualModuleEncoderValues() {
         if (moduleChooser.getSelected() == SwerveENUMS.FRONT_LEFT) {
             SmartDashboard.putNumber("Absolute Encoder", frontLeft.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", frontLeft.getDriveEncoderVelocity());
+            SmartDashboard.putNumber("Drive Encoder", frontLeft.getDriveEncoderValue());
         } else if (moduleChooser.getSelected() == SwerveENUMS.FRONT_RIGHT) {
             SmartDashboard.putNumber("Absolute Encoder", frontRight.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", frontRight.getDriveEncoderVelocity());
+            SmartDashboard.putNumber("Drive Encoder", frontRight.getDriveEncoderValue());
         } else if (moduleChooser.getSelected() == SwerveENUMS.BACK_LEFT) {
             SmartDashboard.putNumber("Absolute Encoder", backLeft.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", backLeft.getDriveEncoderVelocity());
+            SmartDashboard.putNumber("Drive Encoder", backLeft.getDriveEncoderValue());
         } else if (moduleChooser.getSelected() == SwerveENUMS.BACK_RIGHT) {
             SmartDashboard.putNumber("Absolute Encoder", backRight.getAbsoluteEncoderValue());
-            SmartDashboard.putNumber("Drive Encoder", backRight.getDriveEncoderVelocity());
+            SmartDashboard.putNumber("Drive Encoder", backRight.getDriveEncoderValue());
         }
     }
 
@@ -259,5 +257,25 @@ public class DrivetrainTesting extends SubsystemBase {
         SmartDashboard.putNumber("Back Left Drive Encoder", backLeft.getDriveEncoderValue());
         SmartDashboard.putNumber("Back Right Drive Encoder", backRight.getDriveEncoderValue());
     }
+
+    public void stopAllExcept(Constants.SwerveENUMS module){
+        if (module == SwerveENUMS.FRONT_LEFT){
+            frontRight.stop();
+            backLeft.stop();
+            backRight.stop();
+        }        if (module == SwerveENUMS.FRONT_RIGHT){
+            frontLeft.stop();
+            backLeft.stop();
+            backRight.stop();
+        }        if (module == SwerveENUMS.BACK_LEFT){
+            frontRight.stop();
+            frontLeft.stop();
+            backRight.stop();
+        }        if (module == SwerveENUMS.BACK_RIGHT){
+            frontRight.stop();
+            backLeft.stop();
+            frontLeft.stop();
+        }
+}
 
 }

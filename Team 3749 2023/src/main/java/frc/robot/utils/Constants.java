@@ -13,6 +13,7 @@ public final class Constants {
     public static final class SwerveModuleNew {
         public static final double wheel_radius = Units.inchesToMeters(3.5/2);
         public static final double drive_encoder_conversion_factor = 1/12.8;
+        public static final double degrees_to_radians = Math.PI * 2 / 360;
 
         public static final double max_angular_velocity = DrivetrainNew.max_speed;
         public static final double max_angular_acceleration = 2 * Math.PI; // radians per second squared
@@ -20,8 +21,8 @@ public final class Constants {
 
 
         // meters
-        // public static final double drive_encoder_rotations_to_meter = 2 * Math.PI
-        //         * wheel_radius * drive_encoder_conversion_factor;
+        public static final double drive_encoder_rotations_to_meter = 2 * Math.PI
+                * wheel_radius * drive_encoder_conversion_factor;
         // public static final double turning_encoder_rotations_to_meter = 2 * Math.PI
         //         / drive_encoder_conversion_factor;
 
@@ -74,7 +75,7 @@ public final class Constants {
     }
 
     public static final class DrivetrainNew {
-        public static final double max_speed = 3.0; // 3 meters per second
+        public static final double max_speed = 5.0; // 3 meters per second
         public static final double max_angular_speed = Math.PI; // 1/2 rotation per second
 
         public static final boolean gyro_reversed = false;
