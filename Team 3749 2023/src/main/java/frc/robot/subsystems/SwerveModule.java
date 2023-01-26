@@ -12,7 +12,6 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -31,7 +30,8 @@ public class SwerveModule {
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
+            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
         
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
@@ -51,7 +51,7 @@ public class SwerveModule {
         turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
-        turningPidController = new PIDController(0.2, 0, 0);
+        turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders();
@@ -74,10 +74,12 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
-        double angle = absoluteEncoder.getBusVoltage() / RobotController.getVoltage5V();
-        angle *= 2.0 * Math.PI;
-        angle -= absoluteEncoderOffsetRad;
-        return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+        // double angle = absoluteEncoder.getBusVoltage() / RobotController.getVoltage5V();
+        // angle *= 2.0 * Math.PI;
+        // angle -= absoluteEncoderOffsetRad;
+        // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+
+        return ((absoluteEncoder.getAbsolutePosition() / 360 * 2 * Math.PI) - absoluteEncoderOffsetRad) * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
     public void resetEncoders() {
@@ -97,6 +99,7 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] State", state.toString());
     }
 
     public void stop() {

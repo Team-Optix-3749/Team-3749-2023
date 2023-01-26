@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.POV;
-import frc.robot.utils.Xbox;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 
@@ -21,13 +19,11 @@ public class RobotContainer {
 
   // private final POV pilotPOV = new POV(pilot);
   // private final POV operatorPOV = new POV(operator);
-
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-
   private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
-
+  
   // Subsystems
-
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  
   // Commands
 
   public RobotContainer() {
