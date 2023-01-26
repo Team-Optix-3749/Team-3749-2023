@@ -308,6 +308,10 @@ public class ArmSim extends SubsystemBase {
 		elbowSim.setInput(leftElbowMotor.get() * RobotController.getBatteryVoltage());
 		shoulderSim.setInput(leftShoulderMotor.get() * RobotController.getBatteryVoltage());
 
+
+		System.out.println(RobotController.getBatteryVoltage());
+		SmartDashboard.putNumber("elbow angle", Units.radiansToDegrees(elbowSim.getAngleRads()));
+
 		// Next, we update it. The standard loop time is 20ms.
 		elbowSim.update(0.020);
 		shoulderSim.update(0.020);
