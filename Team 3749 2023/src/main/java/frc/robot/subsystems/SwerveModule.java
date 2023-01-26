@@ -54,6 +54,8 @@ public class SwerveModule {
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
+        SmartDashboard.putNumber(String.valueOf(absoluteEncoderId), absoluteEncoder.getAbsolutePosition());
+
         resetEncoders();
     }
 
@@ -105,5 +107,9 @@ public class SwerveModule {
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
+    }
+
+    public double getAboslutePosition() {
+        return absoluteEncoder.getAbsolutePosition() / 360 * Math.PI - absoluteEncoderOffsetRad;
     }
 }
