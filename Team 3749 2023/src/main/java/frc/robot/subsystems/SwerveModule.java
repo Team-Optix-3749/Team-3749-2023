@@ -37,7 +37,6 @@ public class SwerveModule {
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new CANCoder(absoluteEncoderId);
-        absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
         absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
 
@@ -86,7 +85,7 @@ public class SwerveModule {
         // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
         SmartDashboard.putNumber("ABS POS " + absoluteEncoder.getDeviceID(), absoluteEncoder.getAbsolutePosition());
 
-        return ((absoluteEncoder.getAbsolutePosition() / 360 * 2 * Math.PI) - absoluteEncoderOffsetRad) * (absoluteEncoderReversed ? -1.0 : 1.0);
+        return ((absoluteEncoder.getAbsolutePosition() / 180 * Math.PI)) * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
     public void resetEncoders() {
@@ -115,6 +114,6 @@ public class SwerveModule {
     }
 
     public double getAboslutePosition() {
-        return absoluteEncoder.getAbsolutePosition() / 360 * Math.PI - absoluteEncoderOffsetRad;
+        return absoluteEncoder.getAbsolutePosition() / 180 * Math.PI;
     }
 }
