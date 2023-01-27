@@ -57,10 +57,10 @@ public class Constants {
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 5.267690025599292;
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 5.516194913236766;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 1.894466273038767;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 0.47860200582032;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDeg = 0;
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetDeg = 0;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetDeg = -90;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetDeg = 0;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;

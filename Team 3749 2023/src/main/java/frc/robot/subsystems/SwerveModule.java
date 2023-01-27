@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -36,7 +37,10 @@ public class SwerveModule {
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new CANCoder(absoluteEncoderId);
-        
+        absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
+        absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
+
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
 
@@ -55,7 +59,7 @@ public class SwerveModule {
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         SmartDashboard.putNumber(String.valueOf(absoluteEncoderId), absoluteEncoder.getAbsolutePosition());
-
+        
         resetEncoders();
     }
 
@@ -80,6 +84,7 @@ public class SwerveModule {
         // angle *= 2.0 * Math.PI;
         // angle -= absoluteEncoderOffsetRad;
         // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+        SmartDashboard.putNumber("ABS POS " + absoluteEncoder.getDeviceID(), absoluteEncoder.getAbsolutePosition());
 
         return ((absoluteEncoder.getAbsolutePosition() / 360 * 2 * Math.PI) - absoluteEncoderOffsetRad) * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
