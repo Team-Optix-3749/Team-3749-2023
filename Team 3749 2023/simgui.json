@@ -5,11 +5,6 @@
         "header": {
           "open": true
         }
-      },
-      "SPARK MAX [1]": {
-        "header": {
-          "open": true
-        }
       }
     },
     "Timing": {
@@ -20,7 +15,10 @@
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
     }
   },
   "NetworkTables": {
@@ -29,5 +27,8 @@
         "open": true
       }
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }
