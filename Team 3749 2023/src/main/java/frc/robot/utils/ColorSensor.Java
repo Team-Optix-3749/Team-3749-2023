@@ -34,7 +34,7 @@ public class ColorSensor{
     public static String gamePiece(){
         // .getColor gets RGB values at the current time (what the sensor sees)
         Color detectedColor = m_colorSensor.getColor();
-
+        
         //.matchClosestColor() caluclates the closest color from the listed colors in Color Matcher array
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
