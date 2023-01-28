@@ -31,8 +31,8 @@ public class Claw extends SubsystemBase {
     private MotorControllerGroup clawMotors = new MotorControllerGroup(left_motor, right_motor);
 
     // relative encoder
-    private final RelativeEncoder claw_encoder = right_motor.getEncoder();
-
+    private final RelativeEncoder right_encoder = right_motor.getEncoder();
+    private final RelativeEncoder left_encoder = left_motor.getEncoder();
     // Initializes the base subsystem
     public Claw() {
         right_motor.setInverted(true); // invert the motor to not break it
@@ -47,11 +47,15 @@ public class Claw extends SubsystemBase {
      * set speed for motor
      * 
      * @param speed
+     * @return 
      */
-
-    public void setSpeed(double setpoint) {
-        clawMotors.setVelocity(claw_PID.calculate(getVelocity(), setpoint));
+    public double AVG_encoder_values(){
+        double encoder_AVG = (left_encoder.getVelocity() + right_encoder.getVelocity())/2;
+        return(encoder_AVG);
     }
+    public void setSpeed(double setpoint) {
+        clawMotors.set(claw_PID.calculate(AVG_encoder_values(), setpoint));
+    }   
 
     // Runs every 20 ms
     @Override
