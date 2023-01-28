@@ -194,8 +194,6 @@ public class ArmSim extends SubsystemBase {
 		SmartDashboard.putNumber("elbowSIm", Units.radiansToDegrees(elbowSim.getAngleRads()));
 		SmartDashboard.putNumber("shoulderSim", Units.radiansToDegrees(shoulderSim.getAngleRads()));
 
-
-		System.out.println(RobotController.getBatteryVoltage());
 		SmartDashboard.putNumber("elbow angle", Units.radiansToDegrees(elbowSim.getAngleRads()));
 
 		// Next, we update it. The standard loop time is 20ms.
