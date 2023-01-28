@@ -1,5 +1,6 @@
 /***
- * @author 
+ * @author Anusha Khobare
+ * @author Ryan R McWeeny
  * 
  *     ColorSensor.java is color sensor code to differniate between the yellow cone and purple cube gamepieces.
  *     Note that this ultility is currently unused in claw code. But is ready for possible future use (use the gamePiece Function).

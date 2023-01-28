@@ -25,7 +25,7 @@ public final class Constants {
         public static final int stop = 0; // speed 0 = motors stop
 
         //PID values
-        public static final double claw_kP = 0;
+        public static final double claw_kP = 0.1;
         public static final double claw_kI = 0;
         public static final double claw_kD = 0;
 

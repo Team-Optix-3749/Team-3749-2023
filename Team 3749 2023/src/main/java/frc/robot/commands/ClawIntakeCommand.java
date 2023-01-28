@@ -2,7 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 /***
- * @author 
+ * @author Anusha Khobare
+ * @author Aashray Reddy
+ * @author Ryan R McWeeny
+ * @author Hanlun Li
  * 
  *     ClawOuttake.Java is a comand that runs the claw motors backwards causing it to intake objects (dependent on Claw.Java and Constants.java)
  */

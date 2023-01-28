@@ -1,7 +1,11 @@
 /***
- * @author 
+ * @author Harkirat
+ * @author Anusha Khobare
+ * @author Aashray Reddy
+ * @author Ryan R McWeeny
+ * @author Hanlun Li
  * 
- *     Description Needed
+ *     Simulation code subsystem code
  */
 
 package frc.robot.subsystems;

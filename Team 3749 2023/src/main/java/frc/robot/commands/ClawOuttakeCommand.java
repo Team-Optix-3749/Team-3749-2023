@@ -2,7 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 /***
- * @author 
+ * @author Anusha Khobare
+ * @author Aashray Reddy
+ * @author Ryan R McWeeny
+ * @author Hanlun Li
  * 
  *     ClawOuttake.Java is a comand that runs the claw motors forward causing it to output objects (dependent on Claw.java and Contstants.java)
  */

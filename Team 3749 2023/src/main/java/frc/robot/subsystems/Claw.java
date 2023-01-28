@@ -1,5 +1,8 @@
 /***
- * @author 
+ * @author Anusha Khobare
+ * @author Aashray Reddy
+ * @author Ryan R McWeeny
+ * @author Hanlun Li
  * 
  *     Claw.java creates objects, dependencies, and motor controller groups to allow us to set the speed of each motor for intake and outtake    
  */
@@ -47,7 +50,7 @@ public class Claw extends SubsystemBase {
      */
 
     public void setSpeed(double setpoint) {
-        clawMotors.set(claw_PID.calculate(getVelocity(), setpoint));
+        clawMotors.setVelocity(claw_PID.calculate(getVelocity(), setpoint));
     }
 
     // Runs every 20 ms
