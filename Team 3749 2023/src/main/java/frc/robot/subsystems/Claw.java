@@ -1,5 +1,8 @@
-//Claw.java creates objects, dependencies, and motor controller groups
-//to allow us to set the speed of each motor for intake and outtake
+/***
+ * @author 
+ * 
+ *     Claw.java creates objects, dependencies, and motor controller groups to allow us to set the speed of each motor for intake and outtake    
+ */
 
 package frc.robot.subsystems;
 
@@ -43,20 +46,20 @@ public class Claw extends SubsystemBase {
      * @param speed
      */
 
-    public void setSpeed(double speed) {
-        clawMotors.set(speed);
+    public void setSpeed(double setpoint) {
+        clawMotors.set(claw_PID.calculate(getVelocity(), setpoint));
     }
 
     // Runs every 20 ms
     @Override
     public void periodic() {
-        /*
-         * Calculates the output of the PID algorithm based on the sensor reading
-         * sends it to a motor
-         * uses calculate()
-         */
-        right_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
-        left_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
+        // /*
+        //  * Calculates the output of the PID algorithm based on the sensor reading
+        //  * sends it to a motor
+        //  * uses calculate()
+        //  */
+        // right_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
+        // left_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
     }
 
 }

@@ -1,5 +1,8 @@
-//Claw.java creates objects, dependencies, and motor controller groups
-//to allow us to set the speed of each motor for intake and outtake
+/***
+ * @author 
+ * 
+ *     Description Needed
+ */
 
 package frc.robot.subsystems;
 

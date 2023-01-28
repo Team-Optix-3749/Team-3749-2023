@@ -1,6 +1,12 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+/***
+ * @author 
+ * 
+ *     ClawOuttake.Java is a comand that runs the claw motors forward causing it to output objects (dependent on Claw.java and Contstants.java)
+ */
+
 
 package frc.robot.commands;
 
@@ -27,7 +33,7 @@ public class ClawOuttakeCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        claw.setSpeed(Constants.Claw.speed);
+        claw.setSpeed(Constants.Claw.setpoint);
     }
 
     // Run on command finish

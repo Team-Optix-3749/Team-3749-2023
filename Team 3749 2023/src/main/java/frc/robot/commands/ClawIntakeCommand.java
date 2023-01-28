@@ -1,6 +1,11 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+/***
+ * @author 
+ * 
+ *     ClawOuttake.Java is a comand that runs the claw motors backwards causing it to intake objects (dependent on Claw.Java and Constants.java)
+ */
 
 package frc.robot.commands;
 
@@ -28,7 +33,7 @@ public class ClawIntakeCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        claw.setSpeed(-Constants.Claw.speed);
+        claw.setSpeed(-Constants.Claw.setpoint);
         
     }
 
