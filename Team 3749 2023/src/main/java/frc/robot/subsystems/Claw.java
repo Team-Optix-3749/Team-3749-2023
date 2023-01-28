@@ -43,17 +43,19 @@ public class Claw extends SubsystemBase {
 
         // not sure what this is: Constants.Base.speed.set(new Double(16.90));
     }
-
-    /**
-     * set speed for motor
-     * 
-     * @param speed
-     * @return 
-     */
+    
+    // averages the Encoder velocities from both left and right encoders.(gives error if method is not set to return double)
     public double AVG_encoder_values(){
         double encoder_AVG = (left_encoder.getVelocity() + right_encoder.getVelocity())/2;
         return(encoder_AVG);
     }
+        /**
+     * set speed for motor
+     * @param setpoint
+     * This parmeter is to tell the PID calculator what the ideal speed is, and how to get there.
+     * @return 
+     */
+    
     public void setSpeed(double setpoint) {
         clawMotors.set(claw_PID.calculate(AVG_encoder_values(), setpoint));
     }   
@@ -61,13 +63,6 @@ public class Claw extends SubsystemBase {
     // Runs every 20 ms
     @Override
     public void periodic() {
-        // /*
-        //  * Calculates the output of the PID algorithm based on the sensor reading
-        //  * sends it to a motor
-        //  * uses calculate()
-        //  */
-        // right_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
-        // left_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
     }
 
 }

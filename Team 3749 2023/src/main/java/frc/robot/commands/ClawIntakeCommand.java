@@ -36,6 +36,7 @@ public class ClawIntakeCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
+        // uses PID to calculate the velocity needed to acheive an exact speed
         claw.setSpeed(-Constants.Claw.setpoint);
         
     }
