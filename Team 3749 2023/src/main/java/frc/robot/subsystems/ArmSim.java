@@ -202,7 +202,7 @@ public class ArmSim extends SubsystemBase {
 
 		// Finally, we set our simulated encoder's readings and simulated battery
 		// voltage
-		elbowEncoderSim.setDistance(elbowSim.getAngleRads());
+		elbowEncoderSim.setDistance(elbowSim.getAngleRads());	
 		shoulderEncoderSim.setDistance(shoulderSim.getAngleRads());
 		// SimBattery estimates loaded battery voltages
 		RoboRioSim.setVInVoltage(
