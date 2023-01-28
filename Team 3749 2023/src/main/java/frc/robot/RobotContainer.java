@@ -18,11 +18,9 @@ public class RobotContainer {
   private final Xbox pilot = new Xbox(0);
   private final Xbox operator = new Xbox(1);
 
-  /// what is this used for??? (since it's currently unused)
   private final POV pilotPOV = new POV(pilot);
   private final POV operatorPOV = new POV(operator);
 
-  // STOP DELETING THIS!!!! declares claw subsystem so it can be called later
   private final Claw claw = new Claw();
 
   // Subsystems
