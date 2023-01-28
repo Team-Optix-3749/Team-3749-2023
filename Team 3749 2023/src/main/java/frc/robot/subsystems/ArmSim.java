@@ -85,7 +85,7 @@ public class ArmSim extends SubsystemBase {
 	private final MechanismRoot2d midNodeHome = mech2d.getRoot("mid node", 27.83, 0);
 	private final MechanismLigament2d midNode = midNodeHome
 			.append(new MechanismLigament2d("mid cone node", 34, 90, 10, new Color8Bit(Color.kWhite)));
-	private final MechanismRoot2d highNodeHome = mech2d.getRoot("migh node", 10.58, 0);
+	private final MechanismRoot2d highNodeHome = mech2d.getRoot("high node", 10.58, 0);
 	private final MechanismLigament2d highNode = highNodeHome
 			.append(new MechanismLigament2d("high cone node", 46, 90, 10, new Color8Bit(Color.kWhite)));
 	private final MechanismRoot2d gridHome = mech2d.getRoot("Grid Home", 49.75, 0);
