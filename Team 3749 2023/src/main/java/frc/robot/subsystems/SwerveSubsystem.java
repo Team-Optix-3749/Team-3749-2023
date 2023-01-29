@@ -62,6 +62,8 @@ public class SwerveSubsystem extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+
+        gyro.setAngleAdjustment(0);
     }
 
     public void zeroHeading() {
@@ -73,7 +75,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(getHeading());
+        return Rotation2d.fromDegrees(-getHeading());
     }
 
     // public Pose2d getPose() {
@@ -116,4 +118,12 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
     }
+
+    // public void setAbsoluteOffset(double offset){
+    //     Constants.
+    // }
+
+
+
+
 }

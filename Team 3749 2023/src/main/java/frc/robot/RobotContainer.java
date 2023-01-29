@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Constants.OIConstants;
@@ -15,8 +16,8 @@ import frc.robot.commands.SwerveJoystickCommand;
 public class RobotContainer {
 
   // Controllers
-  // private final Xbox pilot = new Xbox(0);
-  // private final Xbox operator = new Xbox(1);
+  private final Xbox pilot = new Xbox(OIConstants.kDriverControllerPort);
+  private final Xbox operator = new Xbox(1);
 
   // private final POV pilotPOV = new POV(pilot);
   // private final POV operatorPOV = new POV(operator);
@@ -44,7 +45,10 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {}
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    pilot.a().whileTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+    
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");

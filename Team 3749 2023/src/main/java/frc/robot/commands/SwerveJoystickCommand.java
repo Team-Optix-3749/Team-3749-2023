@@ -55,11 +55,12 @@ public class SwerveJoystickCommand extends CommandBase {
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
-        if (false) {
+
+        if (true) {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        } else {
+        } else {    
             // Relative to robot
             chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
         }
