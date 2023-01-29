@@ -2,9 +2,15 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -31,19 +37,25 @@ public class ArmSim extends SubsystemBase {
 	// distance per pulse = (angle per revolution) / (pulses per revolution)
 	// = (2 * PI rads) / (4096 pulses)
 	private static final double encoder_dist_per_pulse = (2.0 * Math.PI) / 4096;
+	private static final double relative_dist_per_pulse = (2.0 * Math.PI) / 42;
+	private static final double absolute_dist_per_pulse = (2.0 * Math.PI) / 8192;
+
+	private static final PIDController pidController = new PIDController(.1, 0, 0);
 
 	// Standard classes for controlling our arm
-	private final ProfiledPIDController elbowController = new ProfiledPIDController(40.0, 0.0, 0.0,
-			new TrapezoidProfile.Constraints(2, 5));
-	private final ProfiledPIDController shoulderController = new ProfiledPIDController(40.0, 0.0, 0.0,
-			new TrapezoidProfile.Constraints(2, 5));
-
 	private final CANSparkMax leftElbowMotor = new CANSparkMax(15, MotorType.kBrushless);
 	private final CANSparkMax rightElbowMotor = new CANSparkMax(16, MotorType.kBrushless);
 
+	private final RelativeEncoder elbowRelativeEncoder = leftElbowMotor.getEncoder();
+	private final SparkMaxAbsoluteEncoder elbowAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
+	
 	private final CANSparkMax leftShoulderMotor = new CANSparkMax(17, MotorType.kBrushless);
 	private final CANSparkMax rightShoulderMotor = new CANSparkMax(18, MotorType.kBrushless);
 
+	private final RelativeEncoder shoulderRelativeEncoder = leftShoulderMotor.getEncoder();
+	private final SparkMaxAbsoluteEncoder shoulderAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
+	
+	// simulation classes for our arm
 	private final Encoder shoulderEncoder = new Encoder(0, 1);
 	private final Encoder elbowEncoder = new Encoder(4, 5);
 
@@ -54,8 +66,7 @@ public class ArmSim extends SubsystemBase {
 	public SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
 	// This arm sim represents an arm that can travel from -75 degrees (rotated down
-	// front)
-	// to 255 degrees (rotated down in the back).
+	// front to 255 degrees (rotated down in the back).
 	private final SingleJointedArmSim elbowSim = new SingleJointedArmSim(
 			DCMotor.getNEO(2),
 			Constants.Arm.elbow_reduction,
@@ -125,6 +136,10 @@ public class ArmSim extends SubsystemBase {
 					new Color8Bit(Color.kWhite)));
 
 	public ArmSim() {
+
+		/*
+		 * MOTOR CONFIG
+		 */
 		rightElbowMotor.setInverted(true);
 		rightShoulderMotor.setInverted(true);
 
@@ -140,9 +155,22 @@ public class ArmSim extends SubsystemBase {
 		REVPhysicsSim.getInstance().addSparkMax(leftShoulderMotor, DCMotor.getNEO(1));
 		REVPhysicsSim.getInstance().addSparkMax(rightShoulderMotor, DCMotor.getNEO(1));
 
+		// convert encoder pos to radians
+		elbowAbsoluteEncoder.setPositionConversionFactor(absolute_dist_per_pulse);
+		shoulderAbsoluteEncoder.setPositionConversionFactor(absolute_dist_per_pulse);
+
+		elbowAbsoluteEncoder.setZeroOffset(0);
+		shoulderAbsoluteEncoder.setZeroOffset(0);
+
+		elbowRelativeEncoder.setPositionConversionFactor(relative_dist_per_pulse);
+		elbowRelativeEncoder.setPositionConversionFactor(relative_dist_per_pulse);
+
 		elbowEncoder.setDistancePerPulse(encoder_dist_per_pulse);
 		shoulderEncoder.setDistancePerPulse(encoder_dist_per_pulse);
 
+		/*
+		 * CHOOSER INIT
+		 */
 		controlMode.setDefaultOption("Presets (Setpoints)", 0);
 		controlMode.addOption("Virtual Four Bar", 1);
 		controlMode.addOption("Manual Angle Adjust", 2);
@@ -158,11 +186,6 @@ public class ArmSim extends SubsystemBase {
 		SmartDashboard.putData(presetChooser);
 	}
 
-	@Override
-	public void simulationPeriodic() {
-		updateSim();
-	}
-
 	public double getElbowEncoderDistance() {
 		return elbowEncoder.getDistance();
 	}
@@ -171,32 +194,28 @@ public class ArmSim extends SubsystemBase {
 		return shoulderEncoder.getDistance();
 	}
 
-	public void setElbowVoltage(double voltage) {
-		leftElbowMotor.setVoltage(voltage);
-		rightElbowMotor.setVoltage(voltage);
-
-		SmartDashboard.putNumber("elbow angle", elbowEncoder.getRaw());
+	public void setElbow(double setpoint) {
+		elbowRelativeEncoder.setPosition(
+			pidController.calculate(elbowAbsoluteEncoder.getPosition(), setpoint)
+		);
 	}
 
-	public void setShoulderVoltage(double voltage) {
-		leftShoulderMotor.setVoltage(voltage);
-		rightShoulderMotor.setVoltage(voltage);
-
-		SmartDashboard.putNumber("shoulder angle", shoulderEncoder.getRaw());
+	public void setShoulder(double setpoint) {
+		shoulderRelativeEncoder.setPosition(
+			pidController.calculate(shoulderAbsoluteEncoder.getPosition(), setpoint)
+		);
 	}
 
 	public void updateSim() {
+		REVPhysicsSim.getInstance().run();
+		
 		// In this method, we update our simulation of what our arm is doing
 		// First, we set our "inputs" (voltages)
 		elbowSim.setInputVoltage(leftElbowMotor.get() * RobotController.getBatteryVoltage());
 		shoulderSim.setInputVoltage(leftShoulderMotor.get() * RobotController.getBatteryVoltage());
 
-		SmartDashboard.putNumber("elbowSIm", Units.radiansToDegrees(elbowSim.getAngleRads()));
-		SmartDashboard.putNumber("shoulderSim", Units.radiansToDegrees(shoulderSim.getAngleRads()));
-
-
-		System.out.println(RobotController.getBatteryVoltage());
 		SmartDashboard.putNumber("elbow angle", Units.radiansToDegrees(elbowSim.getAngleRads()));
+		SmartDashboard.putNumber("shoulder angle", Units.radiansToDegrees(shoulderSim.getAngleRads()));
 
 		// Next, we update it. The standard loop time is 20ms.
 		elbowSim.update(0.020);
@@ -206,6 +225,7 @@ public class ArmSim extends SubsystemBase {
 		// voltage
 		elbowEncoderSim.setDistance(elbowSim.getAngleRads());
 		shoulderEncoderSim.setDistance(shoulderSim.getAngleRads());
+
 		// SimBattery estimates loaded battery voltages
 		RoboRioSim.setVInVoltage(
 				BatterySim.calculateDefaultBatteryLoadedVoltage(
@@ -216,4 +236,8 @@ public class ArmSim extends SubsystemBase {
 		forearm.setAngle(Units.radiansToDegrees(elbowSim.getAngleRads()));
 	}
 
+	@Override
+	public void simulationPeriodic() {
+		updateSim();
+	}
 }
