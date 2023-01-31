@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -66,6 +67,13 @@ public final class AutoCommands {
         for (int i = 1; i < waypoints.length-1; i++) {
             midpoints[i - 1] = waypoints[i];
         }
+
+        // This is the other way to make this work in a different Java version
+        // ArrayList<Translation2d> midpoints = new ArrayList<>();
+        // for (int i = 1; i < waypoints.length-1; i++) {
+        //     midpoints.add(waypoints[i]);
+        // }
+
 
         TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
                 Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond,
