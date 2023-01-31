@@ -63,7 +63,7 @@ public final class AutoCommands {
                 waypoints[waypoints.length - 1].getY() };
 
         Translation2d[] midpoints = new Translation2d[waypoints.length - 2];
-        for (int i = 1; i < waypoints.length; i++) {
+        for (int i = 1; i < waypoints.length-1; i++) {
             midpoints[i - 1] = waypoints[i];
         }
 
