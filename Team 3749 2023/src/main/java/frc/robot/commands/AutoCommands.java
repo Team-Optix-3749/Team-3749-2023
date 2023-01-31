@@ -37,7 +37,7 @@ public final class AutoCommands {
         PIDController xController = new PIDController(0.5, 0, 0);
         PIDController yController = new PIDController(0.5, 0, 0);
         ProfiledPIDController thetaController = new ProfiledPIDController(0.5, 0, 0,
-                new TrapezoidProfile.Constraints(2 * Math.PI,
+                new TrapezoidProfile.Constraints(Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond,
                         Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
