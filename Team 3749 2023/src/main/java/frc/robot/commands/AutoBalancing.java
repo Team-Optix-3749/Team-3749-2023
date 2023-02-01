@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
@@ -54,11 +55,11 @@ public class AutoBalancing extends CommandBase {
 
         else{
             angle = drivetrain.getVerticalTilt();
-            // 2 is for the midpoint, the 15 degree to radian is to map 15 degrees to 1, 4*0.3048 is the length of the station to meters
-            double angleConst = 2*(1 - Math.cos(15/360*2*Math.PI))/(4*0.3048);
+            double angleConst = Math.cos(15/360*2*Math.PI); // value at the max degree amount, used to map 15 degrees to 1
+            double distAdjacent = (1-Math.cos(angle/360*2*Math.PI))/(1-angleConst); //The distance left to travel over the floor, or adjacent side of the triangle
+            double adjacent_to_hypotenuse = Math.cos(angle/360*2*Math.PI)/angleConst; // Ratio of the adjacent side to the hypotenuse, which is the actualy platform length we care about
+            double dist = Units.feetToMeters(distAdjacent/adjacent_to_hypotenuse * 2); // calculates the hypotonuse distance, then multiplies by 2ft, the specified midpoint of the platform
 
-            double dist = (1-Math.cos(angle/360*2*Math.PI))/angleConst; // PID Would be better, but this works for now.
-            
             dist = Math.abs(angle) > Constants.AutoBalancing.max_pitch_offset ? dist : 0.0; // no speed if it is level
             
             double curPos = drivetrain.getPose().getY();
