@@ -123,6 +123,15 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
     }
+    public void turnToDegrees(double degrees) {
+        frontRight.turnToDegrees(degrees);
+        frontLeft.turnToDegrees(degrees);
+        backRight.turnToDegrees(degrees);
+        backLeft.turnToDegrees(degrees);
 
+    }
 
+    public double getVerticalTilt() {
+        return gyro.getPitch();
+    }
 }

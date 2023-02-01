@@ -87,4 +87,10 @@ public class Constants {
 
         public static final double kDeadband = 0.05;
     }
+    
+    public static final class AutoBalancing{
+        public static final double max_yaw_offset = 1;
+        public static final double max_pitch_offset = 2;
+
+    }
 }

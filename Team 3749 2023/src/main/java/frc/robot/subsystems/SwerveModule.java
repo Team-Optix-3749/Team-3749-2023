@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -119,7 +120,12 @@ public class SwerveModule {
         driveMotor.set(0);
         turningMotor.set(0);
     }
+    // Turn to the set degree amount, -180 to 180
+    public void turnToDegrees(double angleDegrees){
+        double angleRad = Units.degreesToRadians(angleDegrees);
+        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(),angleRad));
 
+    }
 
 
 }
