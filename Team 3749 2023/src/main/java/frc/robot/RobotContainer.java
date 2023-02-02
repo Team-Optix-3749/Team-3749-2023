@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -26,6 +27,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.MoveDistance;
 import frc.robot.commands.SwerveJoystickCommand;
 
 public class RobotContainer {
@@ -43,6 +45,7 @@ public class RobotContainer {
   private final Arm armSubsystem = new Arm();
 
   // Commands
+  private final MoveDistance moveDistance = new MoveDistance(swerveSubsystem, Units.feetToMeters(5));
 
   public RobotContainer() {
     configureButtonBindings();
@@ -63,6 +66,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     pilot.a().whileTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+    pilot.b().whileTrue(moveDistance);
 
   }
 

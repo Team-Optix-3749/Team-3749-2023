@@ -91,6 +91,6 @@ public class Constants {
     public static final class AutoBalancing{
         public static final double max_yaw_offset = 1;
         public static final double max_pitch_offset = 2;
-
+        public static final double max_movement_offset = 0.025; // around 1 inch
     }
 }

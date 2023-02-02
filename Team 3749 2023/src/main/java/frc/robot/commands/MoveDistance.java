@@ -12,6 +12,7 @@ import java.lang.ModuleLayer.Controller;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -51,6 +52,7 @@ public class MoveDistance extends CommandBase {
     @Override
     public void initialize() {
         drivetrain.stopModules();
+        start_point = drivetrain.getPose().getY();
     }
 
     // Run every 20 ms
@@ -70,9 +72,8 @@ public class MoveDistance extends CommandBase {
             // where we are
             double current_position = drivetrain.getPose().getY();
             // where we want to be
-            double final_position = current_position + setpoint;
             // how fast to move
-            double speed = controller.calculate(drivetrain.getPose().getY(), final_position);
+            double speed = controller.calculate(current_position, start_point+setpoint);
             // and we move
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 0, speed, 0, drivetrain.getRotation2d());
