@@ -10,11 +10,8 @@ import frc.robot.commands.AutoCommands;
 
 import java.lang.ModuleLayer.Controller;
 
-import javax.swing.plaf.nimbus.State;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -25,19 +22,28 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /***
  * @author Noah Simon
  * 
- *         Allows the robot to automatically "engage" on the charging station
+ *         Moves the robot a specific amount forwrad on a button press
  */
-public class AutoBalancing extends CommandBase {
+public class MoveDistance extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     SwerveSubsystem drivetrain;
 
-    double angle = drivetrain.getVerticalTilt();
+    double setpoint;
+    double dist_traveled = 0;
+    double start_point;
+
     PIDController controller = new PIDController(0.5, 0, 0);
 
-    // Initializes the BaseCommand
-    public AutoBalancing(SwerveSubsystem drivetrain) {
+    /***
+     * 
+     * @param drivetrain the subsystem
+    * @param dist       how far to to move in meters
+     */
+    public MoveDistance(SwerveSubsystem drivetrain, double dist) {
         this.drivetrain = drivetrain;
+        this.setpoint = dist;
+        // start_point
         addRequirements(drivetrain);
     }
 
@@ -50,23 +56,23 @@ public class AutoBalancing extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        // How inaccurate we are willing to be in reference to looking straight forward
-        if (Math.abs(drivetrain.getHeading())>Constants.AutoBalancing.max_yaw_offset){
+
+         // How inaccurate we are willing to be in reference to looking straight forward
+         if (Math.abs(drivetrain.getHeading())>Constants.AutoBalancing.max_yaw_offset){
             SwerveModuleState[] states = new SwerveModuleState[4];
             for (int i = 0; i <4; i++){
                 states[i] = new SwerveModuleState(0.0, new Rotation2d(0));
             }
             drivetrain.setModuleStates(states);
-            // update start position when we are getting started 
         }
         else{
-            // Tilt of the robot
-            angle = drivetrain.getVerticalTilt(); 
-            // Math lookin ass to get the distance on the station we need to travel based on the angle
-            // see https://www.desmos.com/calculator/ujt90ivwwc for the desmos of the function
-            double dist = calculateDistance(angle);
+
+            // where we are
+            double current_position = drivetrain.getPose().getY();
+            // where we want to be
+            double final_position = current_position + setpoint;
             // how fast to move
-            double speed = controller.calculate(0, dist);
+            double speed = controller.calculate(drivetrain.getPose().getY(), final_position);
             // and we move
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 0, speed, 0, drivetrain.getRotation2d());
@@ -74,7 +80,6 @@ public class AutoBalancing extends CommandBase {
 
             drivetrain.setModuleStates(moduleStates);
         }
-
 
     }
 
@@ -89,21 +94,5 @@ public class AutoBalancing extends CommandBase {
     @Override
     public boolean isFinished() {
         return false;
-    }
-    /***
-     * 
-     * @param angle the gyro read angle
-     * @return distance, how far to travel on the charge station in meters
-     */
-    private double calculateDistance(double angle){
-        double dist = 0;
-        if (Math.abs(angle) > Constants.AutoBalancing.max_pitch_offset){
-            double angleConst = Math.cos(15/360*2*Math.PI); // value at the max degree amount, used to map 15 degrees to 1
-            double distAdjacent = (1-Math.cos(angle/360*2*Math.PI))/(1-angleConst); //The distance left to travel over the floor, or adjacent side of the triangle
-            double adjacent_to_hypotenuse = Math.cos(angle/360*2*Math.PI)/angleConst; // Ratio of the adjacent side to the hypotenuse, which is the actualy platform length we care about
-            dist = Units.feetToMeters(distAdjacent/adjacent_to_hypotenuse * 2); // calculates the hypotonuse distance, then multiplies by 2ft, the specified midpoint of the platform
-
-        }
-        return dist;
     }
 }

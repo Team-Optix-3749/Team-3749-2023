@@ -58,7 +58,7 @@ public final class AutoCommands {
      *                    the trajectory
      * @return a trajectory with the specified coordinates and end rotation
      */
-    private static Trajectory createTrajectory(Translation2d[] waypoints, double endRotation) {
+    public static Trajectory createTrajectory(Translation2d[] waypoints, double endRotation) {
         double[] startXY = new double[] { waypoints[0].getX(), waypoints[0].getY() };
         double[] endXY = new double[] { waypoints[waypoints.length - 1].getX(),
                 waypoints[waypoints.length - 1].getY() };
