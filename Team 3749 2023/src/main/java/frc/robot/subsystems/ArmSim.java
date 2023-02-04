@@ -14,6 +14,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
@@ -40,24 +41,22 @@ public class ArmSim extends SubsystemBase {
 	private static final double relative_dist_per_pulse = (2.0 * Math.PI) / 42;
 	private static final double absolute_dist_per_pulse = (2.0 * Math.PI) / 8192;
 
-	private static final PIDController pidController = new PIDController(.1, 0, 0);
-
 	// Standard classes for controlling our arm
-	private final CANSparkMax leftElbowMotor = new CANSparkMax(15, MotorType.kBrushless);
-	private final CANSparkMax rightElbowMotor = new CANSparkMax(16, MotorType.kBrushless);
+	private final CANSparkMax leftElbowMotor = new CANSparkMax(1, MotorType.kBrushless);
+	private final CANSparkMax rightElbowMotor = new CANSparkMax(2, MotorType.kBrushless);
 
 	private final RelativeEncoder elbowRelativeEncoder = leftElbowMotor.getEncoder();
 	private final SparkMaxAbsoluteEncoder elbowAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
-	
-	private final CANSparkMax leftShoulderMotor = new CANSparkMax(17, MotorType.kBrushless);
-	private final CANSparkMax rightShoulderMotor = new CANSparkMax(18, MotorType.kBrushless);
+
+	private final CANSparkMax leftShoulderMotor = new CANSparkMax(3, MotorType.kBrushless);
+	private final CANSparkMax rightShoulderMotor = new CANSparkMax(4, MotorType.kBrushless);
 
 	private final RelativeEncoder shoulderRelativeEncoder = leftShoulderMotor.getEncoder();
 	private final SparkMaxAbsoluteEncoder shoulderAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
-	
+
 	// simulation classes for our arm
-	private final Encoder shoulderEncoder = new Encoder(0, 1);
-	private final Encoder elbowEncoder = new Encoder(4, 5);
+	private final Encoder elbowEncoder = new Encoder(0, 1);
+	private final Encoder shoulderEncoder = new Encoder(2, 3);
 
 	private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
 	private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
@@ -187,32 +186,42 @@ public class ArmSim extends SubsystemBase {
 	}
 
 	public double getElbowEncoderDistance() {
+		System.out.println("elbow" + elbowEncoder.getDistance());
 		return elbowEncoder.getDistance();
 	}
 
 	public double getShoulderEncoderDistance() {
+		System.out.println("shoulder" + shoulderEncoder.getDistance());
 		return shoulderEncoder.getDistance();
 	}
 
-	public void setElbow(double setpoint) {
-		elbowRelativeEncoder.setPosition(
-			pidController.calculate(elbowAbsoluteEncoder.getPosition(), setpoint)
-		);
+	public double getShoulderRelativeDistance() {
+		System.out.println("elbow" + elbowRelativeEncoder.getPosition());
+		return elbowRelativeEncoder.getPosition();
 	}
 
-	public void setShoulder(double setpoint) {
-		shoulderRelativeEncoder.setPosition(
-			pidController.calculate(shoulderAbsoluteEncoder.getPosition(), setpoint)
-		);
+	public double getElbowRelativeDistance() {
+		System.out.println("shoulder" + shoulderRelativeEncoder.getPosition());
+		return shoulderRelativeEncoder.getPosition();
+	}
+
+	public void setShoulderVoltage(double voltage) {
+		leftShoulderMotor.setVoltage(voltage);
+		rightShoulderMotor.setVoltage(voltage);
+	}
+
+	public void setElbowVoltage(double voltage) {
+		leftElbowMotor.setVoltage(voltage);
+		rightElbowMotor.setVoltage(voltage);
 	}
 
 	public void updateSim() {
 		REVPhysicsSim.getInstance().run();
-		
+
 		// In this method, we update our simulation of what our arm is doing
 		// First, we set our "inputs" (voltages)
-		elbowSim.setInputVoltage(leftElbowMotor.get() * RobotController.getBatteryVoltage());
-		shoulderSim.setInputVoltage(leftShoulderMotor.get() * RobotController.getBatteryVoltage());
+		elbowSim.setInputVoltage(leftElbowMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+		shoulderSim.setInputVoltage(leftShoulderMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
 
 		SmartDashboard.putNumber("elbow angle", Units.radiansToDegrees(elbowSim.getAngleRads()));
 		SmartDashboard.putNumber("shoulder angle", Units.radiansToDegrees(shoulderSim.getAngleRads()));

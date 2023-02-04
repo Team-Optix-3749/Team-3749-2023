@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSim;
@@ -13,6 +14,9 @@ public class ArmSimulationCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   private final ArmSim armSim;
+
+  private final ProfiledPIDController elbowPID = new ProfiledPIDController(.1, 0, 0, new Constraints(2, 5));
+  private final ProfiledPIDController shoulderPID = new ProfiledPIDController(.1, 0, 0, new Constraints(2, 5));
 
   private static final double stowedBottom = 90;
   private static final double stowedTop = 260;
@@ -41,8 +45,8 @@ public class ArmSimulationCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    armSim.setElbow(0.0);
-    armSim.setShoulder(0.0);
+    armSim.setElbowVoltage(0.0);
+    armSim.setShoulderVoltage(0.0);
   }
 
   @Override
@@ -79,16 +83,16 @@ public class ArmSimulationCommand extends CommandBase {
         }
         Constants.Arm.elbowSetpoint.set(this.elbowSetpoint);
         Constants.Arm.shoulderSetpoint.set(this.shoulderSetpoint);
+        
+        armSim.setElbowVoltage(elbowPID.calculate(armSim.getElbowEncoderDistance(), Units.degreesToRadians(elbowSetpoint)));
 
-        armSim.setElbow(Units.degreesToRadians(elbowSetpoint));
-
-        armSim.setShoulder(Units.degreesToRadians(shoulderSetpoint));
+        armSim.setShoulderVoltage(shoulderPID.calculate(armSim.getShoulderEncoderDistance(), Units.degreesToRadians(shoulderSetpoint)));
   }
 
   @Override
   public void end(boolean interrupted) {
-    armSim.setElbow(0.0);
-    armSim.setShoulder(0.0);
+    armSim.setElbowVoltage(0.0);
+    armSim.setElbowVoltage(0.0);
   }
 
   @Override
