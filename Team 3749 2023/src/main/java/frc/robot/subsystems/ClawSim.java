@@ -63,8 +63,8 @@ public class ClawSim extends SubsystemBase {
          * sends it to a motor
          * uses calculate()
          */
-        right_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
-        left_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint));
+        right_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint_velocity));
+        left_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint_velocity));
     }
 
 }

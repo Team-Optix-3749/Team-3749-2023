@@ -51,13 +51,13 @@ public class Claw extends SubsystemBase {
     }
         /**
      * set speed for motor
-     * @param setpoint
+     * @param setpoint_velocity
      * This parmeter is to tell the PID calculator what the ideal speed is, and how to get there.
      * @return 
      */
     
-    public void setSpeed(double setpoint) {
-        clawMotors.set(claw_PID.calculate(AVG_encoder_values(), setpoint));
+    public void setSpeed(double setpoint_velocity) {
+        clawMotors.set(claw_PID.calculate(AVG_encoder_values(), setpoint_velocity));
     }   
 
     // Runs every 20 ms

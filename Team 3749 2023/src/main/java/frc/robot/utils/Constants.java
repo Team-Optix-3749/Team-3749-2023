@@ -29,7 +29,7 @@ public final class Constants {
         public static final double claw_kI = 0;
         public static final double claw_kD = 0;
 
-        public static final int setpoint = 0;
+        public static final int setpoint_velocity = 0;
 
         //ColorSensor
         public static String Object = null;
