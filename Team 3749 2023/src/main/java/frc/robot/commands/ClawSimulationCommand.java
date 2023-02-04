@@ -1,12 +1,3 @@
-/***
- * @author Zaddy Harkirat 
- * @author Anusha Khobare
- * @author Aashray Reddy
- * @author Ryan R McWeeny
- * @author Hanlun Li
- *     Simulation code for the claw
- */
-
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
@@ -19,6 +10,14 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/***
+ * @author Zaddy Harkirat
+ * @author Anusha Khobare
+ * @author Aashray Reddy
+ * @author Ryan R McWeeny
+ * @author Hanlun Li
+ *         Simulation code for the claw
+ */
 public class ClawSimulationCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 

@@ -1,12 +1,3 @@
-/***
- * @author Anusha Khobare
- * @author Aashray Reddy
- * @author Ryan R McWeeny
- * @author Hanlun Li
- * @author Zaddy Harkirat
- * 
- *     Claw.java creates objects, dependencies, and motor controller groups to allow us to set the speed of each motor for intake and outtake    
- */
 
 package frc.robot.subsystems;
 
@@ -20,6 +11,15 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
+/***
+ * @author Anusha Khobare
+ * @author Aashray Reddy
+ * @author Ryan R McWeeny
+ * @author Hanlun Li
+ * @author Zaddy Harkirat
+ * 
+ *     Claw.java creates objects, dependencies, and motor controller groups to allow us to set the speed of each motor for intake and outtake    
+ */
 public class Claw extends SubsystemBase {
     // Creates a PIDController with gains kP, kI, and kD
     PIDController claw_PID = new PIDController(Constants.Claw.claw_kP, Constants.Claw.claw_kI, Constants.Claw.claw_kD);

@@ -1,13 +1,5 @@
 package frc.robot.utils;
 
-/***
- * @author Anusha Khobare
- * @author Ryan R McWeeny
- * 
- *     ColorSensor.java is color sensor code to differniate between the yellow cone and purple cube gamepieces.
- *     Note that this ultility is currently unused in claw code. But is ready for possible future use (use the gamePiece Function).
- *     Rearranged + Adapted code from RevRobotics Color Sensor Template Code
- */
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.I2C;
@@ -18,6 +10,14 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 import frc.robot.utils.Constants;
 
+/***
+ * @author Anusha Khobare
+ * @author Ryan R McWeeny
+ * 
+ *     ColorSensor.java is color sensor code to differniate between the yellow cone and purple cube gamepieces.
+ *     Note that this ultility is currently unused in claw code. But is ready for possible future use (use the gamePiece Function).
+ *     Rearranged + Adapted code from RevRobotics Color Sensor Template Code
+ */
 public class ColorSensor {
     // defines color sensor
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
