@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.security.CodeSigner;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
@@ -8,6 +10,8 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.jni.RevJNIWrapper;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -34,127 +38,102 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSim extends SubsystemBase {
 
-	private static final int kMotorPort = 0;
-	private static final int kEncoderAChannel = 0;
-	private static final int kEncoderBChannel = 1;
-	private static final int kJoystickPort = 0;
-
-	// The P gain for the PID controller that drives this arm.
-	private static final double kArmKp = 1.0;
-	private static final double kArmKi = 0.0;
-
 	// distance per pulse = (angle per revolution) / (pulses per revolution)
 	// = (2 * PI rads) / (4096 pulses)
 	private static final double kArmEncoderDistPerPulse = 2.0 * Math.PI / 4096;
 
 	// The arm gearbox represents a gearbox containing two Vex 775pro motors.
-	private final DCMotor m_armGearbox = DCMotor.getNEO(2);
+	private final DCMotor armGearBox = DCMotor.getNEO(2);
 
 	// Standard classes for controlling our arm
-	public final Encoder m_topEncoder = new Encoder(kEncoderAChannel, kEncoderBChannel);
-	public final Encoder m_bottomEncoder = new Encoder(kEncoderAChannel + 2, kEncoderBChannel + 2);
+	public final Encoder elbowEncoder = new Encoder(0, 1);
+	public final Encoder shoulderEncoder = new Encoder(2, 3);
 
-	public final CANSparkMax m_topMotor = new CANSparkMax(kMotorPort, MotorType.kBrushless);
-	public final CANSparkMax m_bottomMotor = new CANSparkMax(kMotorPort + 1, MotorType.kBrushless);
+	public final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
+	public final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
 
-	// Simulation classes help us simulate what's going on, including gravity.
-	private static final double m_armReduction = 600;
-	private static final double m_arm_topMass = 10.0; // Kilograms
-	private static final double m_arm_topLength = Units.inchesToMeters(38.5);
-	private static final double m_arm_bottomMass = 4.0; // Kilograms
-	private static final double m_arm_bottomLength = Units.inchesToMeters(27);
-
-	public static final int m_arm_top_min_angle = -75;
-	public static final int m_arm_top_max_angle = 260;
-	public static final int m_arm_bottom_min_angle = 30;
-	public static final int m_arm_bottom_max_angle = 150;
-
-	public final ProfiledPIDController m_topController = new ProfiledPIDController(kArmKp, kArmKi, 0,
+	public final ProfiledPIDController elbowController = new ProfiledPIDController(Constants.Arm.kp, Constants.Arm.ki, 0,
 			new TrapezoidProfile.Constraints(2, 5));
-	public final ProfiledPIDController m_bottomController = new ProfiledPIDController(kArmKp, kArmKi, 0,
+	public final ProfiledPIDController shoulderController = new ProfiledPIDController(Constants.Arm.kp, Constants.Arm.ki, 0,
 			new TrapezoidProfile.Constraints(2, 5));
 
 	// This arm sim represents an arm that can travel from -75 degrees (rotated down
 	// front)
 	// to 255 degrees (rotated down in the back).
-	private final SingleJointedArmSim m_arm_topSim = new SingleJointedArmSim(
-			m_armGearbox,
-			m_armReduction,
-			SingleJointedArmSim.estimateMOI(m_arm_topLength, m_arm_topMass),
-			m_arm_topLength,
-			Units.degreesToRadians(m_arm_top_min_angle),
-			Units.degreesToRadians(m_arm_top_max_angle),
-			m_arm_topMass,
+	private final SingleJointedArmSim elbowSim = new SingleJointedArmSim(
+			armGearBox,
+			Constants.Arm.elbow_reduction,
+			SingleJointedArmSim.estimateMOI(Constants.Arm.bicep_length, Constants.Arm.bicep_mass),
+			Constants.Arm.bicep_length,
+			Units.degreesToRadians(Constants.Arm.elbow_min_angle),
+			Units.degreesToRadians(Constants.Arm.elbow_max_angle),
+			Constants.Arm.bicep_mass,
 			false,
 			VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
 	);
-	private final SingleJointedArmSim m_arm_bottomSim = new SingleJointedArmSim(
-			m_armGearbox,
-			m_armReduction,
-			SingleJointedArmSim.estimateMOI(m_arm_bottomLength, m_arm_bottomMass),
-			m_arm_bottomLength,
-			Units.degreesToRadians(m_arm_bottom_min_angle),
-			Units.degreesToRadians(m_arm_bottom_max_angle),
-			m_arm_bottomMass,
+	private final SingleJointedArmSim shoulderSim = new SingleJointedArmSim(
+			armGearBox,
+			Constants.Arm.shoulder_reduction,
+			SingleJointedArmSim.estimateMOI(Constants.Arm.forearm_length, Constants.Arm.forearm_mass),
+			Constants.Arm.forearm_length,
+			Units.degreesToRadians(Constants.Arm.shoulder_min_angle),
+			Units.degreesToRadians(Constants.Arm.shoulder_max_angle),
+			Constants.Arm.forearm_mass,
 			true,
 			VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
 	);
-	private final EncoderSim m_topEncoderSim = new EncoderSim(m_topEncoder);
-	private final EncoderSim m_bottomEncoderSim = new EncoderSim(m_bottomEncoder);
+	private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
+	private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
 	public SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
 	public SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
 	// Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
-	private final Mechanism2d m_mech2d = new Mechanism2d(90, 90);
-	private final MechanismRoot2d midNodeHome = m_mech2d.getRoot("Mid Node", 27.83, 0);
-	private final MechanismLigament2d MidNode = midNodeHome
+	private final Mechanism2d mech2d = new Mechanism2d(90, 90);
+	private final MechanismRoot2d midNodeHome = mech2d.getRoot("Mid Node", 27.83, 0);
+	private final MechanismLigament2d midNode = midNodeHome
 			.append(new MechanismLigament2d("Mid Cone Node", 34, 90, 10, new Color8Bit(Color.kWhite)));
-	private final MechanismRoot2d highNodeHome = m_mech2d.getRoot("High Node", 10.58, 0);
-	private final MechanismLigament2d HighNode = highNodeHome
+	private final MechanismRoot2d highNodeHome = mech2d.getRoot("High Node", 10.58, 0);
+	private final MechanismLigament2d highNode = highNodeHome
 			.append(new MechanismLigament2d("High Cone Node", 46, 90, 10, new Color8Bit(Color.kWhite)));
-	private final MechanismRoot2d gridHome = m_mech2d.getRoot("Grid Home", 49.75, 0);
-	private final MechanismLigament2d GridNode = gridHome
+	private final MechanismRoot2d gridHome = mech2d.getRoot("Grid Home", 49.75, 0);
+	private final MechanismLigament2d gridNode = gridHome
 			.append(new MechanismLigament2d("Grid Wall", 49.75, 180, 50, new Color8Bit(Color.kWhite)));
-	private final MechanismRoot2d dsHome = m_mech2d.getRoot("Double Substation Home", 49.75, 37);
-	private final MechanismLigament2d DSRamp = dsHome
+	private final MechanismRoot2d dsHome = mech2d.getRoot("Double Substation Home", 49.75, 37);
+	private final MechanismLigament2d dsRamp = dsHome
 			.append(new MechanismLigament2d("Double Substation Ramp", 13.75, 180, 10, new Color8Bit(Color.kWhite)));
-	private final MechanismRoot2d m_armPivot = m_mech2d.getRoot("ArmPivot", 65, 21.75);
-	private final MechanismLigament2d m_arm_bottom = m_armPivot.append(
+	private final MechanismRoot2d m_armPivot = mech2d.getRoot("Arm Pivot", 65, 21.75);
+	private final MechanismLigament2d bicep = m_armPivot.append(
 			new MechanismLigament2d(
-					"Arm Bottom",
-					27,
+					"Bicep",
+					Constants.Arm.bicep_length,
 					-90,
 					10,
 					new Color8Bit(Color.kGold)));
-	private final MechanismLigament2d m_arm_tower = m_armPivot
-			.append(new MechanismLigament2d("ArmTower", 18, -90, 10, new Color8Bit(Color.kSilver)));
+	private final MechanismLigament2d armTower = m_armPivot
+			.append(new MechanismLigament2d("Arm Tower", 18, -90, 10, new Color8Bit(Color.kSilver)));
 
-	private final MechanismLigament2d m_aframe_1 = m_armPivot
-			.append(new MechanismLigament2d("aframe1", 24, -50, 10, new Color8Bit(Color.kSilver)));
-	private final MechanismLigament2d m_bumper = gridHome
+	private final MechanismLigament2d armSupport = m_armPivot
+			.append(new MechanismLigament2d("Arm Support", 24, -50, 10, new Color8Bit(Color.kSilver)));
+	private final MechanismLigament2d bumper = gridHome
 			.append(new MechanismLigament2d("Bumper", 30.5, 0, 60, new Color8Bit(Color.kRed)));
-	private final MechanismLigament2d m_arm_top = m_arm_bottom.append(
+	private final MechanismLigament2d forearm = bicep.append(
 			new MechanismLigament2d(
-					"Arm Top",
-					28.5 + 3.0,
-					Units.radiansToDegrees(m_arm_topSim.getAngleRads()),
+					"Elbow",
+					Constants.Arm.forearm_length,
+					Units.radiansToDegrees(elbowSim.getAngleRads()),
 					10,
 					new Color8Bit(Color.kPurple)));
-	private final MechanismLigament2d m_intake = m_arm_top.append(
+	private final MechanismLigament2d claw = forearm.append(
 			new MechanismLigament2d(
-					"Intake",
+					"Claw",
 					7,
-					Units.radiansToDegrees(m_arm_topSim.getAngleRads()),
+					Units.radiansToDegrees(elbowSim.getAngleRads()),
 					40,
 					new Color8Bit(Color.kWhite)));
 
 	public ArmSim() {
-		m_topEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
-		m_bottomEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
-
-		// topRelativeEncoder.setPositionConversionFactor(kArmEncoderDistPerPulse / 42);
-		// bottomRelativeEncoder.setPositionConversionFactor(kArmEncoderDistPerPulse /
-		// 42);
+		elbowEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
+		shoulderEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
 
 		SmartDashboard.putNumber("Setpoint top (degrees)", 90);
 		SmartDashboard.putNumber("Setpoint bottom (degrees)", 90);
@@ -171,30 +150,33 @@ public class ArmSim extends SubsystemBase {
 		SmartDashboard.putData(controlMode);
 		SmartDashboard.putData(presetChooser);
 		// Put Mechanism 2d to SmartDashboard
-		SmartDashboard.putData("Arm Sim", m_mech2d);
+		SmartDashboard.putData("Arm Sim", mech2d);
 	}
 
 	public void updateSim() {
+		REVPhysicsSim.getInstance().run();
+
 		// In this method, we update our simulation of what our arm is doing
 		// First, we set our "inputs" (voltages)
-		m_arm_topSim.setInput(m_topMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
-		m_arm_bottomSim.setInput(m_bottomMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+		elbowSim.setInput(leftElbowMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+		shoulderSim.setInput(leftShoulderMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
 		// Next, we update it. The standard loop time is 20ms.
-		m_arm_topSim.update(0.020);
-		m_arm_bottomSim.update(0.020);
+		elbowSim.update(0.020);
+		shoulderSim.update(0.020);
 
 		// Finally, we set our simulated encoder's readings and simulated battery
 		// voltage
-		m_topEncoderSim.setDistance(m_arm_topSim.getAngleRads());
-		m_bottomEncoderSim.setDistance(m_arm_bottomSim.getAngleRads());
+		elbowEncoderSim.setDistance(elbowSim.getAngleRads());
+		shoulderEncoderSim.setDistance(shoulderSim.getAngleRads());
+		
 		// SimBattery estimates loaded battery voltages
 		RoboRioSim.setVInVoltage(
 				BatterySim.calculateDefaultBatteryLoadedVoltage(
-						m_arm_topSim.getCurrentDrawAmps() + m_arm_bottomSim.getCurrentDrawAmps()));
+						elbowSim.getCurrentDrawAmps() + shoulderSim.getCurrentDrawAmps()));
 
 		// Update the Mechanism Arm angle based on the simulated arm angle
-		m_arm_top.setAngle(Units.radiansToDegrees(m_arm_topSim.getAngleRads()));
-		m_arm_bottom.setAngle(Units.radiansToDegrees(m_arm_bottomSim.getAngleRads()));
+		forearm.setAngle(Units.radiansToDegrees(elbowSim.getAngleRads()));
+		bicep.setAngle(Units.radiansToDegrees(shoulderSim.getAngleRads()));
 	}
 
 	@Override

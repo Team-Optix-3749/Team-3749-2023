@@ -1,16 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSim;
 import frc.robot.utils.Constants;
-import frc.robot.utils.SmartData;
-
 public class ArmSimulationCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
@@ -52,29 +47,29 @@ public class ArmSimulationCommand extends CommandBase {
       case 1:
         // Here, we run PID control where the top arm acts like a four-bar relative to
         // the bottom.
-        double pidOutputTop = armSim.m_topController.calculate(armSim.m_topEncoder.getDistance(),
+        double pidOutputElbow = armSim.elbowController.calculate(armSim.elbowEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(
                 SmartDashboard.getNumber("Setpoint top (degrees)", 0)
                     - MathUtil.clamp(SmartDashboard.getNumber("Setpoint bottom (degrees)", 150),
-                        armSim.m_arm_bottom_min_angle, armSim.m_arm_bottom_max_angle),
-                armSim.m_arm_top_min_angle, armSim.m_arm_top_max_angle)));
-        armSim.m_topMotor.setVoltage(pidOutputTop);
+                        Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_max_angle),
+                Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
+        armSim.leftElbowMotor.setVoltage(pidOutputElbow);
 
-        double pidOutputBottom = armSim.m_bottomController.calculate(armSim.m_bottomEncoder.getDistance(),
+        double pidOutputShoulder = armSim.shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(SmartDashboard.getNumber("Setpoint bottom (degrees)", 0),
-                armSim.m_arm_bottom_min_angle, armSim.m_arm_bottom_max_angle)));
-        armSim.m_bottomMotor.setVoltage(pidOutputBottom);
+            Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_min_angle)));
+        armSim.leftShoulderMotor.setVoltage(pidOutputShoulder);
         break;
       case 2:
-        pidOutputTop = armSim.m_topController.calculate(armSim.m_topEncoder.getDistance(),
+        pidOutputElbow = armSim.elbowController.calculate(armSim.elbowEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(SmartDashboard.getNumber("Setpoint top (degrees)", 0),
-                armSim.m_arm_top_min_angle, armSim.m_arm_top_max_angle)));
-        armSim.m_topMotor.setVoltage(pidOutputTop);
+              Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_min_angle)));
+        armSim.leftShoulderMotor.setVoltage(pidOutputElbow);
 
-        pidOutputBottom = armSim.m_bottomController.calculate(armSim.m_bottomEncoder.getDistance(),
+        pidOutputShoulder = armSim.shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(SmartDashboard.getNumber("Setpoint bottom (degrees)", 0),
-                armSim.m_arm_bottom_min_angle, armSim.m_arm_bottom_max_angle)));
-        armSim.m_bottomMotor.setVoltage(pidOutputBottom);
+            Constants.Arm.elbow_min_angle, Constants.Arm.elbow_min_angle)));
+        armSim.leftShoulderMotor.setVoltage(pidOutputShoulder);
         break;
       default: // also case 0
         double topSetpoint, bottomSetpoint;
@@ -109,14 +104,14 @@ public class ArmSimulationCommand extends CommandBase {
             break;
         }
         // Here, we run PID control where the arm moves to the selected setpoint.
-        pidOutputTop = armSim.m_topController.calculate(armSim.m_topEncoder.getDistance(),
+        pidOutputElbow = armSim.elbowController.calculate(armSim.elbowEncoder.getDistance(),
             Units.degreesToRadians(topSetpoint - bottomSetpoint));
-        armSim.m_topMotor.setVoltage(pidOutputTop);
+        armSim.leftElbowMotor.setVoltage(pidOutputElbow);
         SmartDashboard.putNumber("Setpoint bottom (degrees)", bottomSetpoint);
         SmartDashboard.putNumber("Setpoint top (degrees)", topSetpoint);
-        pidOutputBottom = armSim.m_bottomController.calculate(armSim.m_bottomEncoder.getDistance(),
+        pidOutputShoulder = armSim.shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
             Units.degreesToRadians(bottomSetpoint));
-        armSim.m_bottomMotor.setVoltage(pidOutputBottom);
+        armSim.leftShoulderMotor.setVoltage(pidOutputShoulder);
         break;
     }
   }
