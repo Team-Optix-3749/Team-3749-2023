@@ -41,7 +41,6 @@ public class Claw extends SubsystemBase {
         right_motor.setIdleMode(IdleMode.kBrake); // set neo to be braked when not active
         left_motor.setIdleMode(IdleMode.kBrake); // set neo to be braked when not active
 
-        // not sure what this is: Constants.Base.speed.set(new Double(16.90));
     }
     
     // averages the Encoder velocities from both left and right encoders.(gives error if method is not set to return double)
