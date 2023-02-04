@@ -49,13 +49,13 @@ public class Claw extends SubsystemBase {
         double encoder_AVG = (left_encoder.getVelocity() + right_encoder.getVelocity())/2;
         return(encoder_AVG);
     }
-        /**
+        
+    /**
      * set speed for motor
      * @param setpoint_velocity
      * This parmeter is to tell the PID calculator what the ideal speed is, and how to get there.
      * @return 
      */
-    
     public void setSpeed(double setpoint_velocity) {
         clawMotors.set(claw_PID.calculate(AVG_encoder_values(), setpoint_velocity));
     }   
