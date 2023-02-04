@@ -20,6 +20,7 @@ import frc.robot.utils.Constants;
  * 
  *     Claw.java creates objects, dependencies, and motor controller groups to allow us to set the speed of each motor for intake and outtake    
  */
+
 public class Claw extends SubsystemBase {
     // Creates a PIDController with gains kP, kI, and kD
     private final PIDController claw_PID = new PIDController(Constants.Claw.claw_kP, Constants.Claw.claw_kI, Constants.Claw.claw_kD);
@@ -43,7 +44,10 @@ public class Claw extends SubsystemBase {
 
     }
     
-    // averages the Encoder velocities from both left and right encoders.(gives error if method is not set to return double)
+    /**
+     * averages the Encoder velocities from both left and right encoders.(gives error if method is not set to return double)
+     * @return
+     */
     public double AVG_encoder_values(){
         final double encoder_AVG = (left_encoder.getVelocity() + right_encoder.getVelocity())/2;
         return(encoder_AVG);
