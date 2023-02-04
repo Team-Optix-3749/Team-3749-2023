@@ -95,7 +95,7 @@ public class ArmSim extends SubsystemBase {
 	private final MechanismRoot2d midNodeHome = mech2d.getRoot("mid node", 27.83, 0);
 	private final MechanismLigament2d midNode = midNodeHome
 			.append(new MechanismLigament2d("mid cone node", 34, 90, 10, new Color8Bit(Color.kWhite)));
-	private final MechanismRoot2d highNodeHome = mech2d.getRoot("migh node", 10.58, 0);
+	private final MechanismRoot2d highNodeHome = mech2d.getRoot("high node", 10.58, 0);
 	private final MechanismLigament2d highNode = highNodeHome
 			.append(new MechanismLigament2d("high cone node", 46, 90, 10, new Color8Bit(Color.kWhite)));
 	private final MechanismRoot2d gridHome = mech2d.getRoot("Grid Home", 49.75, 0);
@@ -223,8 +223,8 @@ public class ArmSim extends SubsystemBase {
 		elbowSim.setInputVoltage(leftElbowMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
 		shoulderSim.setInputVoltage(leftShoulderMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
 
-		SmartDashboard.putNumber("elbow angle", Units.radiansToDegrees(elbowSim.getAngleRads()));
-		SmartDashboard.putNumber("shoulder angle", Units.radiansToDegrees(shoulderSim.getAngleRads()));
+		SmartDashboard.putNumber("elbowSIm", Units.radiansToDegrees(elbowSim.getAngleRads()));
+		SmartDashboard.putNumber("shoulderSim", Units.radiansToDegrees(shoulderSim.getAngleRads()));
 
 		// Next, we update it. The standard loop time is 20ms.
 		elbowSim.update(0.020);
@@ -232,7 +232,7 @@ public class ArmSim extends SubsystemBase {
 
 		// Finally, we set our simulated encoder's readings and simulated battery
 		// voltage
-		elbowEncoderSim.setDistance(elbowSim.getAngleRads());
+		elbowEncoderSim.setDistance(elbowSim.getAngleRads());	
 		shoulderEncoderSim.setDistance(shoulderSim.getAngleRads());
 
 		// SimBattery estimates loaded battery voltages
