@@ -25,10 +25,10 @@ public class Arm extends SubsystemBase {
     private CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
 
     // Not sure of values for kp, ki, kd
-    private final PIDController shoulderController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
-            Constants.Arm.kd);
-    private final PIDController elbowController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
-            Constants.Arm.kd);
+    // private final PIDController shoulderController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
+    //         Constants.Arm.kd);
+    // private final PIDController elbowController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
+    //         Constants.Arm.kd);
 
     // Relative Encoder Initialization
     private final RelativeEncoder leftShoulderEncoder = leftShoulderMotor.getEncoder();
@@ -84,13 +84,13 @@ public class Arm extends SubsystemBase {
         // NEED PID TO CONTROL ACCURATELY
         // would work if the conversion factor was correctly set
         // need to change where it gets the calculated angle (x and y vals)
-        leftShoulderEncoder.setPosition(shoulderController.calculate(leftShoulderEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
+        // leftShoulderEncoder.setPosition(shoulderController.calculate(leftShoulderEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
     }
 
     public void setDegreesElbow(double x, double y) {
         // NEED PID TO CONTROL ACCURATELY
         // would work if the conversion factor was correctly set
         // need to change where it gets the calculated angle (x and y vals)
-        leftElbowEncoder.setPosition(elbowController.calculate(leftElbowEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
+        // leftElbowEncoder.setPosition(elbowController.calculate(leftElbowEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
     }
 }

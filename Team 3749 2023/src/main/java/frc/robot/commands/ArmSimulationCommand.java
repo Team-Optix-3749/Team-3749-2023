@@ -1,11 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSim;
+import frc.robot.utils.Constants.Arm.*;
 import frc.robot.utils.Constants;
+
 public class ArmSimulationCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
@@ -31,6 +35,11 @@ public class ArmSimulationCommand extends CommandBase {
 
   private double elbowSetpoint, shoulderSetpoint;
 
+  public ProfiledPIDController elbowController = new ProfiledPIDController(Constants.Arm.elbowKP.get(), Constants.Arm.elbowKI.get(), Constants.Arm.elbowKD.get(),
+  new TrapezoidProfile.Constraints(2, 5));
+public ProfiledPIDController shoulderController = new ProfiledPIDController(Constants.Arm.shoulderKP.get(), Constants.Arm.shoulderKI.get(), Constants.Arm.shoulderKD.get(),
+  new TrapezoidProfile.Constraints(2, 5));
+
   public ArmSimulationCommand(ArmSim armSim) {
     this.armSim = armSim;
     addRequirements(armSim);
@@ -38,6 +47,11 @@ public class ArmSimulationCommand extends CommandBase {
 
   @Override
   public void initialize() {
+    elbowController =  new ProfiledPIDController(Constants.Arm.elbowKP.get(), Constants.Arm.elbowKI.get(), Constants.Arm.elbowKD.get(),
+    new TrapezoidProfile.Constraints(2, 5));
+    shoulderController = new ProfiledPIDController(Constants.Arm.shoulderKP.get(), Constants.Arm.shoulderKI.get(), Constants.Arm.shoulderKD.get(),
+  new TrapezoidProfile.Constraints(2, 5));
+
   }
 
   @Override
@@ -47,7 +61,7 @@ public class ArmSimulationCommand extends CommandBase {
       case 1:
         // Here, we run PID control where the top arm acts like a four-bar relative to
         // the bottom.
-        double pidOutputElbow = armSim.elbowController.calculate(armSim.elbowEncoder.getDistance(),
+        double pidOutputElbow = elbowController.calculate(armSim.elbowEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(
                 SmartDashboard.getNumber("Setpoint top (degrees)", 0)
                     - MathUtil.clamp(SmartDashboard.getNumber("Setpoint bottom (degrees)", 150),
@@ -55,62 +69,62 @@ public class ArmSimulationCommand extends CommandBase {
                 Constants.Arm.elbow_min_angle, Constants.Arm.elbow_max_angle)));
         armSim.leftElbowMotor.setVoltage(pidOutputElbow);
 
-        double pidOutputShoulder = armSim.shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
+        double pidOutputShoulder = shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(SmartDashboard.getNumber("Setpoint bottom (degrees)", 0),
-            Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_min_angle)));
+                Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_min_angle)));
         armSim.leftShoulderMotor.setVoltage(pidOutputShoulder);
         break;
       case 2:
-        pidOutputElbow = armSim.elbowController.calculate(armSim.elbowEncoder.getDistance(),
+        pidOutputElbow = elbowController.calculate(armSim.elbowEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(SmartDashboard.getNumber("Setpoint top (degrees)", 0),
-              Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_min_angle)));
+                Constants.Arm.shoulder_min_angle, Constants.Arm.shoulder_min_angle)));
         armSim.leftShoulderMotor.setVoltage(pidOutputElbow);
 
-        pidOutputShoulder = armSim.shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
+        pidOutputShoulder = shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
             Units.degreesToRadians(MathUtil.clamp(SmartDashboard.getNumber("Setpoint bottom (degrees)", 0),
-            Constants.Arm.elbow_min_angle, Constants.Arm.elbow_min_angle)));
+                Constants.Arm.elbow_min_angle, Constants.Arm.elbow_min_angle)));
         armSim.leftShoulderMotor.setVoltage(pidOutputShoulder);
         break;
       default: // also case 0
-        double topSetpoint, bottomSetpoint;
+        double elbowSetpoint, shoulderSetpoint;
         switch (armSim.presetChooser.getSelected()) {
           case 0:
-            topSetpoint = stowedTop;
-            bottomSetpoint = stowedBottom;
+            elbowSetpoint = ElbowSetpoints.STOWED.angle;
+            shoulderSetpoint = ShoulderSetpoints.STOWED.angle;
             break;
           case 1:
-            topSetpoint = intakeTop;
-            bottomSetpoint = intakeBottom;
+            elbowSetpoint = intakeTop;
+            shoulderSetpoint = intakeBottom;
             break;
           case 2:
-            topSetpoint = doubleSubstationTop;
-            bottomSetpoint = doubleSubstationBottom;
+            elbowSetpoint = doubleSubstationTop;
+            shoulderSetpoint = doubleSubstationBottom;
             break;
           case 3:
-            topSetpoint = scoreFloorTop;
-            bottomSetpoint = scoreFloorBottom;
+            elbowSetpoint = scoreFloorTop;
+            shoulderSetpoint = scoreFloorBottom;
             break;
           case 4:
-            topSetpoint = scoreMidTop;
-            bottomSetpoint = scoreMidBottom;
+            elbowSetpoint = scoreMidTop;
+            shoulderSetpoint = scoreMidBottom;
             break;
           case 5:
-            topSetpoint = scoreHighTop;
-            bottomSetpoint = scoreHighBottom;
+            elbowSetpoint = scoreHighTop;
+            shoulderSetpoint = scoreHighBottom;
             break;
           default:
-            topSetpoint = stowedTop;
-            bottomSetpoint = stowedBottom;
-            break;
+          elbowSetpoint = ElbowSetpoints.STOWED.angle;
+          shoulderSetpoint = ShoulderSetpoints.STOWED.angle;
+          break;
         }
         // Here, we run PID control where the arm moves to the selected setpoint.
-        pidOutputElbow = armSim.elbowController.calculate(armSim.elbowEncoder.getDistance(),
-            Units.degreesToRadians(topSetpoint - bottomSetpoint));
+        pidOutputElbow = elbowController.calculate(armSim.elbowEncoder.getDistance(),
+            Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
         armSim.leftElbowMotor.setVoltage(pidOutputElbow);
-        SmartDashboard.putNumber("Setpoint bottom (degrees)", bottomSetpoint);
-        SmartDashboard.putNumber("Setpoint top (degrees)", topSetpoint);
-        pidOutputShoulder = armSim.shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
-            Units.degreesToRadians(bottomSetpoint));
+        SmartDashboard.putNumber("Setpoint bottom (degrees)", shoulderSetpoint);
+        SmartDashboard.putNumber("Setpoint top (degrees)", elbowSetpoint);
+        pidOutputShoulder = shoulderController.calculate(armSim.shoulderEncoder.getDistance(),
+            Units.degreesToRadians(shoulderSetpoint));
         armSim.leftShoulderMotor.setVoltage(pidOutputShoulder);
         break;
     }
