@@ -16,14 +16,13 @@ import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
-import edu.wpi.first.wpilibj2.Constants;
-import frc.robot.utils.Constants;
+//import frc.robot.utils.Constants;
 
 public class ColorSensor{
     // defines color sensor
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
-    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-    private final ColorMatch m_colorMatcher = new ColorMatch();
+    private final static I2C.Port i2cPort = I2C.Port.kOnboard;
+    private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+    private final static ColorMatch m_colorMatcher = new ColorMatch();
 
     // adds colors from constants to array with all colors
     m_colorMatcher.addColorMatch(cone_color);
@@ -39,11 +38,11 @@ public class ColorSensor{
         //.matchClosestColor() caluclates the closest color from the listed colors in Color Matcher array
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-        if (match.color == cone_color) {
+        if (match.color == Constants.cone_color) {
             //If cone_color detected, it is cone
             Constants.Claw.Object = "Cone";
         }
-        else if (match.color == cube_color) {
+        else if (match.color == Constants.cube_color) {
             //If cube_color detected, it is  cube
             Constants.Claw.Object = "Cube";
         }
@@ -53,6 +52,6 @@ public class ColorSensor{
         }
 
         //return object detected (None, Cube, Cone)
-        return Object;
+        return Constants.Claw.Object;
     }
 }
