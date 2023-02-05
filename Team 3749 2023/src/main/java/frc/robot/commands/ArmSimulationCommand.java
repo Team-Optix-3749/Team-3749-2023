@@ -117,6 +117,7 @@ public ProfiledPIDController shoulderController = new ProfiledPIDController(Cons
           shoulderSetpoint = ShoulderSetpoints.STOWED.angle;
           break;
         }
+        
         // Here, we run PID control where the arm moves to the selected setpoint.
         pidOutputElbow = elbowController.calculate(armSim.elbowEncoder.getDistance(),
             Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
