@@ -4,7 +4,7 @@
 /***
  * @author Johnathan Liu
  * @author Aditya Samavedam
- * 
+ * @author Don Tran
  */
 package frc.robot;
 
@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmSimulationCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
@@ -21,21 +22,15 @@ import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
 public class RobotContainer {
+  private final Xbox pilot = new Xbox(0);
+  private final Xbox operator = new Xbox(1);
 
-  // Controllers
-  // private final Arm arm = new Arm();
-
-  // Replace with 
-  // private final MoveLowerUp MoveLowerUpCommand = new MoveLowerUp(arm);
-  // private final MoveLowerDown MoveLowerDownCommand = new MoveLowerDown(arm);
-  // private final MoveUpperUpDown MoveUpperUpDownCommand = new MoveUpperUpDown(arm);
-  
-  // private final POV pilotPOV = new POV(pilot);
-  // private final POV operatorPOV = new POV(operator);
-  XboxController xbox = new XboxController(0);
+  private final POV pilotPOV = new POV(pilot);
+  private final POV operatorPOV = new POV(operator);
 
   // Subsystems
   private final ArmSim armSim = new ArmSim();
+  private final Arm arm = new Arm();
 
   // Commands
 
@@ -44,16 +39,38 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-  private void configureDefaultCommands() {
-    armSim.setDefaultCommand(
-      new ArmSimulationCommand(armSim)
-    );
-  }
+  private void configureDefaultCommands() {}
 
-  private void configureButtonBindings()
-  {
-    // JoystickButton A = new JoystickButton(xbox, Button.kA.value);
-    // A.toggleOnTrue(new ArmSimulationCommand(armSim)); 
+  // set as whileTrue, what are we going to do about timing, how long do we let it run continuously
+  private void configureButtonBindings() { 
+    // set as if statements dk if this works, might want to make separate function for this
+    // TODO: need to implement enum (defaults are all zero for now)
+    if (pilot.rightBumper().getAsBoolean()){ // cone nodes and single sub station
+      if(pilot.x().getAsBoolean()){ // mid cone node
+        pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
+      } 
+
+      if(pilot.y().getAsBoolean()){ // high cone node
+        pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
+      }
+
+      if(pilot.a().getAsBoolean()){ // single sub
+        pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
+      }
+    }
+    if (pilot.leftBumper().getAsBoolean()){ // cube nodes and double sub station
+      if(pilot.x().getAsBoolean()){ // mid cube node
+        pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
+      } 
+
+      if(pilot.y().getAsBoolean()){ // high cube node
+        pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
+      }
+
+      if(pilot.a().getAsBoolean()){ // double sub
+        pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
+      }
+    }
   }
 
   public Command getAutonomousCommand() {
