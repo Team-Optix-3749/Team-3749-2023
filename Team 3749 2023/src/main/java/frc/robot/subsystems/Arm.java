@@ -57,7 +57,7 @@ public class Arm extends SubsystemBase {
         elbowEncoder.setPositionConversionFactor(250/2048*36);
     }
 
-    // Sets speed of a motor controller group
+    // Sets speed of a motors
     public void setSpeedElbow(double speed) {
         leftElbowMotor.set(speed);
     }
@@ -66,26 +66,14 @@ public class Arm extends SubsystemBase {
         leftShoulderMotor.set(speed);
     }
 
-    /* PID + feedforward implementation; should return the needed voltage, need to
-    // do feedforward
-    // desired posiiton and make sure position values are good for both
-    public void setForearmVoltage(double x, double y) {
-
-    // this sets voltage to degrees (not good)
-         pperMotorControllerGroup.setVoltage(
-                 forearmController.calculate(leftForearmEncoder.getPosition(),
-                         BruteInverseKinematics.calculate(x, y)[0]));
-    // taken from wpilib documentation: not too sure how this all works yet
+    // Sets voltage of motors
+    public void setElbowVoltage(double voltage) {
+        leftElbowMotor.setVoltage(voltage);
     }
-    */
 
-    // public void setBicepVoltage(double x, double y) {
-
-    //     // this sets voltage to degrees (not good)
-    //     lowerMotorControllerGroup.setVoltage(
-    //             bicepController.calculate(leftBicepEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
-    //     // index idk if we want to clean this up lmao
-    // }
+    public void setShoulderVoltage(double voltage) {
+        leftShoulderMotor.setVoltage(voltage);
+    }
 
     public void setDegreesShoulder(double x, double y) {
         // NEED PID TO CONTROL ACCURATELY
@@ -99,5 +87,21 @@ public class Arm extends SubsystemBase {
         // would work if the conversion factor was correctly set
         // need to change where it gets the calculated angle (x and y vals)
         // leftElbowEncoder.setPosition(elbowController.calculate(leftElbowEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
+    }
+
+    public ProfiledPIDController getElbowController() {
+        return elbowController;
+    }
+
+    public ProfiledPIDController getShoulderController() {
+        return shoulderController;
+    }
+
+    public RelativeEncoder getElbowEncoder() {
+        return elbowEncoder;
+    }
+
+    public RelativeEncoder getShoulderEncoder() {
+        return shoulderEncoder;
     }
 }
