@@ -22,11 +22,11 @@ import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
 public class RobotContainer {
-  private final Xbox pilot = new Xbox(0);
-  private final Xbox operator = new Xbox(1);
+  // private final Xbox pilot = new Xbox(0);
+  // private final Xbox operator = new Xbox(1);
 
-  private final POV pilotPOV = new POV(pilot);
-  private final POV operatorPOV = new POV(operator);
+  // private final POV pilotPOV = new POV(pilot);
+  // private final POV operatorPOV = new POV(operator);
 
   // Subsystems
   private final ArmSim armSim = new ArmSim();
@@ -45,32 +45,32 @@ public class RobotContainer {
   private void configureButtonBindings() { 
     // set as if statements dk if this works, might want to make separate function for this
     // TODO: need to implement enum (defaults are all zero for now)
-    if (pilot.rightBumper().getAsBoolean()){ // cone nodes and single sub station
-      if(pilot.x().getAsBoolean()){ // mid cone node
-        pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
-      } 
+    // if (pilot.rightBumper().getAsBoolean()){ // cone nodes and single sub station
+    //   if(pilot.x().getAsBoolean()){ // mid cone node
+    //     pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
+    //   } 
 
-      if(pilot.y().getAsBoolean()){ // high cone node
-        pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
-      }
+    //   if(pilot.y().getAsBoolean()){ // high cone node
+    //     pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
+    //   }
 
-      if(pilot.a().getAsBoolean()){ // single sub
-        pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
-      }
-    }
-    if (pilot.leftBumper().getAsBoolean()){ // cube nodes and double sub station
-      if(pilot.x().getAsBoolean()){ // mid cube node
-        pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
-      } 
+    //   if(pilot.a().getAsBoolean()){ // single sub
+    //     pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
+    //   }
+    // }
+    // if (pilot.leftBumper().getAsBoolean()){ // cube nodes and double sub station
+    //   if(pilot.x().getAsBoolean()){ // mid cube node
+    //     pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
+    //   } 
 
-      if(pilot.y().getAsBoolean()){ // high cube node
-        pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
-      }
+    //   if(pilot.y().getAsBoolean()){ // high cube node
+    //     pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
+    //   }
 
-      if(pilot.a().getAsBoolean()){ // double sub
-        pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
-      }
-    }
+    //   if(pilot.a().getAsBoolean()){ // double sub
+    //     pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
+    //   }
+    // }
   }
 
   public Command getAutonomousCommand() {
