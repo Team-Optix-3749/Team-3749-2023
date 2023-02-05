@@ -45,6 +45,7 @@ public final class Constants {
 
         public static final int number_of_motors = 2;
 
+        // pid constants (TODO: test optimal constants)
         public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", .10);
         public static SmartData<Double> elbowKI = new SmartData<Double>("Elbow kI", .05);
         public static SmartData<Double> elbowKD = new SmartData<Double>("Elbow kD", .05);

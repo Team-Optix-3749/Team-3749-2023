@@ -4,6 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -21,20 +23,24 @@ import frc.robot.utils.BruteInverseKinematics;
 public class Arm extends SubsystemBase {
     private CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
     private CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
+
     private CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
 
-    // Not sure of values for kp, ki, kd
-    // private final PIDController shoulderController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
-    //         Constants.Arm.kd);
-    // private final PIDController elbowController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
-    //         Constants.Arm.kd);
+    // Relative Encoder Initialization (relative for now)
+    // For simplicity, left encoder is designated as shoulder/elbow encoder for now
+    private final RelativeEncoder shoulderEncoder = leftShoulderMotor.getEncoder();
+    // private final RelativeEncoder rightShoulderEncoder = rightShoulderMotor.getEncoder();
 
-    // Relative Encoder Initialization
-    private final RelativeEncoder leftShoulderEncoder = leftShoulderMotor.getEncoder();
-    private final RelativeEncoder rightShoulderEncoder = rightShoulderMotor.getEncoder();
-    private final RelativeEncoder leftElbowEncoder = leftElbowMotor.getEncoder();
-    private final RelativeEncoder rightElbowEncoder = rightElbowMotor.getEncoder();
+    private final RelativeEncoder elbowEncoder = leftElbowMotor.getEncoder();
+    // private final RelativeEncoder rightElbowEncoder = rightElbowMotor.getEncoder();
+
+    // PIDs (to change on the fly in smartdashboard, might need to put this in the arm command)
+    // TODO: confirm max velocity/acceleration constraints
+    private ProfiledPIDController elbowController =  new ProfiledPIDController(Constants.Arm.elbowKP.get(), Constants.Arm.elbowKI.get(), Constants.Arm.elbowKD.get(),
+        new TrapezoidProfile.Constraints(2, 5));
+    private ProfiledPIDController shoulderController = new ProfiledPIDController(Constants.Arm.shoulderKP.get(), Constants.Arm.shoulderKI.get(), Constants.Arm.shoulderKD.get(),
+        new TrapezoidProfile.Constraints(2, 5));
 
     public Arm() {
         // invert right motors
@@ -46,8 +52,9 @@ public class Arm extends SubsystemBase {
         rightElbowMotor.follow(leftElbowMotor);
 
         // conversion factor is ((gear ratio)/(encoder resolution) * 360) degrees
-        leftShoulderEncoder.setPositionConversionFactor(250/2048*360);
-        leftElbowEncoder.setPositionConversionFactor(250/2048*36);
+        // NOTE: confirm if this is correct
+        shoulderEncoder.setPositionConversionFactor(250/2048*360);
+        elbowEncoder.setPositionConversionFactor(250/2048*36);
     }
 
     // Sets speed of a motor controller group

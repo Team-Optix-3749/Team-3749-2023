@@ -145,7 +145,7 @@ public class ArmSim extends SubsystemBase {
 		controlMode.setDefaultOption("Presets (Setpoints)", 0);
 		controlMode.addOption("Virtual Four Bar", 1);
 		controlMode.addOption("Manual Angle Adjust", 2);
-
+		
 		presetChooser.setDefaultOption("Starting Position", 0);
 		presetChooser.addOption("Floor Intake Position", 1);
 		presetChooser.addOption("Double Substation Intake", 2);
