@@ -126,6 +126,9 @@ public class SwerveModule {
         turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(),angleRad));
 
     }
+    public void logMagnetHealth(){
+        // absoluteEncoder
+    }
 
 
 }

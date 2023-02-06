@@ -65,13 +65,11 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem() {
         new Thread(() -> {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(3000);
                 zeroHeading();
             } catch (Exception e) {
             }
         }).start();
-
-        gyro.setAngleAdjustment(0);
     }
 
     public void zeroHeading() {
@@ -79,7 +77,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
+        // return Math.IEEEremainder(gyro.getAngle(), 360);
+        return gyro.getYaw();
     }
 
     public Rotation2d getRotation2d() {
