@@ -101,8 +101,10 @@ public class SwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
     }    
+
+   
     public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(getAbsoluteEncoderRad(), new Rotation2d(getAbsoluteEncoderRad()));
+        return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
     public void setDesiredState(SwerveModuleState state) {

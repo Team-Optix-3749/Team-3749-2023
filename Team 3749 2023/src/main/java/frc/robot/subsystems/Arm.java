@@ -18,8 +18,8 @@ public class Arm extends SubsystemBase {
         shoulderLeft = new CANSparkMax(16, MotorType.kBrushless);
         shoulderRight = new CANSparkMax(15, MotorType.kBrushless);
 
-        shoulderLeft.setIdleMode(IdleMode.kBrake);
-        shoulderRight.setIdleMode(IdleMode.kBrake);
+        shoulderLeft.setIdleMode(IdleMode.kCoast);
+        shoulderRight.setIdleMode(IdleMode.kCoast);
     }
 
     @Override

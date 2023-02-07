@@ -22,10 +22,10 @@ public class Constants {
         public static final double kWheelBase = Units.inchesToMeters(17.5);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
-                new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
+                new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // front right
+                new Translation2d(kWheelBase / 2, kTrackWidth / 2), // front left 
+                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // back right
+                new Translation2d(-kWheelBase / 2, kTrackWidth / 2)); // back left
 
         public static final int kFrontLeftDriveMotorPort = 1;
         public static final int kFrontRightDriveMotorPort = 3;
@@ -62,10 +62,10 @@ public class Constants {
         // public static final double kBackLeftDriveAbsoluteEncoderOffsetDeg = 0;
         // public static final double kBackRightDriveAbsoluteEncoderOffsetDeg = 0;
 
-        public static double kFrontLeftDriveAbsoluteEncoderOffsetDeg = 128.5;
-        public static double kFrontRightDriveAbsoluteEncoderOffsetDeg = 107;
-        public static double kBackLeftDriveAbsoluteEncoderOffsetDeg = 62;
-        public static double kBackRightDriveAbsoluteEncoderOffsetDeg = 170;
+        public static double kFrontLeftDriveAbsoluteEncoderOffsetDeg = 130.341796875;
+        public static double kFrontRightDriveAbsoluteEncoderOffsetDeg = 107.75390625;
+        public static double kBackLeftDriveAbsoluteEncoderOffsetDeg = 61.69921875;
+        public static double kBackRightDriveAbsoluteEncoderOffsetDeg = 168.75;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;

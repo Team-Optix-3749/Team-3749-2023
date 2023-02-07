@@ -70,6 +70,8 @@ public class SwerveSubsystem extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+
+        gyro.calibrate();
     }
 
     public void zeroHeading() {
@@ -90,15 +92,20 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        odometer.resetPosition(getRotation2d(), null, pose);
+        odometer.resetPosition(getRotation2d(),
+                new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
+                        backLeft.getPosition() },
+                pose);
     }
 
     @Override
     public void periodic() {
-        // odometer.update(getRotation2d(), null);
+        odometer.update(getRotation2d(),
+                new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
+                        backLeft.getPosition() });
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        // SmartDashboard.putString("Robot Location",
-        // getPose().getTranslation().toString());
+        SmartDashboard.putNumber("Robot Pose X", getPose().getX());
+        SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
 
         SmartDashboard.putNumber("frontLeft encoder", frontLeft.getAbsoluteEncoderRad());
         SmartDashboard.putNumber("frontRight encoder", frontRight.getAbsoluteEncoderRad());
@@ -129,6 +136,5 @@ public class SwerveSubsystem extends SubsystemBase {
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
-
 
 }
