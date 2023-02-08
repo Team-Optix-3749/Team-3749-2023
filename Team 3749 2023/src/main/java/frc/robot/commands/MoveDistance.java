@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class MoveDistance extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    SwerveSubsystem drivetrain;
+    SwerveSubsystem swerveSubsystem;
 
     double setpoint;
     double dist_traveled = 0;
@@ -42,21 +42,21 @@ public class MoveDistance extends CommandBase {
 
     /***
      * 
-     * @param drivetrain the subsystem
+     * @param swerveSubsystem the subsystem
      * @param dist       how far to to move in meters
      */
-    public MoveDistance(SwerveSubsystem drivetrain, double dist) {
-        this.drivetrain = drivetrain;
+    public MoveDistance(SwerveSubsystem swerveSubsystem, double dist) {
+        this.swerveSubsystem = swerveSubsystem;
         this.setpoint = dist;
         // start_point
-        addRequirements(drivetrain);
+        addRequirements(swerveSubsystem);
     }
 
     // Run on command init
     @Override
     public void initialize() {
-        drivetrain.stopModules();
-        start_point = drivetrain.getPose().getY();
+        swerveSubsystem.stopModules();
+        start_point = swerveSubsystem.getPose().getY();
     }
 
     // Run every 20 ms
@@ -64,9 +64,9 @@ public class MoveDistance extends CommandBase {
     public void execute() {
 
         // How inaccurate we are willing to be in reference to looking straight forward
-        if (Math.abs(drivetrain.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
+        if (Math.abs(swerveSubsystem.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
             // negative so that we move towards the target, not away
-            double turningSpeed = - turnController.calculate(Math.abs(drivetrain.getHeading()),0);
+            double turningSpeed = - turnController.calculate(Math.abs(swerveSubsystem.getHeading()),0);
             turningSpeed = turningLimiter.calculate(turningSpeed)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
@@ -75,26 +75,26 @@ public class MoveDistance extends CommandBase {
 
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turningSpeed, drivetrain.getRotation2d());
+                    0, 0, turningSpeed, swerveSubsystem.getRotation2d());
             // 5. Convert chassis speeds to individual module states
             SwerveModuleState[] moduleStates =Constants. DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
             // 6. Output each module states to wheels
-            drivetrain.setModuleStates(moduleStates);
+            swerveSubsystem.setModuleStates(moduleStates);
         } else {
 
             // where we are
-            double current_position = drivetrain.getPose().getY();
+            double current_position = swerveSubsystem.getPose().getY();
             // where we want to be
             // how fast to move
             double speed = driveController.calculate(current_position, start_point + setpoint);
             // and we move
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, speed, 0, drivetrain.getRotation2d());
+                    0, speed, 0, swerveSubsystem.getRotation2d());
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 
-            drivetrain.setModuleStates(moduleStates);
+            swerveSubsystem.setModuleStates(moduleStates);
         }
 
     }
@@ -102,7 +102,7 @@ public class MoveDistance extends CommandBase {
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        drivetrain.stopModules();
+        swerveSubsystem.stopModules();
 
     }
 
