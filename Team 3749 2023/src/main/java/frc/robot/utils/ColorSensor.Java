@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
-
-import frc.robot.subsystems.Claw;
 import frc.robot.utils.Constants;
 
 public class ColorSensor {
@@ -26,16 +24,13 @@ public class ColorSensor {
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     private final ColorMatch m_colorMatcher = new ColorMatch();
 
-    public Claw claw; //object
-
     public ColorSensor() {
-        // adds colors from constants to array with all colors
-        m_colorMatcher.addColorMatch(Constants.cone_color);
-        m_colorMatcher.addColorMatch(Constants.cube_color);
+    // adds colors from constants to array with all colors
+    m_colorMatcher.addColorMatch(constants.cone_color);
+    m_colorMatcher.addColorMatch(cube_color);
     }
-
     // Constants.Claw.Object is a String (see Constants.java)
-    // States object obtained (possible objects: "Cone", "Cube", None)
+    // States object obtained (possible objects: "Cone", "Cube", None) 
     // is in the claw (returned in "gamePiece" method)
     public static String gamePiece(){
         // .getColor gets RGB values at the current time (what the sensor sees)
@@ -44,29 +39,20 @@ public class ColorSensor {
         //.matchClosestColor() caluclates the closest color from the listed colors in Color Matcher array
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
         Smartdashboard.
-        if (match.color == Constants.cone_color) {
+        if (match.color == cone_color) {
             //If cone_color detected, it is cone
             Constants.Claw.Object = "Cone";
-            return Constants.Claw.Object;
         }
-        else if (match.color == Constants.cube_color) {
+        else if (match.color == cube_color) {
             //If cube_color detected, it is  cube
             Constants.Claw.Object = "Cube";
-            return Constants.Claw.Object;
         }
         else {
             //If color detected falls out of line of margin from .matchClosestColor(), then nothing is detected
             Constants.Claw.Object = "None";
-            return Constants.Claw.Object;
         }
-    }
 
-    public static Boolean autostop() {
-        if (gamePiece() == "None") {
-            return false;
-        } else {
-            return true;
-            claw.setSpeed(1.2);
-        }
+        //return object detected (None, Cube, Cone)
+        return Object;
     }
 }
