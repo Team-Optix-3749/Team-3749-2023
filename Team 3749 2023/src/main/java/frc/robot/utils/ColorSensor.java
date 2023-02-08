@@ -1,6 +1,8 @@
 
 package frc.robot.utils;
 
+import java.security.KeyStore.TrustedCertificateEntry;
+
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -21,17 +23,19 @@ import frc.robot.subsystems.Claw;
  *         Rearranged + Adapted code from RevRobotics Color Sensor Template Code
  */
 public class ColorSensor {
+
     // defines color sensor
     private final static I2C.Port i2cPort = I2C.Port.kOnboard;
     private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     private final static ColorMatch m_colorMatcher = new ColorMatch();
-    Claw claw;
+
+    Claw claw; //object
+
     public static String Game_Piece_Identifier;
 
     // adds colors from constants to array with all colors
     public ColorSensor() {
         m_colorMatcher.addColorMatch(Constants.cone_color);
-       // m_colorMatcher.addColorMatch(Constants.cube_color);
     }
 
     /**
@@ -73,9 +77,9 @@ public class ColorSensor {
 
     public static Boolean autostop() {
         if (gamePiece() == "None") {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
