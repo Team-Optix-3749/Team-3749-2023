@@ -36,8 +36,8 @@ public class MoveDistance extends CommandBase {
     double dist_traveled = 0;
     double start_point;
 
-    PIDController driveController = new PIDController(0.5, 0, 0);
-    PIDController turnController = new PIDController(0.005, 0.0001, 0);
+    PIDController driveController = new PIDController(1.4, 0, 0.01);
+    PIDController turnController = new PIDController(0.005, 0.001, 0);
     private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.01,0);
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
@@ -74,7 +74,7 @@ public class MoveDistance extends CommandBase {
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
             // remove the negative if it turns the wrong direction around
-            turning_speed = Math.abs(turning_speed) * -Math.signum(swerveSubsystem.getHeading());
+            turning_speed = Math.abs(turning_speed) * Math.signum(swerveSubsystem.getHeading());
 
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
