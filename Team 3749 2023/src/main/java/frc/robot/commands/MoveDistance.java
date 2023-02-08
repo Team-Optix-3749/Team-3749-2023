@@ -36,7 +36,8 @@ public class MoveDistance extends CommandBase {
     double start_point;
 
     PIDController driveController = new PIDController(0.5, 0, 0);
-    PIDController turnController = new PIDController(0.5, 0, 0);
+    PIDController turnController = new PIDController(0.005, 0, 0);
+    
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
 
@@ -55,8 +56,9 @@ public class MoveDistance extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
+        System.out.println("Initalize BABBYYYYYYYYYYYYYY");
         swerveSubsystem.stopModules();
-        start_point = swerveSubsystem.getPose().getY();
+        start_point = swerveSubsystem.getPose().getX();
     }
 
     // Run every 20 ms
@@ -84,13 +86,13 @@ public class MoveDistance extends CommandBase {
         } else {
 
             // where we are
-            double current_position = swerveSubsystem.getPose().getY();
+            double current_position = swerveSubsystem.getPose().getX();
             // where we want to be
             // how fast to move
             double speed = driveController.calculate(current_position, start_point + setpoint);
             // and we move
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, speed, 0, swerveSubsystem.getRotation2d());
+                    speed, 0, 0, swerveSubsystem.getRotation2d());
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 
