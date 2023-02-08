@@ -15,9 +15,11 @@ import frc.robot.utils.Constants;
  * @author Anusha Khobare
  * @author Ryan R McWeeny
  * 
- *     ColorSensor.java is color sensor code to differniate between the yellow cone and purple cube gamepieces.
- *     Note that this ultility is currently unused in claw code. But is ready for possible future use (use the gamePiece Function).
- *     Rearranged + Adapted code from RevRobotics Color Sensor Template Code
+ *         ColorSensor.java is color sensor code to differniate between the
+ *         yellow cone and purple cube gamepieces.
+ *         Note that this ultility is currently unused in claw code. But is
+ *         ready for possible future use (use the gamePiece Function).
+ *         Rearranged + Adapted code from RevRobotics Color Sensor Template Code
  */
 public class ColorSensor {
     // defines color sensor
@@ -25,7 +27,7 @@ public class ColorSensor {
     private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     private final static ColorMatch m_colorMatcher = new ColorMatch();
 
-    public Claw claw; //object
+    Claw claw;
 
     public ColorSensor() {
         // adds colors from constants to array with all colors
@@ -35,40 +37,43 @@ public class ColorSensor {
 
     /**
      * uses the color sensor and finds what object is in the claw currently
-     * this is done by matching the object's detected color to a color stored in Constants.java
+     * this is done by matching the object's detected color to a color stored in
+     * Constants.java
      * returns the game piece that it thinks is in the claw
+     * 
      * @return
      */
-    public static String gamePiece(){
+    public static String gamePiece() {
         // .getColor gets RGB values at the current time (what the sensor sees)
         Color detectedColor = m_colorSensor.getColor();
-        
-        //.matchClosestColor() caluclates the closest color from the listed colors in Color Matcher array
+
+        // .matchClosestColor() caluclates the closest color from the listed colors in
+        // Color Matcher array
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-        
+
         if (match.color == Constants.cone_color) {
-            //If cone_color detected, it is cone
+            // If cone_color detected, it is cone
             Constants.Claw.Object = "Cone";
             return Constants.Claw.Object;
-        }
-        else if (match.color == Constants.cube_color) {
-            //If cube_color detected, it is  cube
+        } else if (match.color == Constants.cube_color) {
+            // If cube_color detected, it is cube
             Constants.Claw.Object = "Cube";
             return Constants.Claw.Object;
-        }
-        else {
-            //If color detected falls out of line of margin from .matchClosestColor(), then nothing is detected
+        } else {
+            // If color detected falls out of line of margin from .matchClosestColor(), then
+            // nothing is detected
             Constants.Claw.Object = "None";
             return Constants.Claw.Object;
         }
+
     }
 
-    public static Boolean autostop() {
+    public Boolean autostop() {
         if (gamePiece() == "None") {
+            claw.setSpeed(0.2);
             return false;
         } else {
             return true;
-            claw.setSpeed(1.2);
         }
     }
 }
