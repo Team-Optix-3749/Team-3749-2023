@@ -11,6 +11,7 @@ import frc.robot.commands.AutoCommands;
 import java.lang.ModuleLayer.Controller;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -36,8 +37,8 @@ public class MoveDistance extends CommandBase {
     double start_point;
 
     PIDController driveController = new PIDController(0.5, 0, 0);
-    PIDController turnController = new PIDController(0.005, 0, 0);
-    
+    PIDController turnController = new PIDController(0.005, 0.0001, 0);
+    private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.01,0);
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
 
@@ -68,23 +69,26 @@ public class MoveDistance extends CommandBase {
         // How inaccurate we are willing to be in reference to looking straight forward
         if (Math.abs(swerveSubsystem.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
             // negative so that we move towards the target, not away
-            double turningSpeed = - turnController.calculate(Math.abs(swerveSubsystem.getHeading()),0);
-            turningSpeed = turningLimiter.calculate(turningSpeed)
+            double turning_speed =  turnController.calculate(Math.abs(swerveSubsystem.getHeading()),0);
+            turning_speed = turningLimiter.calculate(turning_speed)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+
+            // remove the negative if it turns the wrong direction around
+            turning_speed = Math.abs(turning_speed) * -Math.signum(swerveSubsystem.getHeading());
 
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
 
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turningSpeed, swerveSubsystem.getRotation2d());
+                    0, 0, turning_speed, swerveSubsystem.getRotation2d());
             // 5. Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates =Constants. DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+            SwerveModuleState[] moduleStates =Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
             // 6. Output each module states to wheels
             swerveSubsystem.setModuleStates(moduleStates);
         } else {
-
+            // X is vertical!
             // where we are
             double current_position = swerveSubsystem.getPose().getX();
             // where we want to be

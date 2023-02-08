@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -29,7 +30,6 @@ public class SwerveModule {
     private final RelativeEncoder turningEncoder;
 
     private final PIDController turningPidController;
-
     private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
@@ -113,8 +113,12 @@ public class SwerveModule {
             return;
         }
         state = SwerveModuleState.optimize(state, getState().angle);
-        driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
+        double drive_speed = state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+
+        double turning_speed = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians());
+
+        driveMotor.set(drive_speed);
+        turningMotor.set(turning_speed);
         SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] State", state.toString());
     }
 

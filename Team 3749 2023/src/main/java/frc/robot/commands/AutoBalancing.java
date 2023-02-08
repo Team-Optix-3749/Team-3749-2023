@@ -132,9 +132,7 @@ public class AutoBalancing extends CommandBase {
 
         }
         // reapplies the sign of the angle to offset the absolute value
-        if (angle < 0) {
-            dist *= -1;
-        }
+        dist = dist * Math.signum(angle);
         return dist;
     }
 }
