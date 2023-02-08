@@ -23,16 +23,16 @@ public class ColorSensor {
     // defines color sensor
     private final static I2C.Port i2cPort = I2C.Port.kOnboard;
     private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-    private final static ColorMatch m_colorMatcher = new ColorMatch();
+    private final static ColorMatch m_color_matcher_cone = new ColorMatch();
+    private final static ColorMatch m_color_matcher_cube = new ColorMatch(); 
 
     Claw claw;
 
     public ColorSensor() {
         // adds colors from constants to array with all colors
-        m_colorMatcher.addColorMatch(Constants.cone_color);
-        m_colorMatcher.addColorMatch(Constants.cube_color);
+        m_color_matcher_cone.addColorMatch(Constants.cone_color);
+        m_color_matcher_cube.addColorMatch(Constants.cube_color);
     }
-
     /**
      * uses the color sensor and finds what object is in the claw currently
      * this is done by matching the object's detected color to a color stored in
@@ -47,13 +47,14 @@ public class ColorSensor {
 
         // .matchClosestColor() caluclates the closest color from the listed colors in
         // Color Matcher array
-        ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+        ColorMatchResult matchcone = m_color_matcher_cone.matchClosestColor(detectedColor);
+        ColorMatchResult matchcube = m_color_matcher_cube.matchClosestColor(detectedColor);
 
-        if (match.color == Constants.cone_color) {
+        if (matchcone.color == Constants.cone_color) {
             // If cone_color detected, it is cone
             Constants.Claw.Object = "Cone";
             return Constants.Claw.Object;
-        } else if (match.color == Constants.cube_color) {
+        } else if (matchcube.color == Constants.cube_color) {
             // If cube_color detected, it is cube
             Constants.Claw.Object = "Cube";
             return Constants.Claw.Object;
@@ -63,7 +64,6 @@ public class ColorSensor {
             Constants.Claw.Object = "None";
             return Constants.Claw.Object;
         }
-
     }
 
     public Boolean autostop() {
