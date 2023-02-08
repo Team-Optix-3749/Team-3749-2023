@@ -39,7 +39,7 @@ public class ColorSensor {
      * Constants.java
      * returns the game piece that it thinks is in the claw
      * 
-     * @return
+     * @return the fact that it is a cone cu
      */
     public static String gamePiece() {
         // .getColor gets RGB values at the current time (what the sensor sees)
