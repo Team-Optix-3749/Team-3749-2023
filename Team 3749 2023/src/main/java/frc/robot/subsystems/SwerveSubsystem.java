@@ -107,6 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Robot Pose X", getPose().getX());
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
 
+
         SmartDashboard.putNumber("frontLeft encoder", frontLeft.getAbsoluteEncoderRad());
         SmartDashboard.putNumber("frontRight encoder", frontRight.getAbsoluteEncoderRad());
         SmartDashboard.putNumber("backLeft encoder", backLeft.getAbsoluteEncoderRad());
