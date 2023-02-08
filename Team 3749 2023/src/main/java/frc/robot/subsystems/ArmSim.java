@@ -91,7 +91,7 @@ public class ArmSim extends SubsystemBase {
 	private final MechanismRoot2d gridHome = mech2d.getRoot("Grid Home", 49.75, 0);
 	private final MechanismLigament2d gridNode = gridHome
 			.append(new MechanismLigament2d("grid wall", 49.75, 180, 50, new Color8Bit(Color.kWhite)));
-	private final MechanismRoot2d dsHome = mech2d.getRoot("Double Substation Home", 49.75, 37);	w
+	private final MechanismRoot2d dsHome = mech2d.getRoot("Double Substation Home", 49.75, 37);
 	private final MechanismLigament2d dsRamp = dsHome
 			.append(new MechanismLigament2d("double substation ramp", 13.75, 180, 10, new Color8Bit(Color.kWhite)));
 	private final MechanismRoot2d armRoot = mech2d.getRoot("arm root", 65, 21.75);
