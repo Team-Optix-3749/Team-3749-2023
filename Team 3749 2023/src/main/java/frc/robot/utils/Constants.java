@@ -31,8 +31,8 @@ public final class Constants {
         public static final int left_elbow_id = 17;
         public static final int right_elbow_id = 18;
 
-        public static final double shoulder_reduction = 200;
-        public static final double elbow_reduction = 250;
+        public static final double shoulder_reduction = 250;
+        public static final double elbow_reduction = 200;
         
         // inches
         public static final double bicep_length = 25; // hypotenuse
@@ -45,16 +45,15 @@ public final class Constants {
 
         public static final int number_of_motors = 2;
 
-        public static final double kp = 0.5;
+        // pid constants (TODO: test optimal constants)
+        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", .10);
+        public static SmartData<Double> elbowKI = new SmartData<Double>("Elbow kI", .05);
+        public static SmartData<Double> elbowKD = new SmartData<Double>("Elbow kD", .05);
 
-        public static SmartData<Double> elbowSetpoint = new SmartData<Double>("Elbow Setpoint", -90.0);
-        public static SmartData<Double> shoulderSetpoint = new SmartData<Double>("Shoulder Setpoint", -90.0);
-
-        // Note: ki must be set to 0 to avoid integral windup, feedforward will be used
-        // to account for the error instead
-        public static final double ki = 0;
-        public static final double kd = 0;
-
+        public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", .5);
+        public static SmartData<Double> shoulderKI = new SmartData<Double>("Shoulder kI", .05);
+        public static SmartData<Double> shoulderKD = new SmartData<Double>("Shoulder kD", .05
+        );
 
         public static final double shoulder_min_angle = 30;
         public static final double shoulder_max_angle = 150;
