@@ -14,7 +14,7 @@ public class ClawAuto extends SubsystemBase {
     public void generateTrajectory() {
   
       // 2018 cross scale auto waypoints.
-      var sideStart = new Pose2d(Units.feetToMeters(1.54), Units.feetToMeters(23.23),
+      var sideStart = new Pose2d(6,7,
           Rotation2d.fromDegrees(-180));
       var crossScale = new Pose2d(Units.feetToMeters(23.7), Units.feetToMeters(6.8),
           Rotation2d.fromDegrees(-160));
