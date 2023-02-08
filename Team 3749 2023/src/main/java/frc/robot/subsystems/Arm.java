@@ -1,96 +1,107 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.REVPhysicsSim;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.utils.ArmSim;
 import frc.robot.utils.Constants;
-import frc.robot.utils.BruteInverseKinematics;
-
-/**
- * @author Bailey Say
- * @author Raymond Sheng
- * @author Don Tran
- * 
- * Code for the arm of the robot. This does not include the claw at the end
- * 
- */
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
-    private CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
-    private CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
-    private CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-    private CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
 
-    // Not sure of values for kp, ki, kd
-    // private final PIDController shoulderController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
-    //         Constants.Arm.kd);
-    // private final PIDController elbowController = new PIDController(Constants.Arm.kp, Constants.Arm.ki,
-    //         Constants.Arm.kd);
+	private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
+	private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
+	private final AbsoluteEncoder elbowAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
-    // Relative Encoder Initialization
-    private final RelativeEncoder leftShoulderEncoder = leftShoulderMotor.getEncoder();
-    private final RelativeEncoder rightShoulderEncoder = rightShoulderMotor.getEncoder();
-    private final RelativeEncoder leftElbowEncoder = leftElbowMotor.getEncoder();
-    private final RelativeEncoder rightElbowEncoder = rightElbowMotor.getEncoder();
+	private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
+	private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
+	private final AbsoluteEncoder shoulderAbsoluteEncoder = leftShoulderMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
-    public Arm() {
-        // invert right motors
-        rightElbowMotor.setInverted(true);
-        rightShoulderMotor.setInverted(true);
+	// This arm sim represents an arm that can travel from -75 degrees (rotated down
+	// front)
+	// to 255 degrees (rotated down in the back).
 
-        // right motors are follower motors for left motors
-        rightShoulderMotor.follow(leftShoulderMotor);
-        rightElbowMotor.follow(leftElbowMotor);
+	public Arm() {
+		rightElbowMotor.follow(leftElbowMotor);
+		rightShoulderMotor.follow(leftShoulderMotor);
 
-        // conversion factor is ((gear ratio)/(encoder resolution) * 360) degrees
-        leftShoulderEncoder.setPositionConversionFactor(250/2048*360);
-        leftElbowEncoder.setPositionConversionFactor(250/2048*36);
-    }
+		rightElbowMotor.setInverted(true);
+		rightShoulderMotor.setInverted(true);
 
-    // Sets speed of a motor controller group
-    public void setSpeedElbow(double speed) {
-        leftElbowMotor.set(speed);
-    }
+		SmartDashboard.putNumber("Setpoint top (degrees)", 90);
+		SmartDashboard.putNumber("Setpoint bottom (degrees)", 90);
 
-    public void setSpeedShoulder(double speed) {
-        leftShoulderMotor.set(speed);
-    }
+		Constants.Arm.controlMode.setDefaultOption("Joystick Control", 0);
+		Constants.Arm.controlMode.addOption("Presets", 1);
+		SmartDashboard.putData(Constants.Arm.controlMode);
 
-    /* PID + feedforward implementation; should return the needed voltage, need to
-    // do feedforward
-    // desired posiiton and make sure position values are good for both
-    public void setForearmVoltage(double x, double y) {
+		ArmSim.elbowEncoder.setDistancePerPulse(Constants.Arm.sim_encoder_dist_per_pulse);
+		ArmSim.shoulderEncoder.setDistancePerPulse(Constants.Arm.sim_encoder_dist_per_pulse);
 
-    // this sets voltage to degrees (not good)
-         pperMotorControllerGroup.setVoltage(
-                 forearmController.calculate(leftForearmEncoder.getPosition(),
-                         BruteInverseKinematics.calculate(x, y)[0]));
-    // taken from wpilib documentation: not too sure how this all works yet
-    }
-    */
+    ArmSim.presetChooser.setDefaultOption("Starting Position", 0);
+    ArmSim.presetChooser.addOption("Floor Intake Position", 1);
+    ArmSim.presetChooser.addOption("High Node Score", 5);
+    SmartDashboard.putData(ArmSim.presetChooser);
+    // Put Mechanism 2d to SmartDashboard
+    SmartDashboard.putData("Arm Sim", ArmSim.mech2d);
+	}
+	
+	public void setElbowVoltage(double voltage) {
+		leftElbowMotor.setVoltage(voltage);
+	}
 
-    // public void setBicepVoltage(double x, double y) {
+	public void setElbowPosition(double position) {
 
-    //     // this sets voltage to degrees (not good)
-    //     lowerMotorControllerGroup.setVoltage(
-    //             bicepController.calculate(leftBicepEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
-    //     // index idk if we want to clean this up lmao
-    // }
+	}
 
-    public void setDegreesShoulder(double x, double y) {
-        // NEED PID TO CONTROL ACCURATELY
-        // would work if the conversion factor was correctly set
-        // need to change where it gets the calculated angle (x and y vals)
-        // leftShoulderEncoder.setPosition(shoulderController.calculate(leftShoulderEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
-    }
+	public void setShoulderPosition(double position) {
+	}
 
-    public void setDegreesElbow(double x, double y) {
-        // NEED PID TO CONTROL ACCURATELY
-        // would work if the conversion factor was correctly set
-        // need to change where it gets the calculated angle (x and y vals)
-        // leftElbowEncoder.setPosition(elbowController.calculate(leftElbowEncoder.getPosition(), BruteInverseKinematics.calculate(x, y)[1]));
-    }
+	public void setShoulderVoltage(double voltage) {
+		leftShoulderMotor.setVoltage(voltage);
+	}
+
+	public double getElbowPosition() {
+		return elbowAbsoluteEncoder.getPosition();
+	}
+
+	public double getShoulderPosition() {
+		return shoulderAbsoluteEncoder.getPosition();
+	}
+
+	@Override
+	public void simulationPeriodic() {
+		REVPhysicsSim.getInstance().run();
+
+		// In this method, we update our simulation of what our arm is doing
+		// First, we set our "inputs" (voltages)
+		ArmSim.elbowSim.setInput(leftElbowMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+		ArmSim.shoulderSim.setInput(leftShoulderMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+		// Next, we update it. The standard loop time is 20ms.
+		ArmSim.elbowSim.update(0.020);
+		ArmSim.shoulderSim.update(0.020);
+
+		// Finally, we set our simulated encoder's readings and simulated battery
+		// voltage
+		ArmSim.elbowEncoderSim.setDistance(ArmSim.elbowSim.getAngleRads());
+		ArmSim.shoulderEncoderSim.setDistance(ArmSim.shoulderSim.getAngleRads());
+		
+		// SimBattery estimates loaded battery voltages
+		RoboRioSim.setVInVoltage(
+				BatterySim.calculateDefaultBatteryLoadedVoltage(
+						ArmSim.elbowSim.getCurrentDrawAmps() + ArmSim.shoulderSim.getCurrentDrawAmps()));
+
+		// Update the Mechanism Arm angle based on the simulated arm angle
+		ArmSim.forearm.setAngle(Units.radiansToDegrees(ArmSim.elbowSim.getAngleRads()));
+		ArmSim.bicep.setAngle(Units.radiansToDegrees(ArmSim.shoulderSim.getAngleRads()));
+	}
+
 }

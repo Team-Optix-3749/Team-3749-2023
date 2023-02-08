@@ -91,6 +91,9 @@
     "transitory": {
       "SmartDashboard": {
         "Arm Sim": {
+          "Arm Pivot": {
+            "open": true
+          },
           "ArmPivot": {
             "Arm Bottom": {
               "Arm Top": {
@@ -102,7 +105,8 @@
               "open": true
             },
             "open": true
-          }
+          },
+          "open": true
         },
         "open": true
       }

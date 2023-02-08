@@ -8,13 +8,14 @@
  */
 package frc.robot;
 
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.ArmSimulationCommand;
+import frc.robot.commands.ArmTeleopCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.POV;
@@ -32,10 +33,11 @@ public class RobotContainer {
   
   // private final POV pilotPOV = new POV(pilot);
   // private final POV operatorPOV = new POV(operator);
-  XboxController xbox = new XboxController(0);
+  private final Xbox pilot = new Xbox(0);
+  private final Xbox operator = new Xbox(1);
 
   // Subsystems
-  private final ArmSim armSim = new ArmSim();
+  private final Arm armSim = new Arm();
 
   // Commands
 
@@ -46,7 +48,7 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     armSim.setDefaultCommand(
-      new ArmSimulationCommand(armSim)
+      new ArmTeleopCommand(armSim, pilot)
     );
   }
 

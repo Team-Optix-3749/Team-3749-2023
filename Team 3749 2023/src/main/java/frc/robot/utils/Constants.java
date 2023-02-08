@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 /***
  * Stores constant variables within subclasses for different subsystems.
  * Such constant values can include motor IDs, motor speed, PID
@@ -26,6 +28,9 @@ public final class Constants {
     }
 
     public static final class Arm {
+
+        public static final SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
+
         public static final int left_shoulder_id = 15;
         public static final int right_shoulder_id = 16;
         public static final int left_elbow_id = 17;
@@ -36,7 +41,7 @@ public final class Constants {
         
         // inches
         public static final double bicep_length = 25; // hypotenuse
-        public static final double forearm_length = 26;
+        public static final double forearm_length = 30;
         public static final double claw_length = 13;
         
         // kilograms
@@ -45,14 +50,15 @@ public final class Constants {
 
         public static final int number_of_motors = 2;
 
-        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", .10);
-        public static SmartData<Double> elbowKI = new SmartData<Double>("Elbow kI", .05);
-        public static SmartData<Double> elbowKD = new SmartData<Double>("Elbow kD", .05);
+        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 1.0);
+        public static SmartData<Double> elbowKI = new SmartData<Double>("Elbow kI", 0.0);
+        public static SmartData<Double> elbowKD = new SmartData<Double>("Elbow kD", 0.0);
 
         public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", .5);
-        public static SmartData<Double> shoulderKI = new SmartData<Double>("Shoulder kI", .05);
-        public static SmartData<Double> shoulderKD = new SmartData<Double>("Shoulder kD", .05
-        );
+        public static SmartData<Double> shoulderKI = new SmartData<Double>("Shoulder kI", .0);
+        public static SmartData<Double> shoulderKD = new SmartData<Double>("Shoulder kD", .0);
+
+        public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
 
         public static final double shoulder_min_angle = 30;
         public static final double shoulder_max_angle = 150;
