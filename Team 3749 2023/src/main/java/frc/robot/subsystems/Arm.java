@@ -47,7 +47,7 @@ public class Arm extends SubsystemBase {
 
         // conversion factor is ((gear ratio)/(encoder resolution) * 360) degrees
         leftShoulderEncoder.setPositionConversionFactor(250/2048*360);
-        leftElbowEncoder.setPositionConversionFactor(250/2048*36);
+        leftElbowEncoder.setPositionConversionFactor(250/2048*360);
     }
 
     // Sets speed of a motor controller group
