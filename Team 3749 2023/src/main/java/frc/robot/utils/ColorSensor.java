@@ -1,6 +1,5 @@
 package frc.robot.utils;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -9,7 +8,6 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 
 import frc.robot.subsystems.Claw;
-import frc.robot.utils.Constants;
 
 /***
  * @author Anusha Khobare
