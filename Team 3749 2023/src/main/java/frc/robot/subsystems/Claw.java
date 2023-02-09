@@ -16,7 +16,7 @@ import frc.robot.utils.Constants;
  * @author Aashray Reddy
  * @author Ryan R McWeeny
  * @author Hanlun Li
- * @author Zaddy Harkirat
+ * @author Harkirat Hattar
  * 
  *     Claw.java creates objects, dependencies, and motor controller groups to allow us to set the speed of each motor for intake and outtake    
  */
