@@ -11,12 +11,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClawAuto extends SubsystemBase {
-    public void generateTrajectory() {
+    public void getcoords() {
   
       // 2018 cross scale auto waypoints.
       var sideStart = new Pose2d(6,7,
           Rotation2d.fromDegrees(-180));
-      var crossScale = new Pose2d(Units.feetToMeters(23.7), Units.feetToMeters(6.8),
+      var crossScale = new Pose2d(, Units.feetToMeters(6.8),
           Rotation2d.fromDegrees(-160));
   
       var interiorWaypoints = new ArrayList<Translation2d>();
