@@ -9,9 +9,15 @@ import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
- * @author Rohin Sood
+ * @author Harkirat Hattar
+ * @author Aashray Reddy
+ * Command for the auto function of the claw  
  * 
- *         Serves as a template to format commands
+ * 
+ * 
+ * 
+ * 
+ * extra space wow look here rohin does this anger you?
  */
 public class ClawAutoCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -20,8 +26,8 @@ public class ClawAutoCommand extends CommandBase {
 
     // Initializes the ClawAutoCommand
     public ClawAutoCommand(Claw Claw) {
-        this.claw = Claw;
-        addRequirements(Claw);
+      this.claw = Claw;
+      addRequirements(Claw);
     }
 
     // Run on command init
@@ -32,12 +38,14 @@ public class ClawAutoCommand extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-        base.set(Constants.Base.speed.get().doubleValue());
+      // uses PID to calculate the velocity needed to acheive an exact speed
+      claw.setSpeed(-Constants.Claw.setpoint_velocity);
     }
 
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
+      //claw.setSpeed(Constants.Claw.stop); //set speed to 0 (stop)
     }
 
     // Returns true when the command should end
