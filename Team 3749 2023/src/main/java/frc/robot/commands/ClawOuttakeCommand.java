@@ -1,5 +1,4 @@
 
-
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
@@ -12,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Ryan R McWeeny
  * @author Hanlun Li
  * 
- *     ClawOuttake.Java is a comand that runs the claw motors forward causing it to output objects (dependent on Claw.java and Contstants.java)
+ *         ClawOuttake.Java is a comand that runs the claw motors forward
+ *         causing it to output objects (dependent on Claw.java and
+ *         Contstants.java)
  */
 public class ClawOuttakeCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })

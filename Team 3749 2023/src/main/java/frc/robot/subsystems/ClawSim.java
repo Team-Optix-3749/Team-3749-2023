@@ -18,7 +18,7 @@ import frc.robot.utils.Constants;
  * @author Ryan R McWeeny
  * @author Hanlun Li
  * 
- *     Simulation code subsystem code
+ *         Simulation code subsystem code
  */
 public class ClawSim extends SubsystemBase {
     // Creates a PIDController with gains kP, kI, and kD
@@ -59,9 +59,8 @@ public class ClawSim extends SubsystemBase {
     @Override
     public void periodic() {
         /*
-         * Calculates the output of the PID algorithm based on the sensor reading
-         * sends it to a motor
-         * uses calculate()
+         * Calculates the output of the PID algorithm based on the sensor reading sends
+         * it to a motor uses calculate()
          */
         right_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint_velocity));
         left_motor.set(claw_PID.calculate(claw_encoder.getPosition(), Constants.Claw.setpoint_velocity));

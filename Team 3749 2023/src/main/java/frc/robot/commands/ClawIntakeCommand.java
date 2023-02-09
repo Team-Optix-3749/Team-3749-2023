@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Ryan R McWeeny
  * @author Hanlun Li
  * 
- *     ClawOuttake.Java is a comand that runs the claw motors backwards causing it to intake objects (dependent on Claw.Java and Constants.java)
+ *         ClawOuttake.Java is a comand that runs the claw motors backwards
+ *         causing it to intake objects (dependent on Claw.Java and
+ *         Constants.java)
  */
 public class ClawIntakeCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -33,7 +35,7 @@ public class ClawIntakeCommand extends CommandBase {
     public void execute() {
         // uses PID to calculate the velocity needed to acheive an exact speed
         claw.setSpeed(-Constants.Claw.setpoint_velocity);
-        
+
     }
 
     // Run on command finish

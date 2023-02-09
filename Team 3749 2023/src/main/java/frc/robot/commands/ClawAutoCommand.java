@@ -10,8 +10,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Harkirat Hattar
- * @author Aashray Reddy
- *         Command for the auto function of the claw
+ * @author Aashray Reddy 
+ * 
+ * Command for the auto function of the claw
  * 
  * 
  * 
@@ -38,8 +39,13 @@ public class ClawAutoCommand extends CommandBase {
   // Run every 20 ms
   @Override
   public void execute() {
-    // uses PID to calculate the velocity needed to acheive an exact speed
-    claw.setSpeed(-Constants.Claw.setpoint_velocity);
+    if (ClawAuto.getcoords() = true) {
+      // uses PID to calculate the velocity needed to acheive an exact speed
+      claw.setSpeed(-Constants.Claw.setpoint_velocity);
+    }
+    else() {
+      claw.setSpeed(Constants.Claw.stop); //set speed to 0 (stop)
+    }
   }
 
   // Run on command finish
