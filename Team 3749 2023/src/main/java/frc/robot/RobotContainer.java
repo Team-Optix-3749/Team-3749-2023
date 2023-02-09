@@ -34,6 +34,7 @@ public class RobotContainer {
   private final MoveDistance moveDistance = new MoveDistance(swerveSubsystem, Units.feetToMeters(5));
 
   public RobotContainer() {
+    setupAuto();
     configureButtonBindings();
     configureDefaultCommands();
 
