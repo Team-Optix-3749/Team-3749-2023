@@ -14,17 +14,17 @@ import frc.robot.subsystems.Claw;
  * @author Ryan R McWeeny
  * 
  *         ColorSensor.java is color sensor code to differniate between the
- *         yellow cone and purple cube gamepieces.
- *         Note that this ultility is currently unused in claw code. But is
- *         ready for possible future use (use the gamePiece Function).
- *         Rearranged + Adapted code from RevRobotics Color Sensor Template Code
+ *         yellow cone and purple cube gamepieces. Note that this ultility is
+ *         currently unused in claw code. But is ready for possible future use
+ *         (use the gamePiece Function). Rearranged + Adapted code from
+ *         RevRobotics Color Sensor Template Code
  */
 public class ColorSensor {
     // defines color sensor
     private final static I2C.Port i2cPort = I2C.Port.kOnboard;
     private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     private final static ColorMatch m_color_matcher_cone = new ColorMatch();
-    private final static ColorMatch m_color_matcher_cube = new ColorMatch(); 
+    private final static ColorMatch m_color_matcher_cube = new ColorMatch();
 
     Claw claw;
 
@@ -33,11 +33,11 @@ public class ColorSensor {
         m_color_matcher_cone.addColorMatch(Constants.cone_color);
         m_color_matcher_cube.addColorMatch(Constants.cube_color);
     }
+
     /**
-     * uses the color sensor and finds what object is in the claw currently
-     * this is done by matching the object's detected color to a color stored in
-     * Constants.java
-     * returns the game piece that it thinks is in the claw
+     * uses the color sensor and finds what object is in the claw currently this is
+     * done by matching the object's detected color to a color stored in
+     * Constants.java returns the game piece that it thinks is in the claw
      * 
      * @return the fact that it is a cone cu
      */
@@ -54,11 +54,13 @@ public class ColorSensor {
             // If cone_color detected, it is cone
             Constants.Claw.Object = "Cone";
             return Constants.Claw.Object;
-        } else if (matchcube.color == Constants.cube_color) {
+        }
+        else if (matchcube.color == Constants.cube_color) {
             // If cube_color detected, it is cube
             Constants.Claw.Object = "Cube";
             return Constants.Claw.Object;
-        } else {
+        }
+        else {
             // If color detected falls out of line of margin from .matchClosestColor(), then
             // nothing is detected
             Constants.Claw.Object = "None";
@@ -70,7 +72,8 @@ public class ColorSensor {
         if (gamePiece() == "None") {
             claw.setSpeed(0.2);
             return false;
-        } else {
+        }
+        else {
             return true;
         }
     }

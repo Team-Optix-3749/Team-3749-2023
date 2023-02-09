@@ -40,7 +40,7 @@ public class ClawAutoCommand extends CommandBase {
   // Run every 20 ms
   @Override
   public void execute() {
-    if (ColorSensor.autostop() = true) {
+    if (ColorSensor.autostop() == true) {
       // uses PID to calculate the velocity needed to acheive an exact speed
       claw.setSpeed(-Constants.Claw.setpoint_velocity);
     }
