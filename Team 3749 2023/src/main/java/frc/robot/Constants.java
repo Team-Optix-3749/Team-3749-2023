@@ -1,8 +1,13 @@
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+
 
 public class Constants {
     public static final class ModuleConstants {
@@ -92,5 +97,9 @@ public class Constants {
         public static final double max_yaw_offset = 2.2;
         public static final double max_pitch_offset = 2;
         public static final double max_movement_offset = 0.025; // around 1 inch
+    }
+
+    public static final class AutoConstants{
+        public static final Map<String, Command> eventMap = new HashMap<>();
     }
 }

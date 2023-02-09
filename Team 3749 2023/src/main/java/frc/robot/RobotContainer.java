@@ -58,4 +58,20 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return AutoCommands.getTestSwerveCommand(swerveSubsystem);
   }
+
+  public void setupAuto(){
+    Constants.AutoConstants.eventMap.put("pickup_cone_floor", null);
+    Constants.AutoConstants.eventMap.put("pickup_cube_floor", null);
+    Constants.AutoConstants.eventMap.put("pickup_cone_double_substation", null);
+    Constants.AutoConstants.eventMap.put("pickup_cube_double_substation", null);
+    Constants.AutoConstants.eventMap.put("pickup_cone_single_substation", null);
+    Constants.AutoConstants.eventMap.put("pickup_cube_single_substation", null);
+    Constants.AutoConstants.eventMap.put("place_cone_bottom", null);
+    Constants.AutoConstants.eventMap.put("place_cube_bottom", null);
+    Constants.AutoConstants.eventMap.put("place_cone_mid", null);
+    Constants.AutoConstants.eventMap.put("place_cube_mid", null);
+    Constants.AutoConstants.eventMap.put("place_cone_top", null);
+    Constants.AutoConstants.eventMap.put("place_cube_top", null);
+
+  }
 }
