@@ -19,13 +19,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * 
  *         extra space wow look here rohin does this anger you?
  */
-public class ClawAutoCommand extends CommandBase {
+public class ClawAutoCommandExtra extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   Claw claw;
 
   // Initializes the ClawAutoCommand
-  public ClawAutoCommand(Claw Claw) {
+  public ClawAutoCommandExtra(Claw Claw) {
     this.claw = Claw;
     addRequirements(Claw);
   }
