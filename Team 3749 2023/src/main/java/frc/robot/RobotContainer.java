@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Constants.OIConstants;
@@ -56,11 +57,11 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return AutoCommands.getTestSwerveCommand(swerveSubsystem);
+    return AutoCommands.getTestPathPlanner(swerveSubsystem);
   }
 
   public void setupAuto(){
-    Constants.AutoConstants.eventMap.put("pickup_cone_floor", null);
+    Constants.AutoConstants.eventMap.put("pickup_cone_floor", new PrintCommand("PICKUP CONE FLOOR"));
     Constants.AutoConstants.eventMap.put("pickup_cube_floor", null);
     Constants.AutoConstants.eventMap.put("pickup_cone_double_substation", null);
     Constants.AutoConstants.eventMap.put("pickup_cube_double_substation", null);
