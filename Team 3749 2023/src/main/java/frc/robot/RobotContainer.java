@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.ArmShoulderCmd;
 import frc.robot.commands.ArmTeleopCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
@@ -27,11 +29,10 @@ public class RobotContainer {
 
   // private final POV pilotPOV = new POV(pilot);
   // private final POV operatorPOV = new POV(operator);
-  private final Xbox pilot = new Xbox(0);
-  private final Xbox operator = new Xbox(1);
+  private final XboxController pilot = new XboxController(0);
 
   // Subsystems
-  private final Arm armSim = new Arm();
+  private final Arm arm = new Arm();
 
   // Commands
 
@@ -41,9 +42,15 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    armSim.setDefaultCommand(
-      new ArmTeleopCommand(armSim, pilot)
-    );
+    JoystickButton a = new JoystickButton(pilot, Button.kA.value);
+    JoystickButton b = new JoystickButton(pilot, Button.kB.value);
+    // a.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
+    // b.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(-6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
+    
+    a.whileTrue(new InstantCommand(() -> arm.setShoulder(1))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+    b.whileTrue(new InstantCommand(() -> arm.setShoulder(-1))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+  
+    // pilot.a().whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6)));
   }
 
   // set as whileTrue, what are we going to do about timing, how long do we let it run continuously

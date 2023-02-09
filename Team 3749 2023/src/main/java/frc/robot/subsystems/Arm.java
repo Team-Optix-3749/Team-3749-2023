@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.ArmSim;
+// import frc.robot.utils.ArmSim;
 import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -31,27 +31,27 @@ public class Arm extends SubsystemBase {
 
 	public Arm() {
 		rightElbowMotor.follow(leftElbowMotor);
-		rightShoulderMotor.follow(leftShoulderMotor);
+		// rightShoulderMotor.follow(leftShoulderMotor);
 
 		rightElbowMotor.setInverted(true);
 		rightShoulderMotor.setInverted(true);
 
-		SmartDashboard.putNumber("Setpoint top (degrees)", 90);
-		SmartDashboard.putNumber("Setpoint bottom (degrees)", 90);
+		// SmartDashboard.putNumber("Setpoint top (degrees)", 90);
+		// SmartDashboard.putNumber("Setpoint bottom (degrees)", 90);
 
-		Constants.Arm.controlMode.setDefaultOption("Joystick Control", 0);
-		Constants.Arm.controlMode.addOption("Presets", 1);
-		SmartDashboard.putData(Constants.Arm.controlMode);
+		// Constants.Arm.controlMode.setDefaultOption("Joystick Control", 0);
+		// Constants.Arm.controlMode.addOption("Presets", 1);
+		// SmartDashboard.putData(Constants.Arm.controlMode);
 
-		ArmSim.elbowEncoder.setDistancePerPulse(Constants.Arm.sim_encoder_dist_per_pulse);
-		ArmSim.shoulderEncoder.setDistancePerPulse(Constants.Arm.sim_encoder_dist_per_pulse);
+	// 	ArmSim.elbowEncoder.setDistancePerPulse(Constants.Arm.sim_encoder_dist_per_pulse);
+	// 	ArmSim.shoulderEncoder.setDistancePerPulse(Constants.Arm.sim_encoder_dist_per_pulse);
 
-    ArmSim.presetChooser.setDefaultOption("Starting Position", 0);
-    ArmSim.presetChooser.addOption("Floor Intake Position", 1);
-    ArmSim.presetChooser.addOption("High Node Score", 5);
-    SmartDashboard.putData(ArmSim.presetChooser);
-    // Put Mechanism 2d to SmartDashboard
-    SmartDashboard.putData("Arm Sim", ArmSim.mech2d);
+  //   ArmSim.presetChooser.setDefaultOption("Starting Position", 0);
+  //   ArmSim.presetChooser.addOption("Floor Intake Position", 1);
+  //   ArmSim.presetChooser.addOption("High Node Score", 5);
+  //   SmartDashboard.putData(ArmSim.presetChooser);
+  //   // Put Mechanism 2d to SmartDashboard
+  //   SmartDashboard.putData("Arm Sim", ArmSim.mech2d);
 	}
 	
 	public void setElbowVoltage(double voltage) {
@@ -69,6 +69,12 @@ public class Arm extends SubsystemBase {
 		leftShoulderMotor.setVoltage(voltage);
 	}
 
+	public void setShoulder(double percent) {
+		System.out.println("a;lsdkjf;laskdghlkasdgh");
+		leftShoulderMotor.set(percent);
+		rightShoulderMotor.set(percent);
+	}
+
 	public double getElbowPosition() {
 		return elbowAbsoluteEncoder.getPosition();
 	}
@@ -79,29 +85,40 @@ public class Arm extends SubsystemBase {
 
 	@Override
 	public void simulationPeriodic() {
-		REVPhysicsSim.getInstance().run();
+		// REVPhysicsSim.getInstance().run();
 
 		// In this method, we update our simulation of what our arm is doing
 		// First, we set our "inputs" (voltages)
-		ArmSim.elbowSim.setInput(leftElbowMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
-		ArmSim.shoulderSim.setInput(leftShoulderMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
-		// Next, we update it. The standard loop time is 20ms.
-		ArmSim.elbowSim.update(0.020);
-		ArmSim.shoulderSim.update(0.020);
+		// ArmSim.elbowSim.setInput(leftElbowMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+		// ArmSim.shoulderSim.setInput(leftShoulderMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+		// // Next, we update it. The standard loop time is 20ms.
+		// ArmSim.elbowSim.update(0.020);
+		// ArmSim.shoulderSim.update(0.020);
 
-		// Finally, we set our simulated encoder's readings and simulated battery
-		// voltage
-		ArmSim.elbowEncoderSim.setDistance(ArmSim.elbowSim.getAngleRads());
-		ArmSim.shoulderEncoderSim.setDistance(ArmSim.shoulderSim.getAngleRads());
+		// // Finally, we set our simulated encoder's readings and simulated battery
+		// // voltage
+		// ArmSim.elbowEncoderSim.setDistance(ArmSim.elbowSim.getAngleRads());
+		// ArmSim.shoulderEncoderSim.setDistance(ArmSim.shoulderSim.getAngleRads());
 		
-		// SimBattery estimates loaded battery voltages
-		RoboRioSim.setVInVoltage(
-				BatterySim.calculateDefaultBatteryLoadedVoltage(
-						ArmSim.elbowSim.getCurrentDrawAmps() + ArmSim.shoulderSim.getCurrentDrawAmps()));
+		// // SimBattery estimates loaded battery voltages
+		// RoboRioSim.setVInVoltage(
+		// 		BatterySim.calculateDefaultBatteryLoadedVoltage(
+		// 				ArmSim.elbowSim.getCurrentDrawAmps() + ArmSim.shoulderSim.getCurrentDrawAmps()));
 
-		// Update the Mechanism Arm angle based on the simulated arm angle
-		ArmSim.forearm.setAngle(Units.radiansToDegrees(ArmSim.elbowSim.getAngleRads()));
-		ArmSim.bicep.setAngle(Units.radiansToDegrees(ArmSim.shoulderSim.getAngleRads()));
+		// // Update the Mechanism Arm angle based on the simulated arm angle
+		// ArmSim.forearm.setAngle(Units.radiansToDegrees(ArmSim.elbowSim.getAngleRads()));
+		// ArmSim.bicep.setAngle(Units.radiansToDegrees(ArmSim.shoulderSim.getAngleRads()));
+	}
+
+	@Override
+	public void periodic() {
+		SmartDashboard.putNumber("Elbow Abs", getElbowPosition());
+		SmartDashboard.putNumber("Shoulder Abs", getShoulderPosition());
+
+		SmartDashboard.putNumber("left elbow voltage", leftElbowMotor.getAppliedOutput() * leftElbowMotor.getBusVoltage());
+		SmartDashboard.putNumber("left shoulder voltage", leftShoulderMotor.getAppliedOutput() * leftShoulderMotor.getBusVoltage());
+		SmartDashboard.putNumber("right elbow voltage", rightElbowMotor.getAppliedOutput() * rightElbowMotor.getBusVoltage());
+		SmartDashboard.putNumber("right shoulder voltage", rightShoulderMotor.getAppliedOutput() * rightShoulderMotor.getBusVoltage());
 	}
 
 }
