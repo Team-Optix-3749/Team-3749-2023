@@ -25,6 +25,7 @@ public class ClawAutoCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   Claw claw;
+  ColorSensor colorSensor; //static won't work w/o class instance; new instance of class required
 
   // Initializes the ClawAutoCommand
   public ClawAutoCommand(Claw Claw) {
@@ -40,13 +41,7 @@ public class ClawAutoCommand extends CommandBase {
   // Run every 20 ms
   @Override
   public void execute() {
-    if (ColorSensor.autostop() == true) {
-      // uses PID to calculate the velocity needed to acheive an exact speed
-      claw.setSpeed(-Constants.Claw.setpoint_velocity);
-    }
-    else {
-      claw.setSpeed(Constants.Claw.stop); //set speed to 0 (stop)
-    }
+    colorSensor.ColorBasedRunning();
   }
 
   // Run on command finish
