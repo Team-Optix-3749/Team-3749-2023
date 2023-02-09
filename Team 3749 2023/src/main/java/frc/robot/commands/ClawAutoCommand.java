@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
+import frc.robot.utils.ColorSensor;
 import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -39,7 +40,7 @@ public class ClawAutoCommand extends CommandBase {
   // Run every 20 ms
   @Override
   public void execute() {
-    if (ClawAuto.getcoords() = true) {
+    if (ColorSensor.autostop() = true) {
       // uses PID to calculate the velocity needed to acheive an exact speed
       claw.setSpeed(-Constants.Claw.setpoint_velocity);
     }
