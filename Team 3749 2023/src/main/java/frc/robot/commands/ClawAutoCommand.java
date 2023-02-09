@@ -43,7 +43,7 @@ public class ClawAutoCommand extends CommandBase {
       // uses PID to calculate the velocity needed to acheive an exact speed
       claw.setSpeed(-Constants.Claw.setpoint_velocity);
     }
-    else() {
+    else {
       claw.setSpeed(Constants.Claw.stop); //set speed to 0 (stop)
     }
   }
