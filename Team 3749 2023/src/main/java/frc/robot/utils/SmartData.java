@@ -33,13 +33,16 @@ public class SmartData<T> {
         if (value.getType() == NetworkTableType.kBoolean) {
             return (T) (Boolean) value.getBoolean();
 
-        } else if (value.getType() == NetworkTableType.kDouble) {
+        }
+        else if (value.getType() == NetworkTableType.kDouble) {
             return (T) (Double) value.getDouble();
 
-        } else if (value.getType() == NetworkTableType.kString) {
+        }
+        else if (value.getType() == NetworkTableType.kString) {
             return (T) (String) value.getString();
 
-        } else {
+        }
+        else {
             return this.defaultVal;
         }
     }

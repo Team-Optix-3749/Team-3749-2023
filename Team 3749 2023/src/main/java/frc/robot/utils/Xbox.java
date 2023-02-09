@@ -89,5 +89,4 @@ public class Xbox extends GenericHID {
     public boolean getRightTrigger() {
         return getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.1;
     }
-
 }

@@ -3,9 +3,8 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj.util.Color;
 
 /***
- * Stores constant variables within subclasses for different subsystems.
- * Such constant values can include motor IDs, motor speed, PID
- * constants, etc...
+ * Stores constant variables within subclasses for different subsystems. Such
+ * constant values can include motor IDs, motor speed, PID constants, etc...
  */
 public final class Constants {
 

@@ -68,7 +68,6 @@ public class ColorSensor {
         }
     }
 
-    
     public Boolean autostop() {
         if (gamePiece() == "None") {
             claw.setSpeed(0.2);
@@ -81,12 +80,12 @@ public class ColorSensor {
     }
 
     public void ColorBasedRunning() {
-        if(autostop() == true) {
-          // uses PID to calculate the velocity needed to acheive an exact speed
-          claw.setSpeed(-Constants.Claw.setpoint_velocity);
+        if (autostop() == true) {
+            // uses PID to calculate the velocity needed to acheive an exact speed
+            claw.setSpeed(-Constants.Claw.setpoint_velocity);
         }
         else {
-          claw.setSpeed(Constants.Claw.stop); //set speed to 0 (stop)
+            claw.setSpeed(Constants.Claw.stop); //set speed to 0 (stop)
         }
     }
 }
