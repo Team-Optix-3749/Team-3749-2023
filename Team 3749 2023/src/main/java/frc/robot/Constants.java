@@ -80,6 +80,12 @@ public class Constants {
                 kPhysicalMaxAngularSpeedRadiansPerSecond;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 5;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 5;
+
+        public static final double kAutoDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2;
+        public static final double kAutoDriveMaxAngularSpeedRadiansPerSecond = //
+                kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
+        public static final double kAutoDriveMaxAccelerationUnitsPerSecond = kTeleDriveMaxAccelerationUnitsPerSecond / 2;
+        public static final double kAutoDriveMaxAngularAccelerationUnitsPerSecond = kTeleDriveMaxAngularAccelerationUnitsPerSecond / 2;
     }
 
     public static final class OIConstants {
