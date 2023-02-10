@@ -19,22 +19,26 @@ public class Arm extends SubsystemBase {
 
 	private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
 	private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
-	private final AbsoluteEncoder elbowAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
+	// private final AbsoluteEncoder elbowAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
 	private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
 	private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
-	private final AbsoluteEncoder shoulderAbsoluteEncoder = leftShoulderMotor.getAbsoluteEncoder(Type.kDutyCycle);
+	// private final AbsoluteEncoder shoulderAbsoluteEncoder = leftShoulderMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
 	// This arm sim represents an arm that can travel from -75 degrees (rotated down
 	// front)
 	// to 255 degrees (rotated down in the back).
 
 	public Arm() {
-		rightElbowMotor.follow(leftElbowMotor);
-		// rightShoulderMotor.follow(leftShoulderMotor);
+		// rightElbowMotor.follow(leftElbowMotor);
+		leftShoulderMotor.restoreFactoryDefaults();
+		rightShoulderMotor.restoreFactoryDefaults();
 
-		rightElbowMotor.setInverted(true);
-		rightShoulderMotor.setInverted(true);
+		leftElbowMotor.restoreFactoryDefaults();
+		rightElbowMotor.restoreFactoryDefaults();
+
+		// rightElbowMotor.setInverted(true);
+		// rightShoulderMotor.setInverted(true);
 
 		// SmartDashboard.putNumber("Setpoint top (degrees)", 90);
 		// SmartDashboard.putNumber("Setpoint bottom (degrees)", 90);
@@ -70,18 +74,22 @@ public class Arm extends SubsystemBase {
 	}
 
 	public void setShoulder(double percent) {
-		System.out.println("a;lsdkjf;laskdghlkasdgh");
 		leftShoulderMotor.set(percent);
-		rightShoulderMotor.set(percent);
+		rightShoulderMotor.set(-percent);
 	}
 
-	public double getElbowPosition() {
-		return elbowAbsoluteEncoder.getPosition();
+	public void setElbow(double percent) {
+		leftElbowMotor.set(percent);
+		rightElbowMotor.set(-percent);
 	}
 
-	public double getShoulderPosition() {
-		return shoulderAbsoluteEncoder.getPosition();
-	}
+	// public double getElbowPosition() {
+	// 	return elbowAbsoluteEncoder.getPosition();
+	// }
+
+	// public double getShoulderPosition() {
+	// 	return shoulderAbsoluteEncoder.getPosition();
+	// }
 
 	@Override
 	public void simulationPeriodic() {
@@ -112,8 +120,8 @@ public class Arm extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		SmartDashboard.putNumber("Elbow Abs", getElbowPosition());
-		SmartDashboard.putNumber("Shoulder Abs", getShoulderPosition());
+		// SmartDashboard.putNumber("Elbow Abs", getElbowPosition());
+		// SmartDashboard.putNumber("Shoulder Abs", getShoulderPosition());
 
 		SmartDashboard.putNumber("left elbow voltage", leftElbowMotor.getAppliedOutput() * leftElbowMotor.getBusVoltage());
 		SmartDashboard.putNumber("left shoulder voltage", leftShoulderMotor.getAppliedOutput() * leftShoulderMotor.getBusVoltage());

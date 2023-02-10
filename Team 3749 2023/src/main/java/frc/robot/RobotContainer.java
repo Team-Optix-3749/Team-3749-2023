@@ -44,15 +44,21 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     JoystickButton a = new JoystickButton(pilot, Button.kA.value);
     JoystickButton b = new JoystickButton(pilot, Button.kB.value);
+    JoystickButton x = new JoystickButton(pilot, Button.kX.value);
+    JoystickButton y = new JoystickButton(pilot, Button.kY.value);
+
     // a.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
     // b.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(-6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
     
-    a.whileTrue(new InstantCommand(() -> arm.setShoulder(1))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
-    b.whileTrue(new InstantCommand(() -> arm.setShoulder(-1))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+    a.whileTrue(new InstantCommand(() -> arm.setShoulder(0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+    b.whileTrue(new InstantCommand(() -> arm.setShoulder(-0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+  
+    x.whileTrue(new InstantCommand(() -> arm.setElbow(0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
+    y.whileTrue(new InstantCommand(() -> arm.setElbow(-0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
   
     // pilot.a().whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6)));
   }
-
+ 
   // set as whileTrue, what are we going to do about timing, how long do we let it run continuously
   private void configureButtonBindings() { 
     // set as if statements dk if this works, might want to make separate function for this
