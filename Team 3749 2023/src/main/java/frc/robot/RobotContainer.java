@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmShoulderCmd;
 import frc.robot.commands.ArmTeleopCommand;
@@ -30,6 +31,9 @@ public class RobotContainer {
   // private final POV pilotPOV = new POV(pilot);
   // private final POV operatorPOV = new POV(operator);
   private final XboxController pilot = new XboxController(0);
+
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(0);
 
   // Subsystems
   private final Arm arm = new Arm();
@@ -51,17 +55,26 @@ public class RobotContainer {
     // b.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(-6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
     
     // a.whileTrue(new InstantCommand(() -> arm.setShoulder(0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
-    a.whileTrue(new InstantCommand(() -> arm.setElbowPosition(0.45))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
-    b.whileTrue(new InstantCommand(() -> arm.setShoulder(-0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+    // a.whileTrue(new InstantCommand(() -> arm.setElbowPosition(0.45))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
+    // b.whileTrue(new InstantCommand(() -> arm.setShoulder(-0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
   
-    x.whileTrue(new InstantCommand(() -> arm.setElbow(0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
-    y.whileTrue(new InstantCommand(() -> arm.setElbow(-0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
+    // x.whileTrue(new InstantCommand(() -> arm.setElbow(0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
+    // y.whileTrue(new InstantCommand(() -> arm.setElbow(-0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
   
     // pilot.a().whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6)));
   }
  
   // set as whileTrue, what are we going to do about timing, how long do we let it run continuously
-  private void configureButtonBindings() { 
+  private void configureButtonBindings() {
+    m_driverController.a().onTrue(Commands.run(() -> {arm.setShoulder(0.2);}, arm)).onFalse(Commands.run(() -> {arm.setShoulder(0);}, arm));
+    m_driverController.b().onTrue(Commands.run(() -> {arm.setShoulder(-0.2);}, arm)).onFalse(Commands.run(() -> {arm.setShoulder(0);}, arm));
+
+    m_driverController.x().onTrue(Commands.run(() -> {arm.setElbow(0.2);}, arm)).onFalse(Commands.run(() -> {arm.setElbow(0);}, arm));
+    m_driverController.y().onTrue(Commands.run(() -> {arm.setElbow(-0.2);}, arm)).onFalse(Commands.run(() -> {arm.setElbow(0);}, arm));
+
+    m_driverController.rightBumper().onTrue(Commands.run(() -> {arm.setShoulderPosition(0.66);}, arm)).onFalse(Commands.run(() -> {arm.setShoulder(0);}, arm));
+    m_driverController.leftBumper().onTrue(Commands.run(() -> {arm.setElbowPosition(0.45);}, arm)).onFalse(Commands.run(() -> {arm.setElbow(0);}, arm));
+
     // set as if statements dk if this works, might want to make separate function for this
     // TODO: need to implement enum (defaults are all zero for now)
     // if (pilot.rightBumper().getAsBoolean()){ // cone nodes and single sub station
