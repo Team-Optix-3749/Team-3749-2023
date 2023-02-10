@@ -50,7 +50,8 @@ public class RobotContainer {
     // a.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
     // b.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(-6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
     
-    a.whileTrue(new InstantCommand(() -> arm.setShoulder(0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+    // a.whileTrue(new InstantCommand(() -> arm.setShoulder(0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
+    a.whileTrue(new InstantCommand(() -> arm.setElbowPosition(0.45))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
     b.whileTrue(new InstantCommand(() -> arm.setShoulder(-0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
   
     x.whileTrue(new InstantCommand(() -> arm.setElbow(0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));

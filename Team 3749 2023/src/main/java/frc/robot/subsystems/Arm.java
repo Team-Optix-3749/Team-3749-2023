@@ -4,9 +4,13 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -17,13 +21,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
 
-	private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-	private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
-	// private final AbsoluteEncoder elbowAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
-
 	private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
 	private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
+	private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
 	// private final AbsoluteEncoder shoulderAbsoluteEncoder = leftShoulderMotor.getAbsoluteEncoder(Type.kDutyCycle);
+	
+	private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
+	private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
+	private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
+	private PIDController elbowPIDController = new PIDController(0.1, 0, 0);
+	// private final AbsoluteEncoder elbowAbsoluteEncoder = leftElbowMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
 	// This arm sim represents an arm that can travel from -75 degrees (rotated down
 	// front)
@@ -62,9 +69,9 @@ public class Arm extends SubsystemBase {
 		leftElbowMotor.setVoltage(voltage);
 	}
 
-	public void setElbowPosition(double position) {
+	// public void setElbowPosition(double position) {
 
-	}
+	// }
 
 	public void setShoulderPosition(double position) {
 	}
@@ -83,13 +90,22 @@ public class Arm extends SubsystemBase {
 		rightElbowMotor.set(-percent);
 	}
 
-	// public double getElbowPosition() {
-	// 	return elbowAbsoluteEncoder.getPosition();
-	// }
+	public double getShoulderPosition() {
+		// STOW: 0.601644465041112
+		return shoulderAbsoluteEncoder.getDistance();
+	}
+	
+	public double getElbowPosition() {
+		// STOW: 0.328055008201375
+		return elbowAbsoluteEncoder.getDistance();
+	}
 
-	// public double getShoulderPosition() {
-	// 	return shoulderAbsoluteEncoder.getPosition();
-	// }
+	public void setElbowPosition(double position) {
+		leftElbowMotor.set(-elbowPIDController.calculate(
+			elbowAbsoluteEncoder.getDistance(), position) * 5);
+		rightElbowMotor.set(elbowPIDController.calculate(
+			elbowAbsoluteEncoder.getDistance(), position) * 5);
+	}
 
 	@Override
 	public void simulationPeriodic() {
@@ -120,8 +136,8 @@ public class Arm extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		// SmartDashboard.putNumber("Elbow Abs", getElbowPosition());
-		// SmartDashboard.putNumber("Shoulder Abs", getShoulderPosition());
+		SmartDashboard.putNumber("Elbow Abs", getElbowPosition());
+		SmartDashboard.putNumber("Shoulder Abs", getShoulderPosition());
 
 		SmartDashboard.putNumber("left elbow voltage", leftElbowMotor.getAppliedOutput() * leftElbowMotor.getBusVoltage());
 		SmartDashboard.putNumber("left shoulder voltage", leftShoulderMotor.getAppliedOutput() * leftShoulderMotor.getBusVoltage());
