@@ -17,18 +17,18 @@ public final class Constants {
 
     public static final class Claw {
         // all values set to zero because we don't know them yet
-        public static final int right_side = 0; // right side of the claw (the motor)
-        public static final int left_side = 1; // left side of the claw (the motor)
+        public static final int right_side = 21; // right side of the claw (the motor)
+        public static final int left_side = 22; // left side of the claw (the motor)
 
-        public static final int speed = 0; // number for the speed
+        public static final double speed = .5; // number for the speed
         public static final int stop = 0; // speed 0 = motors stop
 
         //PID values
         public static final double claw_kP = 0.1;
-        public static final double claw_kI = 0;
-        public static final double claw_kD = 0;
+        public static final double claw_kI = .1;
+        public static final double claw_kD = .1;
 
-        public static final Double setpoint_velocity = 0.0;
+        public static final Double setpoint_velocity = 0.5;
 
         //ColorSensor
         public static String Object = null;

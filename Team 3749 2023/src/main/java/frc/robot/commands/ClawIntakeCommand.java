@@ -34,7 +34,8 @@ public class ClawIntakeCommand extends CommandBase {
     @Override
     public void execute() {
         // uses PID to calculate the velocity needed to acheive an exact speed
-        claw.setSpeed(-Constants.Claw.setpoint_velocity);
+        // claw.setSpeed(-Constants.Claw.setpoint_velocity);
+        claw.set();
 
     }
 
