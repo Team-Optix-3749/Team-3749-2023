@@ -9,7 +9,7 @@ public final class Constants {
         public static final int right_side = 21; // right side of the claw (the motor)
         public static final int left_side = 22; // left side of the claw (the motor)
 
-        public static final double speed = .5; // number for the speed
+        public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.0); // number for the speed
         public static final int stop = 0; // speed 0 = motors stop
 
         //PID values

@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.utils.Constants;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.Claw;
@@ -27,10 +28,10 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         pilot.aWhileHeld(
-            () -> claw.set(.2), () -> claw.set(0), claw
+            () -> claw.set(Constants.Claw.speed.get()), () -> claw.set(0), claw
         );
         pilot.bWhileHeld(
-            () -> claw.set(-.2), () -> claw.set(0), claw
+            () -> claw.set(-Constants.Claw.speed.get()), () -> claw.set(0), claw
         );
     }
 
