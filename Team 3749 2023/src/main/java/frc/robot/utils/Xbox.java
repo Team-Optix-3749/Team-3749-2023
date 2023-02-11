@@ -14,124 +14,173 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  *         Stores getters for all CommandXboxControllers outputs (rips .whenPressed())
  */
 public class Xbox extends CommandXboxController {
-    private Trigger leftBumper;
-    private Trigger rightBumper;
-    private Trigger leftStick;
-    private Trigger rightStick;
-    private Trigger a;
-    private Trigger b;
-    private Trigger x;
-    private Trigger y;
 
     public Xbox(final int port) {
         super(port);
-
-        leftBumper = this.leftBumper();
-        rightBumper = this.rightTrigger();
-        leftStick = this.leftStick();
-        rightStick = this.rightStick();
-        a = this.a();
-        b = this.b();
-        x = this.x();
-        y = this.y();
     }
 
-    public void aWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
-        a.onTrue(
-                Commands.run(onTrue, subsystem));
+    public void aWhileHeld(Runnable whileTrue) {
+        super.a().whileTrue(
+                Commands.run(whileTrue));
     }
 
-    public void aWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
-        a.onTrue(
-                Commands.run(onTrue, subsystem))
-                .onFalse(Commands.run(onFalse, subsystem));
+    public void aWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.a().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
     }
 
-    public void bWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
-        b.onTrue(
-                Commands.run(onTrue, subsystem));
+    public void aWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.a().whileTrue(
+                Commands.run(whileTrue, subsystem));
     }
 
-    public void bWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
-        b.onTrue(
-                Commands.run(onTrue, subsystem))
-                .onFalse(Commands.run(onFalse, subsystem));
+    public void aWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.a().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
-    public void xWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
-        x.onTrue(
-                Commands.run(onTrue, subsystem));
+    public void bWhileHeld(Runnable whileTrue) {
+        super.b().whileTrue(
+                Commands.run(whileTrue));
     }
 
-    public void xWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
-        x.onTrue(
-                Commands.run(onTrue, subsystem))
-                .onFalse(Commands.run(onFalse, subsystem));
+    public void bWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.b().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
     }
 
-    public void yWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
-        y.onTrue(
-                Commands.run(onTrue, subsystem));
+    public void bWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.b().whileTrue(
+                Commands.run(whileTrue, subsystem));
     }
 
-    public void yWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
-        y.onTrue(
-                Commands.run(onTrue, subsystem))
-                .onFalse(Commands.run(onFalse, subsystem));
+    public void bWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.b().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
-    public void leftBumperWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
-        leftBumper.onTrue(
-                Commands.run(onTrue, subsystem));
+    public void xWhileHeld(Runnable whileTrue) {
+        super.x().whileTrue(
+                Commands.run(whileTrue));
     }
 
-    public void leftBumperWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
-        leftBumper.onTrue(
-                Commands.run(onTrue, subsystem))
-                .onFalse(Commands.run(onFalse, subsystem));
+    public void xWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.x().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
     }
 
-    public void rightBumperWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
-        rightBumper.onTrue(
-                Commands.run(onTrue, subsystem));
+    public void xWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.x().whileTrue(
+                Commands.run(whileTrue, subsystem));
     }
 
-    public void rightBumperWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
-        rightBumper.onTrue(
-                Commands.run(onTrue, subsystem))
-                .onFalse(Commands.run(onFalse, subsystem));
+    public void xWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.x().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
+    }
+
+    public void yWhileHeld(Runnable whileTrue) {
+        super.y().whileTrue(
+                Commands.run(whileTrue));
+    }
+
+    public void yWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.y().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
+    }
+
+    public void yWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.y().whileTrue(
+                Commands.run(whileTrue, subsystem));
+    }
+
+    public void yWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.y().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
+    }
+
+    public void leftBumperWhileHeld(Runnable whileTrue) {
+        super.leftBumper().whileTrue(
+                Commands.run(whileTrue));
+    }
+
+    public void leftBumperWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.leftBumper().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
+    }
+
+    public void leftBumperWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.leftBumper().whileTrue(
+                Commands.run(whileTrue, subsystem));
+    }
+
+    public void leftBumperWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.leftBumper().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
+    }
+
+    public void rightBumperWhileHeld(Runnable whileTrue) {
+        super.rightBumper().whileTrue(
+                Commands.run(whileTrue));
+    }
+
+    public void rightBumperWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.rightBumper().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
+    }
+
+    public void rightBumperWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.rightBumper().whileTrue(
+                Commands.run(whileTrue, subsystem));
+    }
+
+    public void rightBumperWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.rightBumper().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
     public Trigger leftBumper() {
-        return leftBumper;
+        return super.leftBumper();
     }
 
     public Trigger rightBumper() {
-        return rightBumper;
+        return super.rightBumper();
     }
 
     public Trigger leftStick() {
-        return leftStick;
+        return super.leftStick();
     }
 
     public Trigger rightStick() {
-        return rightStick;
+        return super.rightStick();
     }
 
     public Trigger a() {
-        return a;
+        return super.a();
     }
 
     public Trigger b() {
-        return b;
+        return super.b();
     }
 
     public Trigger x() {
-        return x;
+        return super.x();
     }
 
     public Trigger y() {
-        return y;
+        return super.y();
     }
 
     public double getLeftX() {

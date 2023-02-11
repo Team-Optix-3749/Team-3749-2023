@@ -33,21 +33,21 @@ public class RobotContainer {
   // set as whileTrue, what are we going to do about timing, how long do we let it
   // run continuously
   private void configureButtonBindings() {
-    pilot.aWhenPressed(
+    pilot.aWhileHeld(
         () -> arm.setShoulder(.2), () -> arm.setShoulder(0), arm);
-    pilot.aWhenPressed(
+    pilot.aWhileHeld(
         () -> arm.setShoulder(-.2), () -> arm.setShoulder(0), arm);
 
-    pilot.xWhenPressed(
+    pilot.xWhileHeld(
         () -> arm.setElbow(.2), () -> arm.setElbow(0), arm);
-    pilot.yWhenPressed(
+    pilot.yWhileHeld(
         () -> arm.setElbow(-.2), () -> arm.setElbow(0), arm);
 
-    pilot.rightBumperWhenPressed(
+    pilot.rightBumperWhileHeld(
         () -> arm.setShoulderPosition(0.66), () -> arm.setShoulderPosition(0), arm);
-    pilot.leftBumperWhenPressed(
+    pilot.leftBumperWhileHeld(
         () -> arm.setShoulderPosition(0.45), () -> arm.setShoulderPosition(0), arm);
-  }
+}
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
