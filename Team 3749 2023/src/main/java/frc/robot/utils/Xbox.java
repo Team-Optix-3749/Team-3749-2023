@@ -1,94 +1,161 @@
 package frc.robot.utils;
 
-import edu.wpi  .first.wpilibj.GenericHID;
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /***
- * @author Rohan Juneja
  * @author Rohin Sood
  * 
- *         Stores getters for all Xbox controller inputs
+ *         Stores getters for all CommandXboxControllers outputs (rips .whenPressed())
  */
-public class Xbox extends GenericHID {
-    private JoystickButton leftBumper;
-    private JoystickButton rightBumper;
-    private JoystickButton leftStick;
-    private JoystickButton rightStick;
-    private JoystickButton a;
-    private JoystickButton b;
-    private JoystickButton x;
-    private JoystickButton y;
+public class Xbox extends CommandXboxController {
+    private Trigger leftBumper;
+    private Trigger rightBumper;
+    private Trigger leftStick;
+    private Trigger rightStick;
+    private Trigger a;
+    private Trigger b;
+    private Trigger x;
+    private Trigger y;
 
     public Xbox(final int port) {
         super(port);
 
-        JoystickButton leftBumper = new JoystickButton(this, XboxController.Button.kLeftBumper.value);
-        JoystickButton rightBumper = new JoystickButton(this, XboxController.Button.kRightBumper.value);
-        JoystickButton leftStick = new JoystickButton(this, XboxController.Button.kLeftStick.value);
-        JoystickButton rightStick = new JoystickButton(this, XboxController.Button.kRightStick.value);
-        JoystickButton a = new JoystickButton(this, XboxController.Button.kA.value);
-        JoystickButton b = new JoystickButton(this, XboxController.Button.kB.value);
-        JoystickButton x = new JoystickButton(this, XboxController.Button.kX.value);
-        JoystickButton y = new JoystickButton(this, XboxController.Button.kY.value);
-
-
+        leftBumper = this.leftBumper();
+        rightBumper = this.rightTrigger();
+        leftStick = this.leftStick();
+        rightStick = this.rightStick();
+        a = this.a();
+        b = this.b();
+        x = this.x();
+        y = this.y();
     }
 
-    public JoystickButton leftBumper() {
+    public void aWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
+        a.onTrue(
+                Commands.run(onTrue, subsystem));
+    }
+
+    public void aWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
+        a.onTrue(
+                Commands.run(onTrue, subsystem))
+                .onFalse(Commands.run(onFalse, subsystem));
+    }
+
+    public void bWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
+        b.onTrue(
+                Commands.run(onTrue, subsystem));
+    }
+
+    public void bWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
+        b.onTrue(
+                Commands.run(onTrue, subsystem))
+                .onFalse(Commands.run(onFalse, subsystem));
+    }
+
+    public void xWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
+        x.onTrue(
+                Commands.run(onTrue, subsystem));
+    }
+
+    public void xWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
+        x.onTrue(
+                Commands.run(onTrue, subsystem))
+                .onFalse(Commands.run(onFalse, subsystem));
+    }
+
+    public void yWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
+        y.onTrue(
+                Commands.run(onTrue, subsystem));
+    }
+
+    public void yWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
+        y.onTrue(
+                Commands.run(onTrue, subsystem))
+                .onFalse(Commands.run(onFalse, subsystem));
+    }
+
+    public void leftBumperWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
+        leftBumper.onTrue(
+                Commands.run(onTrue, subsystem));
+    }
+
+    public void leftBumperWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
+        leftBumper.onTrue(
+                Commands.run(onTrue, subsystem))
+                .onFalse(Commands.run(onFalse, subsystem));
+    }
+
+    public void rightBumperWhenPressed(Runnable onTrue, SubsystemBase subsystem) {
+        rightBumper.onTrue(
+                Commands.run(onTrue, subsystem));
+    }
+
+    public void rightBumperWhenPressed(Runnable onTrue, Runnable onFalse, SubsystemBase subsystem) {
+        rightBumper.onTrue(
+                Commands.run(onTrue, subsystem))
+                .onFalse(Commands.run(onFalse, subsystem));
+    }
+
+    public Trigger leftBumper() {
         return leftBumper;
     }
 
-    public JoystickButton rightBumper() {
+    public Trigger rightBumper() {
         return rightBumper;
     }
 
-    public JoystickButton leftStick() {
+    public Trigger leftStick() {
         return leftStick;
     }
 
-    public JoystickButton rightStick() {
+    public Trigger rightStick() {
         return rightStick;
     }
 
-    public JoystickButton a() {
+    public Trigger a() {
         return a;
     }
 
-    public JoystickButton b() {
+    public Trigger b() {
         return b;
     }
 
-    public JoystickButton x() {
+    public Trigger x() {
         return x;
     }
 
-    public JoystickButton y() {
+    public Trigger y() {
         return y;
     }
 
     public double getLeftX() {
-        return getRawAxis(XboxController.Axis.kLeftX.value);
+        return this.getRawAxis(XboxController.Axis.kLeftX.value);
     }
 
     public double getRightX() {
-        return getRawAxis(XboxController.Axis.kRightX.value);
+        return this.getRawAxis(XboxController.Axis.kRightX.value);
     }
 
     public double getLeftY() {
-        return getRawAxis(XboxController.Axis.kLeftY.value);
+        return this.getRawAxis(XboxController.Axis.kLeftY.value);
     }
 
     public double getRightY() {
-        return getRawAxis(XboxController.Axis.kRightY.value);
+        return this.getRawAxis(XboxController.Axis.kRightY.value);
     }
 
     public boolean getLeftTrigger() {
-        return getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.1;
+        return this.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.1;
     }
 
     public boolean getRightTrigger() {
-        return getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.1;
+        return this.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.1;
     }
 
 }

@@ -8,37 +8,19 @@
  */
 package frc.robot;
 
-import edu.wpi.first.cscore.VideoMode.PixelFormat;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.ArmShoulderCmd;
-import frc.robot.commands.ArmTeleopCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.POV;
 import frc.robot.utils.Xbox;
 
 public class RobotContainer {
-  // private final Xbox pilot = new Xbox(0);
-  // private final Xbox operator = new Xbox(1);
-
-  // private final POV pilotPOV = new POV(pilot);
-  // private final POV operatorPOV = new POV(operator);
-  private final XboxController pilot = new XboxController(0);
-
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(0);
+  private final Xbox pilot = new Xbox(0);
+  private final Xbox operator = new Xbox(1);
 
   // Subsystems
   private final Arm arm = new Arm();
-
-  // Commands
 
   public RobotContainer() {
     configureButtonBindings();
@@ -46,66 +28,28 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    JoystickButton a = new JoystickButton(pilot, Button.kA.value);
-    JoystickButton b = new JoystickButton(pilot, Button.kB.value);
-    JoystickButton x = new JoystickButton(pilot, Button.kX.value);
-    JoystickButton y = new JoystickButton(pilot, Button.kY.value);
-
-    // a.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
-    // b.whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(-6))).whileFalse(new InstantCommand(() -> arm.setShoulderVoltage(0)));
-    
-    // a.whileTrue(new InstantCommand(() -> arm.setShoulder(0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
-    // a.whileTrue(new InstantCommand(() -> arm.setElbowPosition(0.45))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
-    // b.whileTrue(new InstantCommand(() -> arm.setShoulder(-0.2))).whileFalse(new InstantCommand(() -> arm.setShoulder(0)));
-  
-    // x.whileTrue(new InstantCommand(() -> arm.setElbow(0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
-    // y.whileTrue(new InstantCommand(() -> arm.setElbow(-0.2))).whileFalse(new InstantCommand(() -> arm.setElbow(0)));
-  
-    // pilot.a().whileTrue(new InstantCommand(() -> arm.setShoulderVoltage(6)));
   }
- 
-  // set as whileTrue, what are we going to do about timing, how long do we let it run continuously
+
+  // set as whileTrue, what are we going to do about timing, how long do we let it
+  // run continuously
   private void configureButtonBindings() {
-    m_driverController.a().onTrue(Commands.run(() -> {arm.setShoulder(0.2);}, arm)).onFalse(Commands.run(() -> {arm.setShoulder(0);}, arm));
-    m_driverController.b().onTrue(Commands.run(() -> {arm.setShoulder(-0.2);}, arm)).onFalse(Commands.run(() -> {arm.setShoulder(0);}, arm));
+    pilot.aWhenPressed(
+        () -> arm.setShoulder(.2), () -> arm.setShoulder(0), arm);
+    pilot.aWhenPressed(
+        () -> arm.setShoulder(-.2), () -> arm.setShoulder(0), arm);
 
-    m_driverController.x().onTrue(Commands.run(() -> {arm.setElbow(0.2);}, arm)).onFalse(Commands.run(() -> {arm.setElbow(0);}, arm));
-    m_driverController.y().onTrue(Commands.run(() -> {arm.setElbow(-0.2);}, arm)).onFalse(Commands.run(() -> {arm.setElbow(0);}, arm));
+    pilot.xWhenPressed(
+        () -> arm.setElbow(.2), () -> arm.setElbow(0), arm);
+    pilot.yWhenPressed(
+        () -> arm.setElbow(-.2), () -> arm.setElbow(0), arm);
 
-    m_driverController.rightBumper().onTrue(Commands.run(() -> {arm.setShoulderPosition(0.66);}, arm)).onFalse(Commands.run(() -> {arm.setShoulder(0);}, arm));
-    m_driverController.leftBumper().onTrue(Commands.run(() -> {arm.setElbowPosition(0.45);}, arm)).onFalse(Commands.run(() -> {arm.setElbow(0);}, arm));
-
-    // set as if statements dk if this works, might want to make separate function for this
-    // TODO: need to implement enum (defaults are all zero for now)
-    // if (pilot.rightBumper().getAsBoolean()){ // cone nodes and single sub station
-    //   if(pilot.x().getAsBoolean()){ // mid cone node
-    //     pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
-    //   } 
-
-    //   if(pilot.y().getAsBoolean()){ // high cone node
-    //     pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
-    //   }
-
-    //   if(pilot.a().getAsBoolean()){ // single sub
-    //     pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
-    //   }
-    // }
-    // if (pilot.leftBumper().getAsBoolean()){ // cube nodes and double sub station
-    //   if(pilot.x().getAsBoolean()){ // mid cube node
-    //     pilot.x().whileTrue(new ArmCommand(arm, 0, 0));
-    //   } 
-
-    //   if(pilot.y().getAsBoolean()){ // high cube node
-    //     pilot.y().whileTrue(new ArmCommand(arm, 0, 0));
-    //   }
-
-    //   if(pilot.a().getAsBoolean()){ // double sub
-    //     pilot.a().whileTrue(new ArmCommand(arm, 0, 0));
-    //   }
-    // }
+    pilot.rightBumperWhenPressed(
+        () -> arm.setShoulderPosition(0.66), () -> arm.setShoulderPosition(0), arm);
+    pilot.leftBumperWhenPressed(
+        () -> arm.setShoulderPosition(0.45), () -> arm.setShoulderPosition(0), arm);
   }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
-  }  
+  }
 }
