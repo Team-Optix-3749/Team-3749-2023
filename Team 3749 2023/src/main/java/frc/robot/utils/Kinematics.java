@@ -18,9 +18,9 @@ public class Kinematics {
     private Translation2d bicepZero = new Translation2d(0, bicepLength);
     private Translation2d forearmZero = new Translation2d(0, forearmLength);
     
-    public Kinematics(double xi, double yi){
+    public Kinematics(double xi, double yi){ 
         // initial positions of (x,y) for arm
-        // TODO: set positions to defaults
+        // TODO: set positions to default
 
 
     }
