@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch Kinematics",
+      "request": "launch",
+      "mainClass": "frc.robot.utils.Kinematics",
+      "projectName": "Team 3749 2023"
+    },
+    {
+      "type": "java",
       "name": "Launch InverseKinematics",
       "request": "launch",
       "mainClass": "frc.robot.subsystems.InverseKinematics",

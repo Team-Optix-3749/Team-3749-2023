@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.ArmSimCommand;
 import frc.robot.subsystems.arm.*;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Kinematics;
 import frc.robot.utils.Xbox;
 
 public class RobotContainer {
@@ -64,13 +65,21 @@ public class RobotContainer {
             () -> arm.setShoulderPosition(0.45), () -> arm.setShoulderPosition(0), arm);
         break;
       case SIMULATION:
+        pilot.aWhileHeld(() -> testKinematics());
         break;
       default:
         System.out.println("ROBOT_MODE is not set in utils/Constants.java");
         break;
     }
   }
-
+  
+  public void testKinematics() {
+    try {
+      Kinematics.tester();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
+  }
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
