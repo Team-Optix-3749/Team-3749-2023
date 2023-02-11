@@ -4,6 +4,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.utils.Xbox;
 
+/**
+ * Controls the elbow and shoulder using the left and right joysticks
+ * 
+ * @author Rohin Sood
+*/
 public class ArmTeleopCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 

@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 
+/**
+ * Double jointed arm subsystem built with 2 CANSparkMaxes at each joint and REV Through Bore Encoders
+ * 
+ * @author Rohin Sood
+ */
 public class ArmReal extends Arm {
   
   private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);

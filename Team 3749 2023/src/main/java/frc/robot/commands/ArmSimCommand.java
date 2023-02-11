@@ -11,6 +11,11 @@ import frc.robot.subsystems.arm.*;
 import frc.robot.utils.Constants.Arm.*;
 import frc.robot.utils.Constants;
 
+/**
+ * Sets the joint setpoints for the double jointed arm sim using a preset chooser & profiled PID controller
+ * 
+ * @author Rohin Sood
+*/
 public class ArmSimCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 

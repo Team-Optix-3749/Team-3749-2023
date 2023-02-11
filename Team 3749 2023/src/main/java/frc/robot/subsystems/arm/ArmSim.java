@@ -15,12 +15,16 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.utils.Constants;
 
+/**
+ * Double jointed arm simulation adapted from https://github.com/WHS-FRC-3467/DoubleJointedArmSim
+ * 
+ * @author Rohin Sood
+ */
 public class ArmSim extends Arm {
 
 	// distance per pulse = (angle per revolution) / (pulses per revolution)

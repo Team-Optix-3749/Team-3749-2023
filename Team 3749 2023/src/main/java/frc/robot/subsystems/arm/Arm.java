@@ -2,6 +2,11 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Parent class for modular hardware
+ * 
+ * @author Rohin Sood
+ */
 public class Arm extends SubsystemBase {
 
 	public void setElbowVoltage(double voltage) {}
