@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public final class Constants {
 
     public static final RobotMode ROBOT_MODE = RobotMode.REAL;
+
     public static final class Base {
         public static final int neo_id = 3749;
         public static final int falcon_id = 6328;
@@ -38,12 +39,12 @@ public final class Constants {
 
         public static final double shoulder_reduction = 250;
         public static final double elbow_reduction = 200;
-        
+
         // inches
         public static final double bicep_length = 25; // hypotenuse
         public static final double forearm_length = 30;
         public static final double claw_length = 13;
-        
+
         // kilograms
         public static final double bicep_mass = 2.26796; // 5 lbs
         public static final double forearm_mass = 11.3398; // forearm + claw mass (20 + 5 lbs)
@@ -68,7 +69,6 @@ public final class Constants {
 
         public static enum ShoulderSetpoints {
             ZERO(0),
-            STOWED(0),
             GROUND_INTAKE(132.0);
 
             public final double angle;
@@ -81,7 +81,6 @@ public final class Constants {
 
         public static enum ElbowSetpoints {
             ZERO(0),
-            STOWED(0),
             GROUND_INTAKE(111.0);
 
             public final double angle;

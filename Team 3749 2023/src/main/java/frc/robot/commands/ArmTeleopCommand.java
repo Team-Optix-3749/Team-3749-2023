@@ -8,7 +8,7 @@ import frc.robot.utils.Xbox;
  * Controls the elbow and shoulder using the left and right joysticks
  * 
  * @author Rohin Sood
-*/
+ */
 public class ArmTeleopCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
@@ -21,16 +21,16 @@ public class ArmTeleopCommand extends CommandBase {
     this.operator = operator;
     addRequirements(armSim);
   }
-  
+
   @Override
   public void initialize() {
   }
-  
+
   @Override
   public void execute() {
     double shoulderVoltage = 12 * operator.getRightY();
     double elbowVoltage = 12 * operator.getLeftY();
-    
+
     arm.setShoulderVoltage(shoulderVoltage);
     arm.setElbowVoltage(elbowVoltage);
   }
