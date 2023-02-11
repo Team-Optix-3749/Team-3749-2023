@@ -28,8 +28,6 @@ public class RobotContainer {
   private void configureDefaultCommands() {
   }
 
-  // set as whileTrue, what are we going to do about timing, how long do we let it
-  // run continuously
   private void configureButtonBindings() {
     pilot.aWhileHeld(
         () -> arm.setShoulder(.2), () -> arm.setShoulder(0), arm);
@@ -45,7 +43,7 @@ public class RobotContainer {
         () -> arm.setShoulderPosition(0.66), () -> arm.setShoulderPosition(0), arm);
     pilot.leftBumperWhileHeld(
         () -> arm.setShoulderPosition(0.45), () -> arm.setShoulderPosition(0), arm);
-}
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
