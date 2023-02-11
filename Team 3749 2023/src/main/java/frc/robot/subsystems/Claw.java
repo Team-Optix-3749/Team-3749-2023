@@ -34,12 +34,13 @@ public class Claw extends SubsystemBase {
     private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
     
     public Claw() {
-        rightMotor.setIdleMode(IdleMode.kBrake);
-        leftMotor.setIdleMode(IdleMode.kBrake);
-        
+        rightMotor.restoreFactoryDefaults();
+        leftMotor.restoreFactoryDefaults();
+
         rightMotor.setInverted(true);
 
-        rightMotor.follow(leftMotor);
+        rightMotor.setIdleMode(IdleMode.kCoast);
+        leftMotor.setIdleMode(IdleMode.kCoast);
 
         leftPIDController.setP(Constants.Claw.kP.get());
     }
@@ -62,6 +63,7 @@ public class Claw extends SubsystemBase {
      */
     public void set(double speed) {
         leftMotor.set(speed);
+        rightMotor.set(speed);
     }
 
     /**

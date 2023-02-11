@@ -9,10 +9,10 @@ public final class Constants {
         public static final int right_side = 21;
         public static final int left_side = 22; 
 
-        public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.0); 
+        public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.2); 
 
         //PID values
-        public static final SmartData<Double> kP = new SmartData<Double>("Claw kP", 1.0); 
+        public static final SmartData<Double> kP = new SmartData<Double>("Claw kP", .05); 
         public static final double kI = 0.0;
         public static final double kD = 0.0;
 

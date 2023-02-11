@@ -11,7 +11,6 @@ public class RobotContainer {
 
     // Controllers
     private final Xbox pilot = new Xbox(0);
-    private final Xbox operator = new Xbox(1);
 
     // Subsystems
     private final Claw claw = new Claw();
@@ -27,12 +26,13 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        pilot.aWhileHeld(
-            () -> claw.set(Constants.Claw.speed.get()), () -> claw.set(0), claw
-        );
+        // pilot.aWhileHeld(
+        //     () -> claw.set(Constants.Claw.speed.get()), () -> claw.set(0), claw
+        // );
         pilot.bWhileHeld(
             () -> claw.set(-Constants.Claw.speed.get()), () -> claw.set(0), claw
         );
+
         pilot.xWhileHeld(
             () -> claw.setVeloPID(2), () -> claw.setVeloPID(0.0), claw
         );
