@@ -13,6 +13,7 @@ import java.lang.ModuleLayer.Controller;
 import javax.swing.plaf.nimbus.State;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -32,11 +33,14 @@ public class AutoBalancing extends CommandBase {
 
     SwerveSubsystem swerveSubsystem;
 
-    double angle = swerveSubsystem.getVerticalTilt();
-    PIDController controller = new PIDController(0.5, 0, 0);
-    double start_position;
-    double position;
-    double end_position;
+    private final PIDController controller = new PIDController(0.5, 0, 0);
+    private final PIDController turnController = new PIDController(0.005, 0.001, 0);
+    private final SlewRateLimiter turningLimiter = new SlewRateLimiter(Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
+    
+    private  double angle = swerveSubsystem.getVerticalTilt();
+    private double start_position;
+    private double position;
+    private double end_position;
 
     // Initializes the BaseCommand
     public AutoBalancing(SwerveSubsystem swerveSubsystem) {
@@ -66,15 +70,28 @@ public class AutoBalancing extends CommandBase {
     public void execute() {
         // How inaccurate we are willing to be in reference to looking straight forward
         if (Math.abs(swerveSubsystem.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
-            // NOT CORRECT, see MoveDistance
-            // SwerveModuleState[] states = new SwerveModuleState[4];
-            // for (int i = 0; i < 4; i++) {
-            // states[i] = new SwerveModuleState(0.0, new Rotation2d(0));
-            // }
-            // swerveSubsystem.setModuleStates(states);
+            // negative so that we move towards the target, not away
+            double turning_speed =  turnController.calculate(Math.abs(swerveSubsystem.getHeading()),0);
+            turning_speed = turningLimiter.calculate(turning_speed)
+                    * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+
+            // remove the negative if it turns the wrong direction around
+            turning_speed = Math.abs(turning_speed) * Math.signum(swerveSubsystem.getHeading());
+
+            // 4. Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    0, 0, turning_speed, swerveSubsystem.getRotation2d());
+            // 5. Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates =Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+            // 6. Output each module states to wheels
+            swerveSubsystem.setModuleStates(moduleStates);
         }
         // how close to the setpoint we want to be before calculating a new one
-        if (Math.abs(controller.getPositionError()) < Constants.AutoBalancing.max_movement_offset) {
+        else if (Math.abs(controller.getPositionError()) < Constants.AutoBalancing.max_movement_offset) {
             start_position = swerveSubsystem.getPose().getY();
             angle = swerveSubsystem.getVerticalTilt();
             // Math lookin ass to get the distance on the station we need to travel based on

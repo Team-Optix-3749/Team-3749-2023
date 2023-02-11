@@ -66,7 +66,7 @@ public class RobotContainer {
   }
 
   public void setupAuto(){
-    Constants.AutoConstants.eventMap.put("pickup_cone_floor", new PrintCommand("PICKUP CONE FLOOR"));
+    Constants.AutoConstants.eventMap.put("pickup_cone_floor", Commands.print("PICKUP CONE FLOOR"));
     Constants.AutoConstants.eventMap.put("pickup_cube_floor", null);
     Constants.AutoConstants.eventMap.put("pickup_cone_double_substation", null);
     Constants.AutoConstants.eventMap.put("pickup_cube_double_substation", null);
