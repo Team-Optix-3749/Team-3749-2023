@@ -20,12 +20,12 @@ public class Kinematics {
     
     public Kinematics(double xi, double yi){ 
         // initial positions of (x,y) for arm
-        // TODO: set positions to default
+        // TODO: set positions to defaults
 
 
     }
 
-    // foreward kinematics (can use for testing)
+    // forward kinematics (can use for testing)
     // NOTE: assumes theta values are in radians
     public Translation2d forward(double thetaB, double thetaF){
         Translation2d bicepVector = new Translation2d(
@@ -44,7 +44,6 @@ public class Kinematics {
     }
 
     // for now returns a pair of doubles, might need to change later
-    // needs an algebraic solver
     public Pair<Double, Double> inverse(double x, double y) throws Exception{
         if(!validXYArgs(x, y)){
             throw new Exception("invalid x and y, exceeds arm radius");
@@ -69,7 +68,7 @@ public class Kinematics {
         return new Pair<Double, Double>(thetaB, thetaF);
     }
 
-    // validates xy vector lengths don't exceed radius of arm
+    // validates if xy vector length doesn't exceed radius of arm
     public boolean validXYArgs(double x, double y){
         double radiusSquared = Math.pow(bicepLength + forearmLength, 2);
         double distanceSquared = Math.pow(x, 2) + Math.pow(y, 2);
@@ -81,6 +80,7 @@ public class Kinematics {
         return true;
     }
 
+    // tester method
     public static void tester() throws Exception {
         Kinematics kinematics = new Kinematics(0, 0);
         Pair<Double, Double> angles = kinematics.inverse(Math.sqrt(2)*55, Math.sqrt(2)*55);
