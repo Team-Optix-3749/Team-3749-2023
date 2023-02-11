@@ -33,6 +33,9 @@ public class RobotContainer {
         pilot.bWhileHeld(
             () -> claw.set(-Constants.Claw.speed.get()), () -> claw.set(0), claw
         );
+        pilot.xWhileHeld(
+            () -> claw.setVeloPID(2), () -> claw.setVeloPID(0.0), claw
+        );
     }
 
     public Command getAutonomousCommand() {

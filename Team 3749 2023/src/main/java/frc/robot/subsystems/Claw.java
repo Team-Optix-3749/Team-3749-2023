@@ -2,11 +2,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -24,21 +25,23 @@ import frc.robot.utils.Constants;
 
 public class Claw extends SubsystemBase {
     
-    private final CANSparkMax rightMotor = new CANSparkMax(Constants.Claw.right_side, MotorType.kBrushless);
     private final CANSparkMax leftMotor = new CANSparkMax(Constants.Claw.left_side, MotorType.kBrushless);
+    private final CANSparkMax rightMotor = new CANSparkMax(Constants.Claw.right_side, MotorType.kBrushless);
+
+    private final SparkMaxPIDController leftPIDController = leftMotor.getPIDController();
     
     private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
     private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
     
-    private final PIDController clawPID = new PIDController(Constants.Claw.claw_kP, Constants.Claw.claw_kI,
-            Constants.Claw.claw_kD);
-    
     public Claw() {
-        rightMotor.setInverted(true);
-        rightMotor.follow(leftMotor);
-
         rightMotor.setIdleMode(IdleMode.kBrake);
         leftMotor.setIdleMode(IdleMode.kBrake);
+        
+        rightMotor.setInverted(true);
+
+        rightMotor.follow(leftMotor);
+
+        leftPIDController.setP(Constants.Claw.kP.get());
     }
 
     /**
@@ -54,9 +57,20 @@ public class Claw extends SubsystemBase {
 
     /**
      * set % speed of the motor
+     * 
+     * @param speed -1.0 to 1.0
      */
     public void set(double speed) {
         leftMotor.set(speed);
+    }
+
+    /**
+     * sets the desired velocity of the claw using PID
+     * 
+     * @param velo_setpoint (rotations/sec)
+     */
+    public void setVeloPID(double velo_setpoint) {
+        leftPIDController.setReference(velo_setpoint, ControlType.kVelocity);
     }
 
     @Override
