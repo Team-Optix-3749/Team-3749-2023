@@ -11,23 +11,6 @@ public final class Constants {
 
     public static final RobotMode ROBOT_MODE = RobotMode.REAL;
 
-    public static final class Base {
-        public static final int neo_id = 3749;
-        public static final int falcon_id = 6328;
-        public static final SmartData<Double> speed = new SmartData<Double>("Base Speed", 2.54);
-    }
-
-    public static final class Lights {
-        public static final int led_length = 20; // change this value
-        public static final int led_port = 0; // change this value
-        public static final int[] light1 = { 0, 255, 0 };
-        public static final int[] light2 = { 255, 255, 255 };
-    }
-
-    public static final class Controller {
-        public static final int joystick_port = 0;
-    }
-
     public static final class Arm {
 
         public static final SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
