@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -9,11 +9,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Arm extends SubsystemBase {
-
-	private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
+public class ArmReal extends Arm {
+  
+  private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
 	private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
 	private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
 	private PIDController shoulderPIDController = new PIDController(0.008, 0, 0);
@@ -30,42 +29,49 @@ public class Arm extends SubsystemBase {
 			Constants.Arm.shoulderKI.get(), Constants.Arm.shoulderKD.get(),
 			new TrapezoidProfile.Constraints(2, 5));
 
-	public Arm() {
-		leftShoulderMotor.restoreFactoryDefaults();
-		rightShoulderMotor.restoreFactoryDefaults();
+  public ArmReal() {
+    leftShoulderMotor.restoreFactoryDefaults();
+    rightShoulderMotor.restoreFactoryDefaults();
 
-		leftElbowMotor.restoreFactoryDefaults();
-		rightElbowMotor.restoreFactoryDefaults();
-	}
+    leftElbowMotor.restoreFactoryDefaults();
+    rightElbowMotor.restoreFactoryDefaults();
+  }
 
-	public void setElbowVoltage(double voltage) {
+  @Override
+  public void setElbowVoltage(double voltage) {
 		leftElbowMotor.setVoltage(voltage);
 	}
 
+  @Override
 	public void setShoulderVoltage(double voltage) {
 		leftShoulderMotor.setVoltage(voltage);
 	}
 
+  @Override
 	public void setShoulder(double percent) {
 		leftShoulderMotor.set(percent);
 		rightShoulderMotor.set(-percent);
 	}
 
+  @Override
 	public void setElbow(double percent) {
 		leftElbowMotor.set(percent);
 		rightElbowMotor.set(-percent);
 	}
 
+  @Override
 	public double getShoulderPosition() {
 		// STOW: 0.601644465041112
 		return shoulderAbsoluteEncoder.getDistance();
 	}
 
+  @Override
 	public double getElbowPosition() {
 		// STOW: 0.328055008201375
 		return elbowAbsoluteEncoder.getDistance();
 	}
-
+  
+  @Override
 	public void setShoulderPosition(double position) {
 		leftShoulderMotor.set(-shoulderPIDController.calculate(
 				shoulderAbsoluteEncoder.getDistance() * 100, position * 100) * 10);
@@ -78,6 +84,7 @@ public class Arm extends SubsystemBase {
 		SmartDashboard.putNumber("Shoulder Abs PID", shoulderAbsoluteEncoder.getDistance());
 	}
 
+  @Override
 	public void setElbowPosition(double position) {
 		leftElbowMotor.set(-elbowPIDController.calculate(
 				elbowAbsoluteEncoder.getDistance() * 100, position * 100) * 10);
@@ -89,14 +96,5 @@ public class Arm extends SubsystemBase {
 
 		SmartDashboard.putNumber("Elbow Abs PID", elbowAbsoluteEncoder.getDistance());
 	}
-
-	@Override
-	public void simulationPeriodic() {
-	}
-
-	@Override
-	public void periodic() {
-		SmartDashboard.putNumber("Elbow Abs", getElbowPosition());
-		SmartDashboard.putNumber("Shoulder Abs", getShoulderPosition());
-	}
+  
 }

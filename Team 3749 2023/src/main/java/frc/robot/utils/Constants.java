@@ -2,14 +2,14 @@ package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
-/***
+/**
  * Stores constant variables within subclasses for different subsystems.
  * Such constant values can include motor IDs, motor speed, PID
  * constants, etc...
  */
 public final class Constants {
 
-    public static final RobotMode robotState = RobotMode.REAL;
+    public static final RobotMode ROBOT_MODE = RobotMode.REAL;
     public static final class Base {
         public static final int neo_id = 3749;
         public static final int falcon_id = 6328;
@@ -89,9 +89,7 @@ public final class Constants {
             ElbowSetpoints(double angle) {
                 this.angle = angle;
             }
-
         }
-
     }
 
     public static enum RobotMode {
