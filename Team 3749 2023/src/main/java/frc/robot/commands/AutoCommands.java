@@ -58,9 +58,9 @@ public final class AutoCommands {
                          traj, 
                          swerveSubsystem::getPose, // Pose supplier
                          Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-                         new PIDController(0.1, 0.1, 0.01), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                         new PIDController(0.1, 0.1, 0.01), // Y controller (usually the same values as X controller)
-                         new PIDController(0.1, 0.001, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                         new PIDController(0.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                         new PIDController(0.1, 0, 0), // Y controller (usually the same values as X controller)
+                         new PIDController(0.05, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                          swerveSubsystem::setModuleStates, // Module states consumer
                          true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                          swerveSubsystem // Requires this drive subsystem
@@ -80,9 +80,10 @@ public final class AutoCommands {
          */
         private static Command createCommandFromSwerveTrajectory(SwerveSubsystem swerveSubsystem,
                         Trajectory trajectory) {
-                PIDController xController = new PIDController(0.1, 0.1, 0.01);
-                PIDController yController = new PIDController(0.1, 0.1, 0.01);
-                ProfiledPIDController thetaController = new ProfiledPIDController(0.005, 0.001, 0,
+                PIDController xController = new PIDController(0.1, 0, 0);
+                PIDController yController = new PIDController(0.1, 0, 0);
+
+                ProfiledPIDController thetaController = new ProfiledPIDController(0.5wpilib, 0, 0,
                                 new TrapezoidProfile.Constraints(
                                                 Constants.DriveConstants.kAutoDriveMaxAngularSpeedRadiansPerSecond,
                                                 Constants.DriveConstants.kAutoDriveMaxAngularAccelerationUnitsPerSecond));
@@ -150,6 +151,7 @@ public final class AutoCommands {
 
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem) {
                 PathPlannerTrajectory trajectory = PathPlanner.loadPath("calibration", new PathConstraints(5, 5));
-                return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
+                // return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
+                return createCommandFromSwerveTrajectory(swerveSubsystem, trajectory);
         }
 }
