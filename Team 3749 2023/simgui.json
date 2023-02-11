@@ -68,13 +68,9 @@
           "visible": true
         }
       },
-      "/SmartDashboard/SendableChooser[1]": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/SendableChooser[2]": {
         "window": {
+          "name": "presets",
           "visible": true
         }
       }
