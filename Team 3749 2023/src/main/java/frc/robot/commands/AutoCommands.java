@@ -83,7 +83,7 @@ public final class AutoCommands {
                 PIDController xController = new PIDController(0.1, 0, 0);
                 PIDController yController = new PIDController(0.1, 0, 0);
 
-                ProfiledPIDController thetaController = new ProfiledPIDController(0.5wpilib, 0, 0,
+                ProfiledPIDController thetaController = new ProfiledPIDController(0.5, 0, 0,
                                 new TrapezoidProfile.Constraints(
                                                 Constants.DriveConstants.kAutoDriveMaxAngularSpeedRadiansPerSecond,
                                                 Constants.DriveConstants.kAutoDriveMaxAngularAccelerationUnitsPerSecond));
@@ -150,8 +150,7 @@ public final class AutoCommands {
         }
 
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem) {
-                PathPlannerTrajectory trajectory = PathPlanner.loadPath("calibration", new PathConstraints(5, 5));
-                // return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
-                return createCommandFromSwerveTrajectory(swerveSubsystem, trajectory);
+                PathPlannerTrajectory trajectory = PathPlanner.loadPath("test path", new PathConstraints(5, 5));
+                return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
 }
