@@ -54,8 +54,8 @@ public class ArmSim extends Arm {
       Constants.Arm.elbow_reduction,
       SingleJointedArmSim.estimateMOI(Constants.Arm.forearm_length, Constants.Arm.forearm_mass),
       Constants.Arm.forearm_length,
-      Units.degreesToRadians(Constants.Arm.elbow_min_angle),
-      Units.degreesToRadians(Constants.Arm.elbow_max_angle),
+      Units.degreesToRadians(-360),
+      Units.degreesToRadians(360),
       Constants.Arm.forearm_mass,
       false,
       VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
@@ -65,8 +65,8 @@ public class ArmSim extends Arm {
       Constants.Arm.shoulder_reduction,
       SingleJointedArmSim.estimateMOI(Constants.Arm.bicep_length, Constants.Arm.bicep_mass),
       Constants.Arm.bicep_length,
-      Units.degreesToRadians(Constants.Arm.shoulder_min_angle),
-      Units.degreesToRadians(Constants.Arm.shoulder_max_angle),
+      Units.degreesToRadians(30),
+      Units.degreesToRadians(150),
       Constants.Arm.bicep_mass,
       false,
       VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick

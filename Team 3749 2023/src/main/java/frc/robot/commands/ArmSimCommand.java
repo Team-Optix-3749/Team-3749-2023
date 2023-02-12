@@ -38,17 +38,14 @@ public class ArmSimCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Setpoint top (degrees)", 90);
-    SmartDashboard.putNumber("Setpoint bottom (degrees)", 90);
     controlMode.setDefaultOption("Presets (Setpoints)", 0);
     controlMode.addOption("Virtual Four Bar", 1);
     controlMode.addOption("Manual Angle Adjust", 2);
 
     presetChooser.setDefaultOption("Starting Position", 0);
-    presetChooser.addOption("Ground Intake Position", 1);
+    presetChooser.addOption("Stowed", 1);
     SmartDashboard.putData(controlMode);
     SmartDashboard.putData(presetChooser);
-
   }
 
   @Override
@@ -56,17 +53,18 @@ public class ArmSimCommand extends CommandBase {
 
     double elbowSetpoint, shoulderSetpoint;
     switch (presetChooser.getSelected()) {
+      // the real life 0 position is vertical, so its transformed by 90 degrees
       case 0:
-        elbowSetpoint = ElbowSetpoints.ZERO.angle;
-        shoulderSetpoint = ShoulderSetpoints.ZERO.angle;
+        elbowSetpoint = ElbowSetpoints.ZERO.angle - 90;
+        shoulderSetpoint = ShoulderSetpoints.ZERO.angle - 90;
         break;
       case 1:
-        elbowSetpoint = ElbowSetpoints.GROUND_INTAKE.angle;
-        shoulderSetpoint = ShoulderSetpoints.GROUND_INTAKE.angle;
+        elbowSetpoint = ElbowSetpoints.STOWED.angle - 90;
+        shoulderSetpoint = ShoulderSetpoints.STOWED.angle - 90;
         break;
       default:
-        elbowSetpoint = ElbowSetpoints.ZERO.angle;
-        shoulderSetpoint = ShoulderSetpoints.ZERO.angle;
+        elbowSetpoint = ElbowSetpoints.ZERO.angle - 90;
+        shoulderSetpoint = ShoulderSetpoints.ZERO.angle - 90;
         break;
     }
 
