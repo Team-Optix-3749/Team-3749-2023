@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -9,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.*;
 import frc.robot.utils.Constants.Arm.*;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Kinematics;
+import frc.robot.utils.SmartData;
 
 /**
  * Sets the joint setpoints for the double jointed arm sim using a preset
@@ -31,6 +34,10 @@ public class ArmSimCommand extends CommandBase {
   private SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
   private SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
+  // desired positions for x and y
+  public static SmartData<Double> xf = new SmartData<Double>("desired x position", 55.0);
+  public static SmartData<Double> yf = new SmartData<Double>("desired y position", 0.0);
+
   public ArmSimCommand(Arm armSim) {
     this.armSim = armSim;
     addRequirements(armSim);
@@ -46,23 +53,31 @@ public class ArmSimCommand extends CommandBase {
 
     presetChooser.setDefaultOption("Starting Position", 0);
     presetChooser.addOption("Ground Intake Position", 1);
+    presetChooser.addOption("Inverse Kinematics Position", 2);
     SmartDashboard.putData(controlMode);
     SmartDashboard.putData(presetChooser);
 
   }
 
   @Override
-  public void execute() {
+  public void execute(){
 
     double elbowSetpoint, shoulderSetpoint;
     switch (presetChooser.getSelected()) {
       case 0:
-        elbowSetpoint = ElbowSetpoints.ZERO.angle;
-        shoulderSetpoint = ShoulderSetpoints.ZERO.angle;
+        elbowSetpoint = ElbowSetpoints.ZERO.angle + 180;
+        shoulderSetpoint = ShoulderSetpoints.ZERO.angle + 180;
         break;
       case 1:
         elbowSetpoint = ElbowSetpoints.GROUND_INTAKE.angle;
         shoulderSetpoint = ShoulderSetpoints.GROUND_INTAKE.angle;
+        break;
+      case 2:
+        Kinematics kinematics = new Kinematics();
+        Pair<Double, Double> angles = kinematics.inverse(xf.get(), yf.get());
+
+        elbowSetpoint = 180-Math.toDegrees(angles.getSecond());
+        shoulderSetpoint = 180-Math.toDegrees(angles.getFirst());
         break;
       default:
         elbowSetpoint = ElbowSetpoints.ZERO.angle;

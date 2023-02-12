@@ -15,13 +15,12 @@ public class Kinematics {
     private double forearmLength = Constants.Arm.forearm_length;
 
     // "zero" position in terms of angle set to directly vertical
-    private Translation2d bicepZero = new Translation2d(0, bicepLength);
-    private Translation2d forearmZero = new Translation2d(0, forearmLength);
+    private Translation2d bicepZero = new Translation2d(bicepLength, 0);
+    private Translation2d forearmZero = new Translation2d(forearmLength, 0);
     
-    public Kinematics(double xi, double yi){ 
+    public Kinematics(){ 
         // initial positions of (x,y) for arm
         // TODO: set positions to defaults
-
 
     }
 
@@ -44,9 +43,9 @@ public class Kinematics {
     }
 
     // for now returns a pair of doubles, might need to change later
-    public Pair<Double, Double> inverse(double x, double y) throws Exception{
+    public Pair<Double, Double> inverse(double x, double y){
         if(!validXYArgs(x, y)){
-            throw new Exception("invalid x and y, exceeds arm radius");
+            // throw new Exception("invalid x and y, exceeds arm radius");
         }
         
         // final vector location
@@ -82,8 +81,8 @@ public class Kinematics {
 
     // tester method
     public static void tester() throws Exception {
-        Kinematics kinematics = new Kinematics(0, 0);
-        Pair<Double, Double> angles = kinematics.inverse(Math.sqrt(2)*55, Math.sqrt(2)*55);
+        Kinematics kinematics = new Kinematics();
+        Pair<Double, Double> angles = kinematics.inverse(0, 55);
 
         double thetaB = angles.getFirst();
         double thetaF = angles.getSecond();
