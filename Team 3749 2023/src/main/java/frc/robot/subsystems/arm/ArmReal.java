@@ -22,14 +22,14 @@ public class ArmReal extends Arm {
   private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
   private final RelativeEncoder rightShoulderRelativeEncoder = rightShoulderMotor.getEncoder();
   private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
-  private PIDController shoulderPIDController = new PIDController(0.008, 0, 0);
+  private final PIDController shoulderPIDController = new PIDController(0.008, 0, 0);
 
   private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
   private final RelativeEncoder leftElbowRelativeEncoder = leftElbowMotor.getEncoder();
   private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
   private final RelativeEncoder rightElbowRelativeEncoder = rightElbowMotor.getEncoder();
   private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
-  private PIDController elbowPIDController = new PIDController(0.008, 0, 0);
+  private final PIDController elbowPIDController = new PIDController(0.008, 0, 0);
 
   public ArmReal() {
     leftShoulderMotor.restoreFactoryDefaults();
@@ -48,9 +48,9 @@ public class ArmReal extends Arm {
 
   @Override
   public void setShoulder(double percent) {
-    if (getShoulderDistance() <= Constants.Arm.shoulder_min_angle && percent < 0) {
-      return;
-    } else if (getShoulderDistance() >= Constants.Arm.shoulder_max_angle && percent > 0) {
+    boolean past_min_limit = getShoulderDistance() <= Constants.Arm.shoulder_min_angle && percent < 0; 
+    boolean past_max_limit = getShoulderDistance() >= Constants.Arm.shoulder_max_angle && percent > 0; 
+    if (past_min_limit || past_max_limit) {
       return;
     }
     leftShoulderMotor.set(percent);
