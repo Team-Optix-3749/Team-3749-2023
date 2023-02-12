@@ -107,14 +107,14 @@ public class ArmSim extends Arm {
       new MechanismLigament2d(
           "Elbow",
           Constants.Arm.forearm_length,
-          Units.radiansToDegrees(elbowSim.getAngleRads()),
+          0,
           10,
           new Color8Bit(Color.kPurple)));
   private final MechanismLigament2d claw = forearm.append(
       new MechanismLigament2d(
           "Claw",
           Constants.Arm.claw_length,
-          Units.radiansToDegrees(elbowSim.getAngleRads()),
+          0,
           16,
           new Color8Bit(Color.kWhite)));
 
@@ -143,12 +143,12 @@ public class ArmSim extends Arm {
   }
 
   @Override
-  public double getShoulderPosition() {
+  public double getShoulderDistance() {
     return shoulderEncoder.getDistance();
   }
 
   @Override
-  public double getElbowPosition() {
+  public double getElbowDistance() {
     return elbowEncoder.getDistance();
   }
 

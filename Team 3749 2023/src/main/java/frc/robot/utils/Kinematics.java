@@ -1,8 +1,6 @@
 package frc.robot.utils;
 
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 // Kinematics using Tranlsation2d as vectors
@@ -19,9 +17,7 @@ public class Kinematics {
     private Translation2d forearmZero = new Translation2d(forearmLength, 0);
     
     public Kinematics(){ 
-        // initial positions of (x,y) for arm
         // TODO: set positions to defaults
-
     }
 
     // forward kinematics (can use for testing)
@@ -76,13 +72,13 @@ public class Kinematics {
             return true;
         }
 
-        return true;
+        return false;
     }
 
     // tester method
     public static void tester() throws Exception {
         Kinematics kinematics = new Kinematics();
-        Pair<Double, Double> angles = kinematics.inverse(0, 55);
+        Pair<Double, Double> angles = kinematics.inverse(Math.sqrt(2)*55, Math.sqrt(2)*55);
 
         double thetaB = angles.getFirst();
         double thetaF = angles.getSecond();

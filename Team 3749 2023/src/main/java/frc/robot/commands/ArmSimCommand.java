@@ -85,12 +85,12 @@ public class ArmSimCommand extends CommandBase {
         break;
     }
 
-    double pidOutputElbow = elbowController.calculate(armSim.getElbowPosition(),
+    double pidOutputElbow = elbowController.calculate(armSim.getElbowDistance(),
         Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
     armSim.setElbowVoltage(pidOutputElbow);
     SmartDashboard.putNumber("Setpoint bottom (degrees)", shoulderSetpoint);
     SmartDashboard.putNumber("Setpoint top (degrees)", elbowSetpoint);
-    double pidOutputShoulder = shoulderController.calculate(armSim.getShoulderPosition(),
+    double pidOutputShoulder = shoulderController.calculate(armSim.getShoulderDistance(),
         Units.degreesToRadians(shoulderSetpoint));
     armSim.setShoulderVoltage(pidOutputShoulder);
   }

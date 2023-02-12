@@ -50,19 +50,19 @@ public class RobotContainer {
     switch (Constants.ROBOT_MODE) {
       case REAL:
         pilot.aWhileHeld(
-            () -> arm.setShoulder(.2), () -> arm.setShoulder(0), arm);
-        pilot.aWhileHeld(
-            () -> arm.setShoulder(-.2), () -> arm.setShoulder(0), arm);
+            () -> arm.setShoulder(.4), () -> arm.setShoulder(0), arm);
+        pilot.bWhileHeld(
+            () -> arm.setShoulder(-.4), () -> arm.setShoulder(0), arm);
 
         pilot.xWhileHeld(
-            () -> arm.setElbow(.2), () -> arm.setElbow(0), arm);
+            () -> arm.setElbow(.4), () -> arm.setElbow(0), arm);
         pilot.yWhileHeld(
-            () -> arm.setElbow(-.2), () -> arm.setElbow(0), arm);
+            () -> arm.setElbow(-.4), () -> arm.setElbow(0), arm);
 
         pilot.rightBumperWhileHeld(
-            () -> arm.setShoulderPosition(0.66), () -> arm.setShoulderPosition(0), arm);
+            () -> arm.setShoulderAngle(180), () -> arm.setShoulder(0), arm);
         pilot.leftBumperWhileHeld(
-            () -> arm.setShoulderPosition(0.45), () -> arm.setShoulderPosition(0), arm);
+            () -> arm.setElbowAngle(180), () -> arm.setElbow(0), arm);
         break;
       case SIMULATION:
         pilot.aWhileHeld(() -> testKinematics());
