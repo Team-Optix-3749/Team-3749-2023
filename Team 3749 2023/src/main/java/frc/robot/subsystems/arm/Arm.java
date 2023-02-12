@@ -21,11 +21,11 @@ public class Arm extends SubsystemBase {
 	public void setElbow(double percent) {
 	}
 
-	public double getShoulderPosition() {
+	public double getShoulderDistance() {
 		return 0.0;
 	}
 
-	public double getElbowPosition() {
+	public double getElbowDistance() {
 		return 0.0;
 	}
 
@@ -34,5 +34,9 @@ public class Arm extends SubsystemBase {
 
 	public void setElbowPosition(double position) {
 	}
+
+	public void setShoulderAngle(double angle) {}
+	
+	public void setElbowAngle(double angle) {}
 
 }

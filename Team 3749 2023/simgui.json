@@ -89,6 +89,15 @@
       "SmartDashboard": {
         "Arm Sim": {
           "Arm Pivot": {
+            "Bicep": {
+              "Elbow": {
+                "Claw": {
+                  "open": true
+                },
+                "open": true
+              },
+              "open": true
+            },
             "open": true
           },
           "ArmPivot": {

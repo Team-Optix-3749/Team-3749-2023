@@ -44,15 +44,20 @@ public final class Constants {
 
         public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
 
-        public static final double shoulder_min_angle = 30;
-        public static final double shoulder_max_angle = 150;
+        // encoder values (0.0 - 1.0)
+        public static final double shoulder_offset = .128;
+        public static final double elbow_offset = .272;
+
+        public static final double shoulder_min_angle = 90;
+        public static final double shoulder_max_angle = 210;
 
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
         public static enum ShoulderSetpoints {
             ZERO(0),
-            GROUND_INTAKE(132.0);
+            GROUND_INTAKE(180),
+            STOWED(185);
 
             public final double angle;
 
@@ -64,7 +69,8 @@ public final class Constants {
 
         public static enum ElbowSetpoints {
             ZERO(0),
-            GROUND_INTAKE(111.0);
+            GROUND_INTAKE(0),
+            STOWED(126);
 
             public final double angle;
 

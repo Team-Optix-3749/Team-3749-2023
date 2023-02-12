@@ -1,6 +1,7 @@
 package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,81 +18,98 @@ import frc.robot.utils.Constants;
 public class ArmReal extends Arm {
 
   private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
+  private final RelativeEncoder leftShoulderRelativeEncoder = leftShoulderMotor.getEncoder();
   private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
+  private final RelativeEncoder rightShoulderRelativeEncoder = rightShoulderMotor.getEncoder();
   private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
   private PIDController shoulderPIDController = new PIDController(0.008, 0, 0);
 
   private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
+  private final RelativeEncoder leftElbowRelativeEncoder = leftElbowMotor.getEncoder();
   private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
+  private final RelativeEncoder rightElbowRelativeEncoder = rightElbowMotor.getEncoder();
   private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
   private PIDController elbowPIDController = new PIDController(0.008, 0, 0);
 
   public ArmReal() {
     leftShoulderMotor.restoreFactoryDefaults();
     rightShoulderMotor.restoreFactoryDefaults();
-
     leftElbowMotor.restoreFactoryDefaults();
     rightElbowMotor.restoreFactoryDefaults();
-  }
-
-  @Override
-  public void setElbowVoltage(double voltage) {
-    leftElbowMotor.setVoltage(voltage);
-  }
-
-  @Override
-  public void setShoulderVoltage(double voltage) {
-    leftShoulderMotor.setVoltage(voltage);
+    
+    shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
+    elbowAbsoluteEncoder.setPositionOffset(Constants.Arm.elbow_offset);
+    shoulderAbsoluteEncoder.setDistancePerRotation(360);
+    elbowAbsoluteEncoder.setDistancePerRotation(360);
+    
+    leftShoulderMotor.setInverted(true);
+    rightElbowMotor.setInverted(true);
   }
 
   @Override
   public void setShoulder(double percent) {
+    if (getShoulderDistance() <= Constants.Arm.shoulder_min_angle && percent < 0) {
+      return;
+    } else if (getShoulderDistance() >= Constants.Arm.shoulder_max_angle && percent > 0) {
+      return;
+    }
     leftShoulderMotor.set(percent);
-    rightShoulderMotor.set(-percent);
+    rightShoulderMotor.set(percent);
   }
+
 
   @Override
   public void setElbow(double percent) {
     leftElbowMotor.set(percent);
-    rightElbowMotor.set(-percent);
+    rightElbowMotor.set(percent);
   }
 
   @Override
-  public double getShoulderPosition() {
-    // STOW: 0.601644465041112
+  public double getShoulderDistance() {
     return shoulderAbsoluteEncoder.getDistance();
   }
 
   @Override
-  public double getElbowPosition() {
-    // STOW: 0.328055008201375
+  public double getElbowDistance() {
     return elbowAbsoluteEncoder.getDistance();
   }
 
   @Override
-  public void setShoulderPosition(double position) {
-    leftShoulderMotor.set(-shoulderPIDController.calculate(
-        shoulderAbsoluteEncoder.getDistance() * 100, position * 100) * 10);
-    rightShoulderMotor.set(shoulderPIDController.calculate(
-        shoulderAbsoluteEncoder.getDistance() * 100, position * 100) * 10);
+  public void setShoulderAngle(double angle) {
+    leftShoulderMotor.set(
+      shoulderPIDController.calculate(
+        shoulderAbsoluteEncoder.getDistance(), angle)
+    );
 
-    SmartDashboard.putNumber("Shoulder Setter PID", shoulderPIDController.calculate(
-        shoulderAbsoluteEncoder.getDistance() * 100, position * 100));
-
-    SmartDashboard.putNumber("Shoulder Abs PID", shoulderAbsoluteEncoder.getDistance());
+    rightShoulderMotor.set(
+      shoulderPIDController.calculate(
+        shoulderAbsoluteEncoder.getDistance(), angle)
+    );
   }
 
   @Override
-  public void setElbowPosition(double position) {
-    leftElbowMotor.set(-elbowPIDController.calculate(
-        elbowAbsoluteEncoder.getDistance() * 100, position * 100) * 10);
-    rightElbowMotor.set(elbowPIDController.calculate(
-        elbowAbsoluteEncoder.getDistance() * 100, position * 100) * 10);
+  public void setElbowAngle(double angle) {
+    leftElbowMotor.set(
+      elbowPIDController.calculate(
+        elbowAbsoluteEncoder.getDistance(), angle)
+    );
 
-    SmartDashboard.putNumber("Elbow Setter PID", elbowPIDController.calculate(
-        elbowAbsoluteEncoder.getDistance() * 100, position * 100));
+    rightElbowMotor.set(
+      elbowPIDController.calculate(
+        elbowAbsoluteEncoder.getDistance(), angle)
+    );
+  }
 
-    SmartDashboard.putNumber("Elbow Abs PID", elbowAbsoluteEncoder.getDistance());
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("left elbow rel", leftElbowRelativeEncoder.getPosition());
+    SmartDashboard.putNumber("right elbow rel", rightElbowRelativeEncoder.getPosition());
+    SmartDashboard.putNumber("elbow abs", elbowAbsoluteEncoder.getDistance());
+
+    SmartDashboard.putNumber("left shoulder rel", leftShoulderRelativeEncoder.getPosition());
+    SmartDashboard.putNumber("right soulder rel", rightShoulderRelativeEncoder.getPosition());
+    SmartDashboard.putNumber("shoulder abs encoder", shoulderAbsoluteEncoder.get());
+    SmartDashboard.putNumber("shoulder abs dist", shoulderAbsoluteEncoder.getDistance());
   }
 
 }
