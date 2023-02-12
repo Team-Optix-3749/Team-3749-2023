@@ -13,12 +13,11 @@ public class Kinematics {
     private double forearmLength = Constants.Arm.forearm_length;
 
     // "zero" position in terms of angle set to directly vertical
-    private Translation2d bicepZero = new Translation2d(0, bicepLength);
-    private Translation2d forearmZero = new Translation2d(0, forearmLength);
+    private Translation2d bicepZero = new Translation2d(bicepLength, 0);
+    private Translation2d forearmZero = new Translation2d(forearmLength, 0);
     
-    public Kinematics(double xi, double yi){ 
-        // initial positions of (x,y) for arm
-        // TODO: set positions to default
+    public Kinematics(){ 
+        // TODO: set positions to defaults
     }
 
     // forward kinematics (can use for testing)
@@ -40,10 +39,9 @@ public class Kinematics {
     }
 
     // for now returns a pair of doubles, might need to change later
-    // needs an algebraic solver
-    public Pair<Double, Double> inverse(double x, double y) throws Exception{
+    public Pair<Double, Double> inverse(double x, double y){
         if(!validXYArgs(x, y)){
-            throw new Exception("invalid x and y, exceeds arm radius");
+            // throw new Exception("invalid x and y, exceeds arm radius");
         }
         
         // final vector location
@@ -65,7 +63,7 @@ public class Kinematics {
         return new Pair<Double, Double>(thetaB, thetaF);
     }
 
-    // validates xy vector lengths don't exceed radius of arm
+    // validates if xy vector length doesn't exceed radius of arm
     public boolean validXYArgs(double x, double y){
         double radiusSquared = Math.pow(bicepLength + forearmLength, 2);
         double distanceSquared = Math.pow(x, 2) + Math.pow(y, 2);
@@ -77,9 +75,10 @@ public class Kinematics {
         return false;
     }
 
+    // tester method
     public static void tester() throws Exception {
-        Kinematics kinematics = new Kinematics(0, 0);
-        Pair<Double, Double> angles = kinematics.inverse(55/Math.sqrt(2), 55/Math.sqrt(2));
+        Kinematics kinematics = new Kinematics();
+        Pair<Double, Double> angles = kinematics.inverse(Math.sqrt(2)*55, Math.sqrt(2)*55);
 
         double thetaB = angles.getFirst();
         double thetaF = angles.getSecond();

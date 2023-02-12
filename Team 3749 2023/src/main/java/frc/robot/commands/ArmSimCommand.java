@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -9,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.*;
 import frc.robot.utils.Constants.Arm.*;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Kinematics;
+import frc.robot.utils.SmartData;
 
 /**
  * Sets the joint setpoints for the double jointed arm sim using a preset
@@ -31,6 +34,10 @@ public class ArmSimCommand extends CommandBase {
   private SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
   private SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
+  // desired positions for x and y
+  public static SmartData<Double> xf = new SmartData<Double>("desired x position", 55.0);
+  public static SmartData<Double> yf = new SmartData<Double>("desired y position", 0.0);
+
   public ArmSimCommand(Arm armSim) {
     this.armSim = armSim;
     addRequirements(armSim);
@@ -43,13 +50,14 @@ public class ArmSimCommand extends CommandBase {
     controlMode.addOption("Manual Angle Adjust", 2);
 
     presetChooser.setDefaultOption("Starting Position", 0);
-    presetChooser.addOption("Stowed", 1);
+    presetChooser.addOption("Stowed Position", 1);
+    presetChooser.addOption("Inverse Kinematics Position", 2);
     SmartDashboard.putData(controlMode);
     SmartDashboard.putData(presetChooser);
   }
 
   @Override
-  public void execute() {
+  public void execute(){
 
     double elbowSetpoint, shoulderSetpoint;
     switch (presetChooser.getSelected()) {
@@ -61,6 +69,13 @@ public class ArmSimCommand extends CommandBase {
       case 1:
         elbowSetpoint = ElbowSetpoints.STOWED.angle - 90;
         shoulderSetpoint = ShoulderSetpoints.STOWED.angle - 90;
+        break;
+      case 2:
+        Kinematics kinematics = new Kinematics();
+        Pair<Double, Double> angles = kinematics.inverse(xf.get(), yf.get());
+
+        elbowSetpoint = 180-Math.toDegrees(angles.getSecond());
+        shoulderSetpoint = 180-Math.toDegrees(angles.getFirst());
         break;
       default:
         elbowSetpoint = ElbowSetpoints.ZERO.angle - 90;
