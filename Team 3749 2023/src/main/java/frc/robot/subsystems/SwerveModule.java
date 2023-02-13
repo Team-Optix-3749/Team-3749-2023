@@ -49,7 +49,7 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-        turningMotor.setIdleMode(IdleMode.kBrake);
+        turningMotor.setIdleMode(IdleMode.kCoast);
 
         driveEncoder = driveMotor.getEncoder();
         turningEncoder = turningMotor.getEncoder();

@@ -21,6 +21,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -46,12 +47,14 @@ public final class AutoCommands {
          * @summary takes a trajectory and moves on it
          */
 
-        public static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath,SwerveSubsystem swerveSubsystem) {
+        public static Command  followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath,SwerveSubsystem swerveSubsystem) {
                 return new SequentialCommandGroup(
                      new InstantCommand(() -> {
                        // Reset odometry for the first path you run during auto
                        if(isFirstPath){
                            swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
+                           SmartDashboard.putNumber("holonomic pose x",traj.getInitialHolonomicPose().getX());
+                           SmartDashboard.putNumber("holonomic pose y",traj.getInitialHolonomicPose().getX());
                        }
                      }),
                      new PPSwerveControllerCommand(
@@ -60,7 +63,7 @@ public final class AutoCommands {
                          Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
                          new PIDController(0.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                          new PIDController(0.1, 0, 0), // Y controller (usually the same values as X controller)
-                         new PIDController(0.05, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                         new PIDController(5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                          swerveSubsystem::setModuleStates, // Module states consumer
                          true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                          swerveSubsystem // Requires this drive subsystem
@@ -151,6 +154,7 @@ public final class AutoCommands {
 
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem) {
                 PathPlannerTrajectory trajectory = PathPlanner.loadPath("test path", new PathConstraints(5, 5));
+                
                 return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
 }
