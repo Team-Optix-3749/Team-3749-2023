@@ -32,21 +32,27 @@ public class RobotContainer {
         break;
     }
 
-    configureDefaultCommands();
-    configureButtonBindings();
+    try {
+      configureDefaultCommands();
+      configureButtonBindings();
+    } catch (Exception e) {
+      System.out.println(e);
+    }
   }
 
-  private void configureDefaultCommands() {
+  private void configureDefaultCommands() throws Exception {
     switch (Constants.ROBOT_MODE) {
       case REAL:
         break;
       case SIMULATION:
         arm.setDefaultCommand(
             new ArmSimCommand(arm));
+        default:
+         throw new Exception("ROBOT_MODE is not set in utils/Constants.java");
     }
   }
 
-  private void configureButtonBindings() {
+  private void configureButtonBindings() throws Exception {
     switch (Constants.ROBOT_MODE) {
       case REAL:
         pilot.aWhileHeld(
@@ -60,16 +66,15 @@ public class RobotContainer {
             () -> arm.setElbow(-.4), () -> arm.setElbow(0), arm);
 
         pilot.rightBumperWhileHeld(
-            () -> arm.setShoulderAngle(180), () -> arm.setShoulder(0), arm);
+            () -> arm.setArmAngle(Constants.Arm.ShoulderSetpoints.DS.angle, Constants.Arm.ElbowSetpoints.DS.angle), () -> arm.stop(), arm);
         pilot.leftBumperWhileHeld(
-            () -> arm.setElbowAngle(180), () -> arm.setElbow(0), arm);
+          () -> arm.setArmAngle(Constants.Arm.ShoulderSetpoints.STOWED.angle, Constants.Arm.ElbowSetpoints.STOWED.angle), () -> arm.stop(), arm);
         break;
       case SIMULATION:
-        pilot.aWhileHeld(() -> testKinematics());
+        // pilot.aWhileHeld(() -> testKinematics());
         break;
       default:
-        System.out.println("ROBOT_MODE is not set in utils/Constants.java");
-        break;
+        throw new Exception("ROBOT_MODE is not set in utils/Constants.java");
     }
   }
   

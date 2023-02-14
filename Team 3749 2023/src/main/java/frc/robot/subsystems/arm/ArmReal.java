@@ -22,14 +22,14 @@ public class ArmReal extends Arm {
   private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
   private final RelativeEncoder rightShoulderRelativeEncoder = rightShoulderMotor.getEncoder();
   private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
-  private final PIDController shoulderPIDController = new PIDController(0.008, 0, 0);
+  private final PIDController shoulderPIDController = new PIDController(0.02, 0, 0);
 
   private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
   private final RelativeEncoder leftElbowRelativeEncoder = leftElbowMotor.getEncoder();
   private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
   private final RelativeEncoder rightElbowRelativeEncoder = rightElbowMotor.getEncoder();
   private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
-  private final PIDController elbowPIDController = new PIDController(0.008, 0, 0);
+  private final PIDController elbowPIDController = new PIDController(0.02, 0, 0);
 
   public ArmReal() {
     leftShoulderMotor.restoreFactoryDefaults();
@@ -43,7 +43,7 @@ public class ArmReal extends Arm {
     elbowAbsoluteEncoder.setDistancePerRotation(360);
     
     leftShoulderMotor.setInverted(true);
-    rightElbowMotor.setInverted(true);
+    leftElbowMotor.setInverted(true);
   }
 
   @Override
@@ -98,6 +98,20 @@ public class ArmReal extends Arm {
       elbowPIDController.calculate(
         elbowAbsoluteEncoder.getDistance(), angle)
     );
+  }
+
+  @Override
+  public void setArmAngle(double shoulder_angle, double elbow_angle) {
+    setShoulderAngle(shoulder_angle);
+    setElbowAngle(elbow_angle);
+  }
+
+  @Override
+  public void stop() {
+    rightElbowMotor.stopMotor();
+    rightShoulderMotor.stopMotor();
+    leftElbowMotor.stopMotor();
+    leftShoulderMotor.stopMotor();
   }
 
   @Override

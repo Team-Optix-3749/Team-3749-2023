@@ -39,4 +39,8 @@ public class Arm extends SubsystemBase {
 	
 	public void setElbowAngle(double angle) {}
 
+	public void setArmAngle(double shoulder_angle, double elbow_angle) {}
+
+	public void stop() {}
+
 }
