@@ -1,10 +1,15 @@
 package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.REVPhysicsSim;
+
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
@@ -37,39 +42,46 @@ public class ArmSim extends Arm {
   private final DCMotor elbowGearBox = DCMotor.getNEO(2);
 
   // Standard classes for controlling our arm
-  public final Encoder elbowEncoder = new Encoder(0, 1);
-  public final Encoder shoulderEncoder = new Encoder(2, 3);
+  private final Encoder elbowEncoder = new Encoder(0, 1);
+  private final Encoder shoulderEncoder = new Encoder(2, 3);
 
-  public final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-  public final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
+  private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
+  private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
 
-  public final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
-  public final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
+  private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
+  private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
+
+  private final double elbowMOI = SingleJointedArmSim.estimateMOI(Constants.Arm.elbow_reduction, Constants.Arm.forearm_length);
+  private final LinearSystem<N2, N1, N1> elbowPlant = LinearSystemId.createSingleJointedArmSystem(
+                elbowGearBox, elbowMOI, Constants.Arm.elbow_reduction);
+
+  private final double shoulderMOI = SingleJointedArmSim.estimateMOI(Constants.Arm.shoulder_reduction, Constants.Arm.bicep_length);
+  private final LinearSystem<N2, N1, N1> shoulderPlant = LinearSystemId.createSingleJointedArmSystem(
+                shoulderGearBox, shoulderMOI, Constants.Arm.shoulder_reduction);
+
 
   // This arm sim represents an arm that can travel from -75 degrees (rotated down
   // front)
   // to 255 degrees (rotated down in the back).
   private final SingleJointedArmSim elbowSim = new SingleJointedArmSim(
+      elbowPlant,
       elbowGearBox,
       Constants.Arm.elbow_reduction,
-      SingleJointedArmSim.estimateMOI(Constants.Arm.forearm_length, Constants.Arm.forearm_mass),
       Constants.Arm.forearm_length,
       Units.degreesToRadians(-360),
       Units.degreesToRadians(360),
-      Constants.Arm.forearm_mass,
       false,
       VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
   );
   private final SingleJointedArmSim shoulderSim = new SingleJointedArmSim(
+      shoulderPlant,
       shoulderGearBox,
       Constants.Arm.shoulder_reduction,
-      SingleJointedArmSim.estimateMOI(Constants.Arm.bicep_length, Constants.Arm.bicep_mass),
       Constants.Arm.bicep_length,
-      Units.degreesToRadians(30),
-      Units.degreesToRadians(150),
-      Constants.Arm.bicep_mass,
-      false,
-      VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
+      Units.degreesToRadians(-360),
+      Units.degreesToRadians(360),
+      true,
+      VecBuilder.fill(kArmEncoderDistPerPulse) 
   );
   private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
   private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
