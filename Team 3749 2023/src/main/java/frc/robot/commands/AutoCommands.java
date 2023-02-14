@@ -61,8 +61,8 @@ public final class AutoCommands {
                          traj, 
                          swerveSubsystem::getPose, // Pose supplier
                          Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-                         new PIDController(0.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                         new PIDController(0.1, 0, 0), // Y controller (usually the same values as X controller)
+                         new PIDController(0.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                         new PIDController(0.01, 0, 0), // Y controller (usually the same values as X controller)
                          new PIDController(5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                          swerveSubsystem::setModuleStates, // Module states consumer
                          true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
@@ -153,7 +153,7 @@ public final class AutoCommands {
         }
 
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem) {
-                PathPlannerTrajectory trajectory = PathPlanner.loadPath("test path", new PathConstraints(5, 5));
+                PathPlannerTrajectory trajectory = PathPlanner.loadPath("calibration", new PathConstraints(1, 1));
                 
                 return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
