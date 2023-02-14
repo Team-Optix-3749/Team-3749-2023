@@ -6,8 +6,7 @@ package frc.robot.utils;
  */
 public final class Constants {
     public static final class Claw {
-        public static final int right_side = 21;
-        public static final int left_side = 22; 
+        public static final int claw_id = 21;
 
         public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.2); 
 

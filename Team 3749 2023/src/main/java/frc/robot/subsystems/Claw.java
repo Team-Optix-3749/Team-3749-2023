@@ -2,10 +2,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,35 +25,35 @@ import frc.robot.utils.Constants;
 
 public class Claw extends SubsystemBase {
     
-    private final CANSparkMax leftMotor = new CANSparkMax(Constants.Claw.left_side, MotorType.kBrushless);
-    private final CANSparkMax rightMotor = new CANSparkMax(Constants.Claw.right_side, MotorType.kBrushless);
+    private final CANSparkMax clawMotor = new CANSparkMax(Constants.Claw.claw_id, MotorType.kBrushless);
+    private final RelativeEncoder clawEncoder = clawMotor.getEncoder();
 
-    private final SparkMaxPIDController leftPIDController = leftMotor.getPIDController();
-    
-    private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
-    private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
+    private final SparkMaxPIDController clawMotorPIDController = clawMotor.getPIDController();
     
     public Claw() {
-        rightMotor.restoreFactoryDefaults();
-        leftMotor.restoreFactoryDefaults();
+        clawMotor.restoreFactoryDefaults();
 
-        rightMotor.setInverted(true);
+        clawMotor.setIdleMode(IdleMode.kBrake);
 
-        rightMotor.setIdleMode(IdleMode.kCoast);
-        leftMotor.setIdleMode(IdleMode.kCoast);
-
-        leftPIDController.setP(Constants.Claw.kP.get());
+        clawMotorPIDController.setP(Constants.Claw.kP.get());
     }
 
     /**
-     * averages the Encoder velocities from both left and right encoders.(gives
-     * error if method is not set to return double)
+     * gets the temperature of the claw motor
      * 
      * @return
      */
-    public double avgEncoderPos() {
-        double encoder_avg = (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
-        return encoder_avg;
+    public double getTemperature() {
+        return clawMotor.getMotorTemperature();
+    }
+
+    /**
+     * gets the temperature of the claw motor
+     * 
+     * @return
+     */
+    public double getPosition() {
+        return clawEncoder.getPosition();
     }
 
     /**
@@ -62,22 +62,27 @@ public class Claw extends SubsystemBase {
      * @param speed -1.0 to 1.0
      */
     public void set(double speed) {
-        leftMotor.set(speed);
-        rightMotor.set(speed);
+        clawMotor.set(speed);
     }
 
     /**
-     * sets the desired velocity of the claw using PID
-     * 
-     * @param velo_setpoint (rotations/sec)
+     * stops the motor
      */
-    public void setVeloPID(double velo_setpoint) {
-        leftPIDController.setReference(velo_setpoint, ControlType.kVelocity);
+    public void stop() {
+        clawMotor.stopMotor();
+    }
+
+    /**
+     * holds the motor at its current position 
+     */
+    public void hold() {
+        clawMotorPIDController.setReference(clawMotor.get(), ControlType.kPosition);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Avg encoder Velo", avgEncoderPos());
+        SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
+        SmartDashboard.putNumber("Claw Position", getPosition());
     }
 
 }
