@@ -32,7 +32,7 @@ public class AutoBalancingToby extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     SwerveSubsystem swerveSubsystem;
-    
+
     double setpoint;
     double dist_traveled = 0;
     double start_point;
@@ -64,7 +64,6 @@ public class AutoBalancingToby extends CommandBase {
 
         setpoint = Constants.AutoBalancing.adjusting_distance;
         start_point = swerveSubsystem.getPose().getX();
-
 
     }
 
@@ -118,7 +117,8 @@ public class AutoBalancingToby extends CommandBase {
             double current_position = swerveSubsystem.getPose().getX();
             // where we want to be
             // how fast to move
-            double speed = driveController.calculate(current_position, start_point + setpoint);
+            double speed = driveController.calculate(current_position, start_point + setpoint)
+                    * Constants.AutoBalancing.adjust_speed_mps;
             // and we move
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     speed, 0, 0, swerveSubsystem.getRotation2d());
