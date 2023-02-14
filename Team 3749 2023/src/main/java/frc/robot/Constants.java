@@ -108,6 +108,8 @@ public class Constants {
         // FOR TOBY
         public static final double adjust_speed_mps = 0.25;
         public static final double adjusting_distance = 0.05; // In meters, so this is 5 cm
+        // Hella Simple
+        public static final double adjust_time_length = 0.5; // in seconds
     }
 
     public static final class AutoConstants{
