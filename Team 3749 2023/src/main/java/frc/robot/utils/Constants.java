@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  */
 public final class Constants {
 
-    public static final RobotMode ROBOT_MODE = RobotMode.SIMULATION;
+    public static final RobotMode ROBOT_MODE = RobotMode.REAL;
 
     public static final class Arm {
 
@@ -56,7 +56,7 @@ public final class Constants {
 
         public static enum ShoulderSetpoints {
             ZERO(0),
-            STOWED(185),
+            STOWED(172),
             DS(200);
 
             public final double angle;
@@ -69,7 +69,7 @@ public final class Constants {
 
         public static enum ElbowSetpoints {
             ZERO(0),
-            STOWED(26),
+            STOWED(23),
             DS(73);
 
             public final double angle;

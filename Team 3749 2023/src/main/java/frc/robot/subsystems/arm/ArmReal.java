@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 
@@ -31,6 +32,8 @@ public class ArmReal extends Arm {
   private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
   private final PIDController elbowPIDController = new PIDController(0.02, 0, 0);
 
+  private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
+
   public ArmReal() {
     leftShoulderMotor.restoreFactoryDefaults();
     rightShoulderMotor.restoreFactoryDefaults();
@@ -44,6 +47,10 @@ public class ArmReal extends Arm {
     
     leftShoulderMotor.setInverted(true);
     leftElbowMotor.setInverted(true);
+
+    presetChooser.setDefaultOption("Stowed", 0);
+    presetChooser.addOption("DS", 1);
+    SmartDashboard.putData(presetChooser);
   }
 
   @Override
@@ -102,6 +109,30 @@ public class ArmReal extends Arm {
 
   @Override
   public void setArmAngle(double shoulder_angle, double elbow_angle) {
+    setShoulderAngle(shoulder_angle);
+    setElbowAngle(elbow_angle);
+  }
+
+  @Override
+  public void setArmPreset() {
+    double shoulder_angle;
+    double elbow_angle;
+
+    switch(presetChooser.getSelected()) {
+      case (0):
+        shoulder_angle = Constants.Arm.ShoulderSetpoints.STOWED.angle;
+        elbow_angle = Constants.Arm.ElbowSetpoints.STOWED.angle;
+        break;
+      case (1):
+        shoulder_angle = Constants.Arm.ShoulderSetpoints.DS.angle;
+        elbow_angle = Constants.Arm.ElbowSetpoints.DS.angle;
+        break;
+      default:
+        shoulder_angle = Constants.Arm.ShoulderSetpoints.STOWED.angle;
+        elbow_angle = Constants.Arm.ElbowSetpoints.STOWED.angle;
+        break;
+    }
+
     setShoulderAngle(shoulder_angle);
     setElbowAngle(elbow_angle);
   }

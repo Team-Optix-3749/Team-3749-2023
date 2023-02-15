@@ -43,6 +43,9 @@ public class RobotContainer {
   private void configureDefaultCommands() throws Exception {
     switch (Constants.ROBOT_MODE) {
       case REAL:
+        arm.setDefaultCommand(
+          Commands.run(arm::setArmPreset, arm)  
+        );
         break;
       case SIMULATION:
         arm.setDefaultCommand(
