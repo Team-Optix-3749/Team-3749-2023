@@ -23,14 +23,14 @@ public class ArmReal extends Arm {
   private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
   private final RelativeEncoder rightShoulderRelativeEncoder = rightShoulderMotor.getEncoder();
   private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
-  private final PIDController shoulderPIDController = new PIDController(0.02, 0, 0);
+  private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulderKP.get(), 0, 0);
 
   private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
   private final RelativeEncoder leftElbowRelativeEncoder = leftElbowMotor.getEncoder();
   private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
   private final RelativeEncoder rightElbowRelativeEncoder = rightElbowMotor.getEncoder();
   private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
-  private final PIDController elbowPIDController = new PIDController(0.02, 0, 0);
+  private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbowKP.get(), 0, 0);
 
   private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
@@ -155,6 +155,9 @@ public class ArmReal extends Arm {
     SmartDashboard.putNumber("right soulder rel", rightShoulderRelativeEncoder.getPosition());
     SmartDashboard.putNumber("shoulder abs encoder", shoulderAbsoluteEncoder.get());
     SmartDashboard.putNumber("shoulder abs dist", shoulderAbsoluteEncoder.getDistance());
+
+    elbowPIDController.setP(Constants.Arm.elbowKP.get());
+    shoulderPIDController.setP(Constants.Arm.shoulderKP.get());
   }
 
 }
