@@ -128,4 +128,9 @@ public class Constants {
 
         public static final Double setpoint_velocity = 0.5;
     }
+
+    public static class VisionConstants {
+        public static final int apriltag_pipeline_index = 0;
+        public static final int reflective_tape_pipeline_index = 1;
+      }
 }
