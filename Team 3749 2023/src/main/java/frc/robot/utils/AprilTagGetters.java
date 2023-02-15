@@ -28,12 +28,8 @@ import frc.robot.Constants.*;
 /**
  * @author Advik Garg
  * @author Akhil Singamneni
- * 
- * 
- * 
- * 
- * 
- * 
+ * @author Noah Simon
+ * The class to manage April Tag Detection and information updates
  */
 
 public class AprilTagGetters {

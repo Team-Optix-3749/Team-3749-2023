@@ -13,5 +13,12 @@ public class Limelight {
         this.ta = ta; // Target area
 
     }
+
+    public static NetworkTableEntry getTX(){
+        return tx;
+    }
+    public static NetworkTableEntry getTY(){
+        return ta;
+    }
 }
 

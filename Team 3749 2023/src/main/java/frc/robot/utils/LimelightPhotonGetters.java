@@ -8,6 +8,7 @@ import frc.robot.Constants.VisionConstants;
 /**
  * @author Advik Garg
  * @author William Cheng
+ * Class to return Limelight values
  */
 public class LimelightPhotonGetters {
     static NetworkTable table = NetworkTableInstance.getDefault().getTable("photonvision"); // New network table instance, and reading in the data table from limelight.

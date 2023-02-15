@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.Xbox;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.MoveDistance;
@@ -27,7 +28,6 @@ public class RobotContainer {
 
   // private final POV pilotPOV = new POV(pilot);
   // private final POV operatorPOV = new POV(operator);
-  private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
 
   // Subsystems
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -44,10 +44,9 @@ public class RobotContainer {
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
         swerveSubsystem,
-        () -> -driverJoytick.getRawAxis(OIConstants.kDriverYAxis),
-        () -> driverJoytick.getRawAxis(OIConstants.kDriverXAxis),
-        () -> driverJoytick.getRawAxis(OIConstants.kDriverRotAxis),
-        () -> !driverJoytick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
+        () -> -pilot.getLeftY(),
+        () -> pilot.getLeftX(),
+        () -> pilot.getRightX()));
 
     configureButtonBindings();
   }
