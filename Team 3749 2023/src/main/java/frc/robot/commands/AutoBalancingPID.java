@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Noah Simon
  * 
  *         Allows the robot to automatically "engage" on the charging station
+ * Strategy: Move forward until change in angle. Then use PID from the angle measurement to balance
  */
 public class AutoBalancingPID extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })

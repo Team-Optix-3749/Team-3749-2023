@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Noah Simon
  * 
  *         Allows the robot to automatically "engage" on the charging station
+ * Strategy: Move until shift in angle. Then move back at a set speed for a set amount of time, no PID
  */
 public class AutoBalancingHellaSimple extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
