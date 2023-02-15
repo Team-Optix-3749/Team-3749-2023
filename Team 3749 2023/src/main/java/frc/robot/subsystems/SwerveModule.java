@@ -21,7 +21,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
-/** Add your docs here. */
+/***
+ * @author Noah Simon
+ * @author Raadwan ___
+ * @author Rohin Sood
+ * @author Harkirat ____
+ * 
+ *         Object to manage each individual swerve module, including a drive
+ *         motor, a turning motor, a drive encoder, and an Absolute CanCoder
+ * 
+ */
 public class SwerveModule {
     private final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
@@ -32,12 +41,10 @@ public class SwerveModule {
     private final PIDController turningPidController;
     private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
-    private final double absoluteEncoderOffsetRad;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
-        
-        this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
+
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new CANCoder(absoluteEncoderId);
         absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
@@ -63,7 +70,7 @@ public class SwerveModule {
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         SmartDashboard.putNumber(String.valueOf(absoluteEncoderId), absoluteEncoder.getAbsolutePosition());
-        
+
         resetEncoders();
     }
 
@@ -84,7 +91,8 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
-        // double angle = absoluteEncoder.getBusVoltage() / RobotController.getVoltage5V();
+        // double angle = absoluteEncoder.getBusVoltage() /
+        // RobotController.getVoltage5V();
         // angle *= 2.0 * Math.PI;
         // angle -= absoluteEncoderOffsetRad;
         // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
@@ -100,10 +108,9 @@ public class SwerveModule {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
-    }    
+    }
 
-   
-    public SwerveModulePosition getPosition(){
+    public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
@@ -126,15 +133,12 @@ public class SwerveModule {
         driveMotor.set(0);
         turningMotor.set(0);
     }
+
     // Turn to the set degree amount, -180 to 180
-    public void turnToDegrees(double angleDegrees){
+    public void turnToDegrees(double angleDegrees) {
         double angleRad = Units.degreesToRadians(angleDegrees);
-        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(),angleRad));
+        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), angleRad));
 
     }
-    public void logMagnetHealth(){
-        // absoluteEncoder
-    }
-
 
 }

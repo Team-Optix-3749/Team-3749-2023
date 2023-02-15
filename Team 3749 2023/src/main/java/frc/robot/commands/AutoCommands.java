@@ -30,9 +30,10 @@ import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /***
- * A class to return command sequences for auto
- * 
  * @author Noah Simon
+ * A class to return command sequences for auto
+ * Path Planner is used to create sequences, see docs below
+ * {@link} https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage
  * 
  */
 

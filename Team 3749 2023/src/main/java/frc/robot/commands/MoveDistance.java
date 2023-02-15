@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /***
  * @author Noah Simon
  * 
- *         Moves the robot a specific amount forwrad on a button press
+ *         Moves the robot a specific amount forwrad on a button press. For testing purposes
  */
 public class MoveDistance extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })

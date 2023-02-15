@@ -18,7 +18,7 @@ import frc.robot.utils.Xbox;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.MoveDistance;
-import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.SwerveTeleopCommand;
 
 public class RobotContainer {
 
@@ -42,7 +42,7 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
+    swerveSubsystem.setDefaultCommand(new SwerveTeleopCommand(
         swerveSubsystem,
         () -> -pilot.getLeftY(),
         () -> pilot.getLeftX(),

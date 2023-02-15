@@ -27,6 +27,17 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.utils.AprilTagGetters;
 
+/***
+ * @author Noah Simon
+ * @author Rohin Sood
+ * @author Raadwan ____
+ * @author Harkirat ____
+ * 
+ *         Subsystem class for swerve drive, used to manage four swerve modules
+ *         and set their states. Also includes a pose estimator, gyro, and
+ *         logging information
+ */
+
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -120,7 +131,7 @@ public class SwerveSubsystem extends SubsystemBase {
             swerveDrivePoseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(),
                     estimatedPose.get().timestampSeconds);
         }
- 
+
     }
 
     @Override

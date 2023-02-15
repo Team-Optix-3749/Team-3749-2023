@@ -10,13 +10,21 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class SwerveJoystickCommand extends CommandBase {
+
+/***
+ * @author Noah Simon
+ * @author Raadwan _____
+ * @author Rohin Sood
+ * Default command to control the SwervedriveSubsystem with joysticks
+ */
+
+public class SwerveTeleopCommand extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-    public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem,
+    public SwerveTeleopCommand(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
