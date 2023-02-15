@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.Claw;
-
 public class RobotContainer {
 
     // Controllers
@@ -21,17 +20,26 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
     }
+    int counter = 0;
 
     private void configureButtonBindings() {
-        pilot.aWhileHeld(
-            () -> claw.set(Constants.Claw.speed.get()), () -> claw.stop(), claw
-        );
-        pilot.bWhileHeld(
-            () -> claw.set(-Constants.Claw.speed.get()), () -> claw.stop(), claw
-        );
         pilot.xWhileHeld(
             () -> claw.hold(), () -> claw.stop(), claw
         );
+
+        while (true) {
+            if (counter%2 == 0){
+                pilot.aWhileHeld(
+                    () -> claw.set(-Constants.Claw.speed.get()), () -> claw.stop(), claw
+                );
+            }
+            else {
+                pilot.aWhileHeld(
+                    () -> claw.set(Constants.Claw.speed.get()), () -> claw.stop(), claw
+                );
+            }
+            counter ++;
+        }
     }
 
     public Command getAutonomousCommand() {
