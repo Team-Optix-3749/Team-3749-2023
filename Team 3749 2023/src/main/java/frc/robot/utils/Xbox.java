@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 /***
  * @author Rohin Sood
  * 
- *         Stores getters for all CommandXboxControllers outputs (rips
- *         .whenPressed())
+ *         Stores getters for all CommandXboxControllers outputs (rips .whenPressed())
  */
 public class Xbox extends CommandXboxController {
 
