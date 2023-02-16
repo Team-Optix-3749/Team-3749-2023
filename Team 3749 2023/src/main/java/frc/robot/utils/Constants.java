@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  */
 public final class Constants {
 
-    public static final RobotMode ROBOT_MODE = RobotMode.SIMULATION;
+    public static final RobotMode ROBOT_MODE = RobotMode.REAL;
 
     public static final class Arm {
 
@@ -43,7 +43,8 @@ public final class Constants {
         public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
 
         // encoder values (0.0 - 1.0)
-        public static final double shoulder_offset = .128;
+        // public static final double shoulder_offset = .128;
+        public static final double shoulder_offset = .08;
         public static final double elbow_offset = .272;
 
         public static final double shoulder_min_angle = 90;
