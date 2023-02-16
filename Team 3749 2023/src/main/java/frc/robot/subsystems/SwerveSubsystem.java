@@ -15,16 +15,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.AutoCommands;
 import frc.robot.utils.AprilTagGetters;
 
 /***
@@ -140,16 +137,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Pose X", getPose().getX());
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
-
-        SmartDashboard.putNumber("frontLeft encoder", frontLeft.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("frontRight encoder", frontRight.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("backLeft encoder", backLeft.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("backRight encoder", backRight.getAbsoluteEncoderRad());
-
-        SmartDashboard.putNumber("frontLeft turning pos", frontLeft.getTurningPosition());
-        SmartDashboard.putNumber("frontRight turning pos", frontRight.getTurningPosition());
-        SmartDashboard.putNumber("backLeft turning pos", backLeft.getTurningPosition());
-        SmartDashboard.putNumber("backRight turning pos", backRight.getTurningPosition());
     }
 
     public void stopModules() {

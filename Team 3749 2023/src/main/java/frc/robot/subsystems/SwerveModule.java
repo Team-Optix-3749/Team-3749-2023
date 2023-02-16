@@ -12,12 +12,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
@@ -69,7 +67,6 @@ public class SwerveModule {
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SmartDashboard.putNumber(String.valueOf(absoluteEncoderId), absoluteEncoder.getAbsolutePosition());
 
         resetEncoders();
     }
@@ -96,7 +93,6 @@ public class SwerveModule {
         // angle *= 2.0 * Math.PI;
         // angle -= absoluteEncoderOffsetRad;
         // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
-        SmartDashboard.putNumber("ABS POS " + absoluteEncoder.getDeviceID(), absoluteEncoder.getAbsolutePosition());
 
         return ((absoluteEncoder.getAbsolutePosition() / 180 * Math.PI)) * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
@@ -126,7 +122,6 @@ public class SwerveModule {
 
         driveMotor.set(drive_speed);
         turningMotor.set(turning_speed);
-        SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] State", state.toString());
     }
 
     public void stop() {
