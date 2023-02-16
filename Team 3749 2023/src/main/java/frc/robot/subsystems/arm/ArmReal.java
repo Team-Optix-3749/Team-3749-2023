@@ -154,6 +154,8 @@ public class ArmReal extends Arm {
     SmartDashboard.putNumber("elbow abs", elbowAbsoluteEncoder.getDistance());
 
     SmartDashboard.putNumber("shoulder abs dist", shoulderAbsoluteEncoder.getDistance());
+    SmartDashboard.putNumber("shoulder abs raw", shoulderAbsoluteEncoder.get());
+
 
     elbowPIDController.setP(Constants.Arm.elbowKP.get());
     shoulderPIDController.setP(Constants.Arm.shoulderKP.get());
