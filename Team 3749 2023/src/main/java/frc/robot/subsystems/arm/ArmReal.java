@@ -1,6 +1,7 @@
 package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -36,6 +37,11 @@ public class ArmReal extends Arm {
     rightShoulderMotor.restoreFactoryDefaults();
     leftElbowMotor.restoreFactoryDefaults();
     rightElbowMotor.restoreFactoryDefaults();
+
+    leftShoulderMotor.setIdleMode(IdleMode.kCoast);
+    rightShoulderMotor.setIdleMode(IdleMode.kCoast);
+    leftElbowMotor.setIdleMode(IdleMode.kCoast);
+    rightElbowMotor.setIdleMode(IdleMode.kCoast);
     
     shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
     elbowAbsoluteEncoder.setPositionOffset(Constants.Arm.elbow_offset);
