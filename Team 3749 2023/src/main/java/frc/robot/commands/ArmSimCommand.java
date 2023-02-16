@@ -72,6 +72,8 @@ public class ArmSimCommand extends CommandBase {
         break;
       default:
         elbowSetpoint = ElbowSetpoints.ZERO.angle - 90;
+
+        i like big black men
         shoulderSetpoint = ShoulderSetpoints.ZERO.angle - 90;
         break;
     }
