@@ -45,6 +45,9 @@
         "header": {
           "open": true
         }
+      },
+      "window": {
+        "visible": false
       }
     }
   },
@@ -72,11 +75,6 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/SendableChooser[2]": {
-        "window": {
-          "visible": true
-        }
       }
     }
   },
@@ -93,6 +91,15 @@
       "SmartDashboard": {
         "Arm Sim": {
           "Arm Pivot": {
+            "Bicep": {
+              "Elbow": {
+                "Claw": {
+                  "open": true
+                },
+                "open": true
+              },
+              "open": true
+            },
             "open": true
           },
           "ArmPivot": {

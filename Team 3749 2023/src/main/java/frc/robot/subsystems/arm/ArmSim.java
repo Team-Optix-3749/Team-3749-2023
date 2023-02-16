@@ -80,7 +80,7 @@ public class ArmSim extends Arm {
       Constants.Arm.bicep_length,
       Units.degreesToRadians(-360),
       Units.degreesToRadians(360),
-      true,
+      false,
       VecBuilder.fill(kArmEncoderDistPerPulse) 
   );
   private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);

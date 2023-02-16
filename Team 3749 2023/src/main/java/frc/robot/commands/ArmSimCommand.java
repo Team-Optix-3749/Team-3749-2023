@@ -24,14 +24,13 @@ public class ArmSimCommand extends CommandBase {
 
   private final Arm armSim;
 
-  private ProfiledPIDController elbowController = new ProfiledPIDController(Constants.Arm.elbowKP.get(),
-      Constants.Arm.elbowKI.get(), Constants.Arm.elbowKD.get(),
+  private ProfiledPIDController elbowController = new ProfiledPIDController(Constants.Arm.elbowSimKP.get(),
+      0, 0,
       new TrapezoidProfile.Constraints(2, 5));
-  private ProfiledPIDController shoulderController = new ProfiledPIDController(Constants.Arm.shoulderKP.get(),
-      Constants.Arm.shoulderKI.get(), Constants.Arm.shoulderKD.get(),
+  private ProfiledPIDController shoulderController = new ProfiledPIDController(Constants.Arm.shoulderSimKP.get(),
+      0,0,
       new TrapezoidProfile.Constraints(2, 5));
 
-  private SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
   private SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
   // desired positions for x and y
@@ -45,14 +44,8 @@ public class ArmSimCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    controlMode.setDefaultOption("Presets (Setpoints)", 0);
-    controlMode.addOption("Virtual Four Bar", 1);
-    controlMode.addOption("Manual Angle Adjust", 2);
-
-    presetChooser.setDefaultOption("Starting Position", 0);
-    presetChooser.addOption("Stowed Position", 1);
-    presetChooser.addOption("Inverse Kinematics Position", 2);
-    SmartDashboard.putData(controlMode);
+    presetChooser.setDefaultOption("STOWED", 0);
+    presetChooser.addOption("DS", 1);
     SmartDashboard.putData(presetChooser);
   }
 
@@ -63,12 +56,12 @@ public class ArmSimCommand extends CommandBase {
     switch (presetChooser.getSelected()) {
       // the real life 0 position is vertical, so its transformed by 90 degrees
       case 0:
-        elbowSetpoint = ElbowSetpoints.ZERO.angle - 90;
-        shoulderSetpoint = ShoulderSetpoints.ZERO.angle - 90;
+        elbowSetpoint = 180 - ElbowSetpoints.STOWED.angle;
+        shoulderSetpoint = 180 - ShoulderSetpoints.STOWED.angle;
         break;
       case 1:
-        elbowSetpoint = ElbowSetpoints.STOWED.angle - 90;
-        shoulderSetpoint = ShoulderSetpoints.STOWED.angle - 90;
+        elbowSetpoint = 180 - ElbowSetpoints.DS.angle;
+        shoulderSetpoint = 180 - ShoulderSetpoints.DS.angle;
         break;
       case 2:
         Kinematics kinematics = new Kinematics();
@@ -91,6 +84,9 @@ public class ArmSimCommand extends CommandBase {
     double pidOutputShoulder = shoulderController.calculate(armSim.getShoulderDistance(),
         Units.degreesToRadians(shoulderSetpoint));
     armSim.setShoulderVoltage(pidOutputShoulder);
+
+    shoulderController.setP(Constants.Arm.shoulderSimKP.get());
+    elbowController.setP(Constants.Arm.elbowSimKP.get());
   }
 
   @Override

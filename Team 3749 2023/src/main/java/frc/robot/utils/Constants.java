@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  */
 public final class Constants {
 
-    public static final RobotMode ROBOT_MODE = RobotMode.REAL;
+    public static final RobotMode ROBOT_MODE = RobotMode.SIMULATION;
 
     public static final class Arm {
 
@@ -35,12 +35,10 @@ public final class Constants {
         public static final int number_of_motors = 2;
 
         public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 0.02);
-        public static SmartData<Double> elbowKI = new SmartData<Double>("Elbow kI", 0.0);
-        public static SmartData<Double> elbowKD = new SmartData<Double>("Elbow kD", 0.0);
+        public static SmartData<Double> elbowSimKP = new SmartData<Double>("Elbow Sim kP", 0.5);
 
         public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", 0.02);
-        public static SmartData<Double> shoulderKI = new SmartData<Double>("Shoulder kI", .0);
-        public static SmartData<Double> shoulderKD = new SmartData<Double>("Shoulder kD", .0);
+        public static SmartData<Double> shoulderSimKP = new SmartData<Double>("Shoulder Sim kP", 2.0);
 
         public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
 
