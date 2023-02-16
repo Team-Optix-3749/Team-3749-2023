@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
@@ -21,7 +17,7 @@ import frc.robot.Constants.ModuleConstants;
 
 /***
  * @author Noah Simon
- * @author Raadwan ___
+ * @author Raadwan Masum
  * @author Rohin Sood
  * @author Harkirat ____
  * 
@@ -40,8 +36,9 @@ public class SwerveModule {
     private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
 
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed,
+            boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset,
+            boolean absoluteEncoderReversed) {
 
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new CANCoder(absoluteEncoderId);
@@ -87,13 +84,8 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
-        // double angle = absoluteEncoder.getBusVoltage() /
-        // RobotController.getVoltage5V();
-        // angle *= 2.0 * Math.PI;
-        // angle -= absoluteEncoderOffsetRad;
-        // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
-
-        return ((absoluteEncoder.getAbsolutePosition() / 180 * Math.PI)) * (absoluteEncoderReversed ? -1.0 : 1.0);
+        return ((absoluteEncoder.getAbsolutePosition() / 180 * Math.PI))
+                * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
     public void resetEncoders() {
@@ -134,5 +126,4 @@ public class SwerveModule {
         turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), angleRad));
 
     }
-
 }
