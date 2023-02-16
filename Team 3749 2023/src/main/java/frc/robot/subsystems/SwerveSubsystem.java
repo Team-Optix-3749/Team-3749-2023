@@ -89,23 +89,38 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.calibrate();
     }
 
+    /**
+     * Zero robot heading
+     */
     public void zeroHeading() {
         gyro.reset();
     }
 
+    /**
+     * @return robot heading
+     */
     public double getHeading() {
-        // return Math.IEEEremainder(gyro.getAngle(), 360);
         return gyro.getYaw();
     }
 
+    /**
+     * @return robot Rotation3d
+     */
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(-getHeading());
     }
 
+    /**
+     * @return robot Pose2d
+     */
     public Pose2d getPose() {
         return swerveDrivePoseEstimator.getEstimatedPosition();
     }
 
+    /**
+     * Reset robot pose
+     * @param pose
+     */
     public void resetOdometry(Pose2d pose) {
         swerveDrivePoseEstimator.resetPosition(getRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
@@ -113,6 +128,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 pose);
     }
 
+    /**
+     * Update robot odometry
+     */
     public void updateOdometry() {
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
@@ -134,6 +152,9 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
     }
 
+    /**
+     * Stop robot modules
+     */
     public void stopModules() {
         frontLeft.stop();
         frontRight.stop();
@@ -141,6 +162,10 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
+    /**
+     * Set module states
+     * @param desiredStates
+     */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         frontRight.setDesiredState(desiredStates[0]);
@@ -149,6 +174,9 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.setDesiredState(desiredStates[3]);
     }
 
+    /**
+     * @return robot pitch (vertical tilt)
+     */
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
