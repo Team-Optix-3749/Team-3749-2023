@@ -11,8 +11,8 @@ import frc.robot.Constants.*;
 
 public class RobotContainer {
     // Controllers
-    private final Xbox pilot = new Xbox(OIConstants.kDriverControllerPort);
-    private final Xbox operator = new Xbox(1);
+    private final Xbox pilot = new Xbox(OIConstants.kPilotControllerPort);
+    private final Xbox operator = new Xbox(OIConstants.kOperatorControllerPort);
 
     // Subsystems
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
