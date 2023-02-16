@@ -27,14 +27,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author Noah Simon
  * 
  *         Allows the robot to automatically "engage" on the charging station
- * Strategy: Move forward until change in angle. Then use PID from the angle measurement to balance
+ *         Strategy: Move forward until change in angle. Then use PID from the
+ *         angle measurement to balance
  */
 public class AutoBalancingPID extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     SwerveSubsystem swerveSubsystem;
 
-    private final PIDController controller = new PIDController(0.5, 0, 0);
+    private final PIDController controller = new PIDController(0.1, 0, 0);
     private final PIDController turnController = new PIDController(0.005, 0.001, 0);
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
@@ -108,7 +109,7 @@ public class AutoBalancingPID extends CommandBase {
             has_flipped = true;
             double speed = controller.calculate(angle, 0)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-            // not sure if this is necesary 
+            // not sure if this is necesary
             // // signs the speed so we move in the correct direction
             // speed = Math.abs(speed) * Math.signum(angle);
 
@@ -122,6 +123,13 @@ public class AutoBalancingPID extends CommandBase {
                     .toSwerveModuleStates(chassisSpeeds);
             // 6. Output each module states to wheels
             swerveSubsystem.setModuleStates(moduleStates);
+        }
+        // we level? Stop with wheels facing different directions to prevent sliding
+        else {
+            SwerveModuleState[] states = new SwerveModuleState[4];
+            for (int i = 0; i < 4; i++) {
+                states[i] = new SwerveModuleState(0, new Rotation2d(45 + 90 * i));
+            }
         }
 
     }
