@@ -197,8 +197,6 @@ public class Xbox extends CommandXboxController {
         return this.getRawAxis(XboxController.Axis.kRightY.value);
     }
 
-
-
     public boolean getLeftTrigger() {
         return this.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.1;
     }

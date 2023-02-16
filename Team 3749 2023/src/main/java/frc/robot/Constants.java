@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.utils.SmartData;
 
 public class Constants {
     public static final class ModuleConstants {
@@ -116,18 +116,19 @@ public class Constants {
     public static final class AutoConstants{
         public static final Map<String, Command> eventMap = new HashMap<>();
     }
+    
     public static final class Claw {
-        public static final int right_side = 21; // right side of the claw (the motor)
-        public static final int left_side = 22; // left side of the claw (the motor)
+        public static final int claw_id = 22;
 
-        public static final int stop = 0; // speed 0 = motors stop
+        public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.5);
 
-        //PID values
-        public static final double claw_kP = 0.1;
-        public static final double claw_kI = .1;
-        public static final double claw_kD = .1;
+        // current of above 60 Amps will produce high temperatures
+        public static final SmartData<Integer> currentLimit = new SmartData<Integer>("Claw current limit", 45);
 
-        public static final Double setpoint_velocity = 0.5;
+        // PID values
+        public static final SmartData<Double> kP = new SmartData<Double>("Claw kP", .05);
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
     }
 
     public static class VisionConstants {

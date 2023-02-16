@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Claw;
 import frc.robot.commands.*;
 import frc.robot.utils.*;
 import frc.robot.Constants.*;
@@ -15,6 +16,7 @@ public class RobotContainer {
 
     // Subsystems
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    private final Claw claw = new Claw();
 
     public RobotContainer() {
         setupAuto();
@@ -41,6 +43,9 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.aWhileHeld(() -> swerveSubsystem.zeroHeading(), swerveSubsystem);
+
+        pilot.bWhileHeld(() -> claw.set(-Constants.Claw.speed.get()),
+            () -> claw.set(Constants.Claw.speed.get()), claw);
     }
 
     /**
