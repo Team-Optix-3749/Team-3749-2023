@@ -1,10 +1,8 @@
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Claw;
 import frc.robot.commands.*;
@@ -19,9 +17,6 @@ public class RobotContainer {
     // Subsystems
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     private final Claw clawSubsystem = new Claw();
-
-    // Commands
-    private final MoveDistance moveDistance = new MoveDistance(swerveSubsystem, Units.feetToMeters(5));
 
     public RobotContainer() {
         setupAuto();
@@ -47,8 +42,7 @@ public class RobotContainer {
      * Set controller button bindings
      */
     private void configureButtonBindings() {
-        pilot.a().whileTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-        pilot.b().whileTrue(moveDistance);
+        pilot.aWhileHeld(() -> swerveSubsystem.zeroHeading(), swerveSubsystem);
     }
 
     /**
