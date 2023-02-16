@@ -22,19 +22,8 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        pilot.xWhileHeld(() -> claw.hold(), () -> claw.stop(), claw);
-
-        int counter = 0;
-        while (true) {
-            if (counter % 2 == 0) {
-                pilot.bWhileHeld(
-                        () -> claw.set(-Constants.Claw.speed.get()), () -> claw.stop(), claw);
-            } else {
-                pilot.bWhileHeld(
-                        () -> claw.set(Constants.Claw.speed.get()), () -> claw.stop(), claw);
-            }
-            counter++;
-        }
+        pilot.bWhileHeld(() -> claw.set(-Constants.Claw.speed.get()),
+            () -> claw.set(Constants.Claw.speed.get()), claw);
     }
 
     public Command getAutonomousCommand() {
