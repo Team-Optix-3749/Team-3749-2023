@@ -130,6 +130,7 @@ public class AutoBalancingPID extends CommandBase {
             for (int i = 0; i < 4; i++) {
                 states[i] = new SwerveModuleState(0, new Rotation2d(45 + 90 * i));
             }
+            swerveSubsystem.setModuleStates(states);
         }
 
     }
