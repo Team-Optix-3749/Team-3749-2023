@@ -1,31 +1,19 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
 import frc.robot.Constants;
-import frc.robot.commands.AutoCommands;
-
-import java.lang.ModuleLayer.Controller;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /***
  * @author Noah Simon
  * 
- *         Moves the robot a specific amount forwrad on a button press. For testing purposes
+ *         Moves the robot a specific amount forwrad on a button press. For
+ *         testing purposes
  */
 public class MoveDistance extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -38,13 +26,13 @@ public class MoveDistance extends CommandBase {
 
     PIDController driveController = new PIDController(1.6, 0, 0.01);
     PIDController turnController = new PIDController(0.005, 0.001, 0);
-    private final SlewRateLimiter turningLimiter = new SlewRateLimiter(Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
-
+    private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
+            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     /***
      * 
      * @param swerveSubsystem the subsystem
-     * @param dist       how far to to move in meters
+     * @param dist            how far to to move in meters
      */
     public MoveDistance(SwerveSubsystem swerveSubsystem, double dist) {
         this.swerveSubsystem = swerveSubsystem;
@@ -68,7 +56,7 @@ public class MoveDistance extends CommandBase {
         // How inaccurate we are willing to be in reference to looking straight forward
         if (Math.abs(swerveSubsystem.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
             // negative so that we move towards the target, not away
-            double turning_speed =  turnController.calculate(Math.abs(swerveSubsystem.getHeading()),0);
+            double turning_speed = turnController.calculate(Math.abs(swerveSubsystem.getHeading()), 0);
             turning_speed = turningLimiter.calculate(turning_speed)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
@@ -82,7 +70,8 @@ public class MoveDistance extends CommandBase {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     0, 0, turning_speed, swerveSubsystem.getRotation2d());
             // 5. Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates =Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                    .toSwerveModuleStates(chassisSpeeds);
 
             // 6. Output each module states to wheels
             swerveSubsystem.setModuleStates(moduleStates);
