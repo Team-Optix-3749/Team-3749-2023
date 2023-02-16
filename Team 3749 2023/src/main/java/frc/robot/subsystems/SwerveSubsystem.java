@@ -27,8 +27,8 @@ import frc.robot.utils.AprilTagGetters;
 /***
  * @author Noah Simon
  * @author Rohin Sood
- * @author Raadwan ____
- * @author Harkirat ____
+ * @author Raadwan
+ * @author Harkirat
  * 
  *         Subsystem class for swerve drive, used to manage four swerve modules
  *         and set their states. Also includes a pose estimator, gyro, and
@@ -128,7 +128,6 @@ public class SwerveSubsystem extends SubsystemBase {
             swerveDrivePoseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(),
                     estimatedPose.get().timestampSeconds);
         }
-
     }
 
     @Override
@@ -157,5 +156,4 @@ public class SwerveSubsystem extends SubsystemBase {
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
-
 }
