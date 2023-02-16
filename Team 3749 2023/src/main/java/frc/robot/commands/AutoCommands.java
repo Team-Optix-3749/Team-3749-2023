@@ -76,7 +76,7 @@ public final class AutoCommands {
          * @param trajectory      a viable trajectory object containing information
          *                        about where the robot should go
          * @return a SwerveControllerCommand based on the trajectory
-         * @summary takes a trajectory and moves on it. Non path planner cersion
+         * @summary takes a trajectory and moves on it. Non path planner version
          */
         private static Command createCommandFromSwerveTrajectory(SwerveSubsystem swerveSubsystem,
                         Trajectory trajectory) {
@@ -99,7 +99,7 @@ public final class AutoCommands {
 
         /***
          * @summary takes in several translation 2D's and a relative end rotation.
-         *          Creates a trajectory object
+         *          Creates a trajectory object. For non path planner use
          * @param waypoints   an array of translation 2D's. Each coordinate will be hit
          *                    in the order they are listed. The first should be 0,0
          * @param endRotation the relative-to-start rotation of the robot by the end of
@@ -107,6 +107,7 @@ public final class AutoCommands {
          * @return a trajectory with the specified coordinates and end rotation
          */
         public static Trajectory createTrajectory(Translation2d[] waypoints, double endRotation) {
+                // start and end coordinates, taken from waypoints
                 double[] startXY = new double[] { waypoints[0].getX(), waypoints[0].getY() };
                 double[] endXY = new double[] { waypoints[waypoints.length - 1].getX(),
                                 waypoints[waypoints.length - 1].getY() };
@@ -115,13 +116,7 @@ public final class AutoCommands {
                 for (int i = 1; i < waypoints.length - 1; i++) {
                         midpoints[i - 1] = waypoints[i];
                 }
-
-                // This is the other way to make this work in a different Java version
-                // ArrayList<Translation2d> midpoints = new ArrayList<>();
-                // for (int i = 1; i < waypoints.length-1; i++) {
-                // midpoints.add(waypoints[i]);
-                // }
-
+                
                 TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
                                 Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond,
                                 Constants.DriveConstants.kAutoDriveMaxAccelerationUnitsPerSecond);
@@ -149,8 +144,9 @@ public final class AutoCommands {
                                 new InstantCommand(() -> swerveSubsystem.stopModules()));
         }
 
+        // Essentially the template of a getPath command we should be using.  
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem, Alliance teamColor) {
-                PathPlannerTrajectory trajectory = PathPlanner.loadPath("calibration", new PathConstraints(1, 1));
+                PathPlannerTrajectory trajectory = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
                 trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
                 return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
