@@ -59,14 +59,14 @@ public class RobotContainer {
     switch (Constants.ROBOT_MODE) {
       case REAL:
         pilot.aWhileHeld(
-            () -> arm.setShoulder(.4), () -> arm.setShoulder(0), arm);
-        pilot.bWhileHeld(
             () -> arm.setShoulder(-.4), () -> arm.setShoulder(0), arm);
+        pilot.bWhileHeld(
+            () -> arm.setShoulder(.4), () -> arm.setShoulder(0), arm);
 
         pilot.xWhileHeld(
-            () -> arm.setElbow(.4), () -> arm.setElbow(0), arm);
-        pilot.yWhileHeld(
             () -> arm.setElbow(-.4), () -> arm.setElbow(0), arm);
+        pilot.yWhileHeld(
+            () -> arm.setElbow(.4), () -> arm.setElbow(0), arm);
 
         pilot.rightBumperWhileHeld(
             () -> arm.setArmAngle(Constants.Arm.ShoulderSetpoints.DS.angle, Constants.Arm.ElbowSetpoints.DS.angle), () -> arm.stop(), arm);
