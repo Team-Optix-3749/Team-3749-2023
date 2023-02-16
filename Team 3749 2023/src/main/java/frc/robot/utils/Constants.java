@@ -34,10 +34,10 @@ public final class Constants {
 
         public static final int number_of_motors = 2;
 
-        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 0.02);
+        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 0.015);
         public static SmartData<Double> elbowSimKP = new SmartData<Double>("Elbow Sim kP", 0.5);
 
-        public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", 0.02);
+        public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", 0.015);
         public static SmartData<Double> shoulderSimKP = new SmartData<Double>("Shoulder Sim kP", 2.0);
 
         public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
@@ -69,7 +69,7 @@ public final class Constants {
         public static enum ElbowSetpoints {
             ZERO(0),
             STOWED(25),
-            DS(73);
+            DS(75);
 
             public final double angle;
 
