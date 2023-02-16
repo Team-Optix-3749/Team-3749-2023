@@ -67,40 +67,68 @@ public class SwerveModule {
         resetEncoders();
     }
 
+    /**
+     * @return module drive position
+     */
     public double getDrivePosition() {
         return driveEncoder.getPosition();
     }
 
+    /**
+     * @return module turning position
+     */
     public double getTurningPosition() {
         return turningEncoder.getPosition();
     }
 
+    /**
+     * @return module drive velocity
+     */
     public double getDriveVelocity() {
         return driveEncoder.getVelocity();
     }
 
+    /**
+     * @return module turning velocity
+     */
     public double getTurningVelocity() {
         return turningEncoder.getVelocity();
     }
 
+    /**
+     * @return module absolute encoder value in radians
+     */
     public double getAbsoluteEncoderRad() {
         return ((absoluteEncoder.getAbsolutePosition() / 180 * Math.PI))
                 * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
+    /**
+     * Reset module encoders
+     */
     public void resetEncoders() {
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
+    /**
+     * @return module state
+     */
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
+    /**
+     * @return module position
+     */
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
+    /**
+     * Set module state
+     * @param state
+     */
     public void setDesiredState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
@@ -115,12 +143,18 @@ public class SwerveModule {
         turningMotor.set(turning_speed);
     }
 
+    /**
+     * Stop swerve module
+     */
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
     }
 
-    // Turn to the set degree amount, -180 to 180
+    /**
+     * Turn module to degree
+     * @param angleDegrees
+     */
     public void turnToDegrees(double angleDegrees) {
         double angleRad = Units.degreesToRadians(angleDegrees);
         turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), angleRad));
