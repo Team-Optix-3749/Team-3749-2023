@@ -69,7 +69,7 @@ public final class Constants {
         public static enum ElbowSetpoints {
             ZERO(0),
             STOWED(25),
-            DS(75);
+            DS(80);
 
             public final double angle;
 
