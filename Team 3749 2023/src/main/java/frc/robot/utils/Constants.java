@@ -34,14 +34,8 @@ public final class Constants {
 
         public static final int number_of_motors = 2;
 
-<<<<<<< HEAD
         public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 0.02);
         public static SmartData<Double> elbowSimKP = new SmartData<Double>("Elbow Sim kP", 0.5);
-=======
-        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 0.03);
-        public static SmartData<Double> elbowKI = new SmartData<Double>("Elbow kI", 0.0);
-        public static SmartData<Double> elbowKD = new SmartData<Double>("Elbow kD", 0.0);
->>>>>>> c592accf3eb3557426d5f20e4f7ede067d7e0807
 
         public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", 0.02);
         public static SmartData<Double> shoulderSimKP = new SmartData<Double>("Shoulder Sim kP", 2.0);
