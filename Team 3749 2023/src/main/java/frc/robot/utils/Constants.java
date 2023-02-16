@@ -56,7 +56,11 @@ public final class Constants {
         public static enum ShoulderSetpoints {
             ZERO(0),
             STOWED(190),
-            DS(200);
+            DS(200),
+            CONETOP(140),
+            CONEMID(175),
+            CUBETOP(150),
+            CUBEMID(180);
 
             public final double angle;
 
@@ -69,7 +73,11 @@ public final class Constants {
         public static enum ElbowSetpoints {
             ZERO(0),
             STOWED(25),
-            DS(80);
+            DS(80),
+            CONETOP(160),
+            CONEMID(105),
+            CUBETOP(140),
+            CUBEMID(80);
 
             public final double angle;
 
