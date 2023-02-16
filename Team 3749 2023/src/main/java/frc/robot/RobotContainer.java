@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Claw;
 import frc.robot.commands.*;
 import frc.robot.utils.*;
 import frc.robot.Constants.*;
@@ -12,11 +11,10 @@ import frc.robot.Constants.*;
 public class RobotContainer {
     // Controllers
     private final Xbox pilot = new Xbox(OIConstants.kPilotControllerPort);
-    private final Xbox operator = new Xbox(OIConstants.kOperatorControllerPort);
+    // private final Xbox operator = new Xbox(OIConstants.kOperatorControllerPort);
 
     // Subsystems
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    private final Claw clawSubsystem = new Claw();
 
     public RobotContainer() {
         setupAuto();
@@ -68,6 +66,6 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("place_cube_mid", null);
         Constants.AutoConstants.eventMap.put("place_cone_top", null);
         Constants.AutoConstants.eventMap.put("place_cube_top", null);
-        Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() -> clawSubsystem.set(0.2), clawSubsystem));
+        // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() -> clawSubsystem.set(0.2), clawSubsystem));
     }
 }

@@ -1,9 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.Optional;
-
-import org.photonvision.EstimatedRobotPose;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -18,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.utils.AprilTagGetters;
 
 /***
  * @author Noah Simon
@@ -135,13 +130,6 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
-
-        Optional<EstimatedRobotPose> estimatedPose = AprilTagGetters.updatePoseWithAprilTag(getPose());
-        if (estimatedPose.isPresent()) {
-
-            swerveDrivePoseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(),
-                    estimatedPose.get().timestampSeconds);
-        }
     }
 
     @Override
