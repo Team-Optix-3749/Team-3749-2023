@@ -1,12 +1,9 @@
 package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,17 +18,13 @@ import frc.robot.utils.Constants;
 public class ArmReal extends Arm {
 
   private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
-  private final RelativeEncoder leftShoulderRelativeEncoder = leftShoulderMotor.getEncoder();
   private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
-  private final RelativeEncoder rightShoulderRelativeEncoder = rightShoulderMotor.getEncoder();
   private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
   private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulderKP.get(), 0, 0);
   // private final ProfiledPIDController shoulderPIDController = new ProfiledPIDController(Constants.Arm.shoulderKP.get(), 0, 0, new TrapezoidProfile.Constraints(2, 2));
 
   private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-  private final RelativeEncoder leftElbowRelativeEncoder = leftElbowMotor.getEncoder();
   private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
-  private final RelativeEncoder rightElbowRelativeEncoder = rightElbowMotor.getEncoder();
   private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
   // private final ProfiledPIDController elbowPIDController = new ProfiledPIDController(Constants.Arm.elbowKP.get(), 0, 0, new TrapezoidProfile.Constraints(2, 2));
   private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbowKP.get(), 0, 0);
