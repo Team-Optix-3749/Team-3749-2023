@@ -151,13 +151,8 @@ public class ArmReal extends Arm {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("left elbow rel", leftElbowRelativeEncoder.getPosition());
-    SmartDashboard.putNumber("right elbow rel", rightElbowRelativeEncoder.getPosition());
     SmartDashboard.putNumber("elbow abs", elbowAbsoluteEncoder.getDistance());
 
-    SmartDashboard.putNumber("left shoulder rel", leftShoulderRelativeEncoder.getPosition());
-    SmartDashboard.putNumber("right soulder rel", rightShoulderRelativeEncoder.getPosition());
-    SmartDashboard.putNumber("shoulder abs encoder", shoulderAbsoluteEncoder.get());
     SmartDashboard.putNumber("shoulder abs dist", shoulderAbsoluteEncoder.getDistance());
 
     elbowPIDController.setP(Constants.Arm.elbowKP.get());
