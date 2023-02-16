@@ -6,6 +6,7 @@ import java.util.List;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -153,9 +155,9 @@ public final class AutoCommands {
                                 new InstantCommand(() -> swerveSubsystem.stopModules()));
         }
 
-        public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem) {
+        public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem, Alliance teamColor) {
                 PathPlannerTrajectory trajectory = PathPlanner.loadPath("calibration", new PathConstraints(1, 1));
-                
+                trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
                 return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
 }
