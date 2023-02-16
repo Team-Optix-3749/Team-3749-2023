@@ -10,12 +10,11 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
-
 /***
  * @author Noah Simon
  * @author Raadwan _____
  * @author Rohin Sood
- * Default command to control the SwervedriveSubsystem with joysticks
+ *         Default command to control the SwervedriveSubsystem with joysticks
  */
 
 public class SwerveTeleopCommand extends CommandBase {
@@ -61,14 +60,12 @@ public class SwerveTeleopCommand extends CommandBase {
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
 
-        if (true) {
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        } else {    
-            // Relative to robot
-            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-        }
+        // Relative to field
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+
+        // Relative to robot
+        // chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
 
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
