@@ -146,8 +146,9 @@ public final class AutoCommands {
 
         // Essentially the template of a getPath command we should be using.  
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem, Alliance teamColor) {
-                PathPlannerTrajectory trajectory = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
+                PathPlannerTrajectory trajectory = PathPlanner.loadPath("test path", new PathConstraints(1, 1));
                 trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
+                
                 return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
 }
