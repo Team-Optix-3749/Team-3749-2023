@@ -23,19 +23,17 @@ public class RobotContainer {
         configureButtonBindings();
         configureDefaultCommands();
 
-        swerveSubsystem.setDefaultCommand(new SwerveTeleopCommand(
-                swerveSubsystem,
-                () -> -pilot.getLeftY(),
-                () -> pilot.getLeftX(),
-                () -> pilot.getRightX()));
-
-        configureButtonBindings();
     }
 
     /**
      * Set default commands
      */
     private void configureDefaultCommands() {
+        swerveSubsystem.setDefaultCommand(new SwerveTeleopCommand(
+                swerveSubsystem,
+                () -> -pilot.getLeftY(),
+                () -> pilot.getLeftX(),
+                () -> pilot.getRightX()));
     }
 
     /**
