@@ -60,7 +60,7 @@ public class AutoBalancingPID extends CommandBase {
      * @return true if it is within the margin, false if not
      */
     private boolean withinMargin(double margin, double a, double b) {
-        if (a + margin >= b && a - margin <= b || a == b) {
+        if (a + margin >= b && a - margin <= b) {
             return true;
         }
         return false;
