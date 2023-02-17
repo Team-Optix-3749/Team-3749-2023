@@ -20,6 +20,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -62,7 +63,7 @@ public final class AutoCommands {
                          new PIDController(0.01, 0, 0), // Y controller (usually the same values as X controller)
                          new PIDController(5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                          swerveSubsystem::setModuleStates, // Module states consumer
-                         true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+                         false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                          swerveSubsystem // Requires this drive subsystem
                      )
                  );
@@ -146,9 +147,10 @@ public final class AutoCommands {
 
         // Essentially the template of a getPath command we should be using.  
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem, Alliance teamColor) {
-                PathPlannerTrajectory trajectory = PathPlanner.loadPath("test path", new PathConstraints(1, 1));
+                PathPlannerTrajectory trajectory = PathPlanner.loadPath("Claw test", new PathConstraints(1, 1));
+
                 trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
-                
+                SmartDashboard.putNumber("y pos after some time", trajectory.sample(0.8).poseMeters.getY());
                 return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
 }

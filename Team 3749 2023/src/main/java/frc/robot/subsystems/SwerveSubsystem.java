@@ -107,7 +107,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return swerveDrivePoseEstimator.getEstimatedPosition();
+        Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
+        return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
     }
 
     public void resetOdometry(Pose2d pose) {

@@ -7,7 +7,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3865749437592507,
+        "x": 2.0,
         "y": 3.0
       },
       "holonomicAngle": 0,
@@ -31,6 +31,31 @@
         "x": 2.0,
         "y": 3.0
       },
+      "nextControl": {
+        "x": 2.0,
+        "y": 3.0
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.0,
+        "y": 3.0
+      },
+      "prevControl": {
+        "x": 0.0,
+        "y": 3.0
+      },
       "nextControl": null,
       "holonomicAngle": 0,
       "isReversal": false,
@@ -45,5 +70,12 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.29,
+      "names": [
+        "pickup_cone_floor"
+      ]
+    }
+  ]
 }

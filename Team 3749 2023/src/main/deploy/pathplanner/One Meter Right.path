@@ -28,8 +28,8 @@
         "y": 2.0
       },
       "prevControl": {
-        "x": 1.027786645465586,
-        "y": 2.78848786363687
+        "x": 1.0,
+        "y": 3.0
       },
       "nextControl": null,
       "holonomicAngle": 0,
