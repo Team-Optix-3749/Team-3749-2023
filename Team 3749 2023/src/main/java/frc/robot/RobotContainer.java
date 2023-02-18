@@ -62,16 +62,6 @@ public class RobotContainer {
     private void configureButtonBindings() throws Exception {
         switch (Constants.ROBOT_MODE) {
             case REAL:
-                // pilot.aWhileHeld(
-                //         () -> arm.setShoulder(-.4), () -> arm.stopShoulder(), arm);
-                // pilot.bWhileHeld(
-                //         () -> arm.setShoulder(.4), () -> arm.stopShoulder(), arm);
-
-                // pilot.xWhileHeld(
-                //         () -> arm.setElbow(-.4), () -> arm.stopElbow(), arm);
-                // pilot.yWhileHeld(
-                //         () -> arm.setElbow(.4), () -> arm.stopElbow(), arm);
-
                 pilot.a().whileTrue(new SequentialCommandGroup(
                         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
                                 Constants.Arm.ElbowSetpoints.STING.angle),
@@ -97,7 +87,6 @@ public class RobotContainer {
                                 Constants.Arm.ElbowSetpoints.STOWED.angle)));
                 break;
             case SIMULATION:
-                // pilot.aWhileHeld(() -> testKinematics());
                 break;
             default:
                 throw new Exception("ROBOT_MODE is not set in utils/Constants.java");

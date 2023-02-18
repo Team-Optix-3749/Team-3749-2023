@@ -20,81 +20,81 @@ import frc.robot.utils.SmartData;
  * @author Rohin Sood
  */
 public class ArmSimCommand extends CommandBase {
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+    @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-  private final Arm armSim;
+    private final Arm armSim;
 
-  private ProfiledPIDController elbowController = new ProfiledPIDController(Constants.Arm.elbowSimKP.get(),
-      0, 0,
-      new TrapezoidProfile.Constraints(2, 5));
-  private ProfiledPIDController shoulderController = new ProfiledPIDController(Constants.Arm.shoulderSimKP.get(),
-      0,0,
-      new TrapezoidProfile.Constraints(2, 5));
+    private ProfiledPIDController elbowController = new ProfiledPIDController(Constants.Arm.elbowSimKP.get(),
+            0, 0,
+            new TrapezoidProfile.Constraints(2, 5));
+    private ProfiledPIDController shoulderController = new ProfiledPIDController(Constants.Arm.shoulderSimKP.get(),
+            0, 0,
+            new TrapezoidProfile.Constraints(2, 5));
 
-  private SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
+    private SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
-  // desired positions for x and y
-  public static SmartData<Double> xf = new SmartData<Double>("desired x position", 55.0);
-  public static SmartData<Double> yf = new SmartData<Double>("desired y position", 0.0);
+    // desired positions for x and y
+    public static SmartData<Double> xf = new SmartData<Double>("desired x position", 55.0);
+    public static SmartData<Double> yf = new SmartData<Double>("desired y position", 0.0);
 
-  public ArmSimCommand(Arm armSim) {
-    this.armSim = armSim;
-    addRequirements(armSim);
-  }
-
-  @Override
-  public void initialize() {
-    presetChooser.setDefaultOption("STOWED", 0);
-    presetChooser.addOption("DS", 1);
-    SmartDashboard.putData(presetChooser);
-  }
-
-  @Override
-  public void execute(){
-
-    double elbowSetpoint, shoulderSetpoint;
-    switch (presetChooser.getSelected()) {
-      // the real life 0 position is vertical, so its transformed by 90 degrees
-      case 0:
-        elbowSetpoint = 180 - ElbowSetpoints.STOWED.angle;
-        shoulderSetpoint = 180 - ShoulderSetpoints.STOWED.angle;
-        break;
-      case 1:
-        elbowSetpoint = 180 - ElbowSetpoints.DRIVER_STATION.angle;
-        shoulderSetpoint = 180 - ShoulderSetpoints.DRIVER_STATION.angle;
-        break;
-      case 2:
-        Kinematics kinematics = new Kinematics();
-        Pair<Double, Double> angles = kinematics.inverse(xf.get(), yf.get());
-
-        elbowSetpoint = 180-Math.toDegrees(angles.getSecond());
-        shoulderSetpoint = 180-Math.toDegrees(angles.getFirst());
-        break;
-      default:
-        elbowSetpoint = ElbowSetpoints.ZERO.angle - 90;
-        shoulderSetpoint = ShoulderSetpoints.ZERO.angle - 90;
-        break;
+    public ArmSimCommand(Arm armSim) {
+        this.armSim = armSim;
+        addRequirements(armSim);
     }
 
-    double pidOutputElbow = elbowController.calculate(armSim.getElbowAngle(),
-        Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
-    armSim.setElbowVoltage(pidOutputElbow);
-    SmartDashboard.putNumber("Setpoint bottom (degrees)", shoulderSetpoint);
-    SmartDashboard.putNumber("Setpoint top (degrees)", elbowSetpoint);
-    double pidOutputShoulder = shoulderController.calculate(armSim.getShoulderAngle(),
-        Units.degreesToRadians(shoulderSetpoint));
-    armSim.setShoulderVoltage(pidOutputShoulder);
+    @Override
+    public void initialize() {
+        presetChooser.setDefaultOption("STOWED", 0);
+        presetChooser.addOption("DS", 1);
+        SmartDashboard.putData(presetChooser);
+    }
 
-    shoulderController.setP(Constants.Arm.shoulderSimKP.get());
-    elbowController.setP(Constants.Arm.elbowSimKP.get());
-  }
+    @Override
+    public void execute() {
 
-  @Override
-  public void end(boolean interrupted) {
-  }
+        double elbowSetpoint, shoulderSetpoint;
+        switch (presetChooser.getSelected()) {
+            // the real life 0 position is vertical, so its transformed by 90 degrees
+            case 0:
+                elbowSetpoint = 180 - ElbowSetpoints.STOWED.angle;
+                shoulderSetpoint = 180 - ShoulderSetpoints.STOWED.angle;
+                break;
+            case 1:
+                elbowSetpoint = 180 - ElbowSetpoints.DRIVER_STATION.angle;
+                shoulderSetpoint = 180 - ShoulderSetpoints.DRIVER_STATION.angle;
+                break;
+            case 2:
+                Kinematics kinematics = new Kinematics();
+                Pair<Double, Double> angles = kinematics.inverse(xf.get(), yf.get());
 
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+                elbowSetpoint = 180 - Math.toDegrees(angles.getSecond());
+                shoulderSetpoint = 180 - Math.toDegrees(angles.getFirst());
+                break;
+            default:
+                elbowSetpoint = ElbowSetpoints.ZERO.angle - 90;
+                shoulderSetpoint = ShoulderSetpoints.ZERO.angle - 90;
+                break;
+        }
+
+        double pidOutputElbow = elbowController.calculate(armSim.getElbowAngle(),
+                Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
+        armSim.setElbowVoltage(pidOutputElbow);
+        SmartDashboard.putNumber("Setpoint bottom (degrees)", shoulderSetpoint);
+        SmartDashboard.putNumber("Setpoint top (degrees)", elbowSetpoint);
+        double pidOutputShoulder = shoulderController.calculate(armSim.getShoulderAngle(),
+                Units.degreesToRadians(shoulderSetpoint));
+        armSim.setShoulderVoltage(pidOutputShoulder);
+
+        shoulderController.setP(Constants.Arm.shoulderSimKP.get());
+        elbowController.setP(Constants.Arm.elbowSimKP.get());
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

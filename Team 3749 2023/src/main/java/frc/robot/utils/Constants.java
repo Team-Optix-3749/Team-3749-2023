@@ -30,6 +30,8 @@ public final class Constants {
 
         // kilograms
         public static final double bicep_mass = 2.26796; // 5 lbs
+
+        // mass of forearm is wrong - should be 1 pound
         public static final double forearm_mass = 11.3398; // forearm + claw mass (20 + 5 lbs)
 
         public static final int number_of_motors = 2;

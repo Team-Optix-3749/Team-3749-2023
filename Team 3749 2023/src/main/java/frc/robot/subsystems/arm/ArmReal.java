@@ -23,16 +23,10 @@ public class ArmReal extends Arm {
             MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
     private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulderKP.get(), 0, 0);
-    // private final ProfiledPIDController shoulderPIDController = new
-    // ProfiledPIDController(Constants.Arm.shoulderKP.get(), 0, 0, new
-    // TrapezoidProfile.Constraints(2, 2));
 
     private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
-    // private final ProfiledPIDController elbowPIDController = new
-    // ProfiledPIDController(Constants.Arm.elbowKP.get(), 0, 0, new
-    // TrapezoidProfile.Constraints(2, 2));
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbowKP.get(), 0, 0);
 
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();

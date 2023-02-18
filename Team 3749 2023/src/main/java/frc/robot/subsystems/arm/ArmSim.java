@@ -35,13 +35,11 @@ public class ArmSim extends Arm {
 
   // distance per pulse = (angle per revolution) / (pulses per revolution)
   // = (2 * PI rads) / (4096 pulses)
-  private static final double kArmEncoderDistPerPulse = 2.0 * Math.PI / 4096;
+  private static final double kSimEncoderDistPerPulse = 2.0 * Math.PI / 4096;
 
-  // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor shoulderGearBox = DCMotor.getNEO(2);
   private final DCMotor elbowGearBox = DCMotor.getNEO(2);
 
-  // Standard classes for controlling our arm
   private final Encoder elbowEncoder = new Encoder(0, 1);
   private final Encoder shoulderEncoder = new Encoder(2, 3);
 
@@ -61,9 +59,6 @@ public class ArmSim extends Arm {
   private final LinearSystem<N2, N1, N1> shoulderPlant = LinearSystemId.createSingleJointedArmSystem(
       shoulderGearBox, shoulderMOI, Constants.Arm.shoulder_reduction);
 
-  // This arm sim represents an arm that can travel from -75 degrees (rotated down
-  // front)
-  // to 255 degrees (rotated down in the back).
   private final SingleJointedArmSim elbowSim = new SingleJointedArmSim(
       elbowPlant,
       elbowGearBox,
@@ -72,8 +67,7 @@ public class ArmSim extends Arm {
       Units.degreesToRadians(-360),
       Units.degreesToRadians(360),
       false,
-      VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
-  );
+      VecBuilder.fill(kSimEncoderDistPerPulse));
   private final SingleJointedArmSim shoulderSim = new SingleJointedArmSim(
       shoulderPlant,
       shoulderGearBox,
@@ -82,11 +76,10 @@ public class ArmSim extends Arm {
       Units.degreesToRadians(-360),
       Units.degreesToRadians(360),
       false,
-      VecBuilder.fill(kArmEncoderDistPerPulse));
+      VecBuilder.fill(kSimEncoderDistPerPulse));
   private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
   private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
 
-  // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final Mechanism2d mech2d = new Mechanism2d(90, 90);
   private final MechanismRoot2d midNodeHome = mech2d.getRoot("Mid Node", 27.83, 0);
   private final MechanismLigament2d midNode = midNodeHome
@@ -137,18 +130,10 @@ public class ArmSim extends Arm {
     rightElbowMotor.setInverted(true);
     rightShoulderMotor.setInverted(true);
 
-    elbowEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
-    shoulderEncoder.setDistancePerPulse(kArmEncoderDistPerPulse);
+    elbowEncoder.setDistancePerPulse(kSimEncoderDistPerPulse);
+    shoulderEncoder.setDistancePerPulse(kSimEncoderDistPerPulse);
 
-    // Put Mechanism 2d to SmartDashboard
     SmartDashboard.putData("Arm Sim", mech2d);
-  }
-
-  private boolean withinMargin(double margin, double a, double b) {
-    if (a + margin >= b && a - margin <= b) {
-      return true;
-    }
-    return false;
   }
 
   @Override
@@ -171,37 +156,22 @@ public class ArmSim extends Arm {
     return elbowEncoder.getDistance();
   }
 
-  // @Override
-  // public boolean getShoulderAtSetpoint(double angle) {
-  //   if (withinMargin(2, getShoulderAngle(), angle)){
-  //     return true;
-  //   }
-  //   return false;
-
-  // }
-
   public void updateSim() {
     REVPhysicsSim.getInstance().run();
 
-    // In this method, we update our simulation of what our arm is doing
-    // First, we set our "inputs" (voltages)
     elbowSim.setInput(leftElbowMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
     shoulderSim.setInput(leftShoulderMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
-    // Next, we update it. The standard loop time is 20ms.
+
     elbowSim.update(0.020);
     shoulderSim.update(0.020);
 
-    // Finally, we set our simulated encoder's readings and simulated battery
-    // voltage
     elbowEncoderSim.setDistance(elbowSim.getAngleRads());
     shoulderEncoderSim.setDistance(shoulderSim.getAngleRads());
 
-    // SimBattery estimates loaded battery voltages
     RoboRioSim.setVInVoltage(
         BatterySim.calculateDefaultBatteryLoadedVoltage(
             elbowSim.getCurrentDrawAmps() + shoulderSim.getCurrentDrawAmps()));
 
-    // Update the Mechanism Arm angle based on the simulated arm angle
     forearm.setAngle(Units.radiansToDegrees(elbowSim.getAngleRads()));
     bicep.setAngle(Units.radiansToDegrees(shoulderSim.getAngleRads()));
   }
