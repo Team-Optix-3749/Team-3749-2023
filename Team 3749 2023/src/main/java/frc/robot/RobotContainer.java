@@ -62,21 +62,33 @@ public class RobotContainer {
     private void configureButtonBindings() throws Exception {
         switch (Constants.ROBOT_MODE) {
             case REAL:
-                pilot.aWhileHeld(
-                        () -> arm.setShoulder(-.4), () -> arm.stopShoulder(), arm);
-                pilot.bWhileHeld(
-                        () -> arm.setShoulder(.4), () -> arm.stopShoulder(), arm);
+                // pilot.aWhileHeld(
+                //         () -> arm.setShoulder(-.4), () -> arm.stopShoulder(), arm);
+                // pilot.bWhileHeld(
+                //         () -> arm.setShoulder(.4), () -> arm.stopShoulder(), arm);
 
-                pilot.xWhileHeld(
-                        () -> arm.setElbow(-.4), () -> arm.stopElbow(), arm);
-                pilot.yWhileHeld(
-                        () -> arm.setElbow(.4), () -> arm.stopElbow(), arm);
+                // pilot.xWhileHeld(
+                //         () -> arm.setElbow(-.4), () -> arm.stopElbow(), arm);
+                // pilot.yWhileHeld(
+                //         () -> arm.setElbow(.4), () -> arm.stopElbow(), arm);
+
+                pilot.a().whileTrue(new SequentialCommandGroup(
+                        new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
+                                Constants.Arm.ElbowSetpoints.STING.angle),
+                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONETOP.angle,
+                                Constants.Arm.ElbowSetpoints.CONETOP.angle)));
+
+                pilot.b().whileTrue(new SequentialCommandGroup(
+                        new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
+                                Constants.Arm.ElbowSetpoints.STING.angle),
+                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONEMID.angle,
+                                Constants.Arm.ElbowSetpoints.CONEMID.angle)));
 
                 pilot.rightBumper().whileTrue(new SequentialCommandGroup(
                         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
                                 Constants.Arm.ElbowSetpoints.STING.angle),
-                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CUBETOP.angle,
-                                Constants.Arm.ElbowSetpoints.CUBETOP.angle)));
+                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.GROUNDINTAKE.angle,
+                                Constants.Arm.ElbowSetpoints.GROUNDINTAKE.angle)));
 
                 pilot.leftBumper().whileTrue(new SequentialCommandGroup(
                         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,

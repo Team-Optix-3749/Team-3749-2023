@@ -57,9 +57,10 @@ public final class Constants {
             ZERO(0),
             STOWED(190),
             STING(220),
+            GROUNDINTAKE(150),
             DS(200),
             CONETOP(140),
-            CONEMID(175),
+            CONEMID(185),
             CUBETOP(150),
             CUBEMID(180);
 
@@ -76,8 +77,9 @@ public final class Constants {
             STOWED(25),
             STING(50),
             DS(80),
+            GROUNDINTAKE(53),
             CONETOP(160),
-            CONEMID(105),
+            CONEMID(90),
             CUBETOP(140),
             CUBEMID(80);
 
