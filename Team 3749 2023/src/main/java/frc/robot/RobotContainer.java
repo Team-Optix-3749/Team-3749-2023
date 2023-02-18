@@ -17,6 +17,7 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.Xbox;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoBalancingPID;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.MoveDistance;
 import frc.robot.commands.SwerveTeleopCommand;
@@ -33,7 +34,7 @@ public class RobotContainer {
   // Subsystems
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final Arm armSubsystem = new Arm();
-  private final Claw clawSubsystem = new Claw();
+  // private final Claw clawSubsystem = new Claw();
 
   // Commands
   private final MoveDistance moveDistance = new MoveDistance(swerveSubsystem, Units.feetToMeters(5));
@@ -56,8 +57,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    pilot.a().whileTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    pilot.b().whileTrue(moveDistance);
+    pilot.aWhileHeld(swerveSubsystem::zeroHeading);
+    pilot.b().whileTrue(new AutoBalancingPID(swerveSubsystem));
+    
 
   }
 
@@ -78,7 +80,7 @@ public class RobotContainer {
     Constants.AutoConstants.eventMap.put("place_cube_mid", null);
     Constants.AutoConstants.eventMap.put("place_cone_top", null);
     Constants.AutoConstants.eventMap.put("place_cube_top", null);
-    Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() -> clawSubsystem.set(0.2), clawSubsystem));
+    // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() -> clawSubsystem.set(0.2), clawSubsystem));
 
 
   }

@@ -104,7 +104,7 @@ public class Constants {
         public static final double max_pitch_offset = 2;
         public static final double max_pitch_margin = 3;
         public static final double max_movement_offset = 0.025; // around 1 inch
-        public static final double base_speed_mps = 1;
+        public static final double base_speed_mps = -1;
         // FOR TOBY
         public static final double adjust_speed_mps = 0.1;
         public static final double adjusting_distance = 0.05; // In meters, so this is 5 cm
