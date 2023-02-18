@@ -60,8 +60,8 @@ public class ArmSimCommand extends CommandBase {
                 shoulderSetpoint = 180 - ShoulderSetpoints.STOWED.angle;
                 break;
             case 1:
-                elbowSetpoint = 180 - ElbowSetpoints.DRIVER_STATION.angle;
-                shoulderSetpoint = 180 - ShoulderSetpoints.DRIVER_STATION.angle;
+                elbowSetpoint = 180 - ElbowSetpoints.DOUBLE_SUBSTATION.angle;
+                shoulderSetpoint = 180 - ShoulderSetpoints.DOUBLE_SUBSTATION.angle;
                 break;
             case 2:
                 Kinematics kinematics = new Kinematics();

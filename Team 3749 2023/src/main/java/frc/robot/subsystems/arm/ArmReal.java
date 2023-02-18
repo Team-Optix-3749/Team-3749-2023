@@ -133,8 +133,8 @@ public class ArmReal extends Arm {
                 elbow_angle = Constants.Arm.ElbowSetpoints.STOWED.angle;
                 break;
             case (1):
-                shoulder_angle = Constants.Arm.ShoulderSetpoints.DRIVER_STATION.angle;
-                elbow_angle = Constants.Arm.ElbowSetpoints.DRIVER_STATION.angle;
+                shoulder_angle = Constants.Arm.ShoulderSetpoints.DOUBLE_SUBSTATION.angle;
+                elbow_angle = Constants.Arm.ElbowSetpoints.DOUBLE_SUBSTATION.angle;
                 break;
             default:
                 shoulder_angle = Constants.Arm.ShoulderSetpoints.STOWED.angle;
