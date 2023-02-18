@@ -57,12 +57,12 @@ public final class Constants {
             ZERO(0),
             STOWED(190),
             STING(220),
-            GROUNDINTAKE(150),
-            DS(200),
-            CONETOP(140),
-            CONEMID(185),
-            CUBETOP(150),
-            CUBEMID(180);
+            DRIVER_STATION(200),
+            GROUND_INTAKE(150),
+            CONE_TOP(140),
+            CONE_MID(185),
+            CUBE_TOP(150),
+            CUBE_MID(180);
 
             public final double angle;
 
@@ -76,12 +76,12 @@ public final class Constants {
             ZERO(0),
             STOWED(25),
             STING(50),
-            DS(80),
-            GROUNDINTAKE(53),
-            CONETOP(160),
-            CONEMID(90),
-            CUBETOP(140),
-            CUBEMID(80);
+            DRIVER_STATION(80),
+            GROUND_INTAKE(53),
+            CONE_TOP(160),
+            CONE_MID(90),
+            CUBE_TOP(140),
+            CUBE_MID(80);
 
             public final double angle;
 
