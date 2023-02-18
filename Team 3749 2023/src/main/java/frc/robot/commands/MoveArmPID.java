@@ -35,6 +35,6 @@ public class MoveArmPID extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isShoulderAtSetpoint() && arm.isElbowAtSetpoint();
+        return arm.getShoulderAtSetpoint() && arm.getElbowAtSetpoint();
     }
 }

@@ -61,8 +61,8 @@ public class ArmReal extends Arm {
 
     @Override
     public void setShoulder(double percent) {
-        boolean past_min_limit = getShoulderDistance() <= Constants.Arm.shoulder_min_angle && percent < 0;
-        boolean past_max_limit = getShoulderDistance() >= Constants.Arm.shoulder_max_angle && percent > 0;
+        boolean past_min_limit = getShoulderAngle() <= Constants.Arm.shoulder_min_angle && percent < 0;
+        boolean past_max_limit = getShoulderAngle() >= Constants.Arm.shoulder_max_angle && percent > 0;
         if (past_min_limit || past_max_limit) {
             return;
         }
@@ -77,12 +77,12 @@ public class ArmReal extends Arm {
     }
 
     @Override
-    public double getShoulderDistance() {
+    public double getShoulderAngle() {
         return shoulderAbsoluteEncoder.getDistance();
     }
 
     @Override
-    public double getElbowDistance() {
+    public double getElbowAngle() {
         return elbowAbsoluteEncoder.getDistance();
     }
 
@@ -113,12 +113,12 @@ public class ArmReal extends Arm {
     }
 
     @Override
-    public boolean isShoulderAtSetpoint() {
+    public boolean getShoulderAtSetpoint() {
         return shoulderPIDController.atSetpoint();
     }
 
     @Override
-    public boolean isElbowAtSetpoint() {
+    public boolean getElbowAtSetpoint() {
         return elbowPIDController.atSetpoint();
     }
 
@@ -139,8 +139,8 @@ public class ArmReal extends Arm {
                 elbow_angle = Constants.Arm.ElbowSetpoints.STOWED.angle;
                 break;
             case (1):
-                shoulder_angle = Constants.Arm.ShoulderSetpoints.DS.angle;
-                elbow_angle = Constants.Arm.ElbowSetpoints.DS.angle;
+                shoulder_angle = Constants.Arm.ShoulderSetpoints.DRIVER_STATION.angle;
+                elbow_angle = Constants.Arm.ElbowSetpoints.DRIVER_STATION.angle;
                 break;
             default:
                 shoulder_angle = Constants.Arm.ShoulderSetpoints.STOWED.angle;
@@ -192,11 +192,11 @@ public class ArmReal extends Arm {
 
         SmartDashboard.putString("idlemode", leftShoulderMotor.getIdleMode() == IdleMode.kBrake ? "brake" : "coast");
 
-        SmartDashboard.putBoolean("SHOULDER AT SETPOINT", isShoulderAtSetpoint());
-        SmartDashboard.putBoolean("ELBOW AT SETPOINT", isElbowAtSetpoint());
+        SmartDashboard.putBoolean("SHOULDER AT SETPOINT", getShoulderAtSetpoint());
+        SmartDashboard.putBoolean("ELBOW AT SETPOINT", getElbowAtSetpoint());
 
-        SmartDashboard.putNumber("S ERROR", getShoulderDistance() - shoulderPIDController.getSetpoint());
-        SmartDashboard.putNumber("E ERROR", getElbowDistance() - elbowPIDController.getSetpoint());
+        SmartDashboard.putNumber("S ERROR", getShoulderAngle() - shoulderPIDController.getSetpoint());
+        SmartDashboard.putNumber("E ERROR", getElbowAngle() - elbowPIDController.getSetpoint());
     }
 
 }

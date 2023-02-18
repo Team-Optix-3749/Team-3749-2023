@@ -60,8 +60,8 @@ public class ArmSimCommand extends CommandBase {
         shoulderSetpoint = 180 - ShoulderSetpoints.STOWED.angle;
         break;
       case 1:
-        elbowSetpoint = 180 - ElbowSetpoints.DS.angle;
-        shoulderSetpoint = 180 - ShoulderSetpoints.DS.angle;
+        elbowSetpoint = 180 - ElbowSetpoints.DRIVER_STATION.angle;
+        shoulderSetpoint = 180 - ShoulderSetpoints.DRIVER_STATION.angle;
         break;
       case 2:
         Kinematics kinematics = new Kinematics();
@@ -76,12 +76,12 @@ public class ArmSimCommand extends CommandBase {
         break;
     }
 
-    double pidOutputElbow = elbowController.calculate(armSim.getElbowDistance(),
+    double pidOutputElbow = elbowController.calculate(armSim.getElbowAngle(),
         Units.degreesToRadians(elbowSetpoint - shoulderSetpoint));
     armSim.setElbowVoltage(pidOutputElbow);
     SmartDashboard.putNumber("Setpoint bottom (degrees)", shoulderSetpoint);
     SmartDashboard.putNumber("Setpoint top (degrees)", elbowSetpoint);
-    double pidOutputShoulder = shoulderController.calculate(armSim.getShoulderDistance(),
+    double pidOutputShoulder = shoulderController.calculate(armSim.getShoulderAngle(),
         Units.degreesToRadians(shoulderSetpoint));
     armSim.setShoulderVoltage(pidOutputShoulder);
 

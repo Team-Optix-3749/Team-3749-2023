@@ -162,23 +162,23 @@ public class ArmSim extends Arm {
   }
 
   @Override
-  public double getShoulderDistance() {
+  public double getShoulderAngle() {
     return shoulderEncoder.getDistance();
   }
 
   @Override
-  public double getElbowDistance() {
+  public double getElbowAngle() {
     return elbowEncoder.getDistance();
   }
 
-  @Override
-  public boolean getShoulderAtSetpoint(double angle) {
-    if (withinMargin(2, getShoulderDistance(), angle)){
-      return true;
-    }
-    return false;
+  // @Override
+  // public boolean getShoulderAtSetpoint(double angle) {
+  //   if (withinMargin(2, getShoulderAngle(), angle)){
+  //     return true;
+  //   }
+  //   return false;
 
-  }
+  // }
 
   public void updateSim() {
     REVPhysicsSim.getInstance().run();

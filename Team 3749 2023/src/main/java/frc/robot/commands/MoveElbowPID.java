@@ -32,6 +32,6 @@ public class MoveElbowPID extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isElbowAtSetpoint();
+        return arm.getElbowAtSetpoint();
     }
 }

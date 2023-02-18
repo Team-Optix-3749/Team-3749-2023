@@ -32,6 +32,6 @@ public class MoveShoulderPID extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isShoulderAtSetpoint();
+        return arm.getShoulderAtSetpoint();
     }
 }

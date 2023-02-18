@@ -75,20 +75,20 @@ public class RobotContainer {
                 pilot.a().whileTrue(new SequentialCommandGroup(
                         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
                                 Constants.Arm.ElbowSetpoints.STING.angle),
-                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONETOP.angle,
-                                Constants.Arm.ElbowSetpoints.CONETOP.angle)));
+                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_TOP.angle,
+                                Constants.Arm.ElbowSetpoints.CONE_TOP.angle)));
 
                 pilot.b().whileTrue(new SequentialCommandGroup(
                         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
                                 Constants.Arm.ElbowSetpoints.STING.angle),
-                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONEMID.angle,
-                                Constants.Arm.ElbowSetpoints.CONEMID.angle)));
+                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_MID.angle,
+                                Constants.Arm.ElbowSetpoints.CONE_MID.angle)));
 
                 pilot.rightBumper().whileTrue(new SequentialCommandGroup(
                         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
                                 Constants.Arm.ElbowSetpoints.STING.angle),
-                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.GROUNDINTAKE.angle,
-                                Constants.Arm.ElbowSetpoints.GROUNDINTAKE.angle)));
+                        new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.GROUND_INTAKE.angle,
+                                Constants.Arm.ElbowSetpoints.GROUND_INTAKE.angle)));
 
                 pilot.leftBumper().whileTrue(new SequentialCommandGroup(
                         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,

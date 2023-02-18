@@ -11,53 +11,73 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Arm extends SubsystemBase {
 
-	public void setElbowVoltage(double voltage) {
-	}
-
+	/**
+	 * @param voltage double
+	 */
 	public void setShoulderVoltage(double voltage) {
 	}
 
+	/**
+	 * @param percent double
+	 */
 	public void setShoulder(double percent) {
 	}
 
-	public void stopShoulder() {
-	}
-
-	public void setElbow(double percent) {
-	}
-
-	public void stopElbow() {
-	}
-
-	public double getShoulderDistance() {
+	/**
+	 * @return the position of the shoulder absolute encoder. the zero position is
+	 *         perpendicular to the floor
+	 */
+	public double getShoulderAngle() {
 		return 0.0;
 	}
 
-	public double getElbowDistance() {
-		return 0.0;
-	}
-
-	public void setShoulderPosition(double position) {
-	}
-
-	public void setElbowPosition(double position) {
-	}
-
-	public boolean getShoulderAtSetpoint(double angle) {
-		return false;
-	}
-
-	public void setShoulderAngleWaypoints(double angle1, double angle2) {
-	}
-
+	/**
+	 * sets the angle of the shoulder using PIDControllers
+	 */
 	public void setShoulderAngle(double angle) {
 	}
 
-	public boolean isShoulderAtSetpoint() {
+	/**
+	 * returns the PIDController.atSetpoint() output
+	 * the PIDController should have a tolerance
+	 */
+	public boolean getShoulderAtSetpoint() {
 		return false;
 	}
 
-	public boolean isElbowAtSetpoint() {
+	/**
+	 * runs .stopMotor() of the motor controller objects
+	 */
+	public void stopShoulder() {
+	}
+
+	/**
+	 * @param voltage double
+	 */
+	public void setElbowVoltage(double voltage) {
+	}
+
+	/**
+	 * @param voltage double
+	 */
+	public void setElbow(double percent) {
+	}
+
+	/**
+	 * runs .stopMotor() of the motor controller objects
+	 */
+	public void stopElbow() {
+	}
+
+	/**
+	 * @return the position of the shoulder absolute encoder. the zero position is
+	 *         parallel to the floor
+	 */
+	public double getElbowAngle() {
+		return 0.0;
+	}
+
+	public boolean getElbowAtSetpoint() {
 		return false;
 	}
 
