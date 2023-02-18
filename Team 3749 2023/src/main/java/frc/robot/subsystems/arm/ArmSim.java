@@ -51,14 +51,15 @@ public class ArmSim extends Arm {
   private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
   private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
 
-  private final double elbowMOI = SingleJointedArmSim.estimateMOI(Constants.Arm.elbow_reduction, Constants.Arm.forearm_length);
+  private final double elbowMOI = SingleJointedArmSim.estimateMOI(Constants.Arm.elbow_reduction,
+      Constants.Arm.forearm_length);
   private final LinearSystem<N2, N1, N1> elbowPlant = LinearSystemId.createSingleJointedArmSystem(
-                elbowGearBox, elbowMOI, Constants.Arm.elbow_reduction);
+      elbowGearBox, elbowMOI, Constants.Arm.elbow_reduction);
 
-  private final double shoulderMOI = SingleJointedArmSim.estimateMOI(Constants.Arm.shoulder_reduction, Constants.Arm.bicep_length);
+  private final double shoulderMOI = SingleJointedArmSim.estimateMOI(Constants.Arm.shoulder_reduction,
+      Constants.Arm.bicep_length);
   private final LinearSystem<N2, N1, N1> shoulderPlant = LinearSystemId.createSingleJointedArmSystem(
-                shoulderGearBox, shoulderMOI, Constants.Arm.shoulder_reduction);
-
+      shoulderGearBox, shoulderMOI, Constants.Arm.shoulder_reduction);
 
   // This arm sim represents an arm that can travel from -75 degrees (rotated down
   // front)
@@ -81,8 +82,7 @@ public class ArmSim extends Arm {
       Units.degreesToRadians(-360),
       Units.degreesToRadians(360),
       false,
-      VecBuilder.fill(kArmEncoderDistPerPulse) 
-  );
+      VecBuilder.fill(kArmEncoderDistPerPulse));
   private final EncoderSim elbowEncoderSim = new EncoderSim(elbowEncoder);
   private final EncoderSim shoulderEncoderSim = new EncoderSim(shoulderEncoder);
 
@@ -144,6 +144,13 @@ public class ArmSim extends Arm {
     SmartDashboard.putData("Arm Sim", mech2d);
   }
 
+  private boolean withinMargin(double margin, double a, double b) {
+    if (a + margin >= b && a - margin <= b) {
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public void setElbowVoltage(double voltage) {
     leftElbowMotor.setVoltage(voltage);
@@ -162,6 +169,15 @@ public class ArmSim extends Arm {
   @Override
   public double getElbowDistance() {
     return elbowEncoder.getDistance();
+  }
+
+  @Override
+  public boolean getShoulderAtSetpoint(double angle) {
+    if (withinMargin(2, getShoulderDistance(), angle)){
+      return true;
+    }
+    return false;
+
   }
 
   public void updateSim() {

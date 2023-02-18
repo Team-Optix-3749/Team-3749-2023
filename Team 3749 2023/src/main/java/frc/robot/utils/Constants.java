@@ -56,6 +56,7 @@ public final class Constants {
         public static enum ShoulderSetpoints {
             ZERO(0),
             STOWED(190),
+            STING(220),
             DS(200),
             CONETOP(140),
             CONEMID(175),
@@ -73,6 +74,7 @@ public final class Constants {
         public static enum ElbowSetpoints {
             ZERO(0),
             STOWED(25),
+            STING(50),
             DS(80),
             CONETOP(160),
             CONEMID(105),

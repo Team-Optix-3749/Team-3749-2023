@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -18,7 +20,13 @@ public class Arm extends SubsystemBase {
 	public void setShoulder(double percent) {
 	}
 
+	public void stopShoulder() {
+	}
+
 	public void setElbow(double percent) {
+	}
+
+	public void stopElbow() {
 	}
 
 	public double getShoulderDistance() {
@@ -35,14 +43,37 @@ public class Arm extends SubsystemBase {
 	public void setElbowPosition(double position) {
 	}
 
-	public void setShoulderAngle(double angle) {}
-	
-	public void setElbowAngle(double angle) {}
+	public boolean getShoulderAtSetpoint(double angle) {
+		return false;
+	}
 
-	public void setArmAngle(double shoulder_angle, double elbow_angle) {}
-	
-	public void setArmPreset() {}
+	public void setShoulderAngleWaypoints(double angle1, double angle2) {
+	}
 
-	public void stop() {}
+	public void setShoulderAngle(double angle) {
+	}
+
+	public boolean isShoulderAtSetpoint() {
+		return false;
+	}
+
+	public boolean isElbowAtSetpoint() {
+		return false;
+	}
+
+	public void setElbowAngle(double angle) {
+	}
+
+	public void setArmAngle(double shoulder_angle, double elbow_angle) {
+	}
+
+	public void setArmPreset() {
+	}
+
+	public void stop() {
+	}
+
+	public void setIdleMode(IdleMode idleMode) {
+	}
 
 }
