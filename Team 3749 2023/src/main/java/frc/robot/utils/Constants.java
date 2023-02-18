@@ -2,14 +2,26 @@ package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
-/**
- * Stores constant variables within subclasses for different subsystems.
- * Such constant values can include motor IDs, motor speed, PID
- * constants, etc...
+/***
+ * Stores constant variables within subclasses for different subsystems. Such
+ * constant values can include motor IDs, motor speed, PID constants, etc...
  */
 public final class Constants {
-
     public static final RobotMode ROBOT_MODE = RobotMode.REAL;
+
+    public static final class Claw {
+        public static final int claw_id = 22;
+
+        public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.5);
+
+        // current of above 60 Amps will produce high temperatures
+        public static final SmartData<Integer> currentLimit = new SmartData<Integer>("Claw current limit", 45);
+
+        // PID values
+        public static final SmartData<Double> kP = new SmartData<Double>("Claw kP", .05);
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+    }
 
     public static final class Arm {
 
@@ -59,7 +71,7 @@ public final class Constants {
             ZERO(0),
             STOWED(190),
             STING(220),
-            DRIVER_STATION(200),
+            DOUBLE_SUBSTATION(200),
             GROUND_INTAKE(150),
             CONE_TOP(140),
             CONE_MID(185),
@@ -78,7 +90,7 @@ public final class Constants {
             ZERO(0),
             STOWED(25),
             STING(50),
-            DRIVER_STATION(80),
+            DOUBLE_SUBSTATION(80),
             GROUND_INTAKE(53),
             CONE_TOP(160),
             CONE_MID(90),

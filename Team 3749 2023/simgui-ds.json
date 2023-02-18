@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "Joysticks": {
     "window": {
       "visible": false
@@ -9,6 +10,8 @@
       "visible": false
     }
   },
+=======
+>>>>>>> staging
   "keyboardJoysticks": [
     {
       "axisConfig": [
@@ -101,8 +104,12 @@
   ],
   "robotJoysticks": [
     {
+<<<<<<< HEAD
       "guid": "78696e70757401000000000000000000",
       "useGamepad": true
+=======
+      "guid": "78696e70757401000000000000000000"
+>>>>>>> staging
     }
   ]
 }

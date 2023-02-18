@@ -1,6 +1,7 @@
 {
   "HALProvider": {
     "Other Devices": {
+<<<<<<< HEAD
       "SPARK MAX [13]": {
         "header": {
           "open": true
@@ -22,6 +23,9 @@
         }
       },
       "SPARK MAX [18]": {
+=======
+      "SPARK MAX [0]": {
+>>>>>>> staging
         "header": {
           "open": true
         }
@@ -30,6 +34,7 @@
         "header": {
           "open": true
         }
+<<<<<<< HEAD
       },
       "SPARK MAX [2]": {
         "header": {
@@ -46,6 +51,11 @@
           "open": true
         }
       },
+=======
+      }
+    },
+    "Timing": {
+>>>>>>> staging
       "window": {
         "visible": false
       }
@@ -54,6 +64,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+<<<<<<< HEAD
       "/LiveWindow/ArmSim": "Subsystem",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
@@ -119,5 +130,21 @@
         "open": true
       }
     }
+=======
+      "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      }
+    }
+  },
+  "NetworkTables View": {
+    "visible": false
+>>>>>>> staging
   }
 }

@@ -1,7 +1,6 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -10,21 +9,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 /***
  * @author Rohin Sood
  * 
- *         Stores getters for all CommandXboxControllers outputs (rips
- *         .whenPressed())
+ *         Stores getters for all CommandXboxControllers outputs (rips .whenPressed())
  */
 public class Xbox extends CommandXboxController {
 
     public Xbox(final int port) {
         super(port);
-    }
-
-    public void aWhileHeld(CommandBase command) {
-        super.a().whileTrue(command);
-    }
-
-    public void aWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.a().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void aWhileHeld(Runnable whileTrue) {
@@ -49,14 +39,6 @@ public class Xbox extends CommandXboxController {
                 .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
-    public void bWhileHeld(CommandBase command) {
-        super.b().whileTrue(command);
-    }
-
-    public void bWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.b().whileTrue(trueCommand).whileFalse(falseCommand);
-    }
-
     public void bWhileHeld(Runnable whileTrue) {
         super.b().whileTrue(
                 Commands.run(whileTrue));
@@ -77,14 +59,6 @@ public class Xbox extends CommandXboxController {
         super.b().whileTrue(
                 Commands.run(whileTrue, subsystem))
                 .whileFalse(Commands.run(whileFalse, subsystem));
-    }
-
-    public void xWhileHeld(CommandBase command) {
-        super.x().whileTrue(command);
-    }
-
-    public void xWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.x().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void xWhileHeld(Runnable whileTrue) {
@@ -109,14 +83,6 @@ public class Xbox extends CommandXboxController {
                 .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
-    public void yWhileHeld(CommandBase command) {
-        super.y().whileTrue(command);
-    }
-
-    public void yWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.y().whileTrue(trueCommand).whileFalse(falseCommand);
-    }
-
     public void yWhileHeld(Runnable whileTrue) {
         super.y().whileTrue(
                 Commands.run(whileTrue));
@@ -139,14 +105,6 @@ public class Xbox extends CommandXboxController {
                 .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
-    public void leftBumperWhileHeld(CommandBase command) {
-        super.leftBumper().whileTrue(command);
-    }
-
-    public void leftBumperWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.leftBumper().whileTrue(trueCommand).whileFalse(falseCommand);
-    }
-
     public void leftBumperWhileHeld(Runnable whileTrue) {
         super.leftBumper().whileTrue(
                 Commands.run(whileTrue));
@@ -167,14 +125,6 @@ public class Xbox extends CommandXboxController {
         super.leftBumper().whileTrue(
                 Commands.run(whileTrue, subsystem))
                 .whileFalse(Commands.run(whileFalse, subsystem));
-    }
-
-    public void rightBumperWhileHeld(CommandBase command) {
-        super.leftBumper().whileTrue(command);
-    }
-
-    public void rightBumperWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.leftBumper().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void rightBumperWhileHeld(Runnable whileTrue) {
