@@ -19,23 +19,20 @@ public class RobotContainer {
     private final Claw claw = new Claw();
 
     public RobotContainer() {
-        setupAuto();
+        configureAuto();
         configureButtonBindings();
         configureDefaultCommands();
-
-        swerveSubsystem.setDefaultCommand(new SwerveTeleopCommand(
-                swerveSubsystem,
-                () -> -pilot.getLeftY(),
-                () -> pilot.getLeftX(),
-                () -> pilot.getRightX()));
-
-        configureButtonBindings();
     }
 
     /**
      * Set default commands
      */
     private void configureDefaultCommands() {
+        swerveSubsystem.setDefaultCommand(new SwerveTeleopCommand(
+                swerveSubsystem,
+                () -> -pilot.getLeftY(),
+                () -> pilot.getLeftX(),
+                () -> pilot.getRightX()));
     }
 
     /**
@@ -45,7 +42,7 @@ public class RobotContainer {
         pilot.aWhileHeld(() -> swerveSubsystem.zeroHeading(), swerveSubsystem);
 
         pilot.bWhileHeld(() -> claw.set(-Constants.Claw.speed.get()),
-            () -> claw.set(Constants.Claw.speed.get()), claw);
+                () -> claw.set(Constants.Claw.speed.get()), claw);
     }
 
     /**
@@ -58,7 +55,7 @@ public class RobotContainer {
     /**
      * Set event maps for autonomous
      */
-    public void setupAuto() {
+    public void configureAuto() {
         Constants.AutoConstants.eventMap.put("pickup_cone_floor", Commands.print("PICKUP CONE FLOOR"));
         Constants.AutoConstants.eventMap.put("pickup_cube_floor", null);
         Constants.AutoConstants.eventMap.put("pickup_cone_double_substation", null);
@@ -71,6 +68,7 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("place_cube_mid", null);
         Constants.AutoConstants.eventMap.put("place_cone_top", null);
         Constants.AutoConstants.eventMap.put("place_cube_top", null);
-        // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() -> clawSubsystem.set(0.2), clawSubsystem));
+        // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() ->
+        // clawSubsystem.set(0.2), clawSubsystem));
     }
 }
