@@ -24,12 +24,12 @@ import frc.robot.utils.Constants;
  */
 
 public class Claw extends SubsystemBase {
-    
+
     private final CANSparkMax clawMotor = new CANSparkMax(Constants.Claw.claw_id, MotorType.kBrushless);
     private final RelativeEncoder clawEncoder = clawMotor.getEncoder();
 
     private final SparkMaxPIDController clawMotorPIDController = clawMotor.getPIDController();
-    
+
     public Claw() {
         clawMotor.restoreFactoryDefaults();
 
@@ -75,7 +75,7 @@ public class Claw extends SubsystemBase {
     }
 
     /**
-     * holds the motor at its current position 
+     * holds the motor at its current position
      */
     public void hold() {
         clawMotorPIDController.setReference(clawMotor.get(), ControlType.kPosition);
@@ -86,5 +86,4 @@ public class Claw extends SubsystemBase {
         SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
         SmartDashboard.putNumber("Claw Position", getPosition());
     }
-
 }
