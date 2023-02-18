@@ -136,6 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void periodic() {
         updateOdometry();
         SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("pitch", getVerticalTilt());
         SmartDashboard.putNumber("Robot Pose X", getPose().getX());
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
     }

@@ -42,9 +42,10 @@ public class AutoBalancingPID extends CommandBase {
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     private double angle;
-    private double prev_angle;
     private double heading;
     private boolean has_aligned;
+    private boolean past_center;
+    private double max_angle = 0;
 
     // Initializes the BaseCommand
     public AutoBalancingPID(SwerveSubsystem swerveSubsystem) {
@@ -72,24 +73,32 @@ public class AutoBalancingPID extends CommandBase {
     public void initialize() {
         swerveSubsystem.stopModules();
         // update start position when we are getting started
-        prev_angle = swerveSubsystem.getVerticalTilt();
         angle = swerveSubsystem.getVerticalTilt();
         has_aligned = false;
+        past_center = false;
+        max_angle = 0;
+
 
     }
 
     // Run every 20 ms
     @Override
     public void execute() {
+        
 
 
         heading = swerveSubsystem.getHeading();
-        prev_angle = angle;
         angle = swerveSubsystem.getVerticalTilt();
+        if (Math.abs(angle) > Math.abs(max_angle)){
+            max_angle = angle;
+        }
+        if (Math.abs(max_angle) - 7 > Math.abs(angle)){
+            past_center = true;
+        }
+
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
         if (!withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0) && !has_aligned) {
-            System.out.println("HEADING");
             // negative so that we move towards the target, not away
             double turning_speed = turnController.calculate(Math.abs(heading), 0);
             turning_speed = turningLimiter.calculate(turning_speed)
@@ -110,25 +119,25 @@ public class AutoBalancingPID extends CommandBase {
 
         // move forward if the angle hasn't started to move and it hasn't moved in the
         // past
-        // if (!withinMargin(Constants.AutoBalancing.max_pitch_margin, prev_angle, angle) && !has_flipped) {
-        //     SmartDashboard.putBoolean("STATIC MOVE", true);
+        else if (!withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0) && !past_center ) {
+            has_aligned = true;
+            
 
-        //     // Construct desired chassis speeds
-        //     ChassisSpeeds chassisSpeeds;
-        //     // Relative to field
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        //             Constants.AutoBalancing.base_speed_mps, 0, 0, swerveSubsystem.getRotation2d());
-        //     // Convert chassis speeds to individual module states
-        //     SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-        //             .toSwerveModuleStates(chassisSpeeds);
-        //     // Output each module states to wheels
-        //     swerveSubsystem.setModuleStates(moduleStates);
-        // }
+            // Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    Constants.AutoBalancing.base_speed_mps, 0, 0, swerveSubsystem.getRotation2d());
+            // Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                    .toSwerveModuleStates(chassisSpeeds);
+            // Output each module states to wheels
+            swerveSubsystem.setModuleStates(moduleStates);
+        }
         // the robot must've moved slightly past the center now, so we will start using
         // PID to reach the middle
         else if (!withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
             has_aligned = true;
-            System.out.println("PID");
             double speed = -controller.calculate(angle, 0)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
             // not sure if this is necesary
@@ -148,16 +157,13 @@ public class AutoBalancingPID extends CommandBase {
         }
         // we level? Stop with wheels facing different directions to prevent sliding
         else {
-            System.out.println("DONE");
             SwerveModuleState[] states = new SwerveModuleState[4];
             for (int i = 0; i < 4; i++) {
                 states[i] = new SwerveModuleState(0, new Rotation2d(45 + 90 * i));
             }
             swerveSubsystem.setModuleStates(states);
         }
-        SmartDashboard.putBoolean("Run PID", !withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0));
-        SmartDashboard.putNumber("pitch", swerveSubsystem.getVerticalTilt());
-
+        
 
     }
 
