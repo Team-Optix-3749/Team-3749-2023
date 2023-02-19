@@ -24,8 +24,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /***
@@ -60,9 +60,9 @@ public final class AutoCommands {
                          traj, 
                          swerveSubsystem::getPose, // Pose supplier
                          Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-                         new PIDController(0.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                         new PIDController(0.01, 0, 0), // Y controller (usually the same values as X controller)
-                         new PIDController(5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                         new PIDController(1.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                         new PIDController(1.1, 0, 0), // Y controller (usually the same values as X controller)
+                         new PIDController(2, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                          swerveSubsystem::setModuleStates, // Module states consumer
                          false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                          swerveSubsystem // Requires this drive subsystem
@@ -148,10 +148,9 @@ public final class AutoCommands {
 
         // Essentially the template of a getPath command we should be using.  
         public static Command getTestPathPlanner(SwerveSubsystem swerveSubsystem, Alliance teamColor) {
-                PathPlannerTrajectory trajectory = PathPlanner.loadPath("Claw test", new PathConstraints(1, 1));
+                PathPlannerTrajectory trajectory = PathPlanner.loadPath("Distance Test", new PathConstraints(2.5, 2.5));
 
                 trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
-                SmartDashboard.putNumber("y pos after some time", trajectory.sample(0.8).poseMeters.getY());
                 return new FollowPathWithEvents(followTrajectoryCommand(trajectory,true,swerveSubsystem), trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         }
 }

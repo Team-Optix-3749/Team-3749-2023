@@ -22,8 +22,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import frc.robot.Constants;
-import frc.robot.Constants.*;
+import frc.robot.utils.Constants.*;
 
 /**
  * @author Advik Garg

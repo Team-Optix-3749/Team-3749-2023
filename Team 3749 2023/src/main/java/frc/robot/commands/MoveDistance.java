@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
-import frc.robot.Constants;
+import frc.robot.utils.Constants;
 import frc.robot.commands.AutoCommands;
 
 import java.lang.ModuleLayer.Controller;
