@@ -149,6 +149,28 @@ public class Xbox extends CommandXboxController {
                 .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
+    public void leftStickWhileHeld(Runnable whileTrue) {
+        super.leftStick().whileTrue(
+                Commands.run(whileTrue));
+    }
+
+    public void leftStickWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.leftStick().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
+    }
+
+    public void leftStickWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.leftStick().whileTrue(
+                Commands.run(whileTrue, subsystem));
+    }
+
+    public void leftStickWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.leftStick().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
+    }
+
     public Trigger leftBumper() {
         return super.leftBumper();
     }
