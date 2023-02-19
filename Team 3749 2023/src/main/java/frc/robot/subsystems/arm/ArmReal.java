@@ -48,11 +48,6 @@ public class ArmReal extends Arm {
         shoulderPIDController.setTolerance(3);
         elbowPIDController.setTolerance(3);
 
-        leftShoulderMotor.setSmartCurrentLimit(8);
-        rightShoulderMotor.setSmartCurrentLimit(8);
-        leftElbowMotor.setSmartCurrentLimit(8);
-        rightElbowMotor.setSmartCurrentLimit(8);
-
         presetChooser.setDefaultOption("Stowed", 0);
         presetChooser.addOption("DS", 1);
         SmartDashboard.putData(presetChooser);
