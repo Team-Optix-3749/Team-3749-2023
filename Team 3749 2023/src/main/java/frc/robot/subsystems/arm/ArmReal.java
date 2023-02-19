@@ -48,6 +48,11 @@ public class ArmReal extends Arm {
         shoulderPIDController.setTolerance(3);
         elbowPIDController.setTolerance(3);
 
+        leftShoulderMotor.setSmartCurrentLimit(8);
+        rightShoulderMotor.setSmartCurrentLimit(8);
+        leftElbowMotor.setSmartCurrentLimit(8);
+        rightElbowMotor.setSmartCurrentLimit(8);
+
         presetChooser.setDefaultOption("Stowed", 0);
         presetChooser.addOption("DS", 1);
         SmartDashboard.putData(presetChooser);
@@ -61,13 +66,13 @@ public class ArmReal extends Arm {
             return;
         }
         leftShoulderMotor.set(percent);
-        rightShoulderMotor.set(percent);
+        // rightShoulderMotor.set(percent);
     }
 
     @Override
     public void setElbow(double percent) {
         leftElbowMotor.set(percent);
-        rightElbowMotor.set(percent);
+        // rightElbowMotor.set(percent);
     }
 
     @Override
@@ -178,6 +183,11 @@ public class ArmReal extends Arm {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Shoulder Left Amps", leftShoulderMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Shoulder Right Amps", rightShoulderMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Elbow Left Amps", leftElbowMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Elbow right Amps", rightElbowMotor.getOutputCurrent());
+
         SmartDashboard.putNumber("shoulder angle", shoulderAbsoluteEncoder.getDistance());
         SmartDashboard.putNumber("elbow angle", elbowAbsoluteEncoder.getDistance());
 
