@@ -9,6 +9,7 @@ import frc.robot.utils.Constants;
 import frc.robot.commands.AutoCommands;
 
 import java.lang.ModuleLayer.Controller;
+import java.sql.Time;
 
 import javax.swing.plaf.nimbus.State;
 
@@ -21,6 +22,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -46,6 +48,7 @@ public class AutoBalancingPID extends CommandBase {
     private boolean has_aligned;
     private boolean past_center;
     private double max_angle = 0;
+    private double start_time_balanced = 0;
 
     // Initializes the BaseCommand
     public AutoBalancingPID(SwerveSubsystem swerveSubsystem) {
@@ -77,7 +80,7 @@ public class AutoBalancingPID extends CommandBase {
         has_aligned = false;
         past_center = false;
         max_angle = 0;
-
+        start_time_balanced = 0;
 
     }
 
@@ -85,8 +88,6 @@ public class AutoBalancingPID extends CommandBase {
     @Override
     public void execute() {
         
-
-
         heading = swerveSubsystem.getHeading();
         angle = swerveSubsystem.getVerticalTilt();
         if (Math.abs(angle) > Math.abs(max_angle)){
@@ -121,8 +122,7 @@ public class AutoBalancingPID extends CommandBase {
         // past
         else if (!withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0) && !past_center ) {
             has_aligned = true;
-            
-
+            start_time_balanced = 0;
             // Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
             // Relative to field
@@ -138,12 +138,10 @@ public class AutoBalancingPID extends CommandBase {
         // PID to reach the middle
         else if (!withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
             has_aligned = true;
+            start_time_balanced = 0;
+
             double speed = -controller.calculate(angle, 0)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-            // not sure if this is necesary
-            // // signs the speed so we move in the correct direction
-            // speed = Math.abs(speed) * Math.signum(angle);
-
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
             // Relative to field
@@ -162,6 +160,8 @@ public class AutoBalancingPID extends CommandBase {
                 states[i] = new SwerveModuleState(0, new Rotation2d(45 + 90 * i));
             }
             swerveSubsystem.setModuleStates(states);
+
+            start_time_balanced = Timer.getFPGATimestamp();
         }
         
 
@@ -176,6 +176,11 @@ public class AutoBalancingPID extends CommandBase {
     // Returns true when the command should end
     @Override
     public boolean isFinished() {
+        if (start_time_balanced != 0){
+            if (Timer.getFPGATimestamp() - start_time_balanced > 2){
+                return true;
+            }
+        }
         return false;
     }
 
