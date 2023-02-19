@@ -56,15 +56,24 @@ public class ArmTeleopCommand extends CommandBase {
             desired_setpoint = ArmSetpoints.TOP_INTAKE;
         }
 
+        updateSetpointBooleans();
+
         // if moving form node to node, to the double substation, or from the top_intake
         // to stowed position AND if the arm is not already at its stung position, the
         // arm will not move to its sting position
-        if ((!node_to_node || !to_double_sub || !top_intake_to_stowed) && !reached_sting) {
+        SmartDashboard.putBoolean("node to node", node_to_node);
+
+
+
+        if (!(node_to_node || to_double_sub || top_intake_to_stowed) && !reached_sting) {
+            SmartDashboard.putBoolean("That sting if statement", true);
             arm.setArmAngle(ShoulderSetpoints.STING.angle, ElbowSetpoints.STING.angle);
             reached_sting = arm.getShoulderAtSetpoint() && arm.getElbowAtSetpoint();
-            current_setpoint = reached_sting ? ArmSetpoints.STING : current_setpoint;
+            current_setpoint = ArmSetpoints.STING;
             return;
         }
+        SmartDashboard.putBoolean("That sting if statement", false);
+
 
         arm.setArmAngle(desired_setpoint.angles[0], desired_setpoint.angles[1]);
         
@@ -82,6 +91,20 @@ public class ArmTeleopCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    private void updateSetpointBooleans(){
+        node_to_node = (current_setpoint == ArmSetpoints.CONE_TOP
+                || current_setpoint == ArmSetpoints.CONE_MID)
+                && (desired_setpoint == ArmSetpoints.CONE_TOP
+                || desired_setpoint == ArmSetpoints.CONE_MID);
+        to_double_sub = current_setpoint == ArmSetpoints.DOUBLE_SUBSTATION
+                || desired_setpoint == ArmSetpoints.DOUBLE_SUBSTATION;
+        top_intake_to_stowed = (current_setpoint == ArmSetpoints.TOP_INTAKE
+                || current_setpoint == ArmSetpoints.STOWED)
+                && (desired_setpoint == ArmSetpoints.TOP_INTAKE
+                        || desired_setpoint == ArmSetpoints.STOWED);
+
     }
 
 }
