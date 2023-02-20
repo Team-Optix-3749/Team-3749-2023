@@ -20,7 +20,7 @@ public class Constants {
         public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.4); 
 
         // current of above 60 Amps will produce high temperatures
-        public static final SmartData<Double> currentLimit = new SmartData<Double>("Claw current limit", 30.0); 
+        public static final SmartData<Double> currentLimit = new SmartData<Double>("Claw current limit", 45.0); 
 
         // PID values
         public static final SmartData<Double> kP = new SmartData<Double>("Claw kP", .05);
@@ -73,11 +73,11 @@ public class Constants {
 
         public static enum ShoulderSetpoints {
             ZERO(0),
-            STOWED(190),
+            STOWED(200),
             STING(220),
             DOUBLE_SUBSTATION(200),
             TOP_INTAKE(150),
-            CONE_TOP(143),
+            CONE_TOP(160),
             CONE_MID(188),
             CUBE_TOP(150),
             CUBE_MID(180);
@@ -94,9 +94,9 @@ public class Constants {
             ZERO(0),
             STOWED(25),
             STING(50),
-            DOUBLE_SUBSTATION(80),
+            DOUBLE_SUBSTATION(85),
             TOP_INTAKE(53),
-            CONE_TOP(163),
+            CONE_TOP(140),
             CONE_MID(93),
             CUBE_TOP(140),
             CUBE_MID(80);

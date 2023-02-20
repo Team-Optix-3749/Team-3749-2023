@@ -33,8 +33,6 @@ public class Claw extends SubsystemBase {
     public Claw() {
         clawMotor.restoreFactoryDefaults();
 
-        clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(), 5700);
-
         clawMotor.setIdleMode(IdleMode.kBrake);
 
         clawMotorPIDController.setP(Constants.Claw.kP.get());
@@ -74,16 +72,13 @@ public class Claw extends SubsystemBase {
         clawMotor.stopMotor();
     }
 
-    /**
-     * holds the motor at its current position
-     */
-    public void hold() {
-        clawMotorPIDController.setReference(clawMotor.get(), ControlType.kPosition);
-    }
-
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
         SmartDashboard.putNumber("Claw Position", getPosition());
+
+        clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(), 5700);
+
+        set(0.1);
     }
 }
