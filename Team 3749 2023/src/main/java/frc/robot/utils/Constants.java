@@ -61,12 +61,12 @@ public class Constants {
 
         public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
 
-        // encoder values (0.0 - 1.0)
-        public static final double shoulder_offset = .08;
-        public static final double elbow_offset = .272;
+        // (angle without offset - desired angle) / 360
+        public static final double shoulder_offset = (211.0-90.0)/360.0;
+        public static final double elbow_offset = 196.0/360.0;
 
-        public static final double shoulder_min_angle = 130;
-        public static final double shoulder_max_angle = 255;
+        public static final double shoulder_min_angle = 30;
+        public static final double shoulder_max_angle = 140;
 
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
