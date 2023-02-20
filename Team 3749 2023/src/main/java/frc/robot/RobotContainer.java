@@ -13,6 +13,8 @@ public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
 
     // Subsystems
+    private final SwerveSubsystem swerve = new SwerveSubsystem();
+    private final Claw claw = new Claw();
     private final Arm arm;
 
     public RobotContainer() {
@@ -32,6 +34,7 @@ public class RobotContainer {
         try {
             configureDefaultCommands();
             configureButtonBindings();
+            configureAuto();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -46,6 +49,12 @@ public class RobotContainer {
         switch (Constants.ROBOT_MODE) {
             case REAL:
                 arm.setDefaultCommand(new ArmTeleopCommand(arm));
+                
+                swerve.setDefaultCommand(new SwerveTeleopCommand(
+                    swerve,
+                    () -> -pilot.getLeftY(),
+                    () -> pilot.getLeftX(),
+                    () -> pilot.getRightX()));
                 break;
             case SIMULATION:
                 arm.setDefaultCommand(
@@ -67,43 +76,35 @@ public class RobotContainer {
                 pilot.aWhileHeld(
                         () -> {
                             Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
-                            System.out.println(Constants.desired_setpoint);
-
                         });
 
                 pilot.bWhileHeld(
                         () -> {
                             Constants.desired_setpoint = ArmSetpoints.STOWED;
-                            System.out.println(Constants.desired_setpoint);
-
                         });
 
                 pilot.xWhileHeld(
                         () -> {
                             Constants.desired_setpoint = ArmSetpoints.CONE_MID;
-                            System.out.println(Constants.desired_setpoint);
-
                         });
 
                 pilot.yWhileHeld(
                         () -> {
                             Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
-                            System.out.println(Constants.desired_setpoint);
-
                         });
 
                 pilot.rightBumperWhileHeld(
                         () -> {
                             Constants.desired_setpoint = ArmSetpoints.STING;
-                            System.out.println(Constants.desired_setpoint);
-
                         });
 
                 pilot.startWhileHeld(
                         () -> {
                             Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
-                            System.out.println(Constants.desired_setpoint);
                         });
+                        
+                pilot.backWhileHeld(
+                        () -> swerve.zeroHeading(), swerveSubsystem);
                 break;
             case SIMULATION:
                 break;
@@ -116,6 +117,26 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return new PrintCommand("No Auto");
+        return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
+    }
+
+    /**
+     * Set event maps for autonomous
+     */
+    public void configureAuto() {
+        Constants.AutoConstants.eventMap.put("pickup_cone_floor", Commands.print("PICKUP CONE FLOOR"));
+        Constants.AutoConstants.eventMap.put("pickup_cube_floor", null);
+        Constants.AutoConstants.eventMap.put("pickup_cone_double_substation", null);
+        Constants.AutoConstants.eventMap.put("pickup_cube_double_substation", null);
+        Constants.AutoConstants.eventMap.put("pickup_cone_single_substation", null);
+        Constants.AutoConstants.eventMap.put("pickup_cube_single_substation", null);
+        Constants.AutoConstants.eventMap.put("place_cone_bottom", null);
+        Constants.AutoConstants.eventMap.put("place_cube_bottom", null);
+        Constants.AutoConstants.eventMap.put("place_cone_mid", null);
+        Constants.AutoConstants.eventMap.put("place_cube_mid", null);
+        Constants.AutoConstants.eventMap.put("place_cone_top", null);
+        Constants.AutoConstants.eventMap.put("place_cube_top", null);
+        // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() ->
+        // claw.set(0.2), claw));
     }
 }
