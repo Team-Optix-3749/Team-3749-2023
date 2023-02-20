@@ -70,6 +70,11 @@ public class RobotContainer {
         });
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+
+        pilot.rightTriggerWhileHeld(() -> 
+            claw.set(1));
+        pilot.leftTriggerWhileHeld(() -> 
+            claw.set(-0.125));
     }
 
     /**
