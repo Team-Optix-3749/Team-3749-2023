@@ -18,32 +18,28 @@ import frc.robot.utils.Constants;
  */
 public class ArmReal extends Arm {
 
-    private final CANSparkMax leftShoulderMotor = new CANSparkMax(Constants.Arm.left_shoulder_id, MotorType.kBrushless);
-    private final CANSparkMax rightShoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id,
+    private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id,
             MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
     private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulderKP.get(), 0, 0);
 
-    private final CANSparkMax leftElbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-    private final CANSparkMax rightElbowMotor = new CANSparkMax(Constants.Arm.right_elbow_id, MotorType.kBrushless);
+    private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbowKP.get(), 0, 0);
 
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
     public ArmReal() {
-        leftShoulderMotor.restoreFactoryDefaults();
-        rightShoulderMotor.restoreFactoryDefaults();
-        leftElbowMotor.restoreFactoryDefaults();
-        rightElbowMotor.restoreFactoryDefaults();
+        shoulderMotor.restoreFactoryDefaults();
+        elbowMotor.restoreFactoryDefaults();
 
         shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
         elbowAbsoluteEncoder.setPositionOffset(Constants.Arm.elbow_offset);
         shoulderAbsoluteEncoder.setDistancePerRotation(360);
         elbowAbsoluteEncoder.setDistancePerRotation(360);
 
-        leftShoulderMotor.setInverted(true);
-        leftElbowMotor.setInverted(true);
+        elbowMotor.setInverted(true);
+        shoulderMotor.setInverted(true);
 
         shoulderPIDController.setTolerance(3);
         elbowPIDController.setTolerance(3);
@@ -51,23 +47,23 @@ public class ArmReal extends Arm {
         presetChooser.setDefaultOption("Stowed", 0);
         presetChooser.addOption("DS", 1);
         SmartDashboard.putData(presetChooser);
+
+        setIdleMode(IdleMode.kBrake);
     }
 
     @Override
     public void setShoulder(double percent) {
-        boolean past_min_limit = getShoulderAngle() <= Constants.Arm.shoulder_min_angle && percent < 0;
-        boolean past_max_limit = getShoulderAngle() >= Constants.Arm.shoulder_max_angle && percent > 0;
+        boolean past_min_limit = getShoulderAngle() <= Constants.Arm.shoulder_min_angle && percent > 0;
+        boolean past_max_limit = getShoulderAngle() >= Constants.Arm.shoulder_max_angle && percent < 0;
         if (past_min_limit || past_max_limit) {
             return;
         }
-        leftShoulderMotor.set(percent);
-        // rightShoulderMotor.set(percent);
+        shoulderMotor.set(percent);
     }
 
     @Override
     public void setElbow(double percent) {
-        leftElbowMotor.set(percent);
-        // rightElbowMotor.set(percent);
+        elbowMotor.set(percent);
     }
 
     @Override
@@ -84,11 +80,7 @@ public class ArmReal extends Arm {
     public void setShoulderAngle(double angle) {
         shoulderPIDController.setSetpoint(angle);
 
-        leftShoulderMotor.set(
-                shoulderPIDController.calculate(
-                        shoulderAbsoluteEncoder.getDistance()));
-
-        rightShoulderMotor.set(
+        shoulderMotor.set(
                 shoulderPIDController.calculate(
                         shoulderAbsoluteEncoder.getDistance()));
     }
@@ -97,11 +89,7 @@ public class ArmReal extends Arm {
     public void setElbowAngle(double angle) {
         elbowPIDController.setSetpoint(angle);
 
-        leftElbowMotor.set(
-                elbowPIDController.calculate(
-                        elbowAbsoluteEncoder.getDistance()));
-
-        rightElbowMotor.set(
+        elbowMotor.set(
                 elbowPIDController.calculate(
                         elbowAbsoluteEncoder.getDistance()));
     }
@@ -148,48 +136,36 @@ public class ArmReal extends Arm {
 
     @Override
     public void stop() {
-        rightElbowMotor.stopMotor();
-        rightShoulderMotor.stopMotor();
-        leftElbowMotor.stopMotor();
-        leftShoulderMotor.stopMotor();
+        elbowMotor.stopMotor();
+        shoulderMotor.stopMotor();
     }
 
     @Override
     public void stopShoulder() {
-        setIdleMode(IdleMode.kCoast);
-        rightShoulderMotor.stopMotor();
-        leftShoulderMotor.stopMotor();
+        shoulderMotor.stopMotor();
     }
 
     @Override
     public void stopElbow() {
-        setIdleMode(IdleMode.kCoast);
-        rightElbowMotor.stopMotor();
-        leftElbowMotor.stopMotor();
+        elbowMotor.stopMotor();
     }
 
     @Override
     public void setIdleMode(IdleMode idleMode) {
-        leftShoulderMotor.setIdleMode(idleMode);
-        rightShoulderMotor.setIdleMode(idleMode);
-        leftElbowMotor.setIdleMode(idleMode);
-        rightElbowMotor.setIdleMode(idleMode);
+        shoulderMotor.setIdleMode(idleMode);
+        elbowMotor.setIdleMode(idleMode);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shoulder Left Amps", leftShoulderMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Shoulder Right Amps", rightShoulderMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Elbow Left Amps", leftElbowMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Elbow right Amps", rightElbowMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Shoulder Right Amps", shoulderMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Elbow right Amps", elbowMotor.getOutputCurrent());
 
         SmartDashboard.putNumber("shoulder angle", shoulderAbsoluteEncoder.getDistance());
         SmartDashboard.putNumber("elbow angle", elbowAbsoluteEncoder.getDistance());
 
         elbowPIDController.setP(Constants.Arm.elbowKP.get());
         shoulderPIDController.setP(Constants.Arm.shoulderKP.get());
-
-        SmartDashboard.putString("idlemode", leftShoulderMotor.getIdleMode() == IdleMode.kBrake ? "brake" : "coast");
 
         SmartDashboard.putBoolean("SHOULDER AT SETPOINT", getShoulderAtSetpoint());
         SmartDashboard.putBoolean("ELBOW AT SETPOINT", getElbowAtSetpoint());
