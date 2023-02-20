@@ -44,8 +44,7 @@ public class RobotContainer {
     private void configureDefaultCommands() throws Exception {
         switch (Constants.ROBOT_MODE) {
             case REAL:
-                arm.setDefaultCommand(
-                        new ArmTeleopCommand(arm, pilot));
+                arm.setDefaultCommand(new ArmTeleopCommand(arm, pilot));
                 break;
             case SIMULATION:
                 arm.setDefaultCommand(
@@ -65,34 +64,35 @@ public class RobotContainer {
         switch (Constants.ROBOT_MODE) {
             case REAL:
                 // pilot.y().whileTrue(new SequentialCommandGroup(
-                //         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                //                 Constants.Arm.ElbowSetpoints.STING.angle),
-                //         new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_TOP.angle,
-                //                 Constants.Arm.ElbowSetpoints.CONE_TOP.angle)));
+                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
+                // Constants.Arm.ElbowSetpoints.STING.angle),
+                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_TOP.angle,
+                // Constants.Arm.ElbowSetpoints.CONE_TOP.angle)));
 
                 // pilot.b().whileTrue(new SequentialCommandGroup(
-                //         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                //                 Constants.Arm.ElbowSetpoints.STING.angle),
-                //         new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_MID.angle,
-                //                 Constants.Arm.ElbowSetpoints.CONE_MID.angle)));
+                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
+                // Constants.Arm.ElbowSetpoints.STING.angle),
+                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_MID.angle,
+                // Constants.Arm.ElbowSetpoints.CONE_MID.angle)));
 
                 // pilot.a().whileTrue(new SequentialCommandGroup(
-                //         // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                //         //         Constants.Arm.ElbowSetpoints.STING.angle),
-                //         new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.DOUBLE_SUBSTATION.angle,
-                //                 Constants.Arm.ElbowSetpoints.DOUBLE_SUBSTATION.angle)));
+                // // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
+                // // Constants.Arm.ElbowSetpoints.STING.angle),
+                // new MoveArmHoldPID(arm,
+                // Constants.Arm.ShoulderSetpoints.DOUBLE_SUBSTATION.angle,
+                // Constants.Arm.ElbowSetpoints.DOUBLE_SUBSTATION.angle)));
 
                 // pilot.start().whileTrue(new SequentialCommandGroup(
-                //         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                //                 Constants.Arm.ElbowSetpoints.STING.angle),
-                //         new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.TOP_INTAKE.angle,
-                //                 Constants.Arm.ElbowSetpoints.TOP_INTAKE.angle)));
+                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
+                // Constants.Arm.ElbowSetpoints.STING.angle),
+                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.TOP_INTAKE.angle,
+                // Constants.Arm.ElbowSetpoints.TOP_INTAKE.angle)));
 
                 // pilot.leftBumper().whileTrue(new SequentialCommandGroup(
-                //         new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                //                 Constants.Arm.ElbowSetpoints.STING.angle),
-                //         new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.STOWED.angle,
-                //                 Constants.Arm.ElbowSetpoints.STOWED.angle)));
+                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
+                // Constants.Arm.ElbowSetpoints.STING.angle),
+                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.STOWED.angle,
+                // Constants.Arm.ElbowSetpoints.STOWED.angle)));
                 break;
             case SIMULATION:
                 break;
