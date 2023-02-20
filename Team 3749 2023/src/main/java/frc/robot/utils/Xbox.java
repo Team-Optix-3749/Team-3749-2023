@@ -171,6 +171,50 @@ public class Xbox extends CommandXboxController {
                 .whileFalse(Commands.run(whileFalse, subsystem));
     }
 
+    public void leftTriggerWhileHeld(Runnable whileTrue) {
+        super.leftTrigger().whileTrue(
+                Commands.run(whileTrue));
+    }
+
+    public void leftTriggerWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.leftTrigger().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
+    }
+
+    public void leftTriggerWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.leftTrigger().whileTrue(
+                Commands.run(whileTrue, subsystem));
+    }
+
+    public void leftTriggerWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.leftTrigger().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
+    }
+
+    public void rightTriggerWhileHeld(Runnable whileTrue) {
+        super.rightTrigger().whileTrue(
+                Commands.run(whileTrue));
+    }
+
+    public void rightTriggerWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.rightTrigger().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
+    }
+
+    public void rightTriggerWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.rightTrigger().whileTrue(
+                Commands.run(whileTrue, subsystem));
+    }
+
+    public void rightTriggerWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.rightTrigger().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
+    }
+
     public Trigger leftBumper() {
         return super.leftBumper();
     }
