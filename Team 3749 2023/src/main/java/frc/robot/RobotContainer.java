@@ -1,8 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.arm.*;
+import frc.robot.subsystems.swerve.*;
 import frc.robot.commands.*;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
@@ -13,104 +15,60 @@ public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
 
     // Subsystems
-    private final SwerveSubsystem swerve = new SwerveSubsystem();
-    private final Claw claw = new Claw();
-    private final Arm arm;
+    private final Swerve swerve = new Swerve();
+    // private final Claw claw = new Claw();
+    private final Arm arm = new Arm();
 
     public RobotContainer() {
-        switch (Constants.ROBOT_MODE) {
-            case REAL:
-                arm = new ArmReal();
-                break;
-            case SIMULATION:
-                arm = new ArmSim();
-                break;
-            default:
-                arm = null;
-                System.out.println("ROBOT_MODE is not set in utils/Constants.java");
-                break;
-        }
-
-        try {
-            configureDefaultCommands();
-            configureButtonBindings();
-            configureAuto();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        configureDefaultCommands();
+        configureButtonBindings();
+        configureAuto();
     }
 
     /**
      * Set default commands
      * 
-     * @throws Exception
      */
-    private void configureDefaultCommands() throws Exception {
-        switch (Constants.ROBOT_MODE) {
-            case REAL:
-                arm.setDefaultCommand(new ArmTeleopCommand(arm));
-                
-                swerve.setDefaultCommand(new SwerveTeleopCommand(
-                    swerve,
-                    () -> -pilot.getLeftY(),
-                    () -> pilot.getLeftX(),
-                    () -> pilot.getRightX()));
-                break;
-            case SIMULATION:
-                arm.setDefaultCommand(
-                        new ArmSimCommand(arm));
-            default:
-                throw new Exception("ROBOT_MODE is not set in utils/Constants.java");
-        }
+    private void configureDefaultCommands() {
+        arm.setDefaultCommand(new ArmTeleopCommand(arm));
+
+        swerve.setDefaultCommand(new SwerveTeleopCommand(
+                swerve,
+                () -> -pilot.getLeftY(),
+                () -> pilot.getLeftX(),
+                () -> pilot.getRightX()));
     }
 
     /**
      * Set controller button bindings
      * 
-     * @throws Exception
      */
-    private void configureButtonBindings() throws Exception {
+    private void configureButtonBindings() {
+        pilot.aWhileHeld(() -> {
+            Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
+        });
 
-        switch (Constants.ROBOT_MODE) {
-            case REAL:
-                pilot.aWhileHeld(
-                        () -> {
-                            Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
-                        });
+        pilot.bWhileHeld(() -> {
+            Constants.desired_setpoint = ArmSetpoints.STOWED;
+        });
 
-                pilot.bWhileHeld(
-                        () -> {
-                            Constants.desired_setpoint = ArmSetpoints.STOWED;
-                        });
+        pilot.xWhileHeld(() -> {
+            Constants.desired_setpoint = ArmSetpoints.CONE_MID;
+        });
 
-                pilot.xWhileHeld(
-                        () -> {
-                            Constants.desired_setpoint = ArmSetpoints.CONE_MID;
-                        });
+        pilot.yWhileHeld(() -> {
+            Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
+        });
 
-                pilot.yWhileHeld(
-                        () -> {
-                            Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
-                        });
+        pilot.rightBumperWhileHeld(() -> {
+            Constants.desired_setpoint = ArmSetpoints.STING;
+        });
 
-                pilot.rightBumperWhileHeld(
-                        () -> {
-                            Constants.desired_setpoint = ArmSetpoints.STING;
-                        });
+        pilot.startWhileHeld(() -> {
+            Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
+        });
 
-                pilot.startWhileHeld(
-                        () -> {
-                            Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
-                        });
-                        
-                pilot.backWhileHeld(
-                        () -> swerve.zeroHeading(), swerveSubsystem);
-                break;
-            case SIMULATION:
-                break;
-            default:
-                throw new Exception("ROBOT_MODE is not set in utils/Constants.java");
-        }
+        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
     }
 
     /**

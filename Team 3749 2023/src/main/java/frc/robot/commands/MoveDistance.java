@@ -1,0 +1,108 @@
+package frc.robot.commands;
+
+import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.utils.Constants;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+/***
+ * @author Noah Simon
+ * 
+ *         Moves the robot a specific amount forwrad on a button press. For
+ *         testing purposes
+ */
+public class MoveDistance extends CommandBase {
+    @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+
+    Swerve swerveSubsystem;
+
+    double setpoint;
+    double dist_traveled = 0;
+    double start_point;
+
+    PIDController driveController = new PIDController(1.6, 0, 0.01);
+    PIDController turnController = new PIDController(0.005, 0.001, 0);
+    private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
+            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
+
+    /***
+     * 
+     * @param swerveSubsystem the subsystem
+     * @param dist            how far to to move in meters
+     */
+    public MoveDistance(Swerve swerveSubsystem, double dist) {
+        this.swerveSubsystem = swerveSubsystem;
+        this.setpoint = dist;
+        // start_point
+        addRequirements(swerveSubsystem);
+    }
+
+    // Run on command init
+    @Override
+    public void initialize() {
+        System.out.println("Initalize BABBYYYYYYYYYYYYYY");
+        swerveSubsystem.stopModules();
+        start_point = swerveSubsystem.getPose().getX();
+    }
+
+    // Run every 20 ms
+    @Override
+    public void execute() {
+
+        // How inaccurate we are willing to be in reference to looking straight forward
+        if (Math.abs(swerveSubsystem.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
+            // negative so that we move towards the target, not away
+            double turning_speed = turnController.calculate(Math.abs(swerveSubsystem.getHeading()), 0);
+            turning_speed = turningLimiter.calculate(turning_speed)
+                    * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+
+            // remove the negative if it turns the wrong direction around
+            turning_speed = Math.abs(turning_speed) * Math.signum(swerveSubsystem.getHeading());
+
+            // 4. Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    0, 0, turning_speed, swerveSubsystem.getRotation2d());
+            // 5. Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                    .toSwerveModuleStates(chassisSpeeds);
+
+            // 6. Output each module states to wheels
+            swerveSubsystem.setModuleStates(moduleStates);
+        } else {
+            // X is vertical!
+            // where we are
+            double current_position = swerveSubsystem.getPose().getX();
+            // where we want to be
+            // how fast to move
+            double speed = driveController.calculate(current_position, start_point + setpoint);
+            // and we move
+            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    speed, 0, 0, swerveSubsystem.getRotation2d());
+            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                    .toSwerveModuleStates(chassisSpeeds);
+
+            swerveSubsystem.setModuleStates(moduleStates);
+        }
+
+    }
+
+    // Run on command finish
+    @Override
+    public void end(boolean interrupted) {
+        swerveSubsystem.stopModules();
+
+    }
+
+    // Returns true when the command should end
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+}
