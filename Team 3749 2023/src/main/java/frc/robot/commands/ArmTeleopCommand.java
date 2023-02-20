@@ -80,7 +80,7 @@ public class ArmTeleopCommand extends CommandBase {
         // if moving form node to node, to the double substation, or from the top_intake
         // to stowed position AND if the arm is not already at its stung position, the
         // arm will not move to its sting position
-        if (!(node_to_node || to_double_sub || top_intake_to_stowed) && !reached_sting) {
+        if (!(node_to_node || to_double_sub || top_intake_to_stowed) && !reached_sting || xbox.rightBumper().getAsBoolean()) {
             SmartDashboard.putBoolean("That sting if statement", true);
             arm.setArmAngle(ShoulderSetpoints.STING.angle, ElbowSetpoints.STING.angle);
             reached_sting = arm.getShoulderAtSetpoint() && arm.getElbowAtSetpoint();
