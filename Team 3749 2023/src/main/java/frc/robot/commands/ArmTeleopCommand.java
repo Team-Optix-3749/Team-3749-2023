@@ -75,6 +75,11 @@ public class ArmTeleopCommand extends CommandBase {
         SmartDashboard.putBoolean("That sting if statement", false);
 
 
+        arm.setArmAngle(desired_setpoint.angles[0], desired_setpoint.angles[1]);
+        
+        current_setpoint = desired_setpoint;
+        
+        reached_sting = false;
 
     }
 
