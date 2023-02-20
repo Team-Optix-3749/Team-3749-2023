@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.claw;
 
 import com.revrobotics.CANSparkMax;
@@ -77,7 +76,8 @@ public class Claw extends SubsystemBase {
         SmartDashboard.putNumber("Claw Position", getPosition());
         SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
 
-        // clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(), 5700);
+        // clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(),
+        // 5700);
         set(0.1);
     }
 }
