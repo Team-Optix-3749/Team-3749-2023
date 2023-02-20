@@ -127,4 +127,11 @@ public class Arm extends SubsystemBase {
 	public void setIdleMode(IdleMode idleMode) {
 	}
 
+    /**
+	 * sets the tolerance of the arm PID controllers
+	 */
+    public void setArmTolerance(double tolerance) {
+
+    }
+
 }

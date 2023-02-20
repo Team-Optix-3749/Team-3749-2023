@@ -6,6 +6,7 @@ import frc.robot.subsystems.arm.*;
 import frc.robot.commands.*;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 public class RobotContainer {
     // Controllers
@@ -44,7 +45,7 @@ public class RobotContainer {
     private void configureDefaultCommands() throws Exception {
         switch (Constants.ROBOT_MODE) {
             case REAL:
-                arm.setDefaultCommand(new ArmTeleopCommand(arm, pilot));
+                arm.setDefaultCommand(new ArmTeleopCommand(arm));
                 break;
             case SIMULATION:
                 arm.setDefaultCommand(
@@ -63,36 +64,46 @@ public class RobotContainer {
 
         switch (Constants.ROBOT_MODE) {
             case REAL:
-                // pilot.y().whileTrue(new SequentialCommandGroup(
-                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                // Constants.Arm.ElbowSetpoints.STING.angle),
-                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_TOP.angle,
-                // Constants.Arm.ElbowSetpoints.CONE_TOP.angle)));
+                pilot.aWhileHeld(
+                        () -> {
+                            Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
+                            System.out.println(Constants.desired_setpoint);
 
-                // pilot.b().whileTrue(new SequentialCommandGroup(
-                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                // Constants.Arm.ElbowSetpoints.STING.angle),
-                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.CONE_MID.angle,
-                // Constants.Arm.ElbowSetpoints.CONE_MID.angle)));
+                        });
 
-                // pilot.a().whileTrue(new SequentialCommandGroup(
-                // // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                // // Constants.Arm.ElbowSetpoints.STING.angle),
-                // new MoveArmHoldPID(arm,
-                // Constants.Arm.ShoulderSetpoints.DOUBLE_SUBSTATION.angle,
-                // Constants.Arm.ElbowSetpoints.DOUBLE_SUBSTATION.angle)));
+                pilot.bWhileHeld(
+                        () -> {
+                            Constants.desired_setpoint = ArmSetpoints.STOWED;
+                            System.out.println(Constants.desired_setpoint);
 
-                // pilot.start().whileTrue(new SequentialCommandGroup(
-                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                // Constants.Arm.ElbowSetpoints.STING.angle),
-                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.TOP_INTAKE.angle,
-                // Constants.Arm.ElbowSetpoints.TOP_INTAKE.angle)));
+                        });
 
-                // pilot.leftBumper().whileTrue(new SequentialCommandGroup(
-                // new MoveArmPID(arm, Constants.Arm.ShoulderSetpoints.STING.angle,
-                // Constants.Arm.ElbowSetpoints.STING.angle),
-                // new MoveArmHoldPID(arm, Constants.Arm.ShoulderSetpoints.STOWED.angle,
-                // Constants.Arm.ElbowSetpoints.STOWED.angle)));
+                pilot.xWhileHeld(
+                        () -> {
+                            Constants.desired_setpoint = ArmSetpoints.CONE_MID;
+                            System.out.println(Constants.desired_setpoint);
+
+                        });
+
+                pilot.yWhileHeld(
+                        () -> {
+                            Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
+                            System.out.println(Constants.desired_setpoint);
+
+                        });
+
+                pilot.rightBumperWhileHeld(
+                        () -> {
+                            Constants.desired_setpoint = ArmSetpoints.STING;
+                            System.out.println(Constants.desired_setpoint);
+
+                        });
+
+                pilot.startWhileHeld(
+                        () -> {
+                            Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
+                            System.out.println(Constants.desired_setpoint);
+                        });
                 break;
             case SIMULATION:
                 break;

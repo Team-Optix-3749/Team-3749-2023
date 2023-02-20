@@ -14,6 +14,8 @@ import frc.robot.utils.Constants;
  * Double jointed arm subsystem built with 2 CANSparkMaxes at each joint and REV
  * Through Bore Encoders
  * 
+ * TODO: increase tolerance on sting, change to brake when at setpoint
+ * 
  * @author Rohin Sood
  */
 public class ArmReal extends Arm {
@@ -39,16 +41,16 @@ public class ArmReal extends Arm {
         elbowAbsoluteEncoder.setDistancePerRotation(360);
 
         elbowMotor.setInverted(true);
-        shoulderMotor.setInverted(true);
-
-        shoulderPIDController.setTolerance(3);
-        elbowPIDController.setTolerance(3);
+        shoulderMotor.setInverted(false);
 
         presetChooser.setDefaultOption("Stowed", 0);
         presetChooser.addOption("DS", 1);
         SmartDashboard.putData(presetChooser);
 
-        setIdleMode(IdleMode.kBrake);
+        shoulderPIDController.setTolerance(3);
+        elbowPIDController.setTolerance(5);
+
+        setIdleMode(IdleMode.kCoast);
     }
 
     @Override
@@ -157,6 +159,12 @@ public class ArmReal extends Arm {
     }
 
     @Override
+    public void setArmTolerance(double tolerance) {
+        shoulderPIDController.setTolerance(tolerance);
+        elbowPIDController.setTolerance(tolerance);
+    }
+
+    @Override
     public void periodic() {
         SmartDashboard.putNumber("Shoulder Right Amps", shoulderMotor.getOutputCurrent());
         SmartDashboard.putNumber("Elbow right Amps", elbowMotor.getOutputCurrent());
@@ -166,12 +174,6 @@ public class ArmReal extends Arm {
 
         elbowPIDController.setP(Constants.Arm.elbowKP.get());
         shoulderPIDController.setP(Constants.Arm.shoulderKP.get());
-
-        SmartDashboard.putBoolean("SHOULDER AT SETPOINT", getShoulderAtSetpoint());
-        SmartDashboard.putBoolean("ELBOW AT SETPOINT", getElbowAtSetpoint());
-
-        SmartDashboard.putNumber("S ERROR", getShoulderAngle() - shoulderPIDController.getSetpoint());
-        SmartDashboard.putNumber("E ERROR", getElbowAngle() - elbowPIDController.getSetpoint());
     }
 
 }
