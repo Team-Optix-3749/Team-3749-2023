@@ -3,8 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.swerve.*;
+import frc.robot.subsystems.arm.*;
+import frc.robot.subsystems.claw.*;
 import frc.robot.commands.*;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
@@ -16,7 +17,7 @@ public class RobotContainer {
 
     // Subsystems
     private final Swerve swerve = new Swerve();
-    // private final Claw claw = new Claw();
+    private final Claw claw = new Claw();
     private final Arm arm = new Arm();
 
     public RobotContainer() {

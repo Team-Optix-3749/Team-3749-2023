@@ -17,10 +17,10 @@ public class Constants {
     public static final class Claw {
         public static final int claw_id = 22;
 
-        public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.5);
+        public static final SmartData<Double> speed = new SmartData<Double>("Claw Speed", 0.4); 
 
         // current of above 60 Amps will produce high temperatures
-        public static final SmartData<Integer> currentLimit = new SmartData<Integer>("Claw current limit", 45);
+        public static final SmartData<Double> currentLimit = new SmartData<Double>("Claw current limit", 30.0); 
 
         // PID values
         public static final SmartData<Double> kP = new SmartData<Double>("Claw kP", .05);
