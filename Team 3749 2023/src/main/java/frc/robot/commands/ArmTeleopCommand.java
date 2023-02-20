@@ -65,7 +65,7 @@ public class ArmTeleopCommand extends CommandBase {
 
 
 
-        if (!(node_to_node || to_double_sub || top_intake_to_stowed) && !reached_sting) {
+        if (!(node_to_node || to_double_sub || top_intake_to_stowed) && !reached_sting || xbox.rightBumper().getAsBoolean()) {
             SmartDashboard.putBoolean("That sting if statement", true);
             arm.setArmAngle(ShoulderSetpoints.STING.angle, ElbowSetpoints.STING.angle);
             reached_sting = arm.getShoulderAtSetpoint() && arm.getElbowAtSetpoint();
@@ -75,11 +75,7 @@ public class ArmTeleopCommand extends CommandBase {
         SmartDashboard.putBoolean("That sting if statement", false);
 
 
-        arm.setArmAngle(desired_setpoint.angles[0], desired_setpoint.angles[1]);
-        
-        current_setpoint = desired_setpoint;
-        
-        reached_sting = false;
+
     }
 
     @Override
