@@ -9,10 +9,13 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 /**
  * Double jointed arm subsystem built with 2 CANSparkMaxes at each joint and REV
  * Through Bore Encoders
+ * 
+ * TODO: increase tolerance on sting, change to brake when at setpoint
  * 
  * @author Rohin Sood
  */
@@ -41,14 +44,13 @@ public class ArmReal extends Arm {
         elbowMotor.setInverted(true);
         shoulderMotor.setInverted(false);
 
-        shoulderPIDController.setTolerance(3);
-        elbowPIDController.setTolerance(3);
-
         presetChooser.setDefaultOption("Stowed", 0);
         presetChooser.addOption("DS", 1);
         SmartDashboard.putData(presetChooser);
 
-        setIdleMode(IdleMode.kBrake);
+        setArmTolerance(6.0);
+
+        setIdleMode(IdleMode.kCoast);
     }
 
     @Override
@@ -157,6 +159,12 @@ public class ArmReal extends Arm {
     }
 
     @Override
+    public void setArmTolerance(double tolerance) {
+        shoulderPIDController.setTolerance(tolerance);
+        elbowPIDController.setTolerance(tolerance);
+    }
+
+    @Override
     public void periodic() {
         SmartDashboard.putNumber("Shoulder Right Amps", shoulderMotor.getOutputCurrent());
         SmartDashboard.putNumber("Elbow right Amps", elbowMotor.getOutputCurrent());
@@ -167,11 +175,13 @@ public class ArmReal extends Arm {
         elbowPIDController.setP(Constants.Arm.elbowKP.get());
         shoulderPIDController.setP(Constants.Arm.shoulderKP.get());
 
-        SmartDashboard.putBoolean("SHOULDER AT SETPOINT", getShoulderAtSetpoint());
-        SmartDashboard.putBoolean("ELBOW AT SETPOINT", getElbowAtSetpoint());
-
-        SmartDashboard.putNumber("S ERROR", getShoulderAngle() - shoulderPIDController.getSetpoint());
-        SmartDashboard.putNumber("E ERROR", getElbowAngle() - elbowPIDController.getSetpoint());
+        if (Constants.desired_setpoint == ArmSetpoints.STING) {
+            shoulderPIDController.setTolerance(4.5);
+            elbowPIDController.setTolerance(4.5);
+        } else {
+            shoulderPIDController.setTolerance(3);
+            elbowPIDController.setTolerance(3);
+        }
     }
 
 }

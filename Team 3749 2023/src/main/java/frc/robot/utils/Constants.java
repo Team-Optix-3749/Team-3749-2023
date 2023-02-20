@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public final class Constants {
     public static final RobotMode ROBOT_MODE = RobotMode.REAL;
 
+    public static Arm.ArmSetpoints 
+    desired_setpoint = Arm.ArmSetpoints.STOWED;
+
     public static final class Claw {
         public static final int claw_id = 22;
 
@@ -72,8 +75,8 @@ public final class Constants {
             STING(220),
             DOUBLE_SUBSTATION(200),
             TOP_INTAKE(150),
-            CONE_TOP(140),
-            CONE_MID(185),
+            CONE_TOP(143),
+            CONE_MID(188),
             CUBE_TOP(150),
             CUBE_MID(180);
 
@@ -91,8 +94,8 @@ public final class Constants {
             STING(50),
             DOUBLE_SUBSTATION(80),
             TOP_INTAKE(53),
-            CONE_TOP(160),
-            CONE_MID(90),
+            CONE_TOP(163),
+            CONE_MID(93),
             CUBE_TOP(140),
             CUBE_MID(80);
 
@@ -117,7 +120,7 @@ public final class Constants {
             public final double[] angles;
 
             ArmSetpoints(double shoulder_angle, double elbow_angle) {
-                this.angles = new double[]{shoulder_angle, elbow_angle};
+                this.angles = new double[] { shoulder_angle, elbow_angle };
             }
         }
     }
