@@ -39,7 +39,7 @@ public class ArmReal extends Arm {
         elbowAbsoluteEncoder.setDistancePerRotation(360);
 
         elbowMotor.setInverted(true);
-        shoulderMotor.setInverted(true);
+        shoulderMotor.setInverted(false);
 
         shoulderPIDController.setTolerance(3);
         elbowPIDController.setTolerance(3);
