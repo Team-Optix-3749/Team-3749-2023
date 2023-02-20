@@ -44,17 +44,18 @@ public class ArmTeleopCommand extends CommandBase {
         SmartDashboard.putString("desired", desired_setpoint.name());
         SmartDashboard.putBoolean("reached string", reached_sting);
 
-        if (xbox.a().getAsBoolean()) {
+        if (xbox.a().getAsBoolean())
             desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
-        } else if (xbox.b().getAsBoolean()) {
+        else if (xbox.b().getAsBoolean())
             desired_setpoint = ArmSetpoints.STOWED;
-        } else if (xbox.x().getAsBoolean()) {
+        else if (xbox.x().getAsBoolean())
             desired_setpoint = ArmSetpoints.CONE_MID;
-        } else if (xbox.y().getAsBoolean()) {
+        else if (xbox.y().getAsBoolean())
             desired_setpoint = ArmSetpoints.CONE_TOP;
-        } else if (xbox.rightBumper().getAsBoolean()) {
+        else if (xbox.rightBumper().getAsBoolean())
+            desired_setpoint = ArmSetpoints.STING;
+        else if (xbox.start().getAsBoolean())
             desired_setpoint = ArmSetpoints.TOP_INTAKE;
-        }
 
         updateSetpointBooleans();
 
@@ -63,7 +64,7 @@ public class ArmTeleopCommand extends CommandBase {
         // arm will not move to its sting position
         SmartDashboard.putBoolean("node to node", node_to_node);
 
-        if (!(node_to_node || to_double_sub || top_intake_to_stowed) && !reached_sting || xbox.rightBumper().getAsBoolean()) {
+        if (!(node_to_node || to_double_sub || top_intake_to_stowed) && !reached_sting) {
             SmartDashboard.putBoolean("That sting if statement", true);
             arm.setArmAngle(ShoulderSetpoints.STING.angle, ElbowSetpoints.STING.angle);
             reached_sting = arm.getShoulderAtSetpoint() && arm.getElbowAtSetpoint();
