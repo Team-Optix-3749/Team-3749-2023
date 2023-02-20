@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.utils.Constants;
 import frc.robot.subsystems.arm.Arm;
 
 public class MoveArmPID extends CommandBase {
@@ -10,10 +11,10 @@ public class MoveArmPID extends CommandBase {
     private final double shoulderSetpoint;
     private final double elevatorSetpoint;
 
-    public MoveArmPID(Arm arm, double shoulderSetpoint, double elevatorSetpoint) {
+    public MoveArmPID(Arm arm, Constants.Arm.ArmSetpoints setpoint) {
         this.arm = arm;
-        this.shoulderSetpoint = shoulderSetpoint;
-        this.elevatorSetpoint = elevatorSetpoint;
+        this.shoulderSetpoint = setpoint.angles[0];
+        this.elevatorSetpoint = setpoint.angles[1];
 
         addRequirements(arm);
     }
