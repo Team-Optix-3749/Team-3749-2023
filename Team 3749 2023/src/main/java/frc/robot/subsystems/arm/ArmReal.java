@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 /**
  * Double jointed arm subsystem built with 2 CANSparkMaxes at each joint and REV
@@ -48,7 +47,8 @@ public class ArmReal extends Arm {
         presetChooser.addOption("DS", 1);
         SmartDashboard.putData(presetChooser);
 
-        setArmTolerance(6.0);
+        shoulderPIDController.setTolerance(3);
+        elbowPIDController.setTolerance(5);
 
         setIdleMode(IdleMode.kCoast);
     }
@@ -174,14 +174,6 @@ public class ArmReal extends Arm {
 
         elbowPIDController.setP(Constants.Arm.elbowKP.get());
         shoulderPIDController.setP(Constants.Arm.shoulderKP.get());
-
-        if (Constants.desired_setpoint == ArmSetpoints.STING) {
-            shoulderPIDController.setTolerance(4.5);
-            elbowPIDController.setTolerance(4.5);
-        } else {
-            shoulderPIDController.setTolerance(3);
-            elbowPIDController.setTolerance(3);
-        }
     }
 
 }
