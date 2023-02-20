@@ -54,6 +54,14 @@ public class Arm extends SubsystemBase {
         setIdleMode(IdleMode.kCoast);
     }
 
+    public void setShoulderVoltage(double voltage) {
+        shoulderMotor.setVoltage(voltage);
+    }
+
+    public void setElbowVoltage(double voltage) {
+        elbowMotor.setVoltage(voltage);
+    }
+
     public void setShoulder(double percent) {
         boolean past_min_limit = getShoulderAngle() <= Constants.Arm.shoulder_min_angle && percent > 0;
         boolean past_max_limit = getShoulderAngle() >= Constants.Arm.shoulder_max_angle && percent < 0;
