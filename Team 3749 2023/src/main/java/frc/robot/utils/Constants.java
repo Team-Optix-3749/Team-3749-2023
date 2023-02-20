@@ -60,8 +60,8 @@ public final class Constants {
         public static final double shoulder_offset = .08;
         public static final double elbow_offset = .272;
 
-        public static final double shoulder_min_angle = 90;
-        public static final double shoulder_max_angle = 210;
+        public static final double shoulder_min_angle = 130;
+        public static final double shoulder_max_angle = 220;
 
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
