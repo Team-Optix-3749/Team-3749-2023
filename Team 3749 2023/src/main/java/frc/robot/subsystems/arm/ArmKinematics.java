@@ -13,10 +13,6 @@ public class ArmKinematics {
     private double shoulderLength = Constants.Arm.shoulder_length;
     private double elbowLength = Constants.Arm.elbow_length;
 
-    // "zero" position in terms of angle set to directly vertical
-    private Translation2d shoulderZero = new Translation2d(shoulderLength, 0);
-    private Translation2d elbowZero = new Translation2d(elbowLength, 0);
-
     public ArmKinematics() {}
 
     // forward kinematics (can use for testing)
@@ -39,12 +35,11 @@ public class ArmKinematics {
 
     // for now returns a pair of doubles, might need to change later
     public Pair<Double, Double> inverse(double x, double y) {
+        y = -y;
+
         if (!validXYArgs(x, y)) {
             // throw new Exception("invalid x and y, exceeds arm radius");
         }
-
-        // final vector location
-        Translation2d finalPos = new Translation2d(x, y);
 
         Double thetaF = -Math.acos(
                 (Math.pow(x, 2) +
@@ -57,7 +52,7 @@ public class ArmKinematics {
                 Math.atan(
                         (elbowLength * Math.sin(thetaF)) / (shoulderLength + elbowLength * Math.cos(thetaF)));
 
-        return new Pair<Double, Double>(thetaB, thetaF);
+        return new Pair<Double, Double>(-Math.toDegrees(thetaB), -Math.toDegrees(thetaF));
     }
 
     // validates if xy vector length doesn't exceed radius of arm
