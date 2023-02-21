@@ -7,12 +7,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
-import frc.robot.commands.*;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 public class RobotContainer {
     // Controllers
@@ -55,7 +53,7 @@ public class RobotContainer {
         pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
 
         // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-        pilot.yWhileHeld(() -> arm.setElbowPosition(0, 0, 0), () -> arm.setElbowVoltage(0));
+        pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
 
         pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
 
