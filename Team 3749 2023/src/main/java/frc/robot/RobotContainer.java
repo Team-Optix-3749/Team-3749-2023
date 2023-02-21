@@ -8,6 +8,8 @@ import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
 import frc.robot.commands.*;
+import frc.robot.commands.swerve.AutoCommands;
+import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
