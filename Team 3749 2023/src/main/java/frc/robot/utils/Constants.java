@@ -38,7 +38,7 @@ public class Constants {
         public static final double elbow_mass = 3;
         public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
 
-        public static final double shoulder_length = 0.5588;
+        public static final double shoulder_length = 0.6858;
         public static final double shoulder_cg_radius = 0.15;
         public static final double shoulder_mass = 1.5;
         public static final double shoulder_moi = SingleJointedArmSim.estimateMOI(shoulder_length, shoulder_mass);
