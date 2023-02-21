@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -21,14 +22,14 @@ import frc.robot.utils.Constants;
  */
 public class Arm extends SubsystemBase {
 
-    private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id,
-            MotorType.kBrushless);
+    private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
     private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulderKP.get(), 0, 0);
 
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbowKP.get(), 0, 0);
+    private final ArmFeedforward elbowFeedforward = new ArmFeedforward(Constants.Arm.elbowKS, Constants.Arm.elbowKG, 0, 0);
 
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
@@ -38,8 +39,8 @@ public class Arm extends SubsystemBase {
 
         shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
         elbowAbsoluteEncoder.setPositionOffset(Constants.Arm.elbow_offset);
-        shoulderAbsoluteEncoder.setDistancePerRotation(360);
-        elbowAbsoluteEncoder.setDistancePerRotation(360);
+        shoulderAbsoluteEncoder.setDistancePerRotation(2 * Math.PI);
+        elbowAbsoluteEncoder.setDistancePerRotation(2 * Math.PI);
 
         elbowMotor.setInverted(true);
         shoulderMotor.setInverted(false);
@@ -48,10 +49,11 @@ public class Arm extends SubsystemBase {
         presetChooser.addOption("DS", 1);
         SmartDashboard.putData(presetChooser);
 
-        shoulderPIDController.setTolerance(3);
-        elbowPIDController.setTolerance(5);
+        shoulderPIDController.setTolerance(0);
+        elbowPIDController.setTolerance(0);
 
-        setIdleMode(IdleMode.kCoast);
+        shoulderMotor.setIdleMode(IdleMode.kCoast);
+        elbowMotor.setIdleMode(IdleMode.kCoast);
     }
 
     public void setShoulderVoltage(double voltage) {
@@ -60,6 +62,11 @@ public class Arm extends SubsystemBase {
 
     public void setElbowVoltage(double voltage) {
         elbowMotor.setVoltage(voltage);
+    }
+
+    public void setElbowPosition(double position, double velocity, double acceleration) {
+        setElbowVoltage(elbowPIDController.calculate(elbowAbsoluteEncoder.getDistance(), position)
+                + elbowFeedforward.calculate(position, velocity));
     }
 
     public void setShoulder(double percent) {
@@ -146,16 +153,6 @@ public class Arm extends SubsystemBase {
 
     public void stopElbow() {
         elbowMotor.stopMotor();
-    }
-
-    public void setIdleMode(IdleMode idleMode) {
-        shoulderMotor.setIdleMode(idleMode);
-        elbowMotor.setIdleMode(idleMode);
-    }
-
-    public void setArmTolerance(double tolerance) {
-        shoulderPIDController.setTolerance(tolerance);
-        elbowPIDController.setTolerance(tolerance);
     }
 
     public void periodic() {

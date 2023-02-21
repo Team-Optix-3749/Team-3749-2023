@@ -53,11 +53,14 @@ public class Constants {
 
         public static final int number_of_motors = 2;
 
-        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 0.015);
+        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 50.0);
         public static SmartData<Double> elbowSimKP = new SmartData<Double>("Elbow Sim kP", 0.5);
 
-        public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", 0.015);
+        public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", 2.0);
         public static SmartData<Double> shoulderSimKP = new SmartData<Double>("Shoulder Sim kP", 2.0);
+
+        public static final double elbowKS = 0.1;
+        public static final double elbowKG = 0.7;
 
         public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
 
@@ -220,7 +223,7 @@ public class Constants {
         public static final int kDriverRotAxis = 4;
         public static final int kDriverFieldOrientedButtonIdx = 1;
 
-        public static final double kDeadband = 0.05;
+        public static final double kDeadband = 0.1;
     }
 
     public static final class AutoBalancing {

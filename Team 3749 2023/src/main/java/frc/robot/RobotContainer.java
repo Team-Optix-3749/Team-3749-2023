@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -21,6 +22,8 @@ public class RobotContainer {
     private final Arm arm = new Arm();
 
     public RobotContainer() {
+        DriverStation.silenceJoystickConnectionWarning(true);
+
         configureDefaultCommands();
         configureButtonBindings();
         configureAuto();
@@ -31,7 +34,7 @@ public class RobotContainer {
      * 
      */
     private void configureDefaultCommands() {
-        arm.setDefaultCommand(new ArmTeleopCommand(arm));
+        // arm.setDefaultCommand(new ArmTeleopCommand(arm));
 
         swerve.setDefaultCommand(new SwerveTeleopCommand(
                 swerve,
@@ -45,29 +48,38 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        pilot.aWhileHeld(() -> {
-            Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
-        });
+        pilot.aWhileHeld(() -> arm.setShoulderVoltage(1), () -> arm.setShoulderVoltage(0));
 
-        pilot.bWhileHeld(() -> {
-            Constants.desired_setpoint = ArmSetpoints.STOWED;
-        });
+        pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
 
-        pilot.xWhileHeld(() -> {
-            Constants.desired_setpoint = ArmSetpoints.CONE_MID;
-        });
+        // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
+        pilot.yWhileHeld(() -> arm.setElbowPosition(0, 0, 0), () -> arm.setElbowVoltage(0));
 
-        pilot.yWhileHeld(() -> {
-            Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
-        });
+        pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
 
-        pilot.rightBumperWhileHeld(() -> {
-            Constants.desired_setpoint = ArmSetpoints.STING;
-        });
+        // pilot.aWhileHeld(() -> {
+        //     Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
+        // });
 
-        pilot.startWhileHeld(() -> {
-            Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
-        });
+        // pilot.bWhileHeld(() -> {
+        //     Constants.desired_setpoint = ArmSetpoints.STOWED;
+        // });
+
+        // pilot.xWhileHeld(() -> {
+        //     Constants.desired_setpoint = ArmSetpoints.CONE_MID;
+        // });
+
+        // pilot.yWhileHeld(() -> {
+        //     Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
+        // });
+
+        // pilot.rightBumperWhileHeld(() -> {
+        //     Constants.desired_setpoint = ArmSetpoints.STING;
+        // });
+
+        // pilot.startWhileHeld(() -> {
+        //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
+        // });
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 
