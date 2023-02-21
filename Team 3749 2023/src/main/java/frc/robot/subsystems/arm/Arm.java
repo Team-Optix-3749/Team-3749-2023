@@ -23,6 +23,7 @@ import frc.robot.utils.Constants;
 public class Arm extends SubsystemBase {
 
     private final ArmDynamics dynamics = new ArmDynamics();
+    private final ArmKinematics kinematics = new ArmKinematics();
 
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
@@ -172,7 +173,15 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("shoulder angle", shoulderAbsoluteEncoder.getDistance());
         SmartDashboard.putNumber("elbow angle", elbowAbsoluteEncoder.getDistance());
 
-        setArmPosition(90, 90);
+        // setArmPosition(90, 90);
+
+        setArmPosition(kinematics.inverse(1.0, 0.6).getFirst(), kinematics.inverse(1.0, 0.6).getSecond());
+
+        SmartDashboard.putNumber("ARM X", kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX());
+        SmartDashboard.putNumber("ARM Y", kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
+ 
+        SmartDashboard.putNumber("ARM SA", kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getFirst());
+        SmartDashboard.putNumber("ARM EA", kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getSecond());
     }
 
 }
