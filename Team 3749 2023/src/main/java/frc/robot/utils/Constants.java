@@ -6,6 +6,7 @@ import java.util.Map;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -29,6 +30,26 @@ public class Constants {
     }
 
     public static final class Arm {
+
+        // public static final double elbow_length = 41;
+        // public static final double elbow_cg_radius = 30;
+        // public static final double elbow_mass = 10;
+        // public static final double elbow_moi = 1.0 / 1.0 * (elbow_mass * 0.453592) * (elbow_length / 39.37) * (elbow_length / 39.37);
+
+        public static final double elbow_length = 1.0414;
+        public static final double elbow_cg_radius = 0.762;
+        public static final double elbow_mass = 3;
+        public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
+
+        // public static final double shoulder_length = 22;
+        // public static final double shoulder_cg_radius = 10;
+        // public static final double shoulder_mass = 5;
+        // public static final double shoulder_moi = 1.0 / 1.0 * (shoulder_mass * 0.453592) * (shoulder_length / 39.37) * (shoulder_length / 39.37);
+
+        public static final double shoulder_length = 0.5588;
+        public static final double shoulder_cg_radius = 0.15;
+        public static final double shoulder_mass = 1.5; // Noah was here, run it. The shoulder is a lil too far forward, but stays
+        public static final double shoulder_moi = SingleJointedArmSim.estimateMOI(shoulder_length, shoulder_mass);
 
         public static final SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
 
@@ -66,7 +87,7 @@ public class Constants {
 
         // (angle without offset - desired angle) / 360
         public static final double shoulder_offset = (211.0-90.0)/360.0;
-        public static final double elbow_offset = 196.0/360.0;
+        public static final double elbow_offset = 282.0/360.0;
 
         public static final double shoulder_min_angle = 30;
         public static final double shoulder_max_angle = 140;
