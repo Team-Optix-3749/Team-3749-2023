@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Constants {
@@ -31,27 +30,18 @@ public class Constants {
 
     public static final class Arm {
 
-        // public static final double elbow_length = 41;
-        // public static final double elbow_cg_radius = 30;
-        // public static final double elbow_mass = 10;
-        // public static final double elbow_moi = 1.0 / 1.0 * (elbow_mass * 0.453592) * (elbow_length / 39.37) * (elbow_length / 39.37);
+        public static final double elbow_kP = 0.3;
+        public static final double shoulder_kP = 0.3;
 
         public static final double elbow_length = 1.0414;
         public static final double elbow_cg_radius = 0.762;
         public static final double elbow_mass = 3;
         public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
 
-        // public static final double shoulder_length = 22;
-        // public static final double shoulder_cg_radius = 10;
-        // public static final double shoulder_mass = 5;
-        // public static final double shoulder_moi = 1.0 / 1.0 * (shoulder_mass * 0.453592) * (shoulder_length / 39.37) * (shoulder_length / 39.37);
-
         public static final double shoulder_length = 0.5588;
         public static final double shoulder_cg_radius = 0.15;
-        public static final double shoulder_mass = 1.5; // Noah was here, run it. The shoulder is a lil too far forward, but stays
+        public static final double shoulder_mass = 1.5;
         public static final double shoulder_moi = SingleJointedArmSim.estimateMOI(shoulder_length, shoulder_mass);
-
-        public static final SendableChooser<Integer> controlMode = new SendableChooser<Integer>();
 
         public static final int left_shoulder_id = 15;
         public static final int right_shoulder_id = 16;
@@ -61,29 +51,7 @@ public class Constants {
         public static final double shoulder_reduction = 250;
         public static final double elbow_reduction = 200;
 
-        // inches
-        public static final double bicep_length = 25; // hypotenuse
-        public static final double forearm_length = 30;
-        public static final double claw_length = 13;
-
-        // kilograms
-        public static final double bicep_mass = 2.26796; // 5 lbs
-
-        // mass of forearm is wrong - should be 1 pound
-        public static final double forearm_mass = 11.3398; // forearm + claw mass (20 + 5 lbs)
-
         public static final int number_of_motors = 2;
-
-        public static SmartData<Double> elbowKP = new SmartData<Double>("Elbow kP", 50.0);
-        public static SmartData<Double> elbowSimKP = new SmartData<Double>("Elbow Sim kP", 0.5);
-
-        public static SmartData<Double> shoulderKP = new SmartData<Double>("Shoulder kP", 2.0);
-        public static SmartData<Double> shoulderSimKP = new SmartData<Double>("Shoulder Sim kP", 2.0);
-
-        public static final double elbowKS = 0.1;
-        public static final double elbowKG = 0.7;
-
-        public static final double sim_encoder_dist_per_pulse = 2.0 * Math.PI / 4096;
 
         // (angle without offset - desired angle) / 360
         public static final double shoulder_offset = (211.0-90.0)/360.0;
