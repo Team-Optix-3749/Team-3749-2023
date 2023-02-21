@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,14 +22,15 @@ import frc.robot.utils.Constants;
  */
 public class Arm extends SubsystemBase {
 
+    private final ArmDynamics dynamics = new ArmDynamics();
+
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
-    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulderKP.get(), 0, 0);
+    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP, 0, 0);
 
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
-    private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbowKP.get(), 0, 0);
-    private final ArmFeedforward elbowFeedforward = new ArmFeedforward(Constants.Arm.elbowKS, Constants.Arm.elbowKG, 0, 0);
+    private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP, 0, 0);
 
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
 
@@ -39,8 +40,8 @@ public class Arm extends SubsystemBase {
 
         shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
         elbowAbsoluteEncoder.setPositionOffset(Constants.Arm.elbow_offset);
-        shoulderAbsoluteEncoder.setDistancePerRotation(2 * Math.PI);
-        elbowAbsoluteEncoder.setDistancePerRotation(2 * Math.PI);
+        shoulderAbsoluteEncoder.setDistancePerRotation(360);
+        elbowAbsoluteEncoder.setDistancePerRotation(-360);
 
         elbowMotor.setInverted(true);
         shoulderMotor.setInverted(false);
@@ -56,17 +57,26 @@ public class Arm extends SubsystemBase {
         elbowMotor.setIdleMode(IdleMode.kCoast);
     }
 
+    public void setArmPosition(double shoulderAngle, double elbowAngle) {
+        double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle * -1)).getData();
+
+        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
+        setElbowVoltage(-elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
+
+        SmartDashboard.putNumber("SHOULDER FF", dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData()[0]);
+        SmartDashboard.putNumber("ELBOW FF", dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData()[1]);
+        SmartDashboard.putNumberArray("SIMULATION FF", dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData());
+
+        SmartDashboard.putNumber("shoulder pid", shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle));
+        SmartDashboard.putNumber("elbow pid", elbowPIDController.calculate(getElbowAngle(), elbowAngle));
+    }
+
     public void setShoulderVoltage(double voltage) {
         shoulderMotor.setVoltage(voltage);
     }
 
     public void setElbowVoltage(double voltage) {
         elbowMotor.setVoltage(voltage);
-    }
-
-    public void setElbowPosition(double position, double velocity, double acceleration) {
-        setElbowVoltage(elbowPIDController.calculate(elbowAbsoluteEncoder.getDistance(), position)
-                + elbowFeedforward.calculate(position, velocity));
     }
 
     public void setShoulder(double percent) {
@@ -162,8 +172,7 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("shoulder angle", shoulderAbsoluteEncoder.getDistance());
         SmartDashboard.putNumber("elbow angle", elbowAbsoluteEncoder.getDistance());
 
-        elbowPIDController.setP(Constants.Arm.elbowKP.get());
-        shoulderPIDController.setP(Constants.Arm.shoulderKP.get());
+        setArmPosition(90, 90);
     }
 
 }
