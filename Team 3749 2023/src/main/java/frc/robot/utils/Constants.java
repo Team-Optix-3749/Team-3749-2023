@@ -68,14 +68,14 @@ public class Constants {
         public static final double elbow_kP = 0.3;
         public static final double shoulder_kP = 0.2;
 
-        public static final double elbow_length = 1.0414;
+        public static final double elbow_length = 1.016;
         public static final double elbow_cg_radius = 0.762;
-        public static final double elbow_mass = 1.75;
+        public static final double elbow_mass = 4.53592;
         public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
 
-        public static final double shoulder_length = 0.6858;
-        public static final double shoulder_cg_radius = 0.15;
-        public static final double shoulder_mass = 0.5;
+        public static final double shoulder_length = 0.7239;
+        public static final double shoulder_cg_radius = 0.2032;
+        public static final double shoulder_mass = 3.99161;
         public static final double shoulder_moi = SingleJointedArmSim.estimateMOI(shoulder_length, shoulder_mass);
 
         public static final int left_shoulder_id = 15;
@@ -83,14 +83,15 @@ public class Constants {
         public static final int left_elbow_id = 17;
         public static final int right_elbow_id = 18;
 
-        public static final double shoulder_reduction = 250;
         public static final double elbow_reduction = 200;
 
         public static final int number_of_motors = 2;
 
         // (angle without offset - desired angle) / 360
-        public static final double shoulder_offset = (211.0-90.0)/360.0;
-        public static final double elbow_offset = 282.0/360.0;
+        public static final double shoulder_offset = (270)/360.0;
+        public static final double elbow_offset = (315)/360.0;
+        // public static final double shoulder_offset = 0;
+        // public static final double elbow_offset = 0;
 
         public static final double shoulder_min_angle = 30;
         public static final double shoulder_max_angle = 140;
@@ -98,8 +99,8 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 7;
-        public static final double maxAccelerationMPS = 7;
+        public static final double maxSpeedMPS = 0.5;
+        public static final double maxAccelerationMPS = 0.5;
 
         public static enum ShoulderSetpoints {
             ZERO(0),
