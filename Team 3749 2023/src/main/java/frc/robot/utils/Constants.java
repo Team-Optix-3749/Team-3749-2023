@@ -66,16 +66,16 @@ public class Constants {
     public static final class Arm {
 
         public static final double elbow_kP = 0.3;
-        public static final double shoulder_kP = 0.1;
+        public static final double shoulder_kP = 0.2;
 
         public static final double elbow_length = 1.0414;
         public static final double elbow_cg_radius = 0.762;
-        public static final double elbow_mass = 3;
+        public static final double elbow_mass = 1.75;
         public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
 
         public static final double shoulder_length = 0.6858;
         public static final double shoulder_cg_radius = 0.15;
-        public static final double shoulder_mass = 1.5;
+        public static final double shoulder_mass = 0.5;
         public static final double shoulder_moi = SingleJointedArmSim.estimateMOI(shoulder_length, shoulder_mass);
 
         public static final int left_shoulder_id = 15;
