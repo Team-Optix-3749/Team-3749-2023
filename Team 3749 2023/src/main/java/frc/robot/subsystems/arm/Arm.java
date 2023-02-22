@@ -6,9 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -84,8 +82,11 @@ public class Arm extends SubsystemBase {
 
         double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle * -1)).getData();
 
-        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
-        setElbowVoltage(-elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
+        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) - feedForwardOutput[0]);
+        setElbowVoltage(-elbowPIDController.calculate(getElbowAngle(), elbowAngle) - feedForwardOutput[1]);
+
+        // setShoulderVoltage(-feedForwardOutput[0]);
+        // setElbowVoltage(-feedForwardOutput[1]);
 
         SmartDashboard.putNumber("SHOULDER FF",
                 dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData()[0]);
@@ -99,7 +100,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Translation2d getArmCoordinate(){
-        return kinematics.forward(getShoulderAngle(), getElbowAngle());
+        return kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle()));
     }
 
     public void setShoulderVoltage(double voltage) {
