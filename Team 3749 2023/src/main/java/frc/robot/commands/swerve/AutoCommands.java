@@ -100,7 +100,6 @@ public final class AutoCommands {
                 Constants.DriveConstants.kDriveKinematics, xController, yController, thetaController,
                 swerveSubsystem::setModuleStates, swerveSubsystem);
         return swerveControllerCommand;
-
     }
 
     /***

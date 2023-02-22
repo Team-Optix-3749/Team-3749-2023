@@ -14,6 +14,41 @@ public class Constants {
 
     public static Arm.ArmSetpoints desired_setpoint = Arm.ArmSetpoints.STOWED;
 
+
+    /***
+     * 
+     * @param margin how close the values need to be to return true. Use a positive
+     *               number
+     * @param a      the first number
+     * @param b      the second number
+     * @return true if it is within the margin, false if not
+     */
+    public static boolean withinMargin(double margin, double a, double b) {
+        if (a + margin >= b && a - margin <= b) {
+            return true;
+        }
+        return false;
+    }
+        /***
+     * 
+     * @param margin how close the values need to be to return true. Use a positive
+     *               number
+     * @param a      the first translation
+     * @param b      the second translation
+     * @return true if it is within the margin, false if not
+     */
+    public static boolean withinMargin(double margin, Translation2d a, Translation2d b) {
+        // if X is within margin
+        if (a.getX() + margin >= b.getX() && a.getX() - margin <= b.getX()) {
+            // if Y is within margin
+            if (a.getY() + margin >= b.getY() && a.getY() - margin <= b.getY()) {
+
+            return true;
+            }
+        }
+        return false;
+    }
+
     public static final class Claw {
         public static final int claw_id = 22;
 
@@ -31,7 +66,7 @@ public class Constants {
     public static final class Arm {
 
         public static final double elbow_kP = 0.3;
-        public static final double shoulder_kP = 0.3;
+        public static final double shoulder_kP = 0.1;
 
         public static final double elbow_length = 1.0414;
         public static final double elbow_cg_radius = 0.762;
@@ -62,6 +97,9 @@ public class Constants {
 
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
+
+        public static final double maxSpeedMPS = 0.001;
+        public static final double maxAccelerationMPS = 0.001;
 
         public static enum ShoulderSetpoints {
             ZERO(0),

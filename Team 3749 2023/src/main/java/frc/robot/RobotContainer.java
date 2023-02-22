@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
+import frc.robot.commands.arm.ArmFollowTrajectory;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
@@ -41,6 +42,8 @@ public class RobotContainer {
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
+
+        arm.setDefaultCommand(new ArmFollowTrajectory(arm, ArmTrajectories.getTestTrajectory()));
     }
 
     /**
@@ -56,6 +59,7 @@ public class RobotContainer {
         pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
 
         pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
+
 
         // pilot.aWhileHeld(() -> {
         //     Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
