@@ -35,11 +35,11 @@ public class ArmTrajectories {
         return trajectory;
     }
 
-    public static Trajectory getTestTrajectory() {
-        return createTrajectory(new Translation2d[] {
-                new Translation2d(0.5, 0.6),
+    public static Translation2d[] getTestTrajectory() {
+        return new Translation2d[] {
+                new Translation2d(0.8, 0.6),
                 new Translation2d(1, 0.6)
-        });
+        };
     }
 
 }
