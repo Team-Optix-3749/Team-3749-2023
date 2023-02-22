@@ -43,7 +43,7 @@ public class Constants {
             // if Y is within margin
             if (a.getY() + margin >= b.getY() && a.getY() - margin <= b.getY()) {
 
-            return true;
+              return true;
             }
         }
         return false;
