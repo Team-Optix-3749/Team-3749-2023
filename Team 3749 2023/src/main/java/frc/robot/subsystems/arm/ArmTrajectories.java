@@ -37,8 +37,11 @@ public class ArmTrajectories {
 
     public static Translation2d[] getTestTrajectory() {
         return new Translation2d[] {
-                new Translation2d(0.7, 0.6)
-                // new Translation2d(1, 0.6)
+                new Translation2d(0.7, 0.95),
+                new Translation2d(0.85,1.1
+                ),
+                new Translation2d(1.2,1),
+                new Translation2d(1.4, 1)
         };
     }
 

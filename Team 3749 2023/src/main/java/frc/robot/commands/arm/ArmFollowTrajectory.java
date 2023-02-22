@@ -24,6 +24,7 @@ public class ArmFollowTrajectory extends CommandBase {
 
     @Override
     public void initialize() {
+        current_waypoint_index = 0;
         current_waypoint = waypoints[0];
     }
 
@@ -33,7 +34,7 @@ public class ArmFollowTrajectory extends CommandBase {
         // will stay at the same waypoint if it is the last one
         if (current_waypoint_index != waypoints.length-1){
             // if the arm is sufficiantly close, go to the next waypoint
-            if (Constants.withinMargin(0.1,  arm.getArmCoordinate(), current_waypoint)){
+            if (Constants.withinMargin(0.25,  arm.getArmCoordinate(), current_waypoint)){
                 current_waypoint_index +=1;
                 current_waypoint = waypoints[current_waypoint_index];
             }
