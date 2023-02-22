@@ -28,7 +28,7 @@ public class Arm extends SubsystemBase {
 
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
-    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP, 0, 0);
+    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP, 0, 0.005);
 
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
@@ -82,11 +82,11 @@ public class Arm extends SubsystemBase {
 
         double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle * -1)).getData();
 
-        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) - feedForwardOutput[0]);
-        setElbowVoltage(-elbowPIDController.calculate(getElbowAngle(), elbowAngle) - feedForwardOutput[1]);
+        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
+        setElbowVoltage(-elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
 
-        // setShoulderVoltage(-feedForwardOutput[0]);
-        // setElbowVoltage(-feedForwardOutput[1]);
+        // setShoulderVoltage(feedForwardOutput[0]);
+        // setElbowVoltage(feedForwardOutput[1]);
 
         SmartDashboard.putNumber("SHOULDER FF",
                 dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData()[0]);
@@ -206,6 +206,8 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("elbow angle", elbowAbsoluteEncoder.getDistance());
 
         // setArmPosition(90, 90);
+
+        // setArmPosition(new Translation2d(0.7, 0.6));
 
         // setArmPosition(kinematics.inverse(1.0, 0.6).getFirst(), kinematics.inverse(1.0, 0.6).getSecond());
 
