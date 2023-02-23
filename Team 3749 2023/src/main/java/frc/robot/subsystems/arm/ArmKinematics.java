@@ -52,7 +52,7 @@ public class ArmKinematics {
                 Math.atan(
                         (elbowLength * Math.sin(thetaF)) / (shoulderLength + elbowLength * Math.cos(thetaF)));
 
-        return new Pair<Double, Double>(-Math.toDegrees(thetaB), -Math.toDegrees(thetaF));
+        return new Pair<Double, Double>(-Math.toDegrees(thetaB), Math.toDegrees(thetaF));
     }
 
     // validates if xy vector length doesn't exceed radius of arm

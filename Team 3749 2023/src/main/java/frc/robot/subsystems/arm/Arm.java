@@ -29,7 +29,7 @@ public class Arm extends SubsystemBase {
 
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
-    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP.get(), 0, 0.005);
+    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP.get(), 0, 0);
 
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(2);
@@ -83,8 +83,8 @@ public class Arm extends SubsystemBase {
 
         double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData();
 
-        // setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
-        // setElbowVoltage(-elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
+        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
+        setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
 
         // setShoulderVoltage(feedForwardOutput[0]);
         // setElbowVoltage(feedForwardOutput[1]);
@@ -92,15 +92,11 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("SA SETPOINT", shoulderAngle);
         SmartDashboard.putNumber("EA SETPOINT", elbowAngle);
 
-        SmartDashboard.putNumber("SHOULDER FF",
-                dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData()[0]);
-        SmartDashboard.putNumber("ELBOW FF",
-                dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData()[1]);
-        SmartDashboard.putNumberArray("SIMULATION FF",
-                dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData());
+        // SmartDashboard.putNumber("SHOULDER FF", feedForwardOutput[0]);
+        // SmartDashboard.putNumber("ELBOW FF", feedForwardOutput[1]);
 
-        SmartDashboard.putNumber("shoulder pid", shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle));
-        SmartDashboard.putNumber("elbow pid", elbowPIDController.calculate(getElbowAngle(), elbowAngle));
+        SmartDashboard.putNumber("SHOULDER PID", shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
+        SmartDashboard.putNumber("ELBOW PID", elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
     }
 
     public Translation2d getArmCoordinate(){
@@ -211,12 +207,20 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("elbow angle", getElbowAngle());
 
         SmartDashboard.putNumber("shoulder raw pos", shoulderAbsoluteEncoder.getAbsolutePosition());
-        // SmartDashboard.putNumber("elbow raw pos", elbowAbsoluteEncoder.getAbsolutePosition()* 360 - 180);
         SmartDashboard.putNumber("elbow raw pos", elbowAbsoluteEncoder.getAbsolutePosition());
 
         // setArmPosition(90, 90);
 
         setArmPosition(new Translation2d(1.0, 0.7));
+
+        shoulderPIDController.setP(Constants.Arm.shoulder_kP.get());
+        elbowPIDController.setP(Constants.Arm.elbow_kP.get());
+
+        // setShoulderVoltage(dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[0]);
+        // setElbowVoltage(dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[1]);
+
+        SmartDashboard.putNumber("SHOULDER FF", dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[0]);
+        SmartDashboard.putNumber("ELBOW FF", dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[1]);
 
         // setArmPosition(kinematics.inverse(1.0, 0.6).getFirst(), kinematics.inverse(1.0, 0.6).getSecond());
 
