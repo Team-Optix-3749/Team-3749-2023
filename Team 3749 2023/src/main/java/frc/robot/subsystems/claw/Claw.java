@@ -78,6 +78,6 @@ public class Claw extends SubsystemBase {
 
         // clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(),
         // 5700);
-        set(0.1);
+        // set(0.1);
     }
 }
