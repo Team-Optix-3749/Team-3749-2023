@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
     private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP.get(), 0, 0.005);
 
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-    private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
+    private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(2);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP.get(), 0, 0);
 
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
@@ -43,7 +43,7 @@ public class Arm extends SubsystemBase {
         shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
         elbowAbsoluteEncoder.setPositionOffset(Constants.Arm.elbow_offset);
         shoulderAbsoluteEncoder.setDistancePerRotation(360);
-        elbowAbsoluteEncoder.setDistancePerRotation(-360);
+        elbowAbsoluteEncoder.setDistancePerRotation(360);
 
         elbowMotor.setInverted(true);
         shoulderMotor.setInverted(false);
@@ -219,10 +219,10 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("ARM Y",
                 kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
 
-        // SmartDashboard.putNumber("ARM SA",
-        //         kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getFirst());
-        // SmartDashboard.putNumber("ARM EA",
-        //         kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getSecond());
+        SmartDashboard.putNumber("ARM SA",
+                kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getFirst());
+        SmartDashboard.putNumber("ARM EA",
+                kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getSecond());
 
 
     }
