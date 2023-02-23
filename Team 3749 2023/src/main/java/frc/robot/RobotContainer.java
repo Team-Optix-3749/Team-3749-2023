@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
@@ -84,6 +85,8 @@ public class RobotContainer {
         // pilot.startWhileHeld(() -> {
         //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
         // });
+
+        pilot.a().whileTrue(new ArmFollowTrajectory(arm, ArmTrajectories.getTestTrajectory())).whileFalse(new PrintCommand("false"));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 

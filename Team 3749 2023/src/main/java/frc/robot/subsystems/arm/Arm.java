@@ -211,7 +211,7 @@ public class Arm extends SubsystemBase {
 
         // setArmPosition(90, 90);
 
-        setArmPosition(new Translation2d(1.3, 0.8));
+        // setArmPosition(new Translation2d(1.3, 0.8));
 
         shoulderPIDController.setP(Constants.Arm.shoulder_kP.get());
         elbowPIDController.setP(Constants.Arm.elbow_kP.get());
