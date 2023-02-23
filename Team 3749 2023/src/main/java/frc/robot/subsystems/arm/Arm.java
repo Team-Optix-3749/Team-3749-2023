@@ -211,7 +211,7 @@ public class Arm extends SubsystemBase {
 
         // setArmPosition(90, 90);
 
-        setArmPosition(new Translation2d(1.0, 0.7));
+        setArmPosition(new Translation2d(1.3, 0.8));
 
         shoulderPIDController.setP(Constants.Arm.shoulder_kP.get());
         elbowPIDController.setP(Constants.Arm.elbow_kP.get());
@@ -225,9 +225,9 @@ public class Arm extends SubsystemBase {
         // setArmPosition(kinematics.inverse(1.0, 0.6).getFirst(), kinematics.inverse(1.0, 0.6).getSecond());
 
         SmartDashboard.putNumber("ARM X",
-                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX());
+                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(-getElbowAngle())).getX());
         SmartDashboard.putNumber("ARM Y",
-                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
+                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(-getElbowAngle())).getY());
 
         SmartDashboard.putNumber("ARM SA",
                 kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getFirst());
