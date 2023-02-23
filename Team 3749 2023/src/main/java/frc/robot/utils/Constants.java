@@ -68,7 +68,7 @@ public class Constants {
         // public static final double elbow_kP = 0.3;
         public static final SmartData<Double> elbow_kP = new SmartData<Double>("ebow kp", 0.2);
         // public static final double shoulder_kP = 0.2;
-        public static final SmartData<Double> shoulder_kP = new SmartData<Double>("shoulder kp", 0.1);
+        public static final SmartData<Double> shoulder_kP = new SmartData<Double>("shoulder kp", 0.15);
 
         public static final double elbow_length = 1.016;
         public static final double elbow_cg_radius = 0.762;
@@ -103,8 +103,8 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 0.5;
-        public static final double maxAccelerationMPS = 0.5;
+        public static final double maxSpeedMPS = 15;
+        public static final double maxAccelerationMPS = 15;
 
         public static enum ShoulderSetpoints {
             ZERO(0),
