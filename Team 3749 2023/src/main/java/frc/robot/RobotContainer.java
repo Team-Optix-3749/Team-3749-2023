@@ -43,7 +43,7 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        arm.setDefaultCommand(new ArmFollowTrajectory(arm, ArmTrajectories.getTestTrajectory()));
+        // arm.setDefaultCommand(new ArmFollowTrajectory(arm, ArmTrajectories.getTestTrajectory()));
     }
 
     /**
@@ -51,14 +51,14 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        pilot.aWhileHeld(() -> arm.setShoulderVoltage(1), () -> arm.setShoulderVoltage(0));
+        // pilot.aWhileHeld(() -> arm.setShoulderVoltage(1), () -> arm.setShoulderVoltage(0));
 
-        pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
+        // pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
 
+        // // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
         // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-        pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
 
-        pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
+        // pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
 
 
         // pilot.aWhileHeld(() -> {

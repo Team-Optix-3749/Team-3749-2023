@@ -36,7 +36,7 @@ public class ArmDynamics {
     }
 
     /** Calculates the joint voltages based on the joint positions (feedforward). */
-    public static Vector<N2> feedforward(Vector<N2> position) {
+    public Vector<N2> feedforward(Vector<N2> position) {
         return feedforward(position, VecBuilder.fill(0.0, 0.0), VecBuilder.fill(0.0, 0.0));
     }
 
@@ -46,7 +46,7 @@ public class ArmDynamics {
      * rows represent each joint and the columns represent position, velocity, and
      * acceleration.
      */
-    public static Vector<N2> feedforward(Matrix<N2, N3> state) {
+    public Vector<N2> feedforward(Matrix<N2, N3> state) {
         return feedforward(
                 new Vector<>(state.extractColumnVector(0)),
                 new Vector<>(state.extractColumnVector(1)),
@@ -57,7 +57,7 @@ public class ArmDynamics {
      * Calculates the joint voltages based on the full joint states as vectors
      * (feedforward).
      */
-    public static Vector<N2> feedforward(Vector<N2> position, Vector<N2> velocity, Vector<N2> acceleration) {
+    public Vector<N2> feedforward(Vector<N2> position, Vector<N2> velocity, Vector<N2> acceleration) {
         var torque = M(position)
                 .times(acceleration)
                 .plus(C(position, velocity).times(velocity))
@@ -67,7 +67,7 @@ public class ArmDynamics {
                 elbowDCMotor.getVoltage(torque.get(1, 0), velocity.get(1, 0)));
     }
 
-    private static Matrix<N2, N2> M(Vector<N2> position) {
+    private Matrix<N2, N2> M(Vector<N2> position) {
         var M = new Matrix<>(N2.instance, N2.instance);
         M.set(
                 0,
@@ -100,7 +100,7 @@ public class ArmDynamics {
         return M;
     }
 
-    private static Matrix<N2, N2> C(Vector<N2> position, Vector<N2> velocity) {
+    private Matrix<N2, N2> C(Vector<N2> position, Vector<N2> velocity) {
         var C = new Matrix<>(N2.instance, N2.instance);
         C.set(
                 0,
@@ -129,7 +129,7 @@ public class ArmDynamics {
         return C;
     }
 
-    private static Matrix<N2, N1> Tg(Vector<N2> position) {
+    private Matrix<N2, N1> Tg(Vector<N2> position) {
         var Tg = new Matrix<>(N2.instance, N1.instance);
         Tg.set(
                 0,
