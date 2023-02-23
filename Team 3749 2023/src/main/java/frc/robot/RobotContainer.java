@@ -86,7 +86,7 @@ public class RobotContainer {
         //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
         // });
 
-        pilot.a().whileTrue(new ArmFollowTrajectory(arm, ArmTrajectories.getTestTrajectory())).whileFalse(new PrintCommand("false"));
+        pilot.a().whileTrue(new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory())).whileFalse(new PrintCommand("false"));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 

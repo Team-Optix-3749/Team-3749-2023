@@ -35,10 +35,9 @@ public class ArmTrajectories {
         return trajectory;
     }
 
-    public static Trajectory getTestTrajectory() {
+    public static Trajectory getTopNodeTrajectory() {
         return createTrajectory( new Translation2d[] {
-            new Translation2d(0.7, 0.6),
-            new Translation2d(1.0, 1.0),
+            new Translation2d(0.5, 1.0),
             new Translation2d(1.3, 1.0)
         });
     }
