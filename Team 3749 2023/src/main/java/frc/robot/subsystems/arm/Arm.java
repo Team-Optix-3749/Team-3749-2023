@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -80,13 +81,16 @@ public class Arm extends SubsystemBase {
         double shoulderAngle = kinematics.inverse(position.getX(), position.getY()).getFirst();
         double elbowAngle = kinematics.inverse(position.getX(), position.getY()).getSecond();
 
-        double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle * -1)).getData();
+        double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData();
 
         // setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
         // setElbowVoltage(-elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
 
         // setShoulderVoltage(feedForwardOutput[0]);
         // setElbowVoltage(feedForwardOutput[1]);
+
+        SmartDashboard.putNumber("SA SETPOINT", shoulderAngle);
+        SmartDashboard.putNumber("EA SETPOINT", elbowAngle);
 
         SmartDashboard.putNumber("SHOULDER FF",
                 dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData()[0]);
@@ -129,7 +133,8 @@ public class Arm extends SubsystemBase {
     }
 
     public double getElbowAngle() {
-        return elbowAbsoluteEncoder.getDistance();
+        return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
+        .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - 11;
     }
 
     public void setShoulderAngle(double angle) {
@@ -145,7 +150,7 @@ public class Arm extends SubsystemBase {
 
         elbowMotor.set(
                 elbowPIDController.calculate(
-                        elbowAbsoluteEncoder.getDistance()));
+                        getElbowAngle()));
     }
 
     public boolean getShoulderAtSetpoint() {
@@ -203,14 +208,15 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("Elbow right Amps", elbowMotor.getOutputCurrent());
 
         SmartDashboard.putNumber("shoulder angle", shoulderAbsoluteEncoder.getDistance());
-        SmartDashboard.putNumber("elbow angle", elbowAbsoluteEncoder.getDistance());
+        SmartDashboard.putNumber("elbow angle", getElbowAngle());
 
         SmartDashboard.putNumber("shoulder raw pos", shoulderAbsoluteEncoder.getAbsolutePosition());
+        // SmartDashboard.putNumber("elbow raw pos", elbowAbsoluteEncoder.getAbsolutePosition()* 360 - 180);
         SmartDashboard.putNumber("elbow raw pos", elbowAbsoluteEncoder.getAbsolutePosition());
 
         // setArmPosition(90, 90);
 
-        // setArmPosition(new Translation2d(0.7, 0.6));
+        setArmPosition(new Translation2d(1.0, 0.7));
 
         // setArmPosition(kinematics.inverse(1.0, 0.6).getFirst(), kinematics.inverse(1.0, 0.6).getSecond());
 
