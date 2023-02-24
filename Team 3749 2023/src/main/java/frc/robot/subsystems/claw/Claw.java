@@ -4,11 +4,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.SmartData;
 
 /***
  * @author Anusha Khobare
@@ -25,15 +27,21 @@ public class Claw extends SubsystemBase {
 
     private final CANSparkMax clawMotor = new CANSparkMax(Constants.Claw.claw_id, MotorType.kBrushless);
     private final RelativeEncoder clawEncoder = clawMotor.getEncoder();
+    private SmartData<Double> kv = new SmartData<Double>("claw kv", 0.0775);
+    private SmartData<Double> kp = new SmartData<Double>("claw kp", 0.3);
 
-    private final SparkMaxPIDController clawMotorPIDController = clawMotor.getPIDController();
+    private final PIDController clawPID = new PIDController(kp.get(), 0, 0);
+    private final SimpleMotorFeedforward clawFeedForward = new SimpleMotorFeedforward(0, kv.get());
 
     public Claw() {
         clawMotor.restoreFactoryDefaults();
 
         clawMotor.setIdleMode(IdleMode.kBrake);
-        clawMotor.setSmartCurrentLimit(60);
-        clawMotorPIDController.setP(Constants.Claw.kP.get());
+        clawMotor.setSmartCurrentLimit(50);
+        // 1 wheel rotation / 5 motor rotations
+        clawEncoder.setPositionConversionFactor(1.0 / 5.0);
+        // 1 minute / 60 seconds * 1 wheel rotation / 5 motor rotations
+        clawEncoder.setVelocityConversionFactor(1.0 / (60.0 * 5.0));
     }
 
     /**
@@ -63,6 +71,15 @@ public class Claw extends SubsystemBase {
         clawMotor.set(speed);
     }
 
+    public void setFeedForward(double velocity) {
+        SmartDashboard.putNumber("claw pid gain",clawPID.calculate(clawEncoder.getVelocity(),velocity));
+        SmartDashboard.putNumber("claw ff gain",clawFeedForward.calculate(velocity));
+
+        SmartDashboard.putNumber("claw gain", clawFeedForward.calculate(velocity) + clawPID.calculate(clawEncoder.getVelocity(),velocity));
+        clawMotor.set(clawFeedForward.calculate(velocity) + clawPID.calculate(velocity));
+
+    }
+
     /**
      * stops the motor
      */
@@ -72,12 +89,13 @@ public class Claw extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
-        SmartDashboard.putNumber("Claw Position", getPosition());
-        SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
 
+        SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
+        SmartDashboard.putNumber("Claw Position", clawEncoder.getPosition());
+        SmartDashboard.putNumber("Claw Velocity", clawEncoder.getVelocity());
+        SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
         // clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(),
         // 5700);
-        set(0.1);
+        // set(0.1);
     }
 }

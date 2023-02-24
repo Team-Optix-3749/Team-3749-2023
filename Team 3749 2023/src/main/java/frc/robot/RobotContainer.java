@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.swerve.*;
@@ -52,14 +51,16 @@ public class RobotContainer {
         pilot.a().whileTrue(
             new SequentialCommandGroup(
             new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
-            new InstantCommand(() -> claw.set(-0.3)),
-            new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
+            // Commands.run(() -> claw.setFeedForward(3)).withTimeout(0.5),
+            new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))
+            ))
             .whileFalse(new PrintCommand("false"));
-        // pilot.a().whileTrue(
-        //     new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)))
-        //     .whileFalse(new PrintCommand("false"));
-        // pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.set(0.8)));
+
+
+        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+        // pilot.rightTrigger().whileTrue(Commands.run(() -> claw.set(1)));
+        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setFeedForward(6)));
+
         pilot.leftTrigger().whileTrue(Commands.run(() -> claw.set(-0.125)));
 
     }
