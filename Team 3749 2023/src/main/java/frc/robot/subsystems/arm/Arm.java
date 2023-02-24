@@ -25,7 +25,7 @@ import frc.robot.utils.Constants;
 public class Arm extends SubsystemBase {
 
     private final ArmDynamics dynamics = new ArmDynamics();
-    private final ArmKinematics kinematics = new ArmKinematics();
+    private final NoahKinematics kinematics = new NoahKinematics();
 
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
