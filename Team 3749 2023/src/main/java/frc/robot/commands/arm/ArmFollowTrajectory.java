@@ -42,7 +42,7 @@ public class ArmFollowTrajectory extends CommandBase {
         } catch (Exception e) {
             System.out.println(e);
         }
-        System.out.println(desiredState.poseMeters.getX());
+        System.out.println(desiredState.poseMeters.getY());
         logging();
 
     }
