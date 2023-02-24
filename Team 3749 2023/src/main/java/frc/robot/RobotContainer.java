@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,6 +32,14 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         configureAuto();
+
+        try {
+            FileWriter writer = new FileWriter("data.csv", false);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     /**
