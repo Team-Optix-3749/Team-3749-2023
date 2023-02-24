@@ -26,6 +26,11 @@ lc.set_linewidth(2)
 line = ax.add_collection(lc)
 fig.colorbar(line,ax=ax)
 
+x_scoring_locations = [0.9398, 1.4478]
+y_scoring_locations = [0.8636 - 0.5588, 1.1938 - 0.5588]
+
+ax.bar(x_scoring_locations, y_scoring_locations, width=0.025)
+
 plt.title("Arm Trajectory Visualization")
 plt.xlabel("X Position (m)")
 plt.ylabel("Y Position (m)")
