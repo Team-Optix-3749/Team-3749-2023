@@ -1,12 +1,10 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.utils.Constants;
 import frc.robot.subsystems.arm.Arm;
 
 public class ArmFollowTrajectory extends CommandBase {
@@ -14,9 +12,8 @@ public class ArmFollowTrajectory extends CommandBase {
 
     private final Arm arm;
     private final Trajectory trajectory;
-    
+    private State desiredState;
     private Timer timer = new Timer();
-    private Translation2d current_waypoint;
 
     public ArmFollowTrajectory(Arm arm, Trajectory trajectory) {
         this.arm = arm;
@@ -27,7 +24,7 @@ public class ArmFollowTrajectory extends CommandBase {
 
     @Override
     public void initialize() {
-        
+
         timer.reset();
         timer.start();
 
@@ -36,16 +33,16 @@ public class ArmFollowTrajectory extends CommandBase {
     @Override
     public void execute() {
 
+        logging();
+
         double cur_time = timer.get();
-        State desiredState = trajectory.sample(cur_time);
-        arm.setArmPosition(desiredState.poseMeters.getTranslation());
-        SmartDashboard.putNumber("CURRENT WAYPOINT X", desiredState.poseMeters.getTranslation().getX());
-        SmartDashboard.putNumber("CURRENT WAYPOINT Y", desiredState.poseMeters.getTranslation().getY());
+        desiredState = trajectory.sample(cur_time);
 
-        SmartDashboard.putNumber("Arm Coordinate X", arm.getArmCoordinate().getX());
-        SmartDashboard.putNumber("Arm Coordinate Y", arm.getArmCoordinate().getY());
-
-
+        try {
+            arm.setArmPosition(desiredState.poseMeters.getTranslation());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -56,5 +53,13 @@ public class ArmFollowTrajectory extends CommandBase {
     @Override
     public boolean isFinished() {
         return trajectory.getTotalTimeSeconds() < timer.get();
+    }
+
+    public void logging() {
+        SmartDashboard.putNumber("CURRENT WAYPOINT X", desiredState.poseMeters.getTranslation().getX());
+        SmartDashboard.putNumber("CURRENT WAYPOINT Y", desiredState.poseMeters.getTranslation().getY());
+
+        SmartDashboard.putNumber("Arm Coordinate X", arm.getArmCoordinate().getX());
+        SmartDashboard.putNumber("Arm Coordinate Y", arm.getArmCoordinate().getY());
     }
 }

@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,7 +17,6 @@ import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 
 public class RobotContainer {
-    // Controllers
     private final Xbox pilot = new Xbox(0);
 
     // Subsystems
@@ -51,40 +49,6 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        pilot.aWhileHeld(() -> arm.setArmPosition(new Translation2d(1, 0.7)), () -> arm.stop(), arm);
-
-        // pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
-
-        // // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-        // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-
-        // pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
-
-
-        // pilot.aWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
-        // });
-
-        // pilot.bWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.STOWED;
-        // });
-
-        // pilot.xWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.CONE_MID;
-        // });
-
-        // pilot.yWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
-        // });
-
-        // pilot.rightBumperWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.STING;
-        // });
-
-        // pilot.startWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
-        // });
-
         pilot.a().whileTrue(
             new SequentialCommandGroup(
             new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
@@ -93,11 +57,6 @@ public class RobotContainer {
             .whileFalse(new PrintCommand("false"));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-
-        // pilot.rightTriggerWhileHeld(() -> 
-        //     claw.set(1));
-        // pilot.leftTriggerWhileHeld(() -> 
-        //     claw.set(-0.125));
     }
 
     /**
@@ -123,7 +82,5 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("place_cube_mid", null);
         Constants.AutoConstants.eventMap.put("place_cone_top", null);
         Constants.AutoConstants.eventMap.put("place_cube_top", null);
-        // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() ->
-        // claw.set(0.2), claw));
     }
 }

@@ -27,7 +27,11 @@ public class MoveArmPID extends CommandBase {
 
     @Override
     public void execute() {
-        arm.setArmPosition(position);
+        try {
+            arm.setArmPosition(position);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Override
