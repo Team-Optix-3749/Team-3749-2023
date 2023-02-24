@@ -53,9 +53,9 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
         // arm.setDefaultCommand(new SequentialCommandGroup(
-        //     new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
-        //     new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))
-        //     ));
+        // new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
+        // new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))
+        // ));
     }
 
     /**
@@ -64,13 +64,28 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.a().whileTrue(
-            new SequentialCommandGroup(
-            new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(false)),
-            // Commands.run(() -> claw.setFeedForward(3)).withTimeout(0.5),
-            new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(true))
-            ))
-            .whileFalse(new PrintCommand("false"));
-
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(false)),
+                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5),
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(true))))
+                .whileFalse(new PrintCommand("false"));
+        pilot.b().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false)),
+                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5),
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
+                .whileFalse(new PrintCommand("false"));
+        pilot.y().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
+                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5),
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
+                .whileFalse(new PrintCommand("false"));
+        pilot.x().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(false)),
+                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5)))
+                .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(true)));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
         // pilot.rightTrigger().whileTrue(Commands.run(() -> claw.set(1)));
