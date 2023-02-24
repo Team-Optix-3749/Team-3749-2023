@@ -235,5 +235,8 @@ public class Constants {
     public static class VisionConstants {
         public static final int apriltag_pipeline_index = 0;
         public static final int reflective_tape_pipeline_index = 1;
+
+        public static final double camera_height = Units.inchesToMeters(18); // meters
+        public static final double camera_yaw = 0;
     }
 }

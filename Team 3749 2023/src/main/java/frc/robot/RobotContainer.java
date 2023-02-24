@@ -19,7 +19,7 @@ public class RobotContainer {
     // Subsystems
     private final Swerve swerve = new Swerve();
     private final Claw claw = new Claw();
-    private final Arm arm = new Arm();
+    // private final Arm arm = new Arm();
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -48,14 +48,14 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        pilot.aWhileHeld(() -> arm.setShoulderVoltage(1), () -> arm.setShoulderVoltage(0));
+        // pilot.aWhileHeld(() -> arm.setShoulderVoltage(1), () -> arm.setShoulderVoltage(0));
 
-        pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
+        // pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
 
+        // // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
         // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-        pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
 
-        pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
+        // pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
 
         // pilot.aWhileHeld(() -> {
         //     Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
