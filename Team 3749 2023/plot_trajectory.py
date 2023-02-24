@@ -38,6 +38,9 @@ plt.ylabel("Y Position (m)")
 plt.xticks(np.arange(min(x.to_numpy()), max(x.to_numpy())+1, 0.1))
 plt.yticks(np.arange(min(y.to_numpy()), max(y.to_numpy())+1, 0.1))
 
+plt.plot(x.to_numpy()[0], y.to_numpy()[0], 'r*')
+plt.plot(x.to_numpy()[-1], y.to_numpy()[-1], 'r*')
+
 plt.scatter(x, y, marker='')
 
 plt.show()
