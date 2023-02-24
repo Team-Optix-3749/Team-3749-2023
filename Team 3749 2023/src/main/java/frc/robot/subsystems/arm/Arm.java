@@ -78,8 +78,22 @@ public class Arm extends SubsystemBase {
     // }
 
     public void setArmPosition(Translation2d position){
-        double shoulderAngle = kinematics.inverse(position.getX(), position.getY()).getFirst();
-        double elbowAngle = kinematics.inverse(position.getX(), position.getY()).getSecond();
+        System.out.println("hello");
+        
+        double shoulderAngle;
+        double elbowAngle;
+
+        try {
+            shoulderAngle = kinematics.inverse(position.getX(), position.getY()).getFirst();
+            elbowAngle = kinematics.inverse(position.getX(), position.getY()).getSecond();
+        } catch (Exception e) {
+            shoulderAngle = 90;
+            elbowAngle = -90;
+            System.out.println(e);
+        }
+
+        // double shoulderAngle = kinematics.inverse(getArmCoordinate().getX(), getArmCoordinate().getY()).getFirst();
+        // double elbowAngle = kinematics.inverse(getArmCoordinate().getX(), getArmCoordinate().getY()).getSecond();
 
         double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData();
 
@@ -225,15 +239,23 @@ public class Arm extends SubsystemBase {
         // setArmPosition(kinematics.inverse(1.0, 0.6).getFirst(), kinematics.inverse(1.0, 0.6).getSecond());
 
         SmartDashboard.putNumber("ARM X",
-                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(-getElbowAngle())).getX());
+                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX());
         SmartDashboard.putNumber("ARM Y",
-                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(-getElbowAngle())).getY());
+                kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
+        
+        try { 
+            SmartDashboard.putNumber("ARM SA SETPOINT",
+                    kinematics.inverse(kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(),
+                    kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY()).getFirst());
+            SmartDashboard.putNumber("ARM EA SETPOINT",
+                    kinematics.inverse(kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(), 
+                    kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY()).getSecond());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
-        SmartDashboard.putNumber("ARM SA",
-                kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getFirst());
-        SmartDashboard.putNumber("ARM EA",
-                kinematics.inverse(Constants.Arm.shoulder_length + Constants.Arm.elbow_length, 0).getSecond());
 
+        // SmartDashboard.putNumber(, getElbowAngle())
 
     }
 

@@ -2,29 +2,31 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 
 // Kinematics using Tranlsation2d as vectors
 // Note: uses 2D plane for now assuming orientation and target is right
 public class ArmKinematics {
-    // initializes origin where origin is at base of robot on an XY plane
+    // initializes origin where origin is at the bicep axle on an XY plane
     private final Translation2d origin = new Translation2d(0, 0);
 
     private double shoulderLength = Constants.Arm.shoulder_length;
     private double elbowLength = Constants.Arm.elbow_length;
 
-    public ArmKinematics() {}
+    public ArmKinematics() {
+    }
 
     // forward kinematics (can use for testing)
     // NOTE: assumes theta values are in radians
     public Translation2d forward(double thetaB, double thetaF) {
         Translation2d bicepVector = new Translation2d(
-            shoulderLength * Math.cos(thetaB),
-            shoulderLength * Math.sin(thetaB));
+                shoulderLength * Math.cos(thetaB),
+                shoulderLength * Math.sin(thetaB));
 
         Translation2d forearmVector = new Translation2d(
-            elbowLength * Math.cos(thetaB - thetaF),
-            elbowLength * Math.sin(thetaB - thetaF));
+                elbowLength * Math.cos(thetaB + thetaF),
+                elbowLength * Math.sin(thetaB + thetaF));
 
         Translation2d finalPositionVector = origin
                 .plus(forearmVector)
@@ -33,12 +35,20 @@ public class ArmKinematics {
         return finalPositionVector;
     }
 
-    // for now returns a pair of doubles, might need to change later
-    public Pair<Double, Double> inverse(double x, double y) {
+    
+    /**
+     * Returns the arm angles from x-y coordinates. x=0 throws
+     * 
+     * @param x 
+     * @param y 
+     * @return Pair<Double, Double> of the shoulder angle and elbow angle
+     */
+    public Pair<Double, Double> inverse(double x, double y) throws Exception {
+        
         y = -y;
-
+        SmartDashboard.putBoolean("VALID COORD",validXYArgs(x, y) );
         if (!validXYArgs(x, y)) {
-            // throw new Exception("invalid x and y, exceeds arm radius");
+            throw new Exception("invalid x and y, exceeds arm radius");
         }
 
         Double thetaF = -Math.acos(
@@ -50,7 +60,7 @@ public class ArmKinematics {
 
         Double thetaB = Math.atan(y / x) +
                 Math.atan(
-                        (elbowLength * Math.sin(thetaF)) / (shoulderLength + elbowLength * Math.cos(thetaF)));
+                        (elbowLength * Math.sin(thetaF)) / (shoulderLength + (elbowLength * Math.cos(thetaF))));
 
         return new Pair<Double, Double>(-Math.toDegrees(thetaB), Math.toDegrees(thetaF));
     }
@@ -60,9 +70,11 @@ public class ArmKinematics {
         double radiusSquared = Math.pow(shoulderLength + elbowLength, 2);
         double distanceSquared = Math.pow(x, 2) + Math.pow(y, 2);
 
-        if (radiusSquared >= distanceSquared) {
+        if (x == 0) 
+            return false;
+
+        if (radiusSquared >= distanceSquared && distanceSquared > Math.abs(shoulderLength-elbowLength)) 
             return true;
-        }
 
         return false;
     }
