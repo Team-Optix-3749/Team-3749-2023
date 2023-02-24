@@ -1,6 +1,10 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj.Timer;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,12 +31,10 @@ public class ArmFollowTrajectory extends CommandBase {
 
         timer.reset();
         timer.start();
-
     }
 
     @Override
     public void execute() {
-
 
         double cur_time = timer.get();
         desiredState = trajectory.sample(cur_time);
@@ -42,9 +44,19 @@ public class ArmFollowTrajectory extends CommandBase {
         } catch (Exception e) {
             System.out.println(e);
         }
-        System.out.println(desiredState.poseMeters.getX());
-        logging();
 
+        try {
+            FileWriter myWriter = new FileWriter("data.csv", true);
+            myWriter.write(String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()) + '\n');
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+          } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+          }
+
+        System.out.println(String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
+        logging();
     }
 
     @Override
