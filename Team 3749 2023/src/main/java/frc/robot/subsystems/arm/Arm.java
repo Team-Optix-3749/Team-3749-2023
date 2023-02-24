@@ -94,11 +94,11 @@ public class Arm extends SubsystemBase {
 
         double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData();
 
-        // setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
-        // setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
+        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
+        setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
 
-        setShoulderVoltage(feedForwardOutput[0]);
-        setElbowVoltage(feedForwardOutput[1]);
+        // setShoulderVoltage(feedForwardOutput[0]);
+        // setElbowVoltage(feedForwardOutput[1]);
 
         SmartDashboard.putNumber("SA SETPOINT", shoulderAngle);
         SmartDashboard.putNumber("EA SETPOINT", elbowAngle);
@@ -222,13 +222,11 @@ public class Arm extends SubsystemBase {
 
         // setArmPosition(90, 90);
 
-        // setArmPosition(new Translation2d(1, 0.7));
-
         shoulderPIDController.setP(Constants.Arm.shoulder_kP.get());
         elbowPIDController.setP(Constants.Arm.elbow_kP.get());
 
-        setShoulderVoltage(dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[0]);
-        setElbowVoltage(dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[1]);
+        // setShoulderVoltage(dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[0]);
+        // setElbowVoltage(dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[1]);
 
         // SmartDashboard.putNumber("SHOULDER FF", dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[0]);
         // SmartDashboard.putNumber("ELBOW FF", dynamics.feedforward(VecBuilder.fill(getShoulderAngle(), getElbowAngle())).getData()[1]);
@@ -238,17 +236,7 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("ARM Y",
                 kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
         
-        try { 
-            SmartDashboard.putNumber("ARM SA SETPOINT",
-                    kinematics.inverse(kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(),
-                    kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY()).getFirst());
-            SmartDashboard.putNumber("ARM EA SETPOINT",
-                    kinematics.inverse(kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(), 
-                    kinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY()).getSecond());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
+        
 
         // SmartDashboard.putNumber(, getElbowAngle())
 

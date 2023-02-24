@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,7 +21,7 @@ public class RobotContainer {
 
     // Subsystems
     private final Swerve swerve = new Swerve();
-    private final Claw claw = new Claw();
+    // private final Claw claw = new Claw();
     private final Arm arm = new Arm();
 
     public RobotContainer() {
@@ -52,7 +53,7 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        // pilot.aWhileHeld(() -> arm.setArmPosition(arm.getArmCoordinate()));
+        pilot.aWhileHeld(() -> arm.setArmPosition(new Translation2d(1, 0.7)), () -> arm.stop(), arm);
 
         // pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
 
@@ -86,14 +87,14 @@ public class RobotContainer {
         //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
         // });
 
-        pilot.a().whileTrue(new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory())).whileFalse(new PrintCommand("false"));
+        // pilot.a().whileTrue(new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory())).whileFalse(new PrintCommand("false"));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 
-        pilot.rightTriggerWhileHeld(() -> 
-            claw.set(1));
-        pilot.leftTriggerWhileHeld(() -> 
-            claw.set(-0.125));
+        // pilot.rightTriggerWhileHeld(() -> 
+        //     claw.set(1));
+        // pilot.leftTriggerWhileHeld(() -> 
+        //     claw.set(-0.125));
     }
 
     /**
