@@ -26,6 +26,13 @@ lc.set_linewidth(2)
 line = ax.add_collection(lc)
 fig.colorbar(line,ax=ax)
 
+plt.title("Arm Trajectory Visualization")
+plt.xlabel("X Position (m)")
+plt.ylabel("Y Position (m)")
+
+plt.xticks(np.arange(min(x.to_numpy()), max(x.to_numpy())+1, 0.1))
+plt.yticks(np.arange(min(y.to_numpy()), max(y.to_numpy())+1, 0.1))
+
 plt.scatter(x, y, marker='')
 
 plt.show()
