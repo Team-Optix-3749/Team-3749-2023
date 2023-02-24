@@ -65,9 +65,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         pilot.a().whileTrue(
             new SequentialCommandGroup(
-            new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
+            new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(false)),
             // Commands.run(() -> claw.setFeedForward(3)).withTimeout(0.5),
-            new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))
+            new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(true))
             ))
             .whileFalse(new PrintCommand("false"));
 

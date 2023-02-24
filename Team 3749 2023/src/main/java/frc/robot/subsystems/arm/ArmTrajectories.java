@@ -34,27 +34,58 @@ public class ArmTrajectories {
                 new Pose2d(endXY[0], endXY[1], new Rotation2d(0)),
                 trajectoryConfig);
 
-
         return trajectory;
     }
 
-
-
-
     public static Trajectory getTopNodeTrajectory(boolean reverse) {
         Translation2d[] waypoints = new Translation2d[] {
-            new Translation2d(0.35, -0.2),
-            new Translation2d(0.4, -0.175),
-            new Translation2d(0.45,-0.05),
-            new Translation2d(0.7, 0.7),
-            new Translation2d(1.3, 1.0)
+                new Translation2d(0.35, -0.2),
+                new Translation2d(0.4, -0.175),
+                new Translation2d(0.45, -0.05),
+                new Translation2d(0.8, 0.7),
+                new Translation2d(1.3, 1.0)
         };
-
         if (reverse) {
             Collections.reverse(Arrays.asList(waypoints));
         }
-
         return createTrajectory(waypoints);
     }
 
+    public static Trajectory getMidNodeTrajectory(boolean reverse) {
+        Translation2d[] waypoints = new Translation2d[] {
+                new Translation2d(0.35, -0.2),
+                new Translation2d(0.4, -0.175),
+                new Translation2d(0.45, -0.05),
+                new Translation2d(0.8, 0.65),
+        };
+        if (reverse) {
+            Collections.reverse(Arrays.asList(waypoints));
+        }
+        return createTrajectory(waypoints);
+    }
+
+    public static Trajectory getDoubleSubstationTrajectory(boolean reverse) {
+        Translation2d[] waypoints = new Translation2d[] {
+                new Translation2d(0.35, -0.2),
+                new Translation2d(0.4, -0.15),
+                new Translation2d(0.45, 0),
+                new Translation2d(0.5, 0.7),
+                new Translation2d(0.55, 1.2),
+                new Translation2d(0.6, 1.2) };
+        if (reverse) {
+            Collections.reverse(Arrays.asList(waypoints));
+        }
+        return createTrajectory(waypoints);
+    }
+
+    public static Trajectory getGroundPickupTrajectory(boolean reverse) {
+        Translation2d[] waypoints = new Translation2d[] {
+                new Translation2d(0.35, -0.2),
+                new Translation2d(0.425, -0.2),
+                new Translation2d(0.45, -0.25)};
+        if (reverse) {
+            Collections.reverse(Arrays.asList(waypoints));
+        }
+        return createTrajectory(waypoints);
+    }
 }
