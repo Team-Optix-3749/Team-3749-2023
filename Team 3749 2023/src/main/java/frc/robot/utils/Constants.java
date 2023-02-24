@@ -238,5 +238,6 @@ public class Constants {
 
         public static final double camera_height = Units.inchesToMeters(18); // meters
         public static final double camera_yaw = 0;
+        public static final double camera_pitch = 0;
     }
 }

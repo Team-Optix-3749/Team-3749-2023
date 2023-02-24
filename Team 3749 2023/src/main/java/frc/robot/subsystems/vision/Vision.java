@@ -3,14 +3,17 @@ package frc.robot.subsystems.vision;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Constants;
 
 public class Vision extends SubsystemBase {
 
@@ -64,14 +67,23 @@ public class Vision extends SubsystemBase {
         return target.getPoseAmbiguity();
     }
 
+    public double getDistance(PhotonTrackedTarget target) {
+        return PhotonUtils.calculateDistanceToTargetMeters(
+                Constants.VisionConstants.camera_height,
+                Constants.VisionConstants.camera_yaw,
+                Constants.VisionConstants.camera_pitch,
+                Units.degreesToRadians(getPitch(target)));
+    }
+
     @Override
     public void periodic() {
         result = getLatestPipeline();
         if (result.hasTargets()) {
-            SmartDashboard.putNumber("target pitch: ", result.getBestTarget().getPitch());
-            SmartDashboard.putNumber("target yaw: ", result.getBestTarget().getYaw());
+            PhotonTrackedTarget target = result.getBestTarget();
+            SmartDashboard.putNumber("target pitch: ", getPitch(target));
+            SmartDashboard.putNumber("target yaw: ", getYaw(target));
+            SmartDashboard.putNumber("target distance: ", getDistance(target));
         }
-
     }
 
 }
