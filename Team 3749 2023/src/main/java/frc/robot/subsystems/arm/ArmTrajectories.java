@@ -1,5 +1,8 @@
 package frc.robot.subsystems.arm;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,15 +35,20 @@ public class ArmTrajectories {
                 new Pose2d(endXY[0], endXY[1], new Rotation2d(0)),
                 trajectoryConfig);
 
+
         return trajectory;
     }
 
-    public static Trajectory getTopNodeTrajectory() {
-        return createTrajectory( new Translation2d[] {
+    public static Trajectory getTopNodeTrajectory(boolean reverse) {
+        Translation2d[] waypoints = new Translation2d[] {
             new Translation2d(0.5, 0),
             new Translation2d(0.8, 0.8),
             new Translation2d(1.3, 1.0)
-        });
+        };
+
+        if (reverse) Collections.reverse(Arrays.asList(waypoints));
+
+        return createTrajectory(waypoints);
     }
 
 }

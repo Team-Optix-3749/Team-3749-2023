@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
@@ -21,7 +23,7 @@ public class RobotContainer {
 
     // Subsystems
     private final Swerve swerve = new Swerve();
-    // private final Claw claw = new Claw();
+    private final Claw claw = new Claw();
     private final Arm arm = new Arm();
 
     public RobotContainer() {
@@ -37,15 +39,11 @@ public class RobotContainer {
      * 
      */
     private void configureDefaultCommands() {
-        // arm.setDefaultCommand(new ArmTeleopCommand(arm));
-
         swerve.setDefaultCommand(new SwerveTeleopCommand(
                 swerve,
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
-
-        // arm.setDefaultCommand(new ArmFollowTrajectory(arm, ArmTrajectories.getTestTrajectory()));
     }
 
     /**
@@ -87,7 +85,12 @@ public class RobotContainer {
         //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
         // });
 
-        // pilot.a().whileTrue(new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory())).whileFalse(new PrintCommand("false"));
+        pilot.a().whileTrue(
+            new SequentialCommandGroup(
+            new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
+            new InstantCommand(() -> claw.set(-0.125)),
+            new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
+            .whileFalse(new PrintCommand("false"));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 

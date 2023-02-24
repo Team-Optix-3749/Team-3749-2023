@@ -38,9 +38,7 @@ public class ArmFollowTrajectory extends CommandBase {
 
         double cur_time = timer.get();
         State desiredState = trajectory.sample(cur_time);
-
-        // arm.setArmPosition(desiredState.poseMeters.getTranslation());
-        arm.setArmPosition(new Translation2d(0.5,0));
+        arm.setArmPosition(desiredState.poseMeters.getTranslation());
         SmartDashboard.putNumber("CURRENT WAYPOINT X", desiredState.poseMeters.getTranslation().getX());
         SmartDashboard.putNumber("CURRENT WAYPOINT Y", desiredState.poseMeters.getTranslation().getY());
 
@@ -57,6 +55,6 @@ public class ArmFollowTrajectory extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return trajectory.getTotalTimeSeconds() < timer.get();
     }
 }
