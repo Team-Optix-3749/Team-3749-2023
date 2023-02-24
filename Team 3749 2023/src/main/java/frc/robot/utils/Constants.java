@@ -90,8 +90,9 @@ public class Constants {
         public static final int number_of_motors = 2;
 
         // (angle without offset - desired angle) / 360
-        public static final double shoulder_offset = (30.0)/360.0;
-        public static final double elbow_offset = (11.5)/360.0;
+        public static final double shoulder_offset = (31.0)/360.0;
+        // just the angle offset in degrees
+        public static final double elbow_offset = 38.0;
         // public static final double shoulder_offset = (30.0 + 180)/360.0;
         // public static final double elbow_offset = (11.5 + 180)/360.0;
         // public static final double shoulder_offset = 0;
