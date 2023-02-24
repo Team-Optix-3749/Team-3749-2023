@@ -47,15 +47,16 @@ public class ArmFollowTrajectory extends CommandBase {
 
         try {
             FileWriter myWriter = new FileWriter("data.csv", true);
-            myWriter.write(String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()) + '\n');
+            myWriter.write(String.valueOf(desiredState.poseMeters.getX()) + ','
+                    + String.valueOf(desiredState.poseMeters.getY()) + '\n');
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-          } catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-          }
+        }
 
-        System.out.println(String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
+        System.out.println(
+                String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
         logging();
     }
 
