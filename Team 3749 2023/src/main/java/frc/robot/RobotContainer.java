@@ -52,6 +52,10 @@ public class RobotContainer {
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
+        // arm.setDefaultCommand(new SequentialCommandGroup(
+        //     new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
+        //     new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))
+        //     ));
     }
 
     /**
