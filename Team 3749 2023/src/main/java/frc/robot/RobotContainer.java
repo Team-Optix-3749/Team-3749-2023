@@ -52,7 +52,7 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        // pilot.aWhileHeld(() -> arm.setShoulderVoltage(1), () -> arm.setShoulderVoltage(0));
+        // pilot.aWhileHeld(() -> arm.setArmPosition(arm.getArmCoordinate()));
 
         // pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
 
