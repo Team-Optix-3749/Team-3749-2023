@@ -71,8 +71,8 @@ public class Constants {
         public static final SmartData<Double> shoulder_kP = new SmartData<Double>("shoulder kp", 0.15);
 
         public static final double elbow_length = 1.016;
-        public static final double elbow_cg_radius = 0.762;
-        public static final double elbow_mass = 4;
+        public static final double elbow_cg_radius = 0.71;
+        public static final double elbow_mass = 4.4;
         public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
 
         public static final double shoulder_length = 0.7239;
@@ -90,8 +90,9 @@ public class Constants {
         public static final int number_of_motors = 2;
 
         // (angle without offset - desired angle) / 360
-        public static final double shoulder_offset = (30.0)/360.0;
-        public static final double elbow_offset = (11.5)/360.0;
+        public static final double shoulder_offset = (31.0)/360.0;
+        // just the angle offset in degrees
+        public static final double elbow_offset = 38.0;
         // public static final double shoulder_offset = (30.0 + 180)/360.0;
         // public static final double elbow_offset = (11.5 + 180)/360.0;
         // public static final double shoulder_offset = 0;

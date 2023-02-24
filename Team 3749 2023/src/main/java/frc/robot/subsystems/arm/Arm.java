@@ -40,9 +40,8 @@ public class Arm extends SubsystemBase {
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();
         elbowMotor.restoreFactoryDefaults();
-
+        // elbow offset is done in the get angle method
         shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
-        elbowAbsoluteEncoder.setPositionOffset(Constants.Arm.elbow_offset);
         shoulderAbsoluteEncoder.setDistancePerRotation(360);
         elbowAbsoluteEncoder.setDistancePerRotation(360);
 
@@ -144,7 +143,7 @@ public class Arm extends SubsystemBase {
 
     public double getElbowAngle() {
         return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
-        .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - 11;
+        .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - Constants.Arm.elbow_offset;
     }
 
     public void setShoulderAngle(double angle) {
