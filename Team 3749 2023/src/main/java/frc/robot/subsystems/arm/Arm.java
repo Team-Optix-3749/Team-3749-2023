@@ -35,6 +35,8 @@ public class Arm extends SubsystemBase {
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP.get(), 0, 0);
 
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
+    // safety stow
+    private Translation2d position = new Translation2d(0.35, -0.2);
 
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();
@@ -57,8 +59,11 @@ public class Arm extends SubsystemBase {
         shoulderMotor.setIdleMode(IdleMode.kCoast);
         elbowMotor.setIdleMode(IdleMode.kCoast);
     }
+    public void setArmPosition(Translation2d pos){
+        position = pos;
+    }
 
-    public void setArmPosition(Translation2d position) throws Exception {
+    private void moveArm() throws Exception {
         double shoulderAngle = ArmKinematics.inverse(position.getX(), position.getY()).getFirst();
         double elbowAngle = ArmKinematics.inverse(position.getX(), position.getY()).getSecond();
 
@@ -179,6 +184,14 @@ public class Arm extends SubsystemBase {
     }
 
     public void periodic() {
+        try {
+            moveArm();
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
         shoulderPIDController.setP(Constants.Arm.shoulder_kP.get());
         elbowPIDController.setP(Constants.Arm.elbow_kP.get());
 

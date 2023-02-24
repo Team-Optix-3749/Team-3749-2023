@@ -52,11 +52,16 @@ public class RobotContainer {
         pilot.a().whileTrue(
             new SequentialCommandGroup(
             new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
-            new InstantCommand(() -> claw.set(-0.125)),
+            new InstantCommand(() -> claw.set(-0.3)),
             new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
             .whileFalse(new PrintCommand("false"));
+        // pilot.a().whileTrue(
+        //     new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)))
+        //     .whileFalse(new PrintCommand("false"));
+        // pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.set(0.8)));
+        pilot.leftTrigger().whileTrue(Commands.run(() -> claw.set(-0.125)));
 
-        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
     }
 
     /**

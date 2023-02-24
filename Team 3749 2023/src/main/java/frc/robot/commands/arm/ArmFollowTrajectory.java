@@ -33,7 +33,6 @@ public class ArmFollowTrajectory extends CommandBase {
     @Override
     public void execute() {
 
-        logging();
 
         double cur_time = timer.get();
         desiredState = trajectory.sample(cur_time);
@@ -43,11 +42,13 @@ public class ArmFollowTrajectory extends CommandBase {
         } catch (Exception e) {
             System.out.println(e);
         }
+        System.out.println(desiredState.poseMeters.getX());
+        logging();
+
     }
 
     @Override
     public void end(boolean interrupted) {
-        arm.stop();
     }
 
     @Override
