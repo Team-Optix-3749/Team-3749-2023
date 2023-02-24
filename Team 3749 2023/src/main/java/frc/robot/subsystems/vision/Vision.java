@@ -21,9 +21,9 @@ public class Vision extends SubsystemBase {
     private final NetworkTable table = instance.getTable("photonvision");
 
     private final PhotonCamera camera = new PhotonCamera("photonvision");
-    private PhotonPipelineResult result = getLatestPipeline();
+    private PhotonPipelineResult result = getLatestResult();
 
-    public PhotonPipelineResult getLatestPipeline() {
+    public PhotonPipelineResult getLatestResult() {
         return camera.getLatestResult();
     }
 
@@ -77,7 +77,7 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        result = getLatestPipeline();
+        result = getLatestResult();
         if (result.hasTargets()) {
             PhotonTrackedTarget target = result.getBestTarget();
             SmartDashboard.putNumber("target pitch: ", getPitch(target));
