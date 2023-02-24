@@ -38,9 +38,6 @@ public class ArmTrajectories {
         return trajectory;
     }
 
-
-
-
     public static Trajectory getTopNodeTrajectory(boolean reverse) {
         Translation2d[] waypoints = new Translation2d[] {
             // new Translation2d(0.35, -0.2),
