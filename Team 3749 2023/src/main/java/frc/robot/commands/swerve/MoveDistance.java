@@ -44,7 +44,7 @@ public class MoveDistance extends CommandBase {
     // Run on command init
     @Override
     public void initialize() {
-        System.out.println("Initalize BABBYYYYYYYYYYYYYY");
+        System.out.println("Initalize BABBYYYYYYYYYYYYYY hlleo");
         swerveSubsystem.stopModules();
         start_point = swerveSubsystem.getPose().getX();
     }

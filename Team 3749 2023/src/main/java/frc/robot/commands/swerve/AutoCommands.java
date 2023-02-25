@@ -39,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public final class AutoCommands {
 
     /***
-     * 
      * @param swerveSubsystem the subsystem object. Do not make a new instance
      * @param trajectory      a viable trajectory object containing information
      *                        about where the robot should go
@@ -74,10 +73,7 @@ public final class AutoCommands {
                 ));
     }
 
-    // Use parrelel command groups to run subsystems in parallel
-
     /***
-     * 
      * @param swerveSubsystem the subsystem object. Do not make a new instance
      * @param trajectory      a viable trajectory object containing information
      *                        about where the robot should go

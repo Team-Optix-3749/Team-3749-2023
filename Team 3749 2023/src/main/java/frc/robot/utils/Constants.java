@@ -14,6 +14,21 @@ public class Constants {
 
     public static Arm.ArmSetpoints desired_setpoint = Arm.ArmSetpoints.STOWED;
 
+    /***
+     * 
+     * @param margin how close the values need to be to return true. Use a positive
+     *               number
+     * @param a      the first number
+     * @param b      the second number
+     * @return true if it is within the margin, false if not
+     */
+    public static boolean withinMargin(double margin, double a, double b) {
+        if (a + margin >= b && a - margin <= b) {
+            return true;
+        }
+        return false;
+    }
+
     public static final class Claw {
         public static final int claw_id = 22;
 
@@ -236,8 +251,38 @@ public class Constants {
         public static final int apriltag_pipeline_index = 0;
         public static final int reflective_tape_pipeline_index = 1;
 
-        public static final double camera_height = Units.inchesToMeters(18); // meters
+        public static final double camera_height = Units.inchesToMeters(20); // meters
         public static final double camera_yaw = 0;
         public static final double camera_pitch = 0;
+
+        public static final double camera_offset = 0;
+
+        public static SmartData<Double> visionXKP = new SmartData<Double>("Vision X KP", 0.1);
+        public static SmartData<Double> visionYKP = new SmartData<Double>("Vision Y KP", 0.1);
+
+        public static enum Nodes {
+            MID_CONE(0.0),
+            TOP_CONE(0.0),
+            MID_CUBE(0.0),
+            TOP_CUBE(0.0);
+
+            public double dist;
+
+            Nodes(double dist) {
+                this.dist = dist;
+            }
+            
+        }
+
+        public static enum Pipelines {
+            REFLECTIVE_TAPE(0),
+            APRILTAG(1);
+
+            public int index;
+            
+            Pipelines(int index) {
+                this.index = index;
+            }
+        }
     }
 }
