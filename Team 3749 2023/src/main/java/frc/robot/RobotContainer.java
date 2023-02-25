@@ -66,32 +66,38 @@ public class RobotContainer {
         pilot.a().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(false)),
-                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5),
+                        Commands.run(() -> claw.setFeedForward(-1.5)).withTimeout(1),
                         new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
         pilot.b().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false)),
-                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5),
+                        Commands.run(() -> claw.setFeedForward(-1.5)).withTimeout(1),
                         new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
         pilot.y().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
-                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5),
+                        Commands.run(() -> claw.setFeedForward(-1.5)).withTimeout(1),
                         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
+                .whileFalse(new PrintCommand("false"));
+        pilot.rightBumper().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(false)),
+                        Commands.run(() -> claw.setFeedForward(8)).withTimeout(1),
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
         pilot.x().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(false)),
-                        Commands.run(() -> claw.setFeedForward(0)).withTimeout(0.5)))
+                        Commands.run(() -> claw.setFeedForward(8)).withTimeout(1)))
                 .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(true)));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
         // pilot.rightTrigger().whileTrue(Commands.run(() -> claw.set(1)));
-        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setFeedForward(6)));
+        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setFeedForward(8)));
 
-        pilot.leftTrigger().whileTrue(Commands.run(() -> claw.set(-0.125)));
+        pilot.leftTrigger().whileTrue(Commands.run(() -> claw.setFeedForward(-1.5)));
 
     }
 

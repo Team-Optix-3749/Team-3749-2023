@@ -57,6 +57,7 @@ public class ArmTrajectories {
                 new Translation2d(0.4, -0.175),
                 new Translation2d(0.45, -0.05),
                 new Translation2d(0.8, 0.65),
+                new Translation2d(0.85, 0.65),
         };
         if (reverse) {
             Collections.reverse(Arrays.asList(waypoints));
@@ -69,9 +70,9 @@ public class ArmTrajectories {
                 new Translation2d(0.35, -0.2),
                 new Translation2d(0.4, -0.15),
                 new Translation2d(0.45, 0),
-                new Translation2d(0.5, 0.7),
-                new Translation2d(0.55, 1.2),
-                new Translation2d(0.6, 1.2) };
+                new Translation2d(0.6, 0.7),
+                new Translation2d(0.7, 0.8),
+                new Translation2d(0.75, 0.85) };
         if (reverse) {
             Collections.reverse(Arrays.asList(waypoints));
         }
@@ -81,8 +82,10 @@ public class ArmTrajectories {
     public static Trajectory getGroundPickupTrajectory(boolean reverse) {
         Translation2d[] waypoints = new Translation2d[] {
                 new Translation2d(0.35, -0.2),
-                new Translation2d(0.425, -0.2),
-                new Translation2d(0.45, -0.25)};
+                new Translation2d(0.625, -0.2),
+                new Translation2d(0.625, -0.35),
+
+                new Translation2d(0.625, -0.425)};
         if (reverse) {
             Collections.reverse(Arrays.asList(waypoints));
         }

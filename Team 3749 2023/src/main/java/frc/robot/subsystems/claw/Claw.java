@@ -27,8 +27,12 @@ public class Claw extends SubsystemBase {
 
     private final CANSparkMax clawMotor = new CANSparkMax(Constants.Claw.claw_id, MotorType.kBrushless);
     private final RelativeEncoder clawEncoder = clawMotor.getEncoder();
-    private SmartData<Double> kv = new SmartData<Double>("claw kv", 0.0775);
-    private SmartData<Double> kp = new SmartData<Double>("claw kp", 0.3);
+    // private SmartData<Double> kv = new SmartData<Double>("claw kv", 0.0775);
+    private SmartData<Double> kv = new SmartData<Double>("claw kv", 0.675);
+
+    // private SmartData<Double> kp = new SmartData<Double>("claw kp", 0.3);
+        private SmartData<Double> kp = new SmartData<Double>("claw kp", 0.1);
+
 
     private final PIDController clawPID = new PIDController(kp.get(), 0, 0);
     private final SimpleMotorFeedforward clawFeedForward = new SimpleMotorFeedforward(0, kv.get());
@@ -37,7 +41,7 @@ public class Claw extends SubsystemBase {
         clawMotor.restoreFactoryDefaults();
 
         clawMotor.setIdleMode(IdleMode.kBrake);
-        clawMotor.setSmartCurrentLimit(50);
+        // clawMotor.setSmartCurrentLimit(60);
         // 1 wheel rotation / 5 motor rotations
         clawEncoder.setPositionConversionFactor(1.0 / 5.0);
         // 1 minute / 60 seconds * 1 wheel rotation / 5 motor rotations
@@ -76,7 +80,7 @@ public class Claw extends SubsystemBase {
         SmartDashboard.putNumber("claw ff gain",clawFeedForward.calculate(velocity));
 
         SmartDashboard.putNumber("claw gain", clawFeedForward.calculate(velocity) + clawPID.calculate(clawEncoder.getVelocity(),velocity));
-        clawMotor.set(clawFeedForward.calculate(velocity) + clawPID.calculate(velocity));
+        clawMotor.setVoltage(clawFeedForward.calculate(velocity) + clawPID.calculate(clawEncoder.getVelocity(),velocity));
 
     }
 
@@ -96,6 +100,8 @@ public class Claw extends SubsystemBase {
         SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
         // clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(),
         // 5700);
-        // set(0.1);
+        setFeedForward(1);
+        SmartDashboard.putNumber("claw voltage", clawMotor.getAppliedOutput() * clawMotor.getBusVoltage());
+
     }
 }

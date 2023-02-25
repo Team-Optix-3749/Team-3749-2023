@@ -66,6 +66,8 @@ public class ArmFollowTrajectory extends CommandBase {
 
     @Override
     public boolean isFinished() {
+
+              
         return trajectory.getTotalTimeSeconds() < timer.get();
     }
 
