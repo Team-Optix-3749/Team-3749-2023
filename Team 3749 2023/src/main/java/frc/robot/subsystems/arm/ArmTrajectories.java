@@ -42,8 +42,8 @@ public class ArmTrajectories {
                 new Translation2d(0.35, -0.2),
                 new Translation2d(0.4, -0.175),
                 new Translation2d(0.45, -0.05),
-                new Translation2d(0.8, 0.7),
-                new Translation2d(1.3, 1.0)
+                new Translation2d(0.7, 0.8),
+                new Translation2d(1.4, 1.0)
         };
         if (reverse) {
             Collections.reverse(Arrays.asList(waypoints));
@@ -70,9 +70,9 @@ public class ArmTrajectories {
                 new Translation2d(0.35, -0.2),
                 new Translation2d(0.4, -0.15),
                 new Translation2d(0.45, 0),
-                new Translation2d(0.6, 0.7),
-                new Translation2d(0.7, 0.8),
-                new Translation2d(0.75, 0.85) };
+                new Translation2d(0.6, 0.65),
+                new Translation2d(0.7, 0.7),
+                new Translation2d(0.75, 0.75) };
         if (reverse) {
             Collections.reverse(Arrays.asList(waypoints));
         }
