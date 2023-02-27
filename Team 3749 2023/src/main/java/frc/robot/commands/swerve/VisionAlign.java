@@ -12,6 +12,11 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.VisionConstants;
 
+/**
+ * Aligns the robot with the tracked target and drives to its required distance for placing
+ * 
+ * @author Rohin Sood
+ */
 public class VisionAlign extends CommandBase {
     private final Swerve swerve;
     private final Vision vision;

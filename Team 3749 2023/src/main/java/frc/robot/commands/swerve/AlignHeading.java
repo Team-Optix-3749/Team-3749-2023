@@ -9,6 +9,11 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utils.Constants;
 
+/**
+ * Aligns the robot heading using a PIDController
+ * 
+ * @author Noah Simon
+ */
 public class AlignHeading extends CommandBase {
     private final Swerve swerve;
 
@@ -34,6 +39,7 @@ public class AlignHeading extends CommandBase {
     public void execute() {
         if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0)) {
             has_aligned = true;
+            return;
         }
 
         // negative so that we move towards the target, not away
