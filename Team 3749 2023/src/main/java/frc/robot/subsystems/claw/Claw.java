@@ -67,6 +67,14 @@ public class Claw extends SubsystemBase {
     }
 
     /**
+     * set voltage of motor
+     * @param voltage
+     */
+    public void setVoltage(double voltage) {
+        clawMotor.setVoltage(voltage);
+    }
+
+    /**
      * set % speed of the motor
      * 
      * @param speed -1.0 to 1.0
