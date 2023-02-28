@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -49,7 +50,20 @@ public class ArmTrajectories {
      * @param waypoints
      * @return trajectory
      */
-    private static Trajectory createTrajectory(Pose2d[] waypoints) {
+    private static Trajectory createTrajectory(Pose2d[] waypoints, boolean isReversed) {
+        if (isReversed) {
+            // iterate through waypoints from last to first
+            Collections.reverse(Arrays.asList(waypoints));
+
+            // reverse pose for each waypoint (subtract pi)
+            for (int i = 0; i < waypoints.length; i++)
+                waypoints[i] = waypoints[i].transformBy(
+                    new Transform2d(
+                        new Translation2d(0.0, 0.0),
+                        new Rotation2d(Math.PI)));
+        }
+
+        // generate trajectory
         return TrajectoryGenerator.generateTrajectory(
                 List.of(waypoints),
                 new TrajectoryConfig(
@@ -57,22 +71,14 @@ public class ArmTrajectories {
                         Constants.Arm.maxAccelerationMPS));
     }
 
-    public static Trajectory getTopNodeTrajectoryPose() {
+    public static Trajectory getTopNodeTrajectoryPose(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(0)),
                 new Pose2d(1.0, 1.0, new Rotation2d(0)),
                 new Pose2d(1.4, 1.0, new Rotation2d(0)),
         };
-        return createTrajectory(waypoints);
-    }
 
-    public static Trajectory getTopNodeTrajectoryPoseReverse() {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(1.4, 1.0, new Rotation2d(Math.PI)),
-                new Pose2d(1.0, 1.0, new Rotation2d(Math.PI)),
-                new Pose2d(0.3, -0.2, new Rotation2d(Math.PI)),
-        };
-        return createTrajectory(waypoints);
+        return createTrajectory(waypoints, isReversed);
     }
 
     public static Trajectory getTopNodeTrajectory(boolean reverse) {
