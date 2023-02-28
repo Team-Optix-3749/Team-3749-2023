@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Vision;
@@ -56,13 +57,16 @@ public class VisionAlign extends CommandBase {
         double xSpeed = xController.calculate(relativeTargetPose.getX(), VisionConstants.camera_offset);
         double ySpeed = yController.calculate(relativeTargetPose.getY(), node.dist);
 
+        SmartDashboard.putNumber("X Speed", xSpeed);
+        SmartDashboard.putNumber("Y Speed", ySpeed);
+
         ChassisSpeeds chassisSpeeds;
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, 0, 0, swerve.getRotation2d());
+                xSpeed, ySpeed, 0, swerve.getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
-        swerve.setModuleStates(moduleStates);
+        // swerve.setModuleStates(moduleStates);
     }
 
     @Override
