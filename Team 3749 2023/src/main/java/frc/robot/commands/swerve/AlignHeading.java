@@ -24,9 +24,9 @@ public class AlignHeading extends CommandBase {
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
     
-    public AlignHeading(Swerve swerve, Vision vision) {
+    public AlignHeading(Swerve swerve) {
         this.swerve = swerve;
-        addRequirements(swerve, vision);
+        addRequirements(swerve);
     }
 
     @Override
