@@ -14,6 +14,12 @@ import frc.robot.utils.Constants;
 
 public class ArmTrajectories {
 
+    /**
+     * Create trajectory using Translation2d
+     * 
+     * @param waypoints
+     * @return trajectory
+     */
     private static Trajectory createTrajectory(Translation2d[] waypoints) {
         // start and end coordinates, taken from waypoints
         double[] startXY = new double[] { waypoints[0].getX(), waypoints[0].getY() };
@@ -35,6 +41,38 @@ public class ArmTrajectories {
                 trajectoryConfig);
 
         return trajectory;
+    }
+
+    /**
+     * Create trajectory using Pose2d
+     * 
+     * @param waypoints
+     * @return trajectory
+     */
+    private static Trajectory createTrajectory(Pose2d[] waypoints) {
+        return TrajectoryGenerator.generateTrajectory(
+                List.of(waypoints),
+                new TrajectoryConfig(
+                        Constants.Arm.maxSpeedMPS,
+                        Constants.Arm.maxAccelerationMPS));
+    }
+
+    public static Trajectory getTopNodeTrajectoryPose() {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(0.3, -0.2, new Rotation2d(0)),
+                new Pose2d(1.0, 1.0, new Rotation2d(0)),
+                new Pose2d(1.4, 1.0, new Rotation2d(0)),
+        };
+        return createTrajectory(waypoints);
+    }
+
+    public static Trajectory getTopNodeTrajectoryPoseReverse() {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(1.4, 1.0, new Rotation2d(Math.PI)),
+                new Pose2d(1.0, 1.0, new Rotation2d(Math.PI)),
+                new Pose2d(0.3, -0.2, new Rotation2d(Math.PI)),
+        };
+        return createTrajectory(waypoints);
     }
 
     public static Trajectory getTopNodeTrajectory(boolean reverse) {
@@ -84,8 +122,7 @@ public class ArmTrajectories {
                 new Translation2d(0.35, -0.2),
                 new Translation2d(0.625, -0.2),
                 new Translation2d(0.625, -0.35),
-
-                new Translation2d(0.625, -0.425)};
+                new Translation2d(0.625, -0.425) };
         if (reverse) {
             Collections.reverse(Arrays.asList(waypoints));
         }
