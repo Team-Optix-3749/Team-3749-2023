@@ -84,6 +84,11 @@ public class RobotContainer {
                         new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
 
+        pilot.x().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundIntakeTrajectory(false))))
+                .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getGroundIntakeTrajectory(true)));
+
         pilot.rightBumper().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getStingTrajectory(false))))
@@ -102,7 +107,7 @@ public class RobotContainer {
         pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setVoltage(6)));
         pilot.leftTrigger().whileTrue(Commands.run(() -> claw.setVoltage(-3)));
 
-        pilot.x().whileTrue(Commands.run(() -> claw.setVoltage(3)));
+        pilot.y().whileTrue(Commands.run(() -> claw.setVoltage(6)));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
     }
