@@ -248,20 +248,20 @@ public class Constants {
     }
 
     public static class VisionConstants {
-        public static final int apriltag_pipeline_index = 0;
-        public static final int reflective_tape_pipeline_index = 1;
+        public static final int reflective_tape_pipeline_index = 0;
+        public static final int apriltag_pipeline_index = 1;
 
         public static final double camera_height = Units.inchesToMeters(20); // meters
         public static final double camera_yaw = 0;
         public static final double camera_pitch = 0;
 
-        public static final double camera_offset = 0;
+        public static final double camera_offset = -4.9;
 
         public static SmartData<Double> visionXKP = new SmartData<Double>("Vision X KP", 0.1);
         public static SmartData<Double> visionYKP = new SmartData<Double>("Vision Y KP", 0.1);
 
         public static enum Nodes {
-            MID_CONE(0.0),
+            MID_CONE(-0.66),
             TOP_CONE(0.0),
             MID_CUBE(0.0),
             TOP_CUBE(0.0);
