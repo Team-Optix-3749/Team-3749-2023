@@ -107,7 +107,7 @@ public class Constants {
         // public static final double maxSpeedMPS = 2;
         // public static final double maxAccelerationMPS = 2;
                 public static final double maxSpeedMPS = 5;
-        public static final double maxAccelerationMPS = 5;
+        public static final double maxAccelerationMPS = 10;
 
         public static enum ShoulderSetpoints {
             ZERO(0),
