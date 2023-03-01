@@ -24,7 +24,7 @@ public class RobotContainer {
 
     // Subsystems
     private final Swerve swerve = new Swerve();
-    private final Claw claw = new Claw();
+    // private final Claw claw = new Claw();
     private final Vision vision = new Vision();
     // private final Arm arm = new Arm();
 
@@ -41,8 +41,6 @@ public class RobotContainer {
      * 
      */
     private void configureDefaultCommands() {
-        // arm.setDefaultCommand(new ArmTeleopCommand(arm));
-
         swerve.setDefaultCommand(new SwerveTeleopCommand(
                 swerve,
                 () -> -pilot.getLeftY(),
@@ -57,14 +55,18 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
         pilot.aWhileHeld(
-            new SequentialCommandGroup(
-                new AlignHeading(swerve),
-                new VisionAlign(vision, swerve, Nodes.MID_CONE)
-            ),
-            new PrintCommand(
-                "Unpressed"
-            )
+            new VisionAlign(vision, swerve, Nodes.MID_CONE)
         );
+
+        // pilot.bWhileHeld(
+        //     new SequentialCommandGroup(
+        //         new AlignHeading(swerve),
+        //         new VisionAlign(vision, swerve, Nodes.MID_CONE)
+        //     ),
+        //     new PrintCommand(
+        //         "Unpressed"
+        //     )
+        // );
 
         // pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
 
@@ -99,10 +101,10 @@ public class RobotContainer {
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 
-        pilot.rightTriggerWhileHeld(() -> 
-            claw.set(1));
-        pilot.leftTriggerWhileHeld(() -> 
-            claw.set(-0.125));
+        // pilot.rightTriggerWhileHeld(() -> 
+        //     claw.set(1));
+        // pilot.leftTriggerWhileHeld(() -> 
+        //     claw.set(-0.125));
     }
 
     /**

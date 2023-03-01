@@ -18,7 +18,7 @@ import frc.robot.utils.Constants;
 
 public class Vision extends SubsystemBase {
 
-    private final PhotonCamera camera = new PhotonCamera("photonvision");
+    private final PhotonCamera camera = new PhotonCamera("limelight");
     private PhotonPipelineResult result = getLatestResult();
 
     public PhotonPipelineResult getLatestResult() {
@@ -95,12 +95,16 @@ public class Vision extends SubsystemBase {
     public void periodic() {
         result = getLatestResult();
         if (result.hasTargets()) {
-            System.out.println("hello");
             PhotonTrackedTarget target = result.getBestTarget();
             SmartDashboard.putNumber("target pitch: ", getPitch(target));
             SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
             SmartDashboard.putNumber("target distance: ", getDistance(target));
+            SmartDashboard.putNumberArray("Target translation 2d: ", new double[]{getTranslation2d(target).getX(), getTranslation2d(target).getY()});
         }
+
+        this.setLED(VisionLEDMode.kOn);
+
+        SmartDashboard.putString("Vision Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
     }
 
 }

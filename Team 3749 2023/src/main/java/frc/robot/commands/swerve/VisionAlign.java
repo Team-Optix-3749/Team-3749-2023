@@ -30,10 +30,13 @@ public class VisionAlign extends CommandBase {
         this.vision = vision;
         this.swerve = swerve;
         this.node = node;
+        this.setName("Vision Align");
+        addRequirements(vision, swerve);
     }
 
     @Override
     public void initialize() {
+        SmartDashboard.putString("vision align", "init");
         if (node == VisionConstants.Nodes.MID_CONE || node == VisionConstants.Nodes.TOP_CONE)
             vision.setPipeline(VisionConstants.Pipelines.REFLECTIVE_TAPE.index);
         else
@@ -44,15 +47,20 @@ public class VisionAlign extends CommandBase {
 
     @Override
     public void execute() {
+        SmartDashboard.putString("vision align", "exectue");
+
         PhotonTrackedTarget target;
-        if (vision.hasTarget(vision.getLatestResult()))
+        if (vision.hasTarget(vision.getLatestResult())) {
             target = vision.getBestTarget(vision.getLatestResult());
-        else
+            SmartDashboard.putString("Target", "found");
+        } else {
+            SmartDashboard.putString("Target", "not found");
             return;
+        }
 
         Translation2d relativeTargetPose = vision.getTranslation2d(target);
 
-        aligned = (new Translation2d(VisionConstants.camera_offset, node.dist) == swerve.getPose().getTranslation());
+        aligned = (VisionConstants.camera_offset == swerve.getPose().getTranslation().getX());
 
         double xSpeed = xController.calculate(relativeTargetPose.getX(), VisionConstants.camera_offset);
         double ySpeed = yController.calculate(relativeTargetPose.getY(), node.dist);
@@ -62,15 +70,20 @@ public class VisionAlign extends CommandBase {
 
         ChassisSpeeds chassisSpeeds;
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, 0, swerve.getRotation2d());
+                xSpeed, 0, 0, swerve.getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
-        // swerve.setModuleStates(moduleStates);
+        swerve.setModuleStates(moduleStates);
+
+        xController.setP(VisionConstants.visionXKP.get());
+        yController.setP(VisionConstants.visionYKP.get());
     }
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putString("vision align", "end");
+
         vision.setLED(VisionLEDMode.kOff);
     }
 
