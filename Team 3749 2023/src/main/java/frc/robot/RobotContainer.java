@@ -76,18 +76,20 @@ public class RobotContainer {
                                 new ParallelRaceGroup(
                                         Commands.run(() -> claw.setVoltage(-3)),
                                         new ArmFollowTrajectory(arm,
-                                                ArmTrajectories.getTopNodePlaceReturnTrajectory(false)))
-
-                        ));
+                                                ArmTrajectories.getTopNodePlaceReturnTrajectory(false)))));
 
         // Mid node scoring
         pilot.b().whileTrue(
                 new SequentialCommandGroup(
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false)),
-                        new WaitCommand(1),
-                        Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
-                .whileFalse(new PrintCommand("false"));
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false))))
+                .onFalse(
+                        new SequentialCommandGroup(
+                                new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodePlaceDownTrajectory(false)),
+                                new WaitCommand(0.5),
+                                new ParallelRaceGroup(
+                                        Commands.run(() -> claw.setVoltage(-3)),
+                                        new ArmFollowTrajectory(arm,
+                                                ArmTrajectories.getMidNodePlaceReturnTrajectory(false)))));
 
         // Ground intake
         pilot.x().whileTrue(
