@@ -16,6 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
+/**
+ * Encapsulated PhotonCamera object using in posed estimation and alignment
+ * 
+ * @author Rohin Sood
+ */
 public class Vision extends SubsystemBase {
 
     private final PhotonCamera camera = new PhotonCamera("limelight");
