@@ -1,12 +1,19 @@
 package frc.robot;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
+import frc.robot.commands.arm.ArmFollowTrajectory;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
@@ -27,6 +34,14 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         configureAuto();
+
+        try {
+            FileWriter writer = new FileWriter("data.csv", false);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -34,13 +49,14 @@ public class RobotContainer {
      * 
      */
     private void configureDefaultCommands() {
-        // arm.setDefaultCommand(new ArmTeleopCommand(arm));
-
         swerve.setDefaultCommand(new SwerveTeleopCommand(
                 swerve,
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
+
+        claw.setDefaultCommand(
+                Commands.run(() -> claw.setVoltage(1.0), claw));
     }
 
     /**
@@ -48,45 +64,59 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        pilot.aWhileHeld(() -> arm.setShoulderVoltage(1), () -> arm.setShoulderVoltage(0));
+        // Top node scoring
+        pilot.a().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
+                        new WaitCommand(1),
+                        Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
+                .whileFalse(new PrintCommand("false"));
 
-        pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
+        // Mid node scoring
+        pilot.b().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false)),
+                        new WaitCommand(1),
+                        Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
+                .whileFalse(new PrintCommand("false"));
 
-        // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-        pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
+        // Ground intake
+        pilot.x().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundIntakeTrajectory(false))))
+                .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getGroundIntakeTrajectory(true)));
 
-        pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
+        // Sting position
+        pilot.rightBumper().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getStingTrajectory(false))))
+                .whileFalse(new PrintCommand("false"));
 
-        // pilot.aWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
-        // });
+        // Stow position
+        pilot.leftBumper().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getStingTrajectory(true))))
+                .whileFalse(new PrintCommand("false"));
 
-        // pilot.bWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.STOWED;
-        // });
+        // Double substation intake
+        pilot.rightTrigger().whileTrue(
+                new SequentialCommandGroup(
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(false))))
+                .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(true)));
 
-        // pilot.xWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.CONE_MID;
-        // });
+        // Intake
+        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setVoltage(6)));
 
-        // pilot.yWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
-        // });
+        // Outtake
+        pilot.leftTrigger().whileTrue(Commands.run(() -> claw.setVoltage(-3)));
 
-        // pilot.rightBumperWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.STING;
-        // });
+        // Intake
+        pilot.y().whileTrue(Commands.run(() -> claw.setVoltage(6)));
 
-        // pilot.startWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
-        // });
-
+        // Zero robot heading
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-
-        pilot.rightTriggerWhileHeld(() -> 
-            claw.set(1));
-        pilot.leftTriggerWhileHeld(() -> 
-            claw.set(-0.125));
     }
 
     /**
@@ -112,7 +142,5 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("place_cube_mid", null);
         Constants.AutoConstants.eventMap.put("place_cone_top", null);
         Constants.AutoConstants.eventMap.put("place_cube_top", null);
-        // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() ->
-        // claw.set(0.2), claw));
     }
 }

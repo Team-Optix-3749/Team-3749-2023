@@ -41,21 +41,6 @@ public class AutoBalancingPID extends CommandBase {
         addRequirements(swerveSubsystem);
     }
 
-    /***
-     * 
-     * @param margin how close the values need to be to return true. Use a positive
-     *               number
-     * @param a      the first number
-     * @param b      the second number
-     * @return true if it is within the margin, false if not
-     */
-    private boolean withinMargin(double margin, double a, double b) {
-        if (a + margin >= b && a - margin <= b) {
-            return true;
-        }
-        return false;
-    }
-
     // Run on command init
     @Override
     public void initialize() {
@@ -84,7 +69,7 @@ public class AutoBalancingPID extends CommandBase {
 
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
-        if (!withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0) && !has_aligned) {
+        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0) && !has_aligned) {
             // negative so that we move towards the target, not away
             double turning_speed = turnController.calculate(Math.abs(heading), 0);
             turning_speed = turningLimiter.calculate(turning_speed)
@@ -105,7 +90,7 @@ public class AutoBalancingPID extends CommandBase {
 
         // move forward if the angle hasn't started to move and it hasn't moved in the
         // past
-        else if (!withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0) && !past_center) {
+        else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0) && !past_center) {
             has_aligned = true;
             start_time_balanced = 0;
             // Construct desired chassis speeds
@@ -121,7 +106,7 @@ public class AutoBalancingPID extends CommandBase {
         }
         // the robot must've moved slightly past the center now, so we will start using
         // PID to reach the middle
-        else if (!withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
+        else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
             has_aligned = true;
             start_time_balanced = 0;
 
