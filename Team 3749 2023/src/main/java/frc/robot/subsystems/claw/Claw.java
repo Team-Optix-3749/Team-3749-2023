@@ -108,8 +108,9 @@ public class Claw extends SubsystemBase {
         SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
         // clawMotor.setSmartCurrentLimit(Constants.Claw.currentLimit.get().intValue(),
         // 5700);
-        setFeedForward(1);
-        SmartDashboard.putNumber("claw voltage", clawMotor.getAppliedOutput() * clawMotor.getBusVoltage());
+        SmartDashboard.putNumber("Claw Voltage", clawMotor.getAppliedOutput() * clawMotor.getBusVoltage());
+        SmartDashboard.putString("Claw Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
+
 
     }
 }

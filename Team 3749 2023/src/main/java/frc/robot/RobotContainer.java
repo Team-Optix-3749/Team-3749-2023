@@ -52,6 +52,10 @@ public class RobotContainer {
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
+
+        claw.setDefaultCommand(
+            Commands.run(() -> claw.setVoltage(1.0), claw)
+        );
         // arm.setDefaultCommand(new SequentialCommandGroup(
         //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(false)),
         //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(true))));
@@ -64,9 +68,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         pilot.a().whileTrue(
                 new SequentialCommandGroup(
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(false)),
-                        Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getGroundPickupTrajectory(true))))
+                    new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(false)),
+                    Commands.run(() -> claw.setFeedForward(1)).withTimeout(1),
+                new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(true))))
                 .whileFalse(new PrintCommand("false"));
         pilot.b().whileTrue(
                 new SequentialCommandGroup(
@@ -88,15 +92,15 @@ public class RobotContainer {
                 .whileFalse(new PrintCommand("false"));
         pilot.rightTrigger().whileTrue(
                 new SequentialCommandGroup(
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(false)),
-                        Commands.run(() -> claw.setVoltage(6))))
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(false))
+                        ))
                 .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(true)));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-        // pilot.rightTrigger().whileTrue(Commands.run(() -> claw.set(1)));
+        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setVoltage(6)));
         pilot.x().whileTrue(Commands.run(() -> claw.setVoltage(3)));
 
-        pilot.leftTrigger().whileTrue(Commands.run(() -> claw.setFeedForward(-1.5)));
+        pilot.leftTrigger().whileTrue(Commands.run(() -> claw.setVoltage(-3)));
 
     }
 
