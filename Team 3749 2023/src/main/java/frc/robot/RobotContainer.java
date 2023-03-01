@@ -20,6 +20,7 @@ import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 
 public class RobotContainer {
+    // Controllers
     private final Xbox pilot = new Xbox(0);
 
     // Subsystems
@@ -63,6 +64,7 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
+        // Top node scoring
         pilot.a().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
@@ -71,6 +73,7 @@ public class RobotContainer {
                         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
 
+        // Mid node scoring
         pilot.b().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false)),
@@ -79,31 +82,40 @@ public class RobotContainer {
                         new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
 
+        // Ground intake
         pilot.x().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getGroundIntakeTrajectory(false))))
                 .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getGroundIntakeTrajectory(true)));
 
+        // Sting position
         pilot.rightBumper().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getStingTrajectory(false))))
                 .whileFalse(new PrintCommand("false"));
 
+        // Stow position
         pilot.leftBumper().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getStingTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
 
+        // Double substation intake
         pilot.rightTrigger().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(false))))
                 .onFalse(new ArmFollowTrajectory(arm, ArmTrajectories.getDoubleSubstationTrajectory(true)));
 
+        // Intake
         pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setVoltage(6)));
+
+        // Outtake
         pilot.leftTrigger().whileTrue(Commands.run(() -> claw.setVoltage(-3)));
 
+        // Intake
         pilot.y().whileTrue(Commands.run(() -> claw.setVoltage(6)));
 
+        // Zero robot heading
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
     }
 
