@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +37,14 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         configureAuto();
+
+        try {
+            FileWriter writer = new FileWriter("data.csv", false);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -46,6 +57,9 @@ public class RobotContainer {
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
+
+        // claw.setDefaultCommand(
+        //         Commands.run(() -> claw.setVoltage(1.0), claw));
     }
 
     /**
@@ -53,58 +67,9 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-
         pilot.aWhileHeld(
             new VisionAlign(vision, swerve, Nodes.MID_CONE)
         );
-
-        // pilot.bWhileHeld(
-        //     new SequentialCommandGroup(
-        //         new AlignHeading(swerve),
-        //         new VisionAlign(vision, swerve, Nodes.MID_CONE)
-        //     ),
-        //     new PrintCommand(
-        //         "Unpressed"
-        //     )
-        // );
-
-        // pilot.bWhileHeld(() -> arm.setShoulderVoltage(-1), () -> arm.setShoulderVoltage(0));
-
-        // // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-        // pilot.yWhileHeld(() -> arm.setElbowVoltage(2), () -> arm.setElbowVoltage(0));
-
-        // pilot.xWhileHeld(() -> arm.setElbowVoltage(-2), () -> arm.setElbowVoltage(0));
-
-        // pilot.aWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.DOUBLE_SUBSTATION;
-        // });
-
-        // pilot.bWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.STOWED;
-        // });
-
-        // pilot.xWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.CONE_MID;
-        // });
-
-        // pilot.yWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.CONE_TOP;
-        // });
-
-        // pilot.rightBumperWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.STING;
-        // });
-
-        // pilot.startWhileHeld(() -> {
-        //     Constants.desired_setpoint = ArmSetpoints.TOP_INTAKE;
-        // });
-
-        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-
-        // pilot.rightTriggerWhileHeld(() -> 
-        //     claw.set(1));
-        // pilot.leftTriggerWhileHeld(() -> 
-        //     claw.set(-0.125));
     }
 
     /**
@@ -130,7 +95,5 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("place_cube_mid", null);
         Constants.AutoConstants.eventMap.put("place_cone_top", null);
         Constants.AutoConstants.eventMap.put("place_cube_top", null);
-        // Constants.AutoConstants.eventMap.put("run_claw", Commands.run(() ->
-        // claw.set(0.2), claw));
     }
 }

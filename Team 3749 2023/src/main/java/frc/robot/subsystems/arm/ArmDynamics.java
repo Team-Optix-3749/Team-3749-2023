@@ -29,8 +29,8 @@ import frc.robot.utils.Constants;
 public class ArmDynamics {
     private static final double g = 9.80665;
 
-    private final DCMotor shoulderDCMotor = DCMotor.getNEO(1).withReduction(250);
-    private final DCMotor elbowDCMotor = DCMotor.getNEO(1).withReduction(200);
+    private static final DCMotor shoulderDCMotor = DCMotor.getNEO(1).withReduction(250);
+    private static final DCMotor elbowDCMotor = DCMotor.getNEO(1).withReduction(200);
 
     public ArmDynamics() {
     }
@@ -63,7 +63,7 @@ public class ArmDynamics {
                 .plus(C(position, velocity).times(velocity))
                 .plus(Tg(position));
         return VecBuilder.fill(
-                shoulderDCMotor.getVoltage(torque.get(0, 0), velocity.get(0, 0)),
+                -shoulderDCMotor.getVoltage(torque.get(0, 0), velocity.get(0, 0)),
                 elbowDCMotor.getVoltage(torque.get(1, 0), velocity.get(1, 0)));
     }
 
