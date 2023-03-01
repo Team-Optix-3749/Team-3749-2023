@@ -13,7 +13,15 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.utils.Constants;
 
+/**
+ * Generate arm trajectories
+ * 
+ * @author Noah Simon
+ * @author Rohin Sood
+ * @author Raadwan Masum
+ **/
 public class ArmTrajectories {
+    
     /**
      * Create trajectory
      * 
@@ -28,9 +36,9 @@ public class ArmTrajectories {
             // reverse pose for each waypoint (subtract pi)
             for (int i = 0; i < waypoints.length; i++)
                 waypoints[i] = waypoints[i].transformBy(
-                    new Transform2d(
-                        new Translation2d(0.0, 0.0),
-                        new Rotation2d(Math.PI)));
+                        new Transform2d(
+                                new Translation2d(0.0, 0.0),
+                                new Rotation2d(Math.PI)));
         }
 
         // generate trajectory

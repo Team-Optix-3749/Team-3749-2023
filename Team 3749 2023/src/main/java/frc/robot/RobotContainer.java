@@ -56,11 +56,6 @@ public class RobotContainer {
 
         claw.setDefaultCommand(
                 Commands.run(() -> claw.setVoltage(1.0), claw));
-        // arm.setDefaultCommand(new SequentialCommandGroup(
-        // new ArmFollowTrajectory(arm,
-        // ArmTrajectories.getTopNodeTrajectoryPose(false)),
-        // new ArmFollowTrajectory(arm,
-        // ArmTrajectories.getTopNodeTrajectoryPose(true))));
     }
 
     /**

@@ -28,14 +28,12 @@ public class ArmFollowTrajectory extends CommandBase {
 
     @Override
     public void initialize() {
-
         timer.reset();
         timer.start();
     }
 
     @Override
     public void execute() {
-
         double cur_time = timer.get();
         desiredState = trajectory.sample(cur_time);
 
@@ -57,6 +55,7 @@ public class ArmFollowTrajectory extends CommandBase {
 
         System.out.println(
                 String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
+
         logging();
     }
 
@@ -66,8 +65,6 @@ public class ArmFollowTrajectory extends CommandBase {
 
     @Override
     public boolean isFinished() {
-
-              
         return trajectory.getTotalTimeSeconds() < timer.get();
     }
 
