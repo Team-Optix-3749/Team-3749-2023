@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 /***
  * @author Rohin Sood
  *
- * Wrapper class for a CommandXboxController instance 
+ *         Wrapper class for a CommandXboxController instance
  */
 public class Xbox extends CommandXboxController {
 
@@ -19,13 +19,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void aWhileHeld(CommandBase trueCommand) {
-        super.a().whileTrue(
-                trueCommand);
+        super.a().whileTrue(trueCommand);
     }
 
     public void aWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.a().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.a().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void aWhileHeld(Runnable whileTrue) {
@@ -51,13 +49,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void bWhileHeld(CommandBase trueCommand) {
-        super.b().whileTrue(
-                trueCommand);
+        super.b().whileTrue(trueCommand);
     }
 
     public void bWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.b().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.b().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void bWhileHeld(Runnable whileTrue) {
@@ -83,15 +79,14 @@ public class Xbox extends CommandXboxController {
     }
 
     public void xWhileHeld(CommandBase trueCommand) {
-        super.x().whileTrue(
-                trueCommand);
+        super.x().whileTrue(trueCommand);
     }
 
     public void xWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
         super.x().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+trueCommand).whileFalse(falseCommand);
     }
-    
+
     public void xWhileHeld(Runnable whileTrue) {
         super.x().whileTrue(
                 Commands.run(whileTrue));
@@ -116,12 +111,12 @@ public class Xbox extends CommandXboxController {
 
     public void yWhileHeld(CommandBase trueCommand) {
         super.y().whileTrue(
-                trueCommand);
+trueCommand);
     }
 
     public void yWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
         super.y().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+trueCommand).whileFalse(falseCommand);
     }
 
     public void yWhileHeld(Runnable whileTrue) {
@@ -147,13 +142,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void leftBumperWhileHeld(CommandBase trueCommand) {
-        super.leftBumper().whileTrue(
-                trueCommand);
+        super.leftBumper().whileTrue(trueCommand);
     }
 
     public void leftBumperWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.leftBumper().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.leftBumper().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void leftBumperWhileHeld(Runnable whileTrue) {
@@ -179,13 +172,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void rightBumperWhileHeld(CommandBase trueCommand) {
-        super.rightBumper().whileTrue(
-                trueCommand);
+        super.rightBumper().whileTrue(trueCommand);
     }
 
     public void rightBumperWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.rightBumper().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.rightBumper().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void rightBumperWhileHeld(Runnable whileTrue) {
@@ -211,13 +202,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void leftStickWhileHeld(CommandBase trueCommand) {
-        super.rightBumper().whileTrue(
-                trueCommand);
+        super.rightBumper().whileTrue(trueCommand);
     }
 
     public void leftStickWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.rightBumper().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.rightBumper().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void leftStickWhileHeld(Runnable whileTrue) {
@@ -243,13 +232,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void leftTriggerWhileHeld(CommandBase trueCommand) {
-        super.leftTrigger().whileTrue(
-                trueCommand);
+        super.leftTrigger().whileTrue(trueCommand);
     }
 
     public void leftTriggerWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.leftTrigger().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.leftTrigger().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void leftTriggerWhileHeld(Runnable whileTrue) {
@@ -275,13 +262,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void rightTriggerWhileHeld(CommandBase trueCommand) {
-        super.rightTrigger().whileTrue(
-                trueCommand);
+        super.rightTrigger().whileTrue(trueCommand);
     }
 
     public void rightTriggerWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.rightTrigger().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.rightTrigger().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void rightTriggerWhileHeld(Runnable whileTrue) {
@@ -307,13 +292,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void startWhileHeld(CommandBase trueCommand) {
-        super.start().whileTrue(
-                trueCommand);
+        super.start().whileTrue(trueCommand);
     }
 
     public void startWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.start().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.start().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void startWhileHeld(Runnable whileTrue) {
@@ -339,13 +322,11 @@ public class Xbox extends CommandXboxController {
     }
 
     public void backWhileHeld(CommandBase trueCommand) {
-        super.back().whileTrue(
-                trueCommand);
+        super.back().whileTrue(trueCommand);
     }
 
     public void backWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.back().whileTrue(
-                trueCommand).whileFalse(falseCommand);
+        super.back().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void backWhileHeld(Runnable whileTrue) {
