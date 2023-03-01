@@ -125,7 +125,7 @@ public class ArmTrajectories {
     }
 
     /**
-     * Move arm to and from sting position and double substiation loading position
+     * Move arm to and from stow position and double substiation loading position
      * 
      * @param isReversed
      * @return Trajectory
@@ -140,7 +140,7 @@ public class ArmTrajectories {
     }
 
     /**
-     * Move arm to and from sting position and ground intake position
+     * Move arm to and from stow position and further ground intake position
      * 
      * @param isReversed
      * @return Trajectory
@@ -149,6 +149,21 @@ public class ArmTrajectories {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(0)),
                 new Pose2d(0.7, -0.4, new Rotation2d(5 * Math.PI / 3)),
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    /**
+     * Move arm to and from sting position and ground intake position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static Trajectory getGroundIntakeSweepTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(0.3, -0.2, new Rotation2d(0)),
+                new Pose2d(1.4, -0.4, new Rotation2d(0)),
         };
 
         return createTrajectory(waypoints, isReversed);
