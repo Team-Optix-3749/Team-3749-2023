@@ -79,6 +79,7 @@ public class RobotContainer {
         pilot.b().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false)),
+                        new WaitCommand(1),
                         Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
                         new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
