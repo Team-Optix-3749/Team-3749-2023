@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Constants {
     public static final RobotMode ROBOT_MODE = RobotMode.REAL;
 
-    public static Arm.ArmSetpoints desired_setpoint = Arm.ArmSetpoints.STOWED;
 
 
     /***

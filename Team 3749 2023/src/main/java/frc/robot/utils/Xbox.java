@@ -18,10 +18,12 @@ public class Xbox extends CommandXboxController {
         super(port);
     }
 
+
     public void aWhileHeld(Runnable whileTrue) {
         super.a().whileTrue(
                 Commands.run(whileTrue));
     }
+    
 
     public void aWhileHeld(Runnable whileTrue, Runnable whileFalse) {
         super.a().whileTrue(
