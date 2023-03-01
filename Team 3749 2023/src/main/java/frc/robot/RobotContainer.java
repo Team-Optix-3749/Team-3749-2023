@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
@@ -70,6 +71,7 @@ public class RobotContainer {
         pilot.a().whileTrue(
                 new SequentialCommandGroup(
                         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
+                        new WaitCommand(1),
                         Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
                         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
                 .whileFalse(new PrintCommand("false"));
