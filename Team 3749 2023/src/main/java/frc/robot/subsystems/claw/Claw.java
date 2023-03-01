@@ -85,6 +85,11 @@ public class Claw extends SubsystemBase {
         clawMotor.set(speed);
     }
 
+    /**
+     * set claw motor using feed forward control loop
+     * 
+     * @param velocity
+     */
     public void setFeedForward(double velocity) {
         SmartDashboard.putNumber("claw pid gain", clawPID.calculate(clawEncoder.getVelocity(), velocity));
         SmartDashboard.putNumber("claw ff gain", clawFeedForward.calculate(velocity));

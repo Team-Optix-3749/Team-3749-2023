@@ -22,10 +22,12 @@ import frc.robot.utils.Constants;
  */
 public class Arm extends SubsystemBase {
 
+    // Shoulder motor
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
     private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP, 0, 0);
 
+    // Elbow motor
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(2);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP, 0, 0);
@@ -49,49 +51,80 @@ public class Arm extends SubsystemBase {
         shoulderMotor.setIdleMode(IdleMode.kCoast);
         elbowMotor.setIdleMode(IdleMode.kCoast);
     }
-    
-    public void setArmPosition(Translation2d pos){
+
+    /**
+     * Set arm to Translation2d position
+     * 
+     * @param pos
+     */
+    public void setArmPosition(Translation2d pos) {
         position = pos;
     }
 
+    /**
+     * Get current arm pose as Translation2d
+     * 
+     * @return arm coordianates as Translation2d
+     */
     public Translation2d getArmCoordinate() {
         return ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle()));
     }
 
+    /**
+     * Set shoulder motor voltage
+     * 
+     * @param voltage
+     */
     public void setShoulderVoltage(double voltage) {
         shoulderMotor.setVoltage(voltage);
     }
 
+    /**
+     * Set elbow motor voltage
+     * 
+     * @param voltage
+     */
     public void setElbowVoltage(double voltage) {
         elbowMotor.setVoltage(voltage);
     }
 
+    /**
+     * Get current shoulder angle
+     * 
+     * @return shoulder angle as double
+     */
     public double getShoulderAngle() {
         return shoulderAbsoluteEncoder.getDistance();
     }
 
+    /**
+     * Get current elbow angle
+     * 
+     * @return elbow angle as double
+     */
     public double getElbowAngle() {
         return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
                 .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - Constants.Arm.elbow_offset;
     }
 
-    public boolean getShoulderAtSetpoint() {
-        return shoulderPIDController.atSetpoint();
-    }
-
-    public boolean getElbowAtSetpoint() {
-        return elbowPIDController.atSetpoint();
-    }
-
+    /**
+     * Stop both arm motors
+     */
     public void stop() {
         elbowMotor.stopMotor();
         shoulderMotor.stopMotor();
     }
 
+    /**
+     * Stop shoulder motor
+     */
     public void stopShoulder() {
         shoulderMotor.stopMotor();
     }
 
+    /**
+     * Stop elbow motor
+     */
     public void stopElbow() {
         elbowMotor.stopMotor();
     }

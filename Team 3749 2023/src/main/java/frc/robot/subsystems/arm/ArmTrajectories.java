@@ -21,7 +21,7 @@ import frc.robot.utils.Constants;
  * @author Raadwan Masum
  **/
 public class ArmTrajectories {
-    
+
     /**
      * Create trajectory
      * 
@@ -49,6 +49,12 @@ public class ArmTrajectories {
                         Constants.Arm.maxAccelerationMPS));
     }
 
+    /**
+     * Move arm to and from sting position and stow position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getStingTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
@@ -58,6 +64,12 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm to and from sting position and top node scoring position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 8)),
@@ -67,6 +79,12 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm to and from sting position and mid node scoring position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getMidNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 3)),
@@ -76,6 +94,12 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm to and from sting position and double substiation loading position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
@@ -85,6 +109,12 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm to and from sting position and ground intake position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(0)),
