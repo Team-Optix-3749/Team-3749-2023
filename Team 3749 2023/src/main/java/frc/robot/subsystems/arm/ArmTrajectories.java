@@ -81,6 +81,15 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    public static Trajectory getStingTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
+                new Pose2d(0.4, 0.7, new Rotation2d(Math.PI / 2)),
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
     public static Trajectory getTopNodeTrajectory(boolean reverse) {
         Translation2d[] waypoints = new Translation2d[] {
                 new Translation2d(0.35, -0.2),
