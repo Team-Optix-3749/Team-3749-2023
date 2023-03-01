@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,6 +22,8 @@ import frc.robot.utils.Constants;
  * @author Raadwan Masum
  */
 public class Arm extends SubsystemBase {
+
+    private final ArmDynamics dynamics = new ArmDynamics();
 
     // Shoulder motor
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
@@ -59,6 +62,21 @@ public class Arm extends SubsystemBase {
      */
     public void setArmPosition(Translation2d pos) {
         position = pos;
+    }
+
+    /**
+     * Move arm to set position
+     * 
+     * @throws Exception
+     */
+    private void moveArm() throws Exception {
+        double shoulderAngle = ArmKinematics.inverse(position.getX(), position.getY()).getFirst();
+        double elbowAngle = ArmKinematics.inverse(position.getX(), position.getY()).getSecond();
+
+        double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData();
+
+        setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
+        setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
     }
 
     /**
@@ -130,6 +148,12 @@ public class Arm extends SubsystemBase {
     }
 
     public void periodic() {
+        try {
+            moveArm();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
         SmartDashboard.putNumber("ARM X CACHE", position.getX());
         SmartDashboard.putNumber("ARM Y CACHE", position.getY());
 
