@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 public class ArmTrajectories {
     /**
@@ -105,4 +106,121 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, false);
 
     }
+
+    /***
+     * 
+     * @param desiredSetpoint ArmSetpoints: where you want to go
+     * @param arm Arm: the arm subsystem object, used for its position and getting/setting current setpoint
+     * @return Trajectory: the optimal trajectory for where you are to where you want to go
+     */
+    public static Trajectory findTrajectory(ArmSetpoints desiredSetpoint, Arm arm){
+        ArmSetpoints currentSetpoint = arm.getCurrentSetpoint();
+        Trajectory trajectory;
+
+        if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOWED) {
+            System.out.println("Illigal double sub");
+            arm.setCurrentSetpoint(ArmSetpoints.STOWED);
+            return ArmTrajectories.getDoubleSubstationTrajectory(true);
+        }
+        if (currentSetpoint == ArmSetpoints.TOP_INTAKE && desiredSetpoint != ArmSetpoints.STOWED) {
+            System.out.println("Illigal top intake");
+            arm.setCurrentSetpoint(ArmSetpoints.STOWED);
+
+            return ArmTrajectories.getGroundIntakeTrajectory(true);
+        }
+
+        if (desiredSetpoint == ArmSetpoints.CONE_TOP) {
+
+            // if already there, reverse to stow
+            if (desiredSetpoint == currentSetpoint) {
+                System.out.println("reverse top node");
+
+                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
+                trajectory = ArmTrajectories.getTopNodeTrajectory(true)
+                        .concatenate(ArmTrajectories.getStingTrajectory(true));
+                return trajectory;
+            }
+            // if at mid, run the node to node
+            if (currentSetpoint == ArmSetpoints.CONE_MID) {
+                System.out.println("mid to top node");
+
+                trajectory = ArmTrajectories.getMidNodeToTopNodTrajectory(false);
+            }
+            // otherwise do it normally
+            else {
+                trajectory = ArmTrajectories.getTopNodeTrajectory(false);
+                System.out.println("from sting to top node");
+
+                // if at sting, run the trajectory. If not at sting, go to sting then run the
+                // trajectory
+                if (currentSetpoint != ArmSetpoints.STING) {
+
+                    System.out.println("to sting to top node");
+                    trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
+                }
+            }
+            // change the current setpoint and return
+            arm.setCurrentSetpoint (ArmSetpoints.CONE_TOP);
+            return trajectory;
+        }
+
+        else if (desiredSetpoint == ArmSetpoints.CONE_MID) {
+            if (desiredSetpoint == currentSetpoint) {
+                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
+                trajectory = ArmTrajectories.getMidNodeTrajectory(true)
+                        .concatenate(ArmTrajectories.getStingTrajectory(true));
+                return trajectory;
+            }
+            if (currentSetpoint == ArmSetpoints.CONE_TOP) {
+                trajectory = ArmTrajectories.getMidNodeToTopNodTrajectory(true);
+            } else {
+                trajectory = ArmTrajectories.getMidNodeTrajectory(false);
+                if (currentSetpoint != ArmSetpoints.STING) {
+                    trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
+                }
+            }
+            arm.setCurrentSetpoint (ArmSetpoints.CONE_MID);
+            return trajectory;
+        }
+
+        else if (desiredSetpoint == ArmSetpoints.DOUBLE_SUBSTATION) {
+            if (desiredSetpoint == currentSetpoint) {
+                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
+
+                trajectory = ArmTrajectories.getDoubleSubstationTrajectory(true);
+                return trajectory;
+            }
+            trajectory = ArmTrajectories.getDoubleSubstationTrajectory(false);
+            arm.setCurrentSetpoint (ArmSetpoints.DOUBLE_SUBSTATION);
+            return trajectory;
+
+        }
+
+        else if (desiredSetpoint == ArmSetpoints.TOP_INTAKE) {
+            if (desiredSetpoint == currentSetpoint) {
+                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
+
+                trajectory = ArmTrajectories.getGroundIntakeTrajectory(true);
+                return trajectory;
+            }
+            trajectory = ArmTrajectories.getGroundIntakeTrajectory(false);
+            arm.setCurrentSetpoint (ArmSetpoints.TOP_INTAKE);
+            return trajectory;
+        }
+
+        else if (desiredSetpoint == ArmSetpoints.STING) {
+            if (desiredSetpoint == currentSetpoint) {
+                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
+
+                trajectory = ArmTrajectories.getStingTrajectory(true);
+                return trajectory;
+            }
+            trajectory = ArmTrajectories.getStingTrajectory(false);
+            arm.setCurrentSetpoint (ArmSetpoints.STING);
+            return trajectory;
+        } else {
+            return null;
+        }    
+    }
+
 }

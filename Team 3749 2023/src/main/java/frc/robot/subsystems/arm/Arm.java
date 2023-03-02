@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.arm.ArmFollowTrajectory;
+import frc.robot.commands.arm.MoveArm;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
@@ -42,6 +42,7 @@ public class Arm extends SubsystemBase {
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
     // safety stow
     private Translation2d position = new Translation2d(0.3, -0.2);
+    private ArmSetpoints currentSetpoint = ArmSetpoints.STOWED;
 
 
 
@@ -175,6 +176,14 @@ public class Arm extends SubsystemBase {
 
         setShoulderAngle(shoulder_angle);
         setElbowAngle(elbow_angle);
+    }
+
+    public void setCurrentSetpoint(ArmSetpoints setpoint){
+        currentSetpoint = setpoint;
+    }
+
+    public ArmSetpoints getCurrentSetpoint(){
+        return currentSetpoint;
     }
 
     public void stop() {

@@ -10,24 +10,29 @@ import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmTrajectories;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 
-public class ArmFollowTrajectory extends CommandBase {
+public class MoveArm extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     private final Arm arm;
-    private final Trajectory trajectory;
+    private final ArmSetpoints desiredSetpoint;
+    private Trajectory trajectory;
     private State desiredState;
     private Timer timer = new Timer();
 
-    public ArmFollowTrajectory(Arm arm, Trajectory trajectory) {
+    public MoveArm(Arm arm, ArmSetpoints setpoint) {
         this.arm = arm;
-        this.trajectory = trajectory;
-
+        this.desiredSetpoint = setpoint;
+        // this.trajectory = trajectory;
         addRequirements(arm);
     }
 
     @Override
     public void initialize() {
+
+        trajectory = ArmTrajectories.findTrajectory(desiredSetpoint, arm);
 
         timer.reset();
         timer.start();
