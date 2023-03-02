@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -67,20 +68,28 @@ public class RobotContainer {
         // Top node scoring
         pilot.a().whileTrue(
                 new SequentialCommandGroup(
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false)),
-                        new WaitCommand(1),
-                        Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(true))))
-                .whileFalse(new PrintCommand("false"));
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectory(false))))
+                .onFalse(
+                        new SequentialCommandGroup(
+                                new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodePlaceDownTrajectory(false)),
+                                new WaitCommand(0.5),
+                                new ParallelRaceGroup(
+                                        Commands.run(() -> claw.setVoltage(-3)),
+                                        new ArmFollowTrajectory(arm,
+                                                ArmTrajectories.getTopNodePlaceReturnTrajectory(false)))));
 
         // Mid node scoring
         pilot.b().whileTrue(
                 new SequentialCommandGroup(
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false)),
-                        new WaitCommand(1),
-                        Commands.run(() -> claw.setVoltage(-1)).withTimeout(1),
-                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(true))))
-                .whileFalse(new PrintCommand("false"));
+                        new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodeTrajectory(false))))
+                .onFalse(
+                        new SequentialCommandGroup(
+                                new ArmFollowTrajectory(arm, ArmTrajectories.getMidNodePlaceDownTrajectory(false)),
+                                new WaitCommand(0.5),
+                                new ParallelRaceGroup(
+                                        Commands.run(() -> claw.setVoltage(-3)),
+                                        new ArmFollowTrajectory(arm,
+                                                ArmTrajectories.getMidNodePlaceReturnTrajectory(false)))));
 
         // Ground intake
         pilot.x().whileTrue(
