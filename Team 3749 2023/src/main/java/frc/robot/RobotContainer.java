@@ -2,7 +2,6 @@ package frc.robot;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -14,6 +13,7 @@ import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
 import frc.robot.commands.arm.ArmFollowTrajectory;
+import frc.robot.commands.arm.ArmTeleopCommand;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
@@ -55,13 +55,15 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
+
+        arm.setDefaultCommand(new ArmTeleopCommand(arm, pilot));
+
         claw.setDefaultCommand(
-                Commands.run(() -> claw.setVoltage(1.0), claw));
+            Commands.run(() -> claw.setVoltage(1.0), claw)
+        );
         // arm.setDefaultCommand(new SequentialCommandGroup(
-        // new ArmFollowTrajectory(arm,
-        // ArmTrajectories.getTopNodeTrajectoryPose(false)),
-        // new ArmFollowTrajectory(arm,
-        // ArmTrajectories.getTopNodeTrajectoryPose(true))));
+        //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(false)),
+        //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(true))));
     }
 
     /**
@@ -69,31 +71,7 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        pilot.a().onTrue(
-            Commands.run(
-                () -> pilot.a().whileTrue(
-                    arm.getCommand(ArmSetpoints.CONE_TOP)), arm));
 
-        pilot.b().onTrue(
-            Commands.run(
-                () -> pilot.b().whileTrue(
-                    arm.getCommand(ArmSetpoints.CONE_MID)), arm));
-
-        pilot.rightBumper().onTrue(
-            Commands.run(
-                () -> pilot.rightBumper().whileTrue(
-                    arm.getCommand(ArmSetpoints.STING)), arm));
-                    
-        pilot.rightTrigger().onTrue(
-            Commands.run(
-                () -> pilot.rightTrigger().whileTrue(
-                    arm.getCommand(ArmSetpoints.DOUBLE_SUBSTATION)), arm));
-
-
-        // pilot.aWhileHeld(() -> arm.getCommand(ArmSetpoints.CONE_TOP));
-        // pilot.bWhileHeld(() -> arm.getCommand(ArmSetpoints.CONE_MID));
-        // pilot.rightBumperWhileHeld(() -> arm.getCommand(ArmSetpoints.STING));
-        // pilot.rightTriggerWhileHeld(() -> arm.getCommand(ArmSetpoints.DOUBLE_SUBSTATION));
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
         pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setVoltage(6)));

@@ -31,6 +31,7 @@ public class ArmFollowTrajectory extends CommandBase {
 
         timer.reset();
         timer.start();
+        // System.out.println("START TRAJECTORY");
     }
 
     @Override

@@ -41,13 +41,7 @@ public class Arm extends SubsystemBase {
 
     private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
     // safety stow
-    private Translation2d position = new Translation2d(0.35, -0.2);
-    private Constants.Arm.ArmSetpoints desiredSetpoint = ArmSetpoints.STOWED;
-    private Constants.Arm.ArmSetpoints currentSetpoint = ArmSetpoints.STOWED;
-    private boolean reached_sting = false;
-    private boolean node_to_node = false;
-    private boolean to_double_sub = false;
-    private boolean top_intake_to_stowed = false;
+    private Translation2d position = new Translation2d(0.3, -0.2);
 
 
 
@@ -196,126 +190,12 @@ public class Arm extends SubsystemBase {
         elbowMotor.stopMotor();
     }
 
-    public void setDesiredSetpoint(ArmSetpoints setpoint){
-        desiredSetpoint = setpoint;
-    }
-    // this one is private because it should only be updated through getCommand
-    private  void setCurrentSetpoint(ArmSetpoints setpoint){
-        desiredSetpoint = setpoint;
-    }
-
-    public ArmSetpoints getDesiredSetpoint(){
-        return desiredSetpoint;
-    }
-    public ArmSetpoints getCurrentSetpoint(){
-        return currentSetpoint;
-    }
 
     public Command getTestCommand(){
         return new PrintCommand("TEST");
     }
-    public Command getCommand(ArmSetpoints setpoint){
-        setDesiredSetpoint(setpoint);
-        Trajectory trajectory;
-
-        if (setpoint == ArmSetpoints.CONE_TOP){
-            if (setpoint == currentSetpoint){
-                setCurrentSetpoint(ArmSetpoints.STOWED);
-                trajectory =  ArmTrajectories.getTopNodeTrajectory(true).concatenate(ArmTrajectories.getStingTrajectory(true));
-                return new ArmFollowTrajectory(this,trajectory);
-            }
-            setCurrentSetpoint(ArmSetpoints.CONE_TOP);
-            trajectory = ArmTrajectories.getTopNodeTrajectory(false);
-            if (currentSetpoint !=ArmSetpoints.STING){
-                trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
-            }
-            return new ArmFollowTrajectory(this, trajectory);
-
-        }
-
-
-        else if (setpoint == ArmSetpoints.CONE_MID){
-            if (setpoint == currentSetpoint){
-                setCurrentSetpoint(ArmSetpoints.STOWED);
-                trajectory =  ArmTrajectories.getMidNodeTrajectory(true).concatenate(ArmTrajectories.getStingTrajectory(true));
-                return new ArmFollowTrajectory(this,trajectory);
-            }
-            setCurrentSetpoint(ArmSetpoints.CONE_MID);
-            trajectory = ArmTrajectories.getMidNodeTrajectory(false);
-            if (currentSetpoint !=ArmSetpoints.STING){
-                trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
-            }            return new ArmFollowTrajectory(this, trajectory);
-        }
-
-        else if (setpoint == ArmSetpoints.DOUBLE_SUBSTATION){
-            if (setpoint == currentSetpoint){
-                setCurrentSetpoint(ArmSetpoints.STOWED);
-                trajectory =  ArmTrajectories.getDoubleSubstationTrajectory(true);
-                return new ArmFollowTrajectory(this,trajectory);
-            }
-            setCurrentSetpoint(ArmSetpoints.DOUBLE_SUBSTATION);
-            trajectory = ArmTrajectories.getDoubleSubstationTrajectory(false);
-            return new ArmFollowTrajectory(this, trajectory);
-        }
-
-        // else if (setpoint == ArmSetpoints.TOP_INTAKE){
-        //     if (setpoint == currentSetpoint){
-        //          setCurrentSetpoint(ArmSetpoints.STOWED);
-        //         trajectory =  ArmTrajectories.getFloorTrajectory(true);
-        //         return new ArmFollowTrajectory(this,trajectory);
-        //     }
-        //     setCurrentSetpoint(ArmSetpoints.TOP_INTAKE);
-        //     trajectory = ArmTrajectories.getFloorTrajectory(false);
-        //     return new ArmFollowTrajectory(this, trajectory);
-        // }
-
-     // setpoint == ArmSetpoints.STING
-        else if (setpoint == ArmSetpoints.STING) {
-            if (setpoint == currentSetpoint){
-                setCurrentSetpoint(ArmSetpoints.STOWED);
-                trajectory =  ArmTrajectories.getStingTrajectory(true);
-                return new ArmFollowTrajectory(this,trajectory);
-            }
-            setCurrentSetpoint(ArmSetpoints.STING);
-            trajectory = ArmTrajectories.getStingTrajectory(false);
-            return new ArmFollowTrajectory(this, trajectory);
-        }
-
-        else {
-            return new PrintCommand("ERROR, NO TRAJECTORY FOR SETPOINT");
-        }
-
-        
-
-
-        
-
-
-
-
-
-    }
-
-    private void updateSetpointBooleans() {
-        reached_sting = getCurrentSetpoint() == ArmSetpoints.STING;
-
-        node_to_node = (getCurrentSetpoint() == ArmSetpoints.CONE_TOP
-                || getCurrentSetpoint() == ArmSetpoints.CONE_MID)
-                && (getDesiredSetpoint() == ArmSetpoints.CONE_TOP
-                        || getDesiredSetpoint() == ArmSetpoints.CONE_MID);
-
-        to_double_sub = getCurrentSetpoint() == ArmSetpoints.DOUBLE_SUBSTATION
-                || getDesiredSetpoint() == ArmSetpoints.DOUBLE_SUBSTATION;
-
-        top_intake_to_stowed = (getCurrentSetpoint() == ArmSetpoints.TOP_INTAKE
-                || getCurrentSetpoint() == ArmSetpoints.STOWED)
-                && (getDesiredSetpoint() == ArmSetpoints.TOP_INTAKE
-                        || getDesiredSetpoint() == ArmSetpoints.STOWED);
-
-    }
-
+  
     public void periodic() {
-        updateSetpointBooleans();
         try {
             moveArm();
 

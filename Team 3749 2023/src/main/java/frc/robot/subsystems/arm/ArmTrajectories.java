@@ -53,7 +53,7 @@ public class ArmTrajectories {
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 8)),
-                new Pose2d(1.4, 1.0, new Rotation2d(Math.PI / 8)),
+                new Pose2d(1.33, 1.0, new Rotation2d(Math.PI / 8)),
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -62,10 +62,20 @@ public class ArmTrajectories {
     public static Trajectory getMidNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 3)),
-                new Pose2d(0.6, 0.9, new Rotation2d(Math.PI / 3)),
+                new Pose2d(0.9, 0.7, new Rotation2d(Math.PI / 3)),
         };
 
         return createTrajectory(waypoints, isReversed);
+    }
+
+    public static Trajectory getMidNodeToTopNodTrajectory(boolean isReversed){
+        Pose2d[] waypoints = new Pose2d[]{
+            new Pose2d(0.9,0.7, new Rotation2d(Math.PI / 3)),
+            new Pose2d(1.33,1.0, new Rotation2d(Math.PI / 8)),
+
+        };
+
+        return createTrajectory(waypoints, false);
     }
 
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
@@ -75,5 +85,24 @@ public class ArmTrajectories {
         };
 
         return createTrajectory(waypoints, isReversed);
+    }
+
+    public static Trajectory getGroundIntakeTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(0.3, -0.2, new Rotation2d(0)),
+                new Pose2d(0.7, -0.4, new Rotation2d(5 * Math.PI / 3)),
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    public static Trajectory getBlankTrajectory(Translation2d pos){
+        Pose2d[] waypoints = new Pose2d[]{
+            new Pose2d(pos, new Rotation2d(0)),
+            new Pose2d(0.3,-0.2, new Rotation2d(0))
+        };
+
+        return createTrajectory(waypoints, false);
+
     }
 }
