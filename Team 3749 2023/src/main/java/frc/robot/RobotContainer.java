@@ -13,7 +13,6 @@ import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
 import frc.robot.commands.arm.MoveArm;
-import frc.robot.commands.arm.ArmTeleopCommand;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
@@ -56,8 +55,6 @@ public class RobotContainer {
                 () -> pilot.getRightX()));
 
 
-        arm.setDefaultCommand(new ArmTeleopCommand(arm, pilot));
-
         claw.setDefaultCommand(
             Commands.run(() -> claw.setVoltage(1.0), claw)
         );
@@ -72,10 +69,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        pilot.a().whileTrue(new MoveArm(arm, ArmSetpoints.CONE_TOP));
-        pilot.b().whileTrue(new MoveArm(arm, ArmSetpoints.CONE_MID));
-        pilot.rightBumper().whileTrue(new MoveArm(arm, ArmSetpoints.STING));
-        pilot.rightTrigger().whileTrue(new MoveArm(arm, ArmSetpoints.DOUBLE_SUBSTATION));
+        pilot.a().onTrue(new MoveArm(arm, ArmSetpoints.CONE_TOP));
+        pilot.b().onTrue(new MoveArm(arm, ArmSetpoints.CONE_MID));
+        pilot.rightBumper().onTrue(new MoveArm(arm, ArmSetpoints.STING));
+        pilot.rightTrigger().onTrue(new MoveArm(arm, ArmSetpoints.DOUBLE_SUBSTATION));
 
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);

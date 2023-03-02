@@ -76,7 +76,7 @@ public class ArmTrajectories {
 
         };
 
-        return createTrajectory(waypoints, false);
+        return createTrajectory(waypoints, isReversed);
     }
 
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
@@ -172,6 +172,7 @@ public class ArmTrajectories {
                 return trajectory;
             }
             if (currentSetpoint == ArmSetpoints.CONE_TOP) {
+                System.out.println("TPO TO MID");
                 trajectory = ArmTrajectories.getMidNodeToTopNodTrajectory(true);
             } else {
                 trajectory = ArmTrajectories.getMidNodeTrajectory(false);
