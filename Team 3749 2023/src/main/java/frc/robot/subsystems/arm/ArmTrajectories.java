@@ -116,7 +116,7 @@ public class ArmTrajectories {
     public static Trajectory findTrajectory(ArmSetpoints desiredSetpoint, Arm arm){
         ArmSetpoints currentSetpoint = arm.getCurrentSetpoint();
         Trajectory trajectory;
-
+        // you should only be able to go to stowed from double substation and ground intake
         if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOWED) {
             System.out.println("Illigal double sub");
             arm.setCurrentSetpoint(ArmSetpoints.STOWED);
