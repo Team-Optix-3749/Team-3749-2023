@@ -68,7 +68,6 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    // equivilant to a odometer, but also intakes vision
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
     public Swerve() {
@@ -93,7 +92,6 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getHeading() {
-        // return Math.IEEEremainder(gyro.getAngle(), 360);
         return gyro.getYaw();
     }
 
@@ -119,15 +117,6 @@ public class Swerve extends SubsystemBase {
                         backLeft.getPosition() });
     }
 
-    @Override
-    public void periodic() {
-        updateOdometry();
-        SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putNumber("pitch", getVerticalTilt());
-        SmartDashboard.putNumber("Robot Pose X", getPose().getX());
-        SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
-    }
-
     public void stopModules() {
         frontLeft.stop();
         frontRight.stop();
@@ -146,5 +135,13 @@ public class Swerve extends SubsystemBase {
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
-
+    
+    @Override
+    public void periodic() {
+        updateOdometry();
+        SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("pitch", getVerticalTilt());
+        SmartDashboard.putNumber("Current Pose X", getPose().getX());
+        SmartDashboard.putNumber("Current Pose Y", getPose().getY());
+    }
 }

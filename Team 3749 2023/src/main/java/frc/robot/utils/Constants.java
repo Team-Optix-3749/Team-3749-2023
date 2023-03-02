@@ -196,15 +196,15 @@ public class Constants {
         public static SmartData<Double> visionYKP = new SmartData<Double>("Vision Y KP", 0.1);
 
         public static enum Nodes {
-            MID_CONE(-0.66),
+            MID_CONE(Units.inchesToMeters(22.125)),
             TOP_CONE(0.0),
             MID_CUBE(0.0),
             TOP_CUBE(0.0);
 
-            public double dist;
+            public double height;
 
-            Nodes(double dist) {
-                this.dist = dist;
+            Nodes(double height) {
+                this.height = height;
             }
             
         }

@@ -63,14 +63,14 @@ public class VisionAlign extends CommandBase {
         aligned = (VisionConstants.camera_offset == swerve.getPose().getTranslation().getX());
 
         double xSpeed = xController.calculate(relativeTargetPose.getX(), VisionConstants.camera_offset);
-        double ySpeed = yController.calculate(relativeTargetPose.getY(), node.dist);
+        double ySpeed = yController.calculate(relativeTargetPose.getY(), node.height);
 
         SmartDashboard.putNumber("X Speed", xSpeed);
         SmartDashboard.putNumber("Y Speed", ySpeed);
 
         ChassisSpeeds chassisSpeeds;
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, 0, 0, swerve.getRotation2d());
+                ySpeed, xSpeed, 0, swerve.getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 

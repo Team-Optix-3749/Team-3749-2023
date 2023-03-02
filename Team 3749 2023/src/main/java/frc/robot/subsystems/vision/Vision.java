@@ -73,7 +73,7 @@ public class Vision extends SubsystemBase {
     public double getDistance(PhotonTrackedTarget target) {
         return PhotonUtils.calculateDistanceToTargetMeters(
             Constants.VisionConstants.camera_height,
-            Constants.VisionConstants.camera_yaw,
+            Constants.VisionConstants.Nodes.MID_CONE.height,
             Constants.VisionConstants.camera_pitch,
             Units.degreesToRadians(getPitch(target)));
     }
@@ -104,10 +104,9 @@ public class Vision extends SubsystemBase {
             SmartDashboard.putNumber("target pitch: ", getPitch(target));
             SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
             SmartDashboard.putNumber("target distance: ", getDistance(target));
-            SmartDashboard.putNumberArray("Target translation 2d: ", new double[]{getTranslation2d(target).getX(), getTranslation2d(target).getY()});
+            SmartDashboard.putNumber("Target translation 2d X: ", getTranslation2d(target).getX());
+            SmartDashboard.putNumber("Target translation 2d Y: ", getTranslation2d(target).getY());
         }
-
-        this.setLED(VisionLEDMode.kOn);
 
         SmartDashboard.putString("Vision Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
     }
