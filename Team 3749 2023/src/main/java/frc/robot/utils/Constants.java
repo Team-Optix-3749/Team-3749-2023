@@ -3,7 +3,10 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
@@ -183,6 +186,28 @@ public class Constants {
     }
 
     public static class VisionConstants {
+        // See
+        // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+        // page 208
+        public static final double targetWidth = Units.inchesToMeters(41.30) - Units.inchesToMeters(6.70); // meters
+
+        // See
+        // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+        // page 197
+        public static final double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
+
+        // See
+        // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
+        // pages 4 and 5
+        public static final double kFarTgtXPos = Units.feetToMeters(54);
+        public static final double kFarTgtYPos = Units.feetToMeters(27 / 2) - Units.inchesToMeters(43.75)
+                - Units.inchesToMeters(48.0 / 2.0);
+        public static final double kFarTgtZPos = (Units.inchesToMeters(98.19) - targetHeight) / 2 + targetHeight;
+
+        public static final Pose3d kFarTargetPose = new Pose3d(
+                new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
+                new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
+
         public static final int reflective_tape_pipeline_index = 0;
         public static final int apriltag_pipeline_index = 1;
 
@@ -206,7 +231,7 @@ public class Constants {
             Nodes(double height) {
                 this.height = height;
             }
-            
+
         }
 
         public static enum Pipelines {
@@ -214,7 +239,7 @@ public class Constants {
             APRILTAG(1);
 
             public int index;
-            
+
             Pipelines(int index) {
                 this.index = index;
             }
