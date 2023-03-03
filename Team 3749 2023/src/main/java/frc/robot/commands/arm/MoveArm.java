@@ -160,7 +160,7 @@ public class MoveArm extends CommandBase {
                         trajectories[1].getTotalTimeSeconds(),
 
                 };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseConeSpeed};
+                clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage};
                 pauseLengths = new double[] { 0, 0.5 };
                 return trajectories;
 
@@ -207,7 +207,7 @@ public class MoveArm extends CommandBase {
                         trajectories[0].getTotalTimeSeconds(),
                         trajectories[1].getTotalTimeSeconds(),
                 };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseConeSpeed };
+                clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage };
                 pauseLengths = new double[] { 0, 0.5 };
                 return trajectories;
             }
@@ -258,7 +258,7 @@ public class MoveArm extends CommandBase {
                 Trajectory trajectory = ArmTrajectories.getGroundIntakeTrajectory(true);
                 arm.setCurrentSetpoint(ArmSetpoints.STOWED);
                 trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
+                clawVoltages = new double[] { Constants.Claw.intakeVoltage };
                 pauseLengths = new double[] { 0 };
                 return new Trajectory[] { trajectory };
             } else {

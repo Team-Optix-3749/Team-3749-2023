@@ -54,7 +54,7 @@ public class RobotContainer {
 
 
         claw.setDefaultCommand(
-            Commands.run(() -> claw.setVoltage(1.0), claw)
+            Commands.run(() -> claw.setVoltage(Constants.Claw.idleVoltage), claw)
         );
         // arm.setDefaultCommand(new SequentialCommandGroup(
         //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(false)),
@@ -75,6 +75,9 @@ public class RobotContainer {
 
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+        pilot.leftTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.releaseObjectVoltage));
+        pilot.leftTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.intakeVoltage));
+
     }
 
     /**

@@ -48,8 +48,8 @@ public class Constants {
     public static final class Claw {
         public static final int claw_id = 22;
         public static final double idleVoltage = 1;
-        public static final double releaseConeSpeed = -3;
-        
+        public static final double releaseObjectVoltage = -3;
+        public static final double intakeVoltage = 6;
     }
 
     public static final class Arm {
