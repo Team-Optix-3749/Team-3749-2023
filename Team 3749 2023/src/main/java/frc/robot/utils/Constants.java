@@ -60,6 +60,9 @@ public class Constants {
         public static final SmartData<Double> kP = new SmartData<Double>("Claw kP", .05);
         public static final double kI = 0.0;
         public static final double kD = 0.0;
+
+        public static final double idleVoltage = 1;
+        public static final double releaseConeSpeed = -3;
     }
 
     public static final class Arm {

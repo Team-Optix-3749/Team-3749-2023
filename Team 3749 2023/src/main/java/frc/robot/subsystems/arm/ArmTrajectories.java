@@ -12,9 +12,16 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
+/**
+ * Generate arm trajectories
+ * 
+ * @author Noah Simon
+ * @author Rohin Sood
+ * @author Raadwan Masum
+ **/
 public class ArmTrajectories {
+
     /**
      * Create trajectory
      * 
@@ -29,9 +36,9 @@ public class ArmTrajectories {
             // reverse pose for each waypoint (subtract pi)
             for (int i = 0; i < waypoints.length; i++)
                 waypoints[i] = waypoints[i].transformBy(
-                    new Transform2d(
-                        new Translation2d(0.0, 0.0),
-                        new Rotation2d(Math.PI)));
+                        new Transform2d(
+                                new Translation2d(0.0, 0.0),
+                                new Rotation2d(Math.PI)));
         }
 
         // generate trajectory
@@ -42,6 +49,12 @@ public class ArmTrajectories {
                         Constants.Arm.maxAccelerationMPS));
     }
 
+    /**
+     * Move arm to and from sting position and stow position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getStingTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
@@ -51,34 +64,90 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm to and from sting position and top node scoring position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 8)),
-                new Pose2d(1.33, 1.0, new Rotation2d(Math.PI / 8)),
+                new Pose2d(1.4, 1.0, new Rotation2d(Math.PI / 8)),
         };
 
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm to and from top node positon and onto the scoring node
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static Trajectory getTopNodePlaceDownTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(1.4, 1.0, new Rotation2d(3 * Math.PI / 2)),
+                new Pose2d(1.4, 0.85, new Rotation2d(3 * Math.PI / 2)),
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    /**
+     * Move arm to and from top node placed positon and sting
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static Trajectory getTopNodePlaceReturnTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(1.4, 0.85, new Rotation2d(9 * Math.PI / 8)),
+                new Pose2d(0.5, 0.7, new Rotation2d(9 * Math.PI / 8)),
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    /**
+     * Move arm to and from sting position and mid node scoring position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getMidNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 3)),
-                new Pose2d(0.9, 0.7, new Rotation2d(Math.PI / 3)),
+                new Pose2d(0.5, 0.7, new Rotation2d(0)),
+                new Pose2d(1.05, 0.7, new Rotation2d(0)),
         };
 
         return createTrajectory(waypoints, isReversed);
     }
 
-    public static Trajectory getMidNodeToTopNodTrajectory(boolean isReversed){
-        Pose2d[] waypoints = new Pose2d[]{
-            new Pose2d(0.9,0.7, new Rotation2d(Math.PI / 3)),
-            new Pose2d(1.33,1.0, new Rotation2d(Math.PI / 8)),
-
+    public static Trajectory getMidNodePlaceDownTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(1.05, 0.7, new Rotation2d(3 * Math.PI / 2)),
+                new Pose2d(1.05, 0.5, new Rotation2d(3 * Math.PI / 2)),
         };
 
         return createTrajectory(waypoints, isReversed);
     }
 
+    public static Trajectory getMidNodePlaceReturnTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(1.05, 0.5, new Rotation2d(5 * Math.PI / 6)),
+                new Pose2d(0.5, 0.7, new Rotation2d(5 * Math.PI / 6)),
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    /**
+     * Move arm to and from stow position and double substiation loading position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
@@ -88,6 +157,12 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm to and from stow position and further ground intake position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(0)),
@@ -97,131 +172,28 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
-    public static Trajectory getBlankTrajectory(Translation2d pos){
-        Pose2d[] waypoints = new Pose2d[]{
-            new Pose2d(pos, new Rotation2d(0)),
-            new Pose2d(0.3,-0.2, new Rotation2d(0))
+    /**
+     * Move arm to and from sting position and ground intake position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static Trajectory getGroundIntakeSweepTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(0.3, -0.2, new Rotation2d(0)),
+                new Pose2d(1.4, -0.3, new Rotation2d(0)),
         };
 
-        return createTrajectory(waypoints, false);
-
+        return createTrajectory(waypoints, isReversed);
     }
 
-    /***
-     * 
-     * @param desiredSetpoint ArmSetpoints: where you want to go
-     * @param arm Arm: the arm subsystem object, used for its position and getting/setting current setpoint
-     * @return Trajectory: the optimal trajectory for where you are to where you want to go
-     */
-    public static Trajectory findTrajectory(ArmSetpoints desiredSetpoint, Arm arm){
-        ArmSetpoints currentSetpoint = arm.getCurrentSetpoint();
-        Trajectory trajectory;
-        // you should only be able to go to stowed from double substation and ground intake
-        if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOWED) {
-            System.out.println("Illigal double sub");
-            arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-            return ArmTrajectories.getDoubleSubstationTrajectory(true);
-        }
-        if (currentSetpoint == ArmSetpoints.TOP_INTAKE && desiredSetpoint != ArmSetpoints.STOWED) {
-            System.out.println("Illigal top intake");
-            arm.setCurrentSetpoint(ArmSetpoints.STOWED);
+    public static Trajectory getMidNodeToTopNodeTrajectory(boolean isReversed){
+        Pose2d[] waypoints = new Pose2d[]{
+            new Pose2d(1.05,0.7, new Rotation2d(Math.PI / 3)),
+            new Pose2d(1.4,1.0, new Rotation2d(Math.PI / 8)),
 
-            return ArmTrajectories.getGroundIntakeTrajectory(true);
-        }
+        };
 
-        if (desiredSetpoint == ArmSetpoints.CONE_TOP) {
-
-            // if already there, reverse to stow
-            if (desiredSetpoint == currentSetpoint) {
-                System.out.println("reverse top node");
-
-                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
-                trajectory = ArmTrajectories.getTopNodeTrajectory(true)
-                        .concatenate(ArmTrajectories.getStingTrajectory(true));
-                return trajectory;
-            }
-            // if at mid, run the node to node
-            if (currentSetpoint == ArmSetpoints.CONE_MID) {
-                System.out.println("mid to top node");
-
-                trajectory = ArmTrajectories.getMidNodeToTopNodTrajectory(false);
-            }
-            // otherwise do it normally
-            else {
-                trajectory = ArmTrajectories.getTopNodeTrajectory(false);
-                System.out.println("from sting to top node");
-
-                // if at sting, run the trajectory. If not at sting, go to sting then run the
-                // trajectory
-                if (currentSetpoint != ArmSetpoints.STING) {
-
-                    System.out.println("to sting to top node");
-                    trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
-                }
-            }
-            // change the current setpoint and return
-            arm.setCurrentSetpoint (ArmSetpoints.CONE_TOP);
-            return trajectory;
-        }
-
-        else if (desiredSetpoint == ArmSetpoints.CONE_MID) {
-            if (desiredSetpoint == currentSetpoint) {
-                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
-                trajectory = ArmTrajectories.getMidNodeTrajectory(true)
-                        .concatenate(ArmTrajectories.getStingTrajectory(true));
-                return trajectory;
-            }
-            if (currentSetpoint == ArmSetpoints.CONE_TOP) {
-                System.out.println("TPO TO MID");
-                trajectory = ArmTrajectories.getMidNodeToTopNodTrajectory(true);
-            } else {
-                trajectory = ArmTrajectories.getMidNodeTrajectory(false);
-                if (currentSetpoint != ArmSetpoints.STING) {
-                    trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
-                }
-            }
-            arm.setCurrentSetpoint (ArmSetpoints.CONE_MID);
-            return trajectory;
-        }
-
-        else if (desiredSetpoint == ArmSetpoints.DOUBLE_SUBSTATION) {
-            if (desiredSetpoint == currentSetpoint) {
-                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
-
-                trajectory = ArmTrajectories.getDoubleSubstationTrajectory(true);
-                return trajectory;
-            }
-            trajectory = ArmTrajectories.getDoubleSubstationTrajectory(false);
-            arm.setCurrentSetpoint (ArmSetpoints.DOUBLE_SUBSTATION);
-            return trajectory;
-
-        }
-
-        else if (desiredSetpoint == ArmSetpoints.TOP_INTAKE) {
-            if (desiredSetpoint == currentSetpoint) {
-                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
-
-                trajectory = ArmTrajectories.getGroundIntakeTrajectory(true);
-                return trajectory;
-            }
-            trajectory = ArmTrajectories.getGroundIntakeTrajectory(false);
-            arm.setCurrentSetpoint (ArmSetpoints.TOP_INTAKE);
-            return trajectory;
-        }
-
-        else if (desiredSetpoint == ArmSetpoints.STING) {
-            if (desiredSetpoint == currentSetpoint) {
-                arm.setCurrentSetpoint (ArmSetpoints.STOWED);
-
-                trajectory = ArmTrajectories.getStingTrajectory(true);
-                return trajectory;
-            }
-            trajectory = ArmTrajectories.getStingTrajectory(false);
-            arm.setCurrentSetpoint (ArmSetpoints.STING);
-            return trajectory;
-        } else {
-            return null;
-        }    
+        return createTrajectory(waypoints, isReversed);
     }
-
 }
