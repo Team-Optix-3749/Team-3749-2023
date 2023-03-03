@@ -72,8 +72,8 @@ public class MoveArm extends CommandBase {
                     + String.valueOf(desiredState.poseMeters.getY()) + '\n');
             myWriter.close();
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            // System.out.println("An error occurred.");
+            // e.printStackTrace();
         }
         // System.out.println(clawVoltages[trajectoryIndex]);
         System.out.println(
