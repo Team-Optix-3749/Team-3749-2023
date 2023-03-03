@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -23,23 +22,24 @@ import frc.robot.utils.Constants.Arm.ArmSetpoints;
  * Double jointed arm subsystem built with 2 CANSparkMaxes at each joint and REV
  * Through Bore Encoders
  * 
- * TODO: increase tolerance on sting, change to brake when at setpoint
- * 
+ * @author Noah Simon
  * @author Rohin Sood
+ * @author Raadwan Masum
  */
 public class Arm extends SubsystemBase {
 
     private final ArmDynamics dynamics = new ArmDynamics();
 
+    // Shoulder motor
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
     private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
-    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP.get(), 0, 0);
+    private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP, 0, 0);
 
+    // Elbow motor
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(2);
-    private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP.get(), 0, 0);
+    private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP, 0, 0);
 
-    private final SendableChooser<Integer> presetChooser = new SendableChooser<Integer>();
     // safety stow
     private Translation2d position = new Translation2d(0.3, -0.2);
     private ArmSetpoints currentSetpoint = ArmSetpoints.STOWED;
@@ -57,20 +57,27 @@ public class Arm extends SubsystemBase {
         elbowMotor.setInverted(true);
         shoulderMotor.setInverted(false);
 
-        presetChooser.setDefaultOption("Stowed", 0);
-        presetChooser.addOption("DS", 1);
-        SmartDashboard.putData(presetChooser);
-
         shoulderPIDController.setTolerance(0);
         elbowPIDController.setTolerance(0);
 
         shoulderMotor.setIdleMode(IdleMode.kCoast);
         elbowMotor.setIdleMode(IdleMode.kCoast);
     }
-    public void setArmPosition(Translation2d pos){
+
+    /**
+     * Set arm to Translation2d position
+     * 
+     * @param pos
+     */
+    public void setArmPosition(Translation2d pos) {
         position = pos;
     }
 
+    /**
+     * Move arm to set position
+     * 
+     * @throws Exception
+     */
     private void moveArm() throws Exception {
         double shoulderAngle = ArmKinematics.inverse(position.getX(), position.getY()).getFirst();
         double elbowAngle = ArmKinematics.inverse(position.getX(), position.getY()).getSecond();
@@ -79,105 +86,53 @@ public class Arm extends SubsystemBase {
 
         setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
         setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
-
-        SmartDashboard.putNumber("SHOULDER SETPOINT", shoulderAngle);
-        SmartDashboard.putNumber("ELBOW SETPOINT", elbowAngle);
-
-        SmartDashboard.putNumber("SHOULDER FF", feedForwardOutput[0]);
-        SmartDashboard.putNumber("ELBOW FF", feedForwardOutput[1]);
-
-        SmartDashboard.putNumber("SHOULDER PID",
-                shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
-        SmartDashboard.putNumber("ELBOW PID",
-                elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
     }
 
+    /**
+     * Get current arm pose as Translation2d
+     * 
+     * @return arm coordianates as Translation2d
+     */
     public Translation2d getArmCoordinate() {
         return ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle()));
     }
 
+    /**
+     * Set shoulder motor voltage
+     * 
+     * @param voltage
+     */
     public void setShoulderVoltage(double voltage) {
         shoulderMotor.setVoltage(voltage);
     }
 
+    /**
+     * Set elbow motor voltage
+     * 
+     * @param voltage
+     */
     public void setElbowVoltage(double voltage) {
         elbowMotor.setVoltage(voltage);
     }
 
-    public void setShoulder(double percent) {
-        boolean past_min_limit = getShoulderAngle() <= Constants.Arm.shoulder_min_angle && percent > 0;
-        boolean past_max_limit = getShoulderAngle() >= Constants.Arm.shoulder_max_angle && percent < 0;
-        if (past_min_limit || past_max_limit) {
-            return;
-        }
-        shoulderMotor.set(percent);
-    }
-
-    public void setElbow(double percent) {
-        elbowMotor.set(percent);
-    }
-
+    /**
+     * Get current shoulder angle
+     * 
+     * @return shoulder angle as double
+     */
     public double getShoulderAngle() {
         return shoulderAbsoluteEncoder.getDistance();
     }
 
+    /**
+     * Get current elbow angle
+     * 
+     * @return elbow angle as double
+     */
     public double getElbowAngle() {
         return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
                 .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - Constants.Arm.elbow_offset;
     }
-
-    public void setShoulderAngle(double angle) {
-        shoulderPIDController.setSetpoint(angle);
-
-        shoulderMotor.set(
-                shoulderPIDController.calculate(
-                        shoulderAbsoluteEncoder.getDistance()));
-    }
-
-    public void setElbowAngle(double angle) {
-        elbowPIDController.setSetpoint(angle);
-
-        elbowMotor.set(
-                elbowPIDController.calculate(
-                        getElbowAngle()));
-    }
-
-    public boolean getShoulderAtSetpoint() {
-        return shoulderPIDController.atSetpoint();
-    }
-
-    public boolean getElbowAtSetpoint() {
-        return elbowPIDController.atSetpoint();
-    }
-
-    public void setArmAngle(double shoulder_angle, double elbow_angle) {
-        setShoulderAngle(shoulder_angle);
-        setElbowAngle(elbow_angle);
-    }
-
-    public void setArmPreset() {
-        double shoulder_angle;
-        double elbow_angle;
-
-        switch (presetChooser.getSelected()) {
-            case (0):
-                shoulder_angle = Constants.Arm.ShoulderSetpoints.STOWED.angle;
-                elbow_angle = Constants.Arm.ElbowSetpoints.STOWED.angle;
-                break;
-            case (1):
-                shoulder_angle = Constants.Arm.ShoulderSetpoints.DOUBLE_SUBSTATION.angle;
-                elbow_angle = Constants.Arm.ElbowSetpoints.DOUBLE_SUBSTATION.angle;
-                break;
-            default:
-                shoulder_angle = Constants.Arm.ShoulderSetpoints.STOWED.angle;
-                elbow_angle = Constants.Arm.ElbowSetpoints.STOWED.angle;
-                break;
-        }
-
-        setShoulderAngle(shoulder_angle);
-        setElbowAngle(elbow_angle);
-    }
-
     public void setCurrentSetpoint(ArmSetpoints setpoint){
         currentSetpoint = setpoint;
     }
@@ -185,16 +140,25 @@ public class Arm extends SubsystemBase {
     public ArmSetpoints getCurrentSetpoint(){
         return currentSetpoint;
     }
-
+    
+    /**
+     * Stop both arm motors
+     */
     public void stop() {
         elbowMotor.stopMotor();
         shoulderMotor.stopMotor();
     }
 
+    /**
+     * Stop shoulder motor
+     */
     public void stopShoulder() {
         shoulderMotor.stopMotor();
     }
 
+    /**
+     * Stop elbow motor
+     */
     public void stopElbow() {
         elbowMotor.stopMotor();
     }
@@ -207,14 +171,12 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         try {
             moveArm();
-
         } catch (Exception e) {
             System.out.println(e);
-
         }
 
-        shoulderPIDController.setP(Constants.Arm.shoulder_kP.get());
-        elbowPIDController.setP(Constants.Arm.elbow_kP.get());
+        SmartDashboard.putNumber("ARM X CACHE", position.getX());
+        SmartDashboard.putNumber("ARM Y CACHE", position.getY());
 
         SmartDashboard.putNumber("ARM X",
                 ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX());
@@ -224,5 +186,4 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("shoulder voltage", shoulderMotor.getBusVoltage() * shoulderMotor.getAppliedOutput());
         SmartDashboard.putNumber("elbow voltage", elbowMotor.getBusVoltage() * elbowMotor.getAppliedOutput());
     }
-
 }

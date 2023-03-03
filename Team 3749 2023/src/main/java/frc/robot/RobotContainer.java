@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.claw.*;
@@ -77,11 +75,6 @@ public class RobotContainer {
 
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-        pilot.rightTrigger().whileTrue(Commands.run(() -> claw.setVoltage(6)));
-        pilot.x().whileTrue(Commands.run(() -> claw.setVoltage(3)));
-
-        pilot.leftTrigger().whileTrue(Commands.run(() -> claw.setVoltage(-3)));
-
     }
 
     /**
