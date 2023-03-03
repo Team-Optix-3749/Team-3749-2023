@@ -85,7 +85,7 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 5;
+        public static final double maxSpeedMPS = 7;
         public static final double maxAccelerationMPS = 10;
         
         public static enum ArmSetpoints {

@@ -161,7 +161,7 @@ public class MoveArm extends CommandBase {
 
                 };
                 clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage};
-                pauseLengths = new double[] { 0, 0.5 };
+                pauseLengths = new double[] { 0, 0.4};
                 return trajectories;
 
             }
@@ -208,7 +208,7 @@ public class MoveArm extends CommandBase {
                         trajectories[1].getTotalTimeSeconds(),
                 };
                 clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage };
-                pauseLengths = new double[] { 0, 0.5 };
+                pauseLengths = new double[] { 0, 0.4};
                 return trajectories;
             }
 
