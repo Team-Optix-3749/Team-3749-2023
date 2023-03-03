@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.swerve;
 
+import org.photonvision.PhotonCamera;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -68,6 +70,9 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+
+    private PhotonCamera camera = new PhotonCamera("limelight");
+
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
     public Swerve() {
@@ -78,6 +83,7 @@ public class Swerve extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+
         swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
                 new Rotation2d(0),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
@@ -112,9 +118,23 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
+        // update pose estimation using encoders and gyro
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
+
+        // update pose estimation using apriltags
+        var res = camera.getLatestResult();
+        if (res.hasTargets()) {
+            var imageCaptureTime = res.getTimestampSeconds();
+            var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
+            var camPose = Constants.VisionConstants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
+            SmartDashboard.putNumber("CAM POSE X", camPose.getX());
+            SmartDashboard.putNumber("CAM POSE Y", camPose.getY());
+            SmartDashboard.putNumber("CAM POSE Z", camPose.getZ());
+            swerveDrivePoseEstimator.addVisionMeasurement(
+                    camPose.toPose2d(), imageCaptureTime);
+        }
     }
 
     public void stopModules() {
@@ -135,7 +155,7 @@ public class Swerve extends SubsystemBase {
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
-    
+
     @Override
     public void periodic() {
         updateOdometry();
