@@ -9,8 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.subsystems.vision.Vision;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Limelight;
 import frc.robot.utils.Constants.VisionConstants;
 
 /**
@@ -20,29 +20,27 @@ import frc.robot.utils.Constants.VisionConstants;
  */
 public class VisionAlign extends CommandBase {
     private final Swerve swerve;
-    private final Vision vision;
     private final VisionConstants.Nodes node;
     private final PIDController xController = new PIDController(VisionConstants.visionXKP.get(), 0, 0);
     private final PIDController yController = new PIDController(VisionConstants.visionYKP.get(), 0, 0);
     private boolean aligned;
 
-    public VisionAlign(Vision vision, Swerve swerve, VisionConstants.Nodes node) {
-        this.vision = vision;
+    public VisionAlign(Swerve swerve, VisionConstants.Nodes node) {
         this.swerve = swerve;
         this.node = node;
         this.setName("Vision Align");
-        addRequirements(vision, swerve);
+        addRequirements(swerve);
     }
 
     @Override
     public void initialize() {
         SmartDashboard.putString("vision align", "init");
         if (node == VisionConstants.Nodes.MID_CONE || node == VisionConstants.Nodes.TOP_CONE)
-            vision.setPipeline(VisionConstants.Pipelines.REFLECTIVE_TAPE.index);
+            Limelight.setPipeline(VisionConstants.Pipelines.REFLECTIVE_TAPE.index);
         else
-            vision.setPipeline(VisionConstants.Pipelines.APRILTAG.index);
+        Limelight.setPipeline(VisionConstants.Pipelines.APRILTAG.index);
 
-        vision.setLED(VisionLEDMode.kOn);
+        Limelight.setLED(VisionLEDMode.kOn);
     }
 
     @Override
@@ -50,15 +48,15 @@ public class VisionAlign extends CommandBase {
         SmartDashboard.putString("vision align", "exectue");
 
         PhotonTrackedTarget target;
-        if (vision.hasTarget(vision.getLatestResult())) {
-            target = vision.getBestTarget(vision.getLatestResult());
+        if (Limelight.hasTarget(Limelight.getLatestResult())) {
+            target = Limelight.getBestTarget(Limelight.getLatestResult());
             SmartDashboard.putString("Target", "found");
         } else {
             SmartDashboard.putString("Target", "not found");
             return;
         }
 
-        Translation2d relativeTargetPose = vision.getTranslation2d(target);
+        Translation2d relativeTargetPose = Limelight.getTranslation2d(target);
 
         aligned = (VisionConstants.camera_offset == swerve.getPose().getTranslation().getX());
 
@@ -84,7 +82,7 @@ public class VisionAlign extends CommandBase {
     public void end(boolean interrupted) {
         SmartDashboard.putString("vision align", "end");
 
-        vision.setLED(VisionLEDMode.kOff);
+        Limelight.setLED(VisionLEDMode.kOff);
     }
 
     @Override
