@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.utils.Constants.VisionConstants;
 
 /**
  * Encapsulated PhotonCamera object used in posed estimation and alignment
@@ -68,17 +69,17 @@ public class Limelight {
         return target.getPoseAmbiguity();
     }
 
-    public static double getDistance(PhotonTrackedTarget target) {
+    public static double getDistance(PhotonTrackedTarget target, VisionConstants.Nodes node) {
         return PhotonUtils.calculateDistanceToTargetMeters(
             Constants.VisionConstants.camera_height,
-            Constants.VisionConstants.Nodes.MID_CONE.height,
+            node.height,
             Constants.VisionConstants.camera_pitch,
             Units.degreesToRadians(getPitch(target)));
     }
 
-    public static Translation2d getTranslation2d(PhotonTrackedTarget target) {
+    public static Translation2d getTranslation2d(PhotonTrackedTarget target, VisionConstants.Nodes node) {
         return PhotonUtils.estimateCameraToTargetTranslation(
-            getDistance(target), getYaw(target)
+            getDistance(target, node), getYaw(target)
         ); 
     }
 
@@ -111,14 +112,14 @@ public class Limelight {
     public static void logging() {
 
         result = getLatestResult();
-            if (result.hasTargets()) {
-                PhotonTrackedTarget target = result.getBestTarget();
-                SmartDashboard.putNumber("target pitch: ", getPitch(target));
-                SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
-                SmartDashboard.putNumber("target distance: ", getDistance(target));
-                SmartDashboard.putNumber("Target translation 2d X: ", getTranslation2d(target).getX());
-                SmartDashboard.putNumber("Target translation 2d Y: ", getTranslation2d(target).getY());
-            }
+        if (result.hasTargets()) {
+            PhotonTrackedTarget target = result.getBestTarget();
+            SmartDashboard.putNumber("target pitch: ", getPitch(target));
+            SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
+            SmartDashboard.putNumber("target distance: ", getDistance(target, Constants.VisionConstants.Nodes.MID_CUBE));
+            SmartDashboard.putNumber("Target translation 2d X: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getX());
+            SmartDashboard.putNumber("Target translation 2d Y: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getY());
+        }
     }
 
 }

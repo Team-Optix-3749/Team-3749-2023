@@ -24,6 +24,7 @@ public class VisionAlign extends CommandBase {
     private final PIDController xController = new PIDController(VisionConstants.visionXKP.get(), 0, 0);
     private final PIDController yController = new PIDController(VisionConstants.visionYKP.get(), 0, 0);
     private boolean aligned;
+    private double offset;
 
     public VisionAlign(Swerve swerve, VisionConstants.Nodes node) {
         this.swerve = swerve;
@@ -35,40 +36,45 @@ public class VisionAlign extends CommandBase {
     @Override
     public void initialize() {
         SmartDashboard.putString("vision align", "init");
-        if (node == VisionConstants.Nodes.MID_CONE || node == VisionConstants.Nodes.TOP_CONE)
+        if (node == VisionConstants.Nodes.MID_CONE || node == VisionConstants.Nodes.TOP_CONE) {
             Limelight.setPipeline(VisionConstants.Pipelines.REFLECTIVE_TAPE.index);
-        else
-        Limelight.setPipeline(VisionConstants.Pipelines.APRILTAG.index);
+            offset = VisionConstants.retro_cam_offset;
+        } else {
+            Limelight.setPipeline(VisionConstants.Pipelines.APRILTAG.index);
+            offset = VisionConstants.apriltag_cam_offset;
+        }
 
         Limelight.setLED(VisionLEDMode.kOn);
+
+        xController.setTolerance(0.1);
+        yController.setTolerance(0.1);
     }
 
     @Override
     public void execute() {
         SmartDashboard.putString("vision align", "exectue");
+        SmartDashboard.putBoolean("at setpoint", xController.atSetpoint());
 
         PhotonTrackedTarget target;
         if (Limelight.hasTarget(Limelight.getLatestResult())) {
             target = Limelight.getBestTarget(Limelight.getLatestResult());
-            SmartDashboard.putString("Target", "found");
         } else {
-            SmartDashboard.putString("Target", "not found");
             return;
         }
 
-        Translation2d relativeTargetPose = Limelight.getTranslation2d(target);
+        Translation2d cameraToTargetTranslation = Limelight.getTranslation2d(target, node);
 
-        aligned = (VisionConstants.camera_offset == swerve.getPose().getTranslation().getX());
+        aligned = (VisionConstants.retro_cam_offset == swerve.getPose().getTranslation().getX());
 
-        double xSpeed = xController.calculate(relativeTargetPose.getX(), VisionConstants.camera_offset);
-        double ySpeed = yController.calculate(relativeTargetPose.getY(), node.height);
+        double xSpeed = xController.calculate(cameraToTargetTranslation.getX(), offset);
+        double ySpeed = yController.calculate(cameraToTargetTranslation.getY(), node.height);
 
         SmartDashboard.putNumber("X Speed", xSpeed);
         SmartDashboard.putNumber("Y Speed", ySpeed);
 
         ChassisSpeeds chassisSpeeds;
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                ySpeed, xSpeed, 0, swerve.getRotation2d());
+                0, xSpeed, 0, swerve.getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 

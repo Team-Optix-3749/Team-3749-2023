@@ -5,6 +5,7 @@
 package frc.robot.subsystems.swerve;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.common.hardware.VisionLEDMode;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -12,6 +13,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Limelight;
 import frc.robot.utils.Constants.DriveConstants;
 
 /***
@@ -71,8 +74,6 @@ public class Swerve extends SubsystemBase {
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    private PhotonCamera camera = new PhotonCamera("limelight");
-
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
     public Swerve() {
@@ -91,6 +92,21 @@ public class Swerve extends SubsystemBase {
                 new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
         gyro.calibrate();
+    }
+
+    public void drive(double xSpeed, double ySpeed, double thetaSpeed) {
+        
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, xSpeed, 0, getRotation2d());
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
+
+        setModuleStates(moduleStates);
+    }
+
+    public void stop() {
+        
+        drive(0, 0, 0);
     }
 
     public void zeroHeading() {
@@ -123,18 +139,7 @@ public class Swerve extends SubsystemBase {
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
 
-        // update pose estimation using apriltags
-        var res = camera.getLatestResult();
-        if (res.hasTargets()) {
-            var imageCaptureTime = res.getTimestampSeconds();
-            var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
-            var camPose = Constants.VisionConstants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
-            SmartDashboard.putNumber("CAM POSE X", camPose.getX());
-            SmartDashboard.putNumber("CAM POSE Y", camPose.getY());
-            SmartDashboard.putNumber("CAM POSE Z", camPose.getZ());
-            swerveDrivePoseEstimator.addVisionMeasurement(
-                    camPose.toPose2d(), imageCaptureTime);
-        }
+        Limelight.updatePoseAprilTags(swerveDrivePoseEstimator);
     }
 
     public void stopModules() {
@@ -163,5 +168,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("pitch", getVerticalTilt());
         SmartDashboard.putNumber("Current Pose X", getPose().getX());
         SmartDashboard.putNumber("Current Pose Y", getPose().getY());
+
+        Limelight.logging();
+        Limelight.setLED(VisionLEDMode.kOn);
     }
 }

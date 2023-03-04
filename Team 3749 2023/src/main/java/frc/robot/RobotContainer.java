@@ -11,11 +11,14 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
+import frc.robot.commands.swerve.ApriltagAlign;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
+import frc.robot.commands.swerve.VisionAlign;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.VisionConstants.Nodes;
 
 public class RobotContainer {
     // Controllers
@@ -28,6 +31,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
+        DriverStation.removeRefreshedDataEventHandle(44000);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -63,7 +67,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.aWhileHeld(
-            new MoveToPose(swerve, new Pose2d(new Translation2d(15.48, 1.79), new Rotation2d(0.0)))
+            // new MoveToPose(swerve, new Pose2d(new Translation2d(15.48, 1.79), new Rotation2d(0.0)))
+            new ApriltagAlign(swerve)
         );
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
