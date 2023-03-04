@@ -5,6 +5,7 @@ import java.util.Map;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -208,14 +209,20 @@ public class Constants {
                 new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
                 new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
 
+        public static final Transform3d cam_to_robot =
+            new Transform3d(new Translation3d(0.0, -Units.inchesToMeters(7), -Units.inchesToMeters(18)), new Rotation3d());
+        public static final Transform3d robot_to_cam = cam_to_robot.inverse();
+
         public static final int reflective_tape_pipeline_index = 0;
         public static final int apriltag_pipeline_index = 1;
 
         public static final double camera_height = Units.inchesToMeters(20); // meters
         public static final double camera_yaw = 0;
         public static final double camera_pitch = 0;
+        // public static final double camera_pitch = -2.66	;
 
-        public static final double camera_offset = -4.9;
+        public static final double retro_cam_offset = 0.56;
+        public static final double apriltag_cam_offset = 3.1;
 
         public static SmartData<Double> visionXKP = new SmartData<Double>("Vision X KP", 0.1);
         public static SmartData<Double> visionYKP = new SmartData<Double>("Vision Y KP", 0.1);
@@ -223,8 +230,8 @@ public class Constants {
         public static enum Nodes {
             MID_CONE(Units.inchesToMeters(22.125)),
             TOP_CONE(0.0),
-            MID_CUBE(0.0),
-            TOP_CUBE(0.0);
+            MID_CUBE(Units.inchesToMeters(14.25)),
+            TOP_CUBE(Units.inchesToMeters(14.25));
 
             public double height;
 
