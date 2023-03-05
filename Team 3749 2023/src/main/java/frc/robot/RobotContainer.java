@@ -67,16 +67,14 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        pilot.a().onTrue(new MoveArm(arm, claw, ArmSetpoints.CONE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, claw, ArmSetpoints.CONE_MID));
-        pilot.rightBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.STING));
-        pilot.leftBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.DOUBLE_SUBSTATION));
-        pilot.x().onTrue(new MoveArm(arm, claw, ArmSetpoints.TOP_INTAKE));
-
-
-        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-        pilot.rightTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.releaseObjectVoltage));
-        pilot.leftTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.intakeVoltage));
+        pilot.aWhileHeld(Commands.run(() -> swerve.moveAtAngle(180,0.4)));
+        pilot.bWhileHeld(Commands.run(() -> swerve.moveAtAngle(270,0.4)));
+        pilot.xWhileHeld(Commands.run(() -> swerve.moveAtAngle(90,0.4)));
+        pilot.yWhileHeld(Commands.run(() -> swerve.moveAtAngle(0,0.4)));
+        pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
+        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+        pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
+        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
 
     }
 

@@ -6,10 +6,13 @@ package frc.robot.subsystems.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -70,6 +73,10 @@ public class Swerve extends SubsystemBase {
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     // equivilant to a odometer, but also intakes vision
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+
+    private final PIDController turnController = new PIDController(0.005, 0.001, 0);
+    private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
+            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     public Swerve() {
         new Thread(() -> {
@@ -142,9 +149,60 @@ public class Swerve extends SubsystemBase {
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
     }
+    /***
+     * 
+     * @param angle the angle to move at, in degrees
+     * @param speed the speed to move at, 0-1
+     */
+    public void moveAtAngle(double angle, double speed) {
+        angle = Math.toRadians(angle);
+        double xSpeed = Math.sin(angle) * speed;
+        double ySpeed = Math.cos(angle) * speed;
+        // 4. Construct desired chassis speeds
+        ChassisSpeeds chassisSpeeds;
+
+        // Relative to field
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed, ySpeed, 0, getRotation2d());
+
+        // 5. Convert chassis speeds to individual module states
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+        // 6. Output each module states to wheels
+        setModuleStates(moduleStates);
+    }
+    /***
+
+     * @param angle the rotational angle to move to
+     */
+    public void turnToRotation(double angle){
+            // negative so that we move towards the target, not away
+            double turning_speed = turnController.calculate(Math.abs(getHeading()), angle);
+            turning_speed = turningLimiter.calculate(turning_speed)
+                    * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+            // signs the speed so we move in the correct direction
+            turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
+            // 4. Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    0, 0, turning_speed, getRotation2d());
+            // 5. Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                    .toSwerveModuleStates(chassisSpeeds);
+            // 6. Output each module states to wheels
+            setModuleStates(moduleStates);
+    }
 
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
+    
+    public PIDController getTurnController(){
+        return turnController;
+    }
 
+    public SlewRateLimiter getTurnLimiter(){
+        return turningLimiter;
+    }
 }
