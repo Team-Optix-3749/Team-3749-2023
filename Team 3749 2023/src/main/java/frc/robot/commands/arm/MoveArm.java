@@ -20,6 +20,15 @@ import frc.robot.subsystems.claw.Claw;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 
+/***
+ * @author Noah Simon
+ * 
+ * Moves the arm! It goes between setpoints listed in Constants.Arm.ArmSetpoints and 
+ * travels with ArmPaths listed in ArmTrajectories. Uses Trajectory objects created 
+ * in ArmTrajectories for motion profiling. Additionally controls the claw during 
+ * the paths as described in the ArmPath
+ */
+
 public class MoveArm extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 

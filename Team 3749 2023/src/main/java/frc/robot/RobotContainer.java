@@ -66,7 +66,6 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-
         pilot.a().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_MID));
         pilot.rightBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.STING));
