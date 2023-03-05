@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -124,6 +125,12 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm downward from the middle node
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getMidNodePlaceDownTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(1.05, 0.7, new Rotation2d(3 * Math.PI / 2)),
@@ -133,6 +140,12 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
+    /**
+     * Move arm back to Sting from the mid -> down trajectories
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
     public static Trajectory getMidNodePlaceReturnTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(1.05, 0.5, new Rotation2d(5 * Math.PI / 6)),
@@ -187,13 +200,127 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
-    public static Trajectory getMidNodeToTopNodeTrajectory(boolean isReversed){
-        Pose2d[] waypoints = new Pose2d[]{
-            new Pose2d(1.05,0.7, new Rotation2d(Math.PI / 3)),
-            new Pose2d(1.4,1.0, new Rotation2d(Math.PI / 8)),
+    /**
+     * Move arm to and from top node and mid node positions
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static Trajectory getMidNodeToTopNodeTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(1.05, 0.7, new Rotation2d(Math.PI / 3)),
+                new Pose2d(1.4, 1.0, new Rotation2d(Math.PI / 8)),
 
         };
 
         return createTrajectory(waypoints, isReversed);
     }
+
+    /**
+     * information on an arm path detailing the multiple trajectories, where and for
+     * how long to pause, and what the claw voltage should be during the trajectory.
+     * Pause times take effect before the trajectory in its identical index
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static enum ArmPaths {
+        STOW_TO_TOP(
+                new Trajectory[] { getTopNodeTrajectory(false) }, // trajectories
+                new double[] { 0 }, // pause lengths
+                new double[] { Constants.Claw.idleVoltage }), // voltages
+        STING_TO_TOP(
+                new Trajectory[] { getStingTrajectory(false).concatenate(getTopNodeTrajectory(false)) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        TOP_TO_STOW(
+                new Trajectory[] {
+                        getTopNodePlaceDownTrajectory(false),
+                        getTopNodePlaceReturnTrajectory(false).concatenate(
+                                getStingTrajectory(true))
+                },
+                new double[] { 0, 0.4 },
+                new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage }),
+        TOP_TO_STING(
+                new Trajectory[] { getTopNodeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        TOP_TO_MID(
+                new Trajectory[] { getMidNodeToTopNodeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        STOW_TO_MID(
+                new Trajectory[] { getStingTrajectory(false).concatenate(getMidNodeTrajectory(false)) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        STING_TO_MID(
+                new Trajectory[] { getMidNodeTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        MID_TO_STOW(
+                new Trajectory[] {
+                        ArmTrajectories.getMidNodePlaceDownTrajectory(false),
+                        ArmTrajectories.getMidNodePlaceReturnTrajectory(false).concatenate(
+                                ArmTrajectories.getStingTrajectory(true))
+                },
+                new double[] { 0, 0.4 },
+                new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage }),
+        MID_TO_STING(
+                new Trajectory[] { getMidNodeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        MID_TO_TOP(
+                new Trajectory[] { getMidNodeToTopNodeTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        STOW_TO_DOUBLESUB(
+                new Trajectory[] { getDoubleSubstationTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        DOUBLESUB_TO_STOW(
+                new Trajectory[] { getDoubleSubstationTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        STOW_TO_GROUND_INTAKE(
+                new Trajectory[] { getGroundIntakeTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        GROUND_INTAKE_TO_STOW(
+                new Trajectory[] { getGroundIntakeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        STOW_TO_STING(
+                new Trajectory[] { getStingTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage }),
+        STING_TO_STOW(
+                new Trajectory[] { getStingTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.Claw.idleVoltage });
+
+        public int numTrajectories;
+        public Trajectory[] trajectories;
+        public double[] trajectoryLengths;
+        public double[] pauseLengths;
+        public double[] clawVoltages;
+
+        ArmPaths(Trajectory[] trajectories,
+                double[] pauseLengths,
+                double[] clawVoltages) {
+            this.numTrajectories = trajectories.length;
+            this.trajectoryLengths = new double[numTrajectories];
+            int index = 0;
+            for (Trajectory traj : trajectories) {
+                this.trajectoryLengths[index] = traj.getTotalTimeSeconds();
+                index++;
+            }
+
+            this.trajectories = trajectories;
+            this.pauseLengths = pauseLengths;
+            this.clawVoltages = clawVoltages;
+
+        }
+
+    }
+
 }

@@ -67,11 +67,11 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        pilot.a().onTrue(new MoveArm(arm, claw, ArmSetpoints.CONE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, claw, ArmSetpoints.CONE_MID));
+        pilot.a().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_TOP));
+        pilot.b().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_MID));
         pilot.rightBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.STING));
         pilot.leftBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.DOUBLE_SUBSTATION));
-        pilot.x().onTrue(new MoveArm(arm, claw, ArmSetpoints.TOP_INTAKE));
+        pilot.x().onTrue(new MoveArm(arm, claw, ArmSetpoints.GROUND_INTAKE));
 
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
