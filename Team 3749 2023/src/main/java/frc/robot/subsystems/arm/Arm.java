@@ -183,7 +183,7 @@ public class Arm extends SubsystemBase {
             System.out.println(e);
         }
 
-        // // for testing arm feedforward
+        // for testing arm feedforward
         // try {
         //     feedForwardTesting(ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(),
         //         ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
