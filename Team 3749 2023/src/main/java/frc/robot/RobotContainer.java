@@ -69,8 +69,7 @@ public class RobotContainer {
 
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-        pilot.aWhileHeld(() -> sideIntake.setLiftPIDFF(1.3), () -> sideIntake.stop(), sideIntake);
-        pilot.bWhileHeld(() -> sideIntake.setLiftPIDFF(0.0), () -> sideIntake.stop(), sideIntake);
+        pilot.a().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
         pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage));
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));

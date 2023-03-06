@@ -24,6 +24,8 @@ public class SideIntake extends SubsystemBase {
     private final ArmFeedforward liftFF = new ArmFeedforward(0, Constants.SideIntake.liftKG, 0.0, 0.0);
     private final PIDController liftPID =  new PIDController(Constants.SideIntake.liftKP.get(), 0.0, 0.0);
 
+    private double liftSetpoint = 0.0;
+
     public SideIntake() {
         // intakeMotor.restoreFactoryDefaults();
         liftMotor.restoreFactoryDefaults();
@@ -127,6 +129,10 @@ public class SideIntake extends SubsystemBase {
         setLiftVoltage(pid_output + ff_output);
     }
 
+    public void toggleLiftSetpoint( ) {
+        liftSetpoint = liftSetpoint == 1.33 ? 0 : 1.33;
+    }
+
     /**
      * set % speed of the motor
      * 
@@ -152,5 +158,7 @@ public class SideIntake extends SubsystemBase {
                 this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
 
         liftPID.setP(Constants.SideIntake.liftKP.get());
+
+        setLiftPIDFF(liftSetpoint);
     }
 }
