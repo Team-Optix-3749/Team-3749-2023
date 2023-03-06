@@ -177,19 +177,19 @@ public class Arm extends SubsystemBase {
     }
   
     public void periodic() {
-        // try {
-        //     moveArm();
-        // } catch (Exception e) {
-        //     System.out.println(e);
-        // }
-
-        // for testing arm feedforward
         try {
-            feedForwardTesting(ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(),
-                ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
-        }  catch (Exception e) {
+            moveArm();
+        } catch (Exception e) {
             System.out.println(e);
         }
+
+        // // for testing arm feedforward
+        // try {
+        //     feedForwardTesting(ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(),
+        //         ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
+        // }  catch (Exception e) {
+        //     System.out.println(e);
+        // }
 
         SmartDashboard.putNumber("ARM X CACHE", position.getX());
         SmartDashboard.putNumber("ARM Y CACHE", position.getY());
