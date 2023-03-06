@@ -5,7 +5,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -21,7 +20,6 @@ public class SideIntake extends SubsystemBase {
     private final CANSparkMax liftMotor = new CANSparkMax(Constants.SideIntake.lift_motor_id, MotorType.kBrushless);
     private final RelativeEncoder liftEncoder = liftMotor.getEncoder();
 
-    private final PIDController liftPID = new PIDController(Constants.SideIntake.liftKP.get(), 0.0, 0.0);
     private final ArmFeedforward liftFF = new ArmFeedforward(0, Constants.SideIntake.liftKG.get(), 0.0, 0.0);
 
     public SideIntake() {
@@ -83,18 +81,26 @@ public class SideIntake extends SubsystemBase {
         intakeMotor.setVoltage(voltage);
     }
 
+    /**
+     * set position of the lift motor
+     * 
+     * @param voltage
+     */
     public void setLiftPosition(double position) {
         liftEncoder.setPosition(position);
     }
 
+    /**
+     * set position of the lift motor using FF
+     * 
+     * @param voltage
+     */
     public void setLiftFF(double setpoint) {
-        double pid_output = liftPID.calculate(liftEncoder.getPosition(), setpoint);
         double ff_output = liftFF.calculate(setpoint, 0.0);
 
         SmartDashboard.putNumber("Lift FF Ouptut", ff_output);
-        SmartDashboard.putNumber("Lift PID Ouptut", pid_output);
 
-        setLiftPosition(pid_output + ff_output);
+        setLiftPosition(ff_output);
     }
 
     /**
