@@ -150,14 +150,15 @@ public class MoveArm extends CommandBase {
  
                 arm.setCurrentSetpoint(ArmSetpoints.STOWED);
                 Trajectory[] trajectories = new Trajectory[] {
-                        ArmTrajectories.getTopNodePlaceDownTrajectory(false),
-                        ArmTrajectories.getTopNodePlaceReturnTrajectory(false).concatenate(
+                        // ArmTrajectories.getTopNodePlaceDownTrajectory(false),
+                        // ArmTrajectories.getTopNodePlaceReturnTrajectory(false).concatenate(
+                        //         ArmTrajectories.getStingTrajectory(true))
+                        ArmTrajectories.getTopNodeTrajectory(true).concatenate(
                                 ArmTrajectories.getStingTrajectory(true))
                 };
 
                 trajectoryLengths = new double[] {
                         trajectories[0].getTotalTimeSeconds(),
-                        trajectories[1].getTotalTimeSeconds(),
 
                 };
                 clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage};
