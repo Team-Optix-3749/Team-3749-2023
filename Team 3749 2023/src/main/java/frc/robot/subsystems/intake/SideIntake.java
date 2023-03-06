@@ -14,8 +14,8 @@ import frc.robot.utils.Constants;
  */
 public class SideIntake extends SubsystemBase {
     
-    private final CANSparkMax intakeMotor = new CANSparkMax(Constants.SideIntake.side_intake_id, MotorType.kBrushless);
-    private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
+    // private final CANSparkMax intakeMotor = new CANSparkMax(Constants.SideIntake.side_intake_id, MotorType.kBrushless);
+    // private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
 
     private final CANSparkMax liftMotor = new CANSparkMax(Constants.SideIntake.lift_motor_id, MotorType.kBrushless);
     private final RelativeEncoder liftEncoder = liftMotor.getEncoder();
@@ -23,14 +23,14 @@ public class SideIntake extends SubsystemBase {
     private final ArmFeedforward liftFF = new ArmFeedforward(0, Constants.SideIntake.liftKG.get(), 0.0, 0.0);
 
     public SideIntake() {
-        intakeMotor.restoreFactoryDefaults();
+        // intakeMotor.restoreFactoryDefaults();
         liftMotor.restoreFactoryDefaults();
 
-        intakeMotor.setIdleMode(IdleMode.kBrake);
+        // intakeMotor.setIdleMode(IdleMode.kBrake);
         liftMotor.setIdleMode(IdleMode.kBrake);
 
-        intakeEncoder.setPositionConversionFactor(1.0 / 3.0);
-        intakeEncoder.setVelocityConversionFactor(1.0 / (60.0 * 5.0));
+        // intakeEncoder.setPositionConversionFactor(1.0 / 3.0);
+        // intakeEncoder.setVelocityConversionFactor(1.0 / (60.0 * 5.0));
 
         liftEncoder.setPositionConversionFactor(1.0 / 100.0);
         liftEncoder.setVelocityConversionFactor((Math.PI * 2) / (60.0 * 100.0));
@@ -42,7 +42,8 @@ public class SideIntake extends SubsystemBase {
      * @return
      */
     public double getClawTemperature() {
-        return intakeMotor.getMotorTemperature();
+        // return intakeMotor.getMotorTemperature();
+        return 0;
     }
 
     /**
@@ -51,7 +52,8 @@ public class SideIntake extends SubsystemBase {
      * @return
      */
     public double getIntakePosition() {
-        return intakeEncoder.getPosition();
+        // return intakeEncoder.getPosition();
+        return 0;
     }
 
     /**
@@ -60,7 +62,8 @@ public class SideIntake extends SubsystemBase {
      * @return
      */
     public double getLiftPosition() {
-        return intakeEncoder.getPosition();
+        // return intakeEncoder.getPosition();
+        return 0;
     }
 
     /**
@@ -69,7 +72,8 @@ public class SideIntake extends SubsystemBase {
      * @return
      */
     public double getIntakeVelocity() {
-        return intakeEncoder.getVelocity();
+        // return intakeEncoder.getVelocity();
+        return 0;
     }
 
     /**
@@ -78,7 +82,7 @@ public class SideIntake extends SubsystemBase {
      * @param voltage
      */
     public void setIntakeVoltage(double voltage) {
-        intakeMotor.setVoltage(voltage);
+        // intakeMotor.setVoltage(voltage);
     }
 
     /**
@@ -100,7 +104,7 @@ public class SideIntake extends SubsystemBase {
 
         SmartDashboard.putNumber("Lift FF Ouptut", ff_output);
 
-        setLiftPosition(ff_output);
+        // setLiftPosition(ff_output);
     }
 
     /**
@@ -109,24 +113,24 @@ public class SideIntake extends SubsystemBase {
      * @param speed -1.0 to 1.0
      */
     public void setIntake(double speed) {
-        intakeMotor.set(speed);
+        // intakeMotor.set(speed);
     }
 
     /**
      * stops the motor
      */
     public void stop() {
-        intakeMotor.stopMotor();
+        // intakeMotor.stopMotor();
         liftMotor.stopMotor();
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Side Intake Temp (C)", getClawTemperature());
-        SmartDashboard.putNumber("Side Intake Position", intakeEncoder.getPosition());
-        SmartDashboard.putNumber("Side Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("Side Intake Current", intakeMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Side Intake Voltage", intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage());
+        // SmartDashboard.putNumber("Side Intake Position", intakeEncoder.getPosition());
+        // SmartDashboard.putNumber("Side Intake Velocity", intakeEncoder.getVelocity());
+        // SmartDashboard.putNumber("Side Intake Current", intakeMotor.getOutputCurrent());
+        // SmartDashboard.putNumber("Side Intake Voltage", intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage());
         SmartDashboard.putString("Side Intake Command",
                 this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
     }
