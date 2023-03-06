@@ -88,25 +88,7 @@ public class ArmTrajectories {
     public static Trajectory getMidNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(0)),
-                new Pose2d(1.05, 0.7, new Rotation2d(0)),
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-
-    public static Trajectory getMidNodePlaceDownTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(1.05, 0.7, new Rotation2d(3 * Math.PI / 2)),
-                new Pose2d(1.05, 0.5, new Rotation2d(3 * Math.PI / 2)),
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-
-    public static Trajectory getMidNodePlaceReturnTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(1.05, 0.5, new Rotation2d(5 * Math.PI / 6)),
-                new Pose2d(0.5, 0.7, new Rotation2d(5 * Math.PI / 6)),
+                new Pose2d(0.7, 0.5, new Rotation2d(5 * Math.PI / 3)),
         };
 
         return createTrajectory(waypoints, isReversed);
