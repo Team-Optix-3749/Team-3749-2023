@@ -9,20 +9,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
-import frc.robot.subsystems.claw.*;
-import frc.robot.commands.arm.MoveArm;
+import frc.robot.subsystems.intake.*;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
 
     // Subsystems
     private final Swerve swerve = new Swerve();
-    private final Claw claw = new Claw();
+    private final ArmIntake armIntake = new ArmIntake();
+    private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
 
     public RobotContainer() {
@@ -53,12 +52,13 @@ public class RobotContainer {
                 () -> pilot.getRightX()));
 
 
-        claw.setDefaultCommand(
-            Commands.run(() -> claw.setVoltage(Constants.Claw.idleVoltage), claw)
+        armIntake.setDefaultCommand(
+            Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake)
         );
-        // arm.setDefaultCommand(new SequentialCommandGroup(
-        //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(false)),
-        //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(true))));
+
+        sideIntake.setDefaultCommand(
+            Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
+        );
     }
 
     /**
@@ -67,16 +67,14 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        pilot.a().onTrue(new MoveArm(arm, claw, ArmSetpoints.CONE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, claw, ArmSetpoints.CONE_MID));
-        pilot.rightBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.STING));
-        pilot.leftBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.DOUBLE_SUBSTATION));
-        pilot.x().onTrue(new MoveArm(arm, claw, ArmSetpoints.TOP_INTAKE));
-
 
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
-        pilot.rightTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.releaseObjectVoltage));
-        pilot.leftTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.intakeVoltage));
+        pilot.aWhileHeld(() -> sideIntake.setLiftFF(-Math.PI/2), sideIntake);
+        pilot.aWhileHeld(() -> sideIntake.setLiftFF(-Math.PI/2), sideIntake);
+        pilot.aWhileHeld(() -> sideIntake.setLiftFF(-Math.PI/2), sideIntake);
+
+        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage));
+        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
 
     }
 
