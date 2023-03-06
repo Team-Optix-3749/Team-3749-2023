@@ -60,7 +60,7 @@ public class Constants {
         public static final double intakeVoltage = 6;
         public static final double liftKG = 0.2;
 
-        public static SmartData<Double> liftKP = new SmartData<Double>("Lift KP", 6.0);
+        public static SmartData<Double> liftKP = new SmartData<Double>("Lift KP", 7.0);
     }
 
     public static final class Arm {
