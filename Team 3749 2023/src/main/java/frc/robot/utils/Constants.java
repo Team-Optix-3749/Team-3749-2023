@@ -58,9 +58,9 @@ public class Constants {
         public static final double idleVoltage = 1;
         public static final double releaseObjectVoltage = -3;
         public static final double intakeVoltage = 6;
+        public static final double liftKG = 0.2;
 
-        public static SmartData<Double> liftKG = new SmartData<Double>("Lift KG", 0.7);
-        public static SmartData<Double> liftKP = new SmartData<Double>("Lift KP", 0.1);
+        public static SmartData<Double> liftKP = new SmartData<Double>("Lift KP", 6.0);
     }
 
     public static final class Arm {
