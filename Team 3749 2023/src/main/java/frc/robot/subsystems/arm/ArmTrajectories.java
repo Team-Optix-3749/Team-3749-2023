@@ -151,7 +151,7 @@ public class ArmTrajectories {
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
-                new Pose2d(0.75, 0.75, new Rotation2d(Math.PI / 2)),
+                new Pose2d(0.5, 0.75, new Rotation2d(Math.PI / 2)),
         };
 
         return createTrajectory(waypoints, isReversed);
