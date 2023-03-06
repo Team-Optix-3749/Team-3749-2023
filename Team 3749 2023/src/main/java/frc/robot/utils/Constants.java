@@ -52,6 +52,13 @@ public class Constants {
         public static final double intakeVoltage = 6;
     }
 
+    public static final class GroundClaw {
+        public static final int ground_claw_id = 23;
+        public static final double idleVoltage = 1;
+        public static final double releaseObjectVoltage = -3;
+        public static final double intakeVoltage = 6;
+    }
+
     public static final class Arm {
         // public static final double elbow_kP = 0.3;
         public static final double elbow_kP = 0.2;
