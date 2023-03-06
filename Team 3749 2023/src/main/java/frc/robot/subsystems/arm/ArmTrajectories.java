@@ -118,7 +118,7 @@ public class ArmTrajectories {
     public static Trajectory getGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(0)),
-                new Pose2d(0.7, -0.4, new Rotation2d(5 * Math.PI / 3)),
+                new Pose2d(0.9, -0.09, new Rotation2d(5 * Math.PI / 3)),
         };
 
         return createTrajectory(waypoints, isReversed);
