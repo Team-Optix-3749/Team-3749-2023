@@ -74,7 +74,7 @@ public class Swerve extends SubsystemBase {
     // equivilant to a odometer, but also intakes vision
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
-    private final PIDController turnController = new PIDController(0.005, 0.001, 0);
+    private final PIDController turnController = new PIDController(0.045, 0.00, 0);
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
@@ -93,6 +93,7 @@ public class Swerve extends SubsystemBase {
                 new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
         gyro.calibrate();
+        turnController.enableContinuousInput(-180,180);
     }
 
     public void zeroHeading() {
@@ -151,13 +152,13 @@ public class Swerve extends SubsystemBase {
     }
     /***
      * 
-     * @param angle the angle to move at, in degrees
+     * @param angle the angle to move at, in degrees, -180 to 180
      * @param speed the speed to move at, 0-1
      */
     public void moveAtAngle(double angle, double speed) {
         angle = Math.toRadians(angle);
-        double xSpeed = Math.sin(angle) * speed;
-        double ySpeed = Math.cos(angle) * speed;
+        double xSpeed = Math.cos(angle) * speed;
+        double ySpeed = -Math.sin(angle) * speed;
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
 
@@ -173,15 +174,19 @@ public class Swerve extends SubsystemBase {
     }
     /***
 
-     * @param angle the rotational angle to move to
+     * @param angle the rotational angle to move to, -180 to 180
      */
     public void turnToRotation(double angle){
+            SmartDashboard.putNumber("ANGLE SETPOINT", angle);  
+
             // negative so that we move towards the target, not away
-            double turning_speed = turnController.calculate(Math.abs(getHeading()), angle);
-            turning_speed = turningLimiter.calculate(turning_speed)
-                    * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+            double turning_speed = -turnController.calculate(getHeading(), angle);
+            turning_speed = turningLimiter.calculate(turning_speed);
             // signs the speed so we move in the correct direction
-            turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
+            // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
+
+
+            SmartDashboard.putNumber("SPEEEEED", turning_speed);
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
             // Relative to field

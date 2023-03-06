@@ -67,15 +67,16 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        pilot.aWhileHeld(Commands.run(() -> swerve.moveAtAngle(180,0.4)));
-        pilot.bWhileHeld(Commands.run(() -> swerve.moveAtAngle(270,0.4)));
-        pilot.xWhileHeld(Commands.run(() -> swerve.moveAtAngle(90,0.4)));
-        pilot.yWhileHeld(Commands.run(() -> swerve.moveAtAngle(0,0.4)));
+        pilot.aWhileHeld(() -> swerve.moveAtAngle(180,0.5));
+        pilot.bWhileHeld(() -> swerve.moveAtAngle(90,0.5));
+        pilot.xWhileHeld(() -> swerve.moveAtAngle(-90,0.5));
+        pilot.yWhileHeld(() -> swerve.moveAtAngle(0,0.5));
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
-        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(-90)));
         pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
-        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
+        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
 
+        pilot.backWhileHeld(()-> swerve.zeroHeading());
     }
 
     /**
