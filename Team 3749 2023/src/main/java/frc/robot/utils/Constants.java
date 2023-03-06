@@ -45,18 +45,22 @@ public class Constants {
         return false;
     }
 
-    public static final class Claw {
-        public static final int claw_id = 22;
+    public static final class ArmIntake {
+        public static final int arm_intake_id = 22;
         public static final double idleVoltage = 1;
         public static final double releaseObjectVoltage = -3;
         public static final double intakeVoltage = 6;
     }
 
-    public static final class GroundClaw {
-        public static final int ground_claw_id = 23;
+    public static final class SideIntake {
+        public static final int lift_motor_id = 23;
+        public static final int side_intake_id = 24;
         public static final double idleVoltage = 1;
         public static final double releaseObjectVoltage = -3;
         public static final double intakeVoltage = 6;
+
+        public static SmartData<Double> liftKG = new SmartData<Double>("Lift KG", 0.7);
+        public static SmartData<Double> liftKP = new SmartData<Double>("Lift KP", 0.1);
     }
 
     public static final class Arm {
