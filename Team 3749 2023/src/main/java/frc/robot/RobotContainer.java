@@ -66,10 +66,12 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-
-
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+
         pilot.a().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+
+        pilot.rightBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.releaseObjectVoltage));
+        pilot.leftBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.intakeVoltage));
 
         pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage));
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
