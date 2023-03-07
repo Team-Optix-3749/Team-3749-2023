@@ -40,8 +40,9 @@ public class Claw extends SubsystemBase {
         clawMotor.restoreFactoryDefaults();
 
         clawMotor.setIdleMode(IdleMode.kBrake);
-        clawMotor.setInverted(true);
         // clawMotor.setSmartCurrentLimit(60);
+
+        clawMotor.setInverted(true);
 
         // 1 wheel rotation / 5 motor rotations
         clawEncoder.setPositionConversionFactor(1.0 / 5.0);
