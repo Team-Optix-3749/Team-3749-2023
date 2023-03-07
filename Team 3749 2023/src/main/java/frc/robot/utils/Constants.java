@@ -90,14 +90,13 @@ public class Constants {
         
         public static enum ArmSetpoints {
             ZERO,
-            STOWED,
+            STOW,
             STING,
             DOUBLE_SUBSTATION,
-            TOP_INTAKE,
-            CONE_TOP,
-            CONE_MID,
-            CUBE_TOP,
-            CUBE_MID;
+            GROUND_INTAKE,
+            PLACE_TOP,
+            PLACE_MID;
+        
 
         }
     }
@@ -175,6 +174,8 @@ public class Constants {
                 / 2;
         public static final double kAutoDriveMaxAngularAccelerationUnitsPerSecond = kTeleDriveMaxAngularAccelerationUnitsPerSecond
                 / 2;
+
+        
     }
 
     public static final class OIConstants {

@@ -40,7 +40,7 @@ public class Arm extends SubsystemBase {
 
     // safety stow
     private Translation2d position = new Translation2d(0.3, -0.2);
-    private ArmSetpoints currentSetpoint = ArmSetpoints.STOWED;
+    private ArmSetpoints currentSetpoint = ArmSetpoints.STOW;
 
 
 
