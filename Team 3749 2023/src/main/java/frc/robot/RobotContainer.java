@@ -82,6 +82,12 @@ public class RobotContainer {
         
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+
+        // swerve rotation cardinals
+        pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
+        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
+        pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
+        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
 
     /**
