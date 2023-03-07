@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
@@ -102,6 +105,24 @@ public class RobotContainer {
      * Set event maps for autonomous
      */
     public void configureAuto() {
+        Constants.AutoConstants.eventMap.put("place_cone_top", 
+            new SequentialCommandGroup(
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                new WaitCommand(0.5),
+                new ParallelRaceGroup(
+                    Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage), armIntake),
+                    new SequentialCommandGroup(
+                        new WaitCommand(1),
+                        new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP)
+                    )
+                )
+            )
+        );
+
+        Constants.AutoConstants.eventMap.put("toggle_side_intake", 
+            Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake)
+        );
+
         Constants.AutoConstants.eventMap.put("pickup_cone_floor", Commands.print("PICKUP CONE FLOOR"));
         Constants.AutoConstants.eventMap.put("pickup_cube_floor", null);
         Constants.AutoConstants.eventMap.put("pickup_cone_double_substation", null);
