@@ -56,6 +56,7 @@ public class RobotContainer {
         claw.setDefaultCommand(
             Commands.run(() -> claw.setVoltage(Constants.Claw.idleVoltage), claw)
         );
+
         // arm.setDefaultCommand(new SequentialCommandGroup(
         //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(false)),
         //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(true))));
@@ -66,17 +67,21 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
+        // arm setpoints (buttons)
         pilot.a().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_MID));
-        pilot.rightBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.STING));
-        pilot.leftBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.DOUBLE_SUBSTATION));
         pilot.x().onTrue(new MoveArm(arm, claw, ArmSetpoints.GROUND_INTAKE));
 
-
-        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+        // arm setpoints (bumpers)
+        pilot.rightBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.STING));
+        pilot.leftBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.DOUBLE_SUBSTATION));
+        
+        // intake button bindings
         pilot.rightTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.releaseObjectVoltage));
         pilot.leftTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.intakeVoltage));
-
+        
+        // swerve button bindings
+        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
     }
 
     /**
