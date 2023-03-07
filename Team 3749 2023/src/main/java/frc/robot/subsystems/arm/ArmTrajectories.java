@@ -73,7 +73,7 @@ public class ArmTrajectories {
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 2.5)),
-                new Pose2d(1.1, 0.95, new Rotation2d(0)),
+                new Pose2d(1.1, 0.98, new Rotation2d(0)),
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -148,7 +148,7 @@ public class ArmTrajectories {
     public static Trajectory getMidNodeToTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.8, 0.7, new Rotation2d(Math.PI / 3)),
-                new Pose2d(1.1, 0.95, new Rotation2d(Math.PI / 8)),
+                new Pose2d(1.1, 0.98, new Rotation2d(Math.PI / 8)),
 
         };
 
@@ -169,7 +169,7 @@ public class ArmTrajectories {
                 new double[] { 0 }, // pause lengths
                 new double[] { Constants.Claw.idleVoltage }), // voltages
         STING_TO_TOP(
-                new Trajectory[] { getStingTrajectory(false).concatenate(getTopNodeTrajectory(false)) },
+                new Trajectory[] { getTopNodeTrajectory(false) },
                 new double[] { 0 },
                 new double[] { Constants.Claw.idleVoltage }),
         TOP_TO_STOW(
