@@ -53,7 +53,6 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-
         armIntake.setDefaultCommand(
             Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake)
         );
