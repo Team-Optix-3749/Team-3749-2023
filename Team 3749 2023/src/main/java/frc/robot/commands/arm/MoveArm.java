@@ -5,16 +5,10 @@ import edu.wpi.first.wpilibj.Timer;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.sound.sampled.ReverbType;
-
-import com.ctre.phoenix.motion.SetValueMotionProfile;
-
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmTrajectories;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.utils.Constants;
