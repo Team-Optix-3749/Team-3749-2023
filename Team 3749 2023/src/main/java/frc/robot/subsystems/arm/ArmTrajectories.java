@@ -167,83 +167,83 @@ public class ArmTrajectories {
         STOW_TO_TOP(
                 new Trajectory[] { getTopNodeTrajectory(false) }, // trajectories
                 new double[] { 0 }, // pause lengths
-                new double[] { Constants.Claw.idleVoltage }), // voltages
+                new double[] { Constants.ArmIntake.idleVoltage }), // voltages
         STING_TO_TOP(
                 new Trajectory[] { getTopNodeTrajectory(false) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         TOP_TO_STOW(
                 new Trajectory[] {
                         getTopNodeTrajectory(true).concatenate(
                                 getStingTrajectory(true))
                 },
                 new double[] { 0, 0.4 },
-                new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage, Constants.ArmIntake.releaseObjectVoltage }),
         TOP_TO_STING(
                 new Trajectory[] { getTopNodeTrajectory(true) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         TOP_TO_MID(
                 new Trajectory[] { getMidNodeToTopNodeTrajectory(true) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         STOW_TO_MID(
                 new Trajectory[] { getStingTrajectory(false).concatenate(getMidNodeTrajectory(false)) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         STING_TO_MID(
                 new Trajectory[] { getMidNodeTrajectory(false) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         MID_TO_STOW(
                 new Trajectory[] {
                         ArmTrajectories.getMidNodeTrajectory(true).concatenate(
                                 ArmTrajectories.getStingTrajectory(true))
                 },
                 new double[] { 0, 0.4 },
-                new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage, Constants.ArmIntake.releaseObjectVoltage }),
         MID_TO_STING(
                 new Trajectory[] { getMidNodeTrajectory(true) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         MID_TO_TOP(
                 new Trajectory[] { getMidNodeToTopNodeTrajectory(false) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         STOW_TO_DOUBLESUB(
                 new Trajectory[] { getDoubleSubstationTrajectory(false) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         DOUBLESUB_TO_STOW(
                 new Trajectory[] { getDoubleSubstationTrajectory(true) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         STOW_TO_GROUND_INTAKE(
                 new Trajectory[] { getGroundIntakeTrajectory(false) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         GROUND_INTAKE_TO_STOW(
                 new Trajectory[] { getGroundIntakeTrajectory(true) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         STOW_TO_STING(
                 new Trajectory[] { getStingTrajectory(false) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage }),
+                new double[] { Constants.ArmIntake.idleVoltage }),
         STING_TO_STOW(
                 new Trajectory[] { getStingTrajectory(true) },
                 new double[] { 0 },
-                new double[] { Constants.Claw.idleVoltage });
+                new double[] { Constants.ArmIntake.idleVoltage });
 
         public int numTrajectories;
         public Trajectory[] trajectories;
         public double[] trajectoryLengths;
         public double[] pauseLengths;
-        public double[] clawVoltages;
+        public double[] intakeVoltages;
 
         ArmPaths(Trajectory[] trajectories,
                 double[] pauseLengths,
-                double[] clawVoltages) {
+                double[] intakeVoltages) {
             this.numTrajectories = trajectories.length;
             this.trajectoryLengths = new double[numTrajectories];
             int index = 0;
@@ -254,7 +254,7 @@ public class ArmTrajectories {
 
             this.trajectories = trajectories;
             this.pauseLengths = pauseLengths;
-            this.clawVoltages = clawVoltages;
+            this.intakeVoltages = intakeVoltages;
         }
 
     }

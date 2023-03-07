@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
-import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 
@@ -19,7 +19,7 @@ import frc.robot.utils.Constants.Arm.ArmSetpoints;;
  * 
  * Moves the arm! It goes between setpoints listed in Constants.Arm.ArmSetpoints and 
  * travels with ArmPaths listed in ArmTrajectories. Uses Trajectory objects created 
- * in ArmTrajectories for motion profiling. Additionally controls the claw during 
+ * in ArmTrajectories for motion profiling. Additionally controls the intake during 
  * the paths as described in the ArmPath
  */
 
@@ -27,16 +27,16 @@ public class MoveArm extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     private final Arm arm;
-    private final Claw claw;
+    private final ArmIntake intake;
     private final ArmSetpoints desiredSetpoint;
     private State desiredState;
     private Timer timer = new Timer();
     private ArmPaths trajectoryInformation;
     private int trajectoryIndex = 0;
 
-    public MoveArm(Arm arm, Claw claw, ArmSetpoints setpoint) {
+    public MoveArm(Arm arm, ArmIntake intake, ArmSetpoints setpoint) {
         this.arm = arm;
-        this.claw = claw;
+        this.intake = intake;
         this.desiredSetpoint = setpoint;
         // this.trajectory = trajectory;
         addRequirements(arm);
@@ -55,10 +55,10 @@ public class MoveArm extends CommandBase {
     @Override
     public void execute() {
         if (timer.get() < trajectoryInformation.pauseLengths[trajectoryIndex]) {
-            claw.setVoltage(Constants.Claw.idleVoltage);
+            intake.setVoltage(Constants.ArmIntake.idleVoltage);
             return;
         }
-        claw.setVoltage(trajectoryInformation.clawVoltages[trajectoryIndex]);
+        intake.setVoltage(trajectoryInformation.intakeVoltages[trajectoryIndex]);
 
         double cur_time = timer.get();
         desiredState = trajectoryInformation.trajectories[trajectoryIndex]
@@ -79,7 +79,7 @@ public class MoveArm extends CommandBase {
             // System.out.println("An error occurred.");
             // e.printStackTrace();
         }
-        // System.out.println(clawVoltages[trajectoryIndex]);
+        // System.out.println(intakeVoltages[trajectoryIndex]);
         System.out.println(
                 String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
         logging();
@@ -87,7 +87,7 @@ public class MoveArm extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        claw.setVoltage(Constants.Claw.idleVoltage);
+        intake.setVoltage(Constants.ArmIntake.idleVoltage);
     }
 
     @Override
