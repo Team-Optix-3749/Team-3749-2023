@@ -56,9 +56,10 @@ public class RobotContainer {
         claw.setDefaultCommand(
             Commands.run(() -> claw.setVoltage(Constants.Claw.idleVoltage), claw)
         );
-        // arm.setDefaultCommand(new SequentialCommandGroup(
-        //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(false)),
-        //         new ArmFollowTrajectory(arm, ArmTrajectories.getTopNodeTrajectoryPose(true))));
+
+        // arm.setDefaultCommand(
+        //     new MoveArm(arm, claw, ArmSetpoints.CONE_TOP)
+        // );
     }
 
     /**
@@ -66,17 +67,21 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
+        // arm setpoints (buttons)
+        pilot.a().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_TOP));
+        pilot.b().onTrue(new MoveArm(arm, claw, ArmSetpoints.PLACE_MID));
+        pilot.x().onTrue(new MoveArm(arm, claw, ArmSetpoints.GROUND_INTAKE));
 
-        pilot.aWhileHeld(() -> swerve.moveAtAngle(180,0.5));
-        pilot.bWhileHeld(() -> swerve.moveAtAngle(90,0.5));
-        pilot.xWhileHeld(() -> swerve.moveAtAngle(-90,0.5));
-        pilot.yWhileHeld(() -> swerve.moveAtAngle(0,0.5));
-        pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
-        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(-90)));
-        pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
-        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
-
-        pilot.backWhileHeld(()-> swerve.zeroHeading());
+        // arm setpoints (bumpers)
+        pilot.rightBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.STING));
+        pilot.leftBumper().onTrue(new MoveArm(arm, claw, ArmSetpoints.DOUBLE_SUBSTATION));
+        
+        // intake button bindings
+        pilot.rightTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.releaseObjectVoltage));
+        pilot.leftTriggerWhileHeld(() -> claw.setVoltage(Constants.Claw.intakeVoltage));
+        
+        // swerve button bindings
+        pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
     }
 
     /**

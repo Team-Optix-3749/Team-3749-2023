@@ -5,15 +5,23 @@ import edu.wpi.first.wpilibj.Timer;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmTrajectories;
+import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;;
+
+/***
+ * @author Noah Simon
+ * 
+ * Moves the arm! It goes between setpoints listed in Constants.Arm.ArmSetpoints and 
+ * travels with ArmPaths listed in ArmTrajectories. Uses Trajectory objects created 
+ * in ArmTrajectories for motion profiling. Additionally controls the claw during 
+ * the paths as described in the ArmPath
+ */
 
 public class MoveArm extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -21,14 +29,10 @@ public class MoveArm extends CommandBase {
     private final Arm arm;
     private final Claw claw;
     private final ArmSetpoints desiredSetpoint;
-    private Trajectory[] trajectories;
     private State desiredState;
     private Timer timer = new Timer();
-    private double trajectoryLengths[];
+    private ArmPaths trajectoryInformation;
     private int trajectoryIndex = 0;
-    private int numTrajectories = 0;
-    private double pauseLengths[];
-    private double[] clawVoltages;
 
     public MoveArm(Arm arm, Claw claw, ArmSetpoints setpoint) {
         this.arm = arm;
@@ -41,8 +45,7 @@ public class MoveArm extends CommandBase {
     @Override
     public void initialize() {
 
-        trajectories = findTrajectory(desiredSetpoint, arm);
-        numTrajectories = trajectories.length;
+        trajectoryInformation = findTrajectory(desiredSetpoint, arm);
         trajectoryIndex = 0;
         timer.reset();
         timer.start();
@@ -51,14 +54,15 @@ public class MoveArm extends CommandBase {
 
     @Override
     public void execute() {
-        if (timer.get() < pauseLengths[trajectoryIndex]) {
+        if (timer.get() < trajectoryInformation.pauseLengths[trajectoryIndex]) {
             claw.setVoltage(Constants.Claw.idleVoltage);
             return;
         }
-        claw.setVoltage(clawVoltages[trajectoryIndex]);
+        claw.setVoltage(trajectoryInformation.clawVoltages[trajectoryIndex]);
 
         double cur_time = timer.get();
-        desiredState = trajectories[trajectoryIndex].sample(cur_time - pauseLengths[trajectoryIndex]);
+        desiredState = trajectoryInformation.trajectories[trajectoryIndex]
+                .sample(cur_time - trajectoryInformation.pauseLengths[trajectoryIndex]);
 
         try {
             arm.setArmPosition(desiredState.poseMeters.getTranslation());
@@ -89,9 +93,10 @@ public class MoveArm extends CommandBase {
     @Override
     public boolean isFinished() {
         // if the current trajectory is over
-        if (trajectoryLengths[trajectoryIndex] + pauseLengths[trajectoryIndex] < timer.get()) {
+        if (trajectoryInformation.trajectoryLengths[trajectoryIndex]
+                + trajectoryInformation.pauseLengths[trajectoryIndex] < timer.get()) {
             // if we are not at the last trajectory in the list, start the next one
-            if (trajectoryIndex < numTrajectories - 1) {
+            if (trajectoryIndex < trajectoryInformation.numTrajectories - 1) {
                 trajectoryIndex++;
                 timer.reset();
                 timer.start();
@@ -119,195 +124,90 @@ public class MoveArm extends CommandBase {
      * @return Trajectory: the optimal trajectory for where you are to where you
      *         want to go
      */
-    private Trajectory[] findTrajectory(ArmSetpoints desiredSetpoint, Arm arm) {
+    private ArmPaths findTrajectory(ArmSetpoints desiredSetpoint, Arm arm) {
         ArmSetpoints currentSetpoint = arm.getCurrentSetpoint();
         // you should only be able to go to stowed from double substation and ground
         // intake
-        if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOWED) {
-            System.out.println("Illigal double sub");
-            arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-            Trajectory trajectory = ArmTrajectories.getDoubleSubstationTrajectory(true);
-            trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-            clawVoltages = new double[] { Constants.Claw.idleVoltage };
-            pauseLengths = new double[] { 0 };
-            return new Trajectory[] { trajectory };
+        if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOW) {
+            arm.setCurrentSetpoint(ArmSetpoints.STOW);
+            return ArmPaths.DOUBLESUB_TO_STOW;
         }
-        if (currentSetpoint == ArmSetpoints.TOP_INTAKE && desiredSetpoint != ArmSetpoints.STOWED) {
-            System.out.println("Illigal top intake");
-            arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-            Trajectory trajectory = ArmTrajectories.getGroundIntakeTrajectory(true);
-            trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-            clawVoltages = new double[] { Constants.Claw.idleVoltage };
-            pauseLengths = new double[] { 0 };
-            return new Trajectory[] { trajectory };
+        if (currentSetpoint == ArmSetpoints.GROUND_INTAKE && desiredSetpoint != ArmSetpoints.STOW) {
+            arm.setCurrentSetpoint(ArmSetpoints.STOW);
+            return ArmPaths.GROUND_INTAKE_TO_STOW;
         }
 
-        if (desiredSetpoint == ArmSetpoints.CONE_TOP) {
-
-            // if already there, place and return
-            if (desiredSetpoint == currentSetpoint) {
-                System.out.println("reverse top node");
- 
-                arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-                Trajectory[] trajectories = new Trajectory[] {
-                        ArmTrajectories.getTopNodePlaceDownTrajectory(false),
-                        ArmTrajectories.getTopNodePlaceReturnTrajectory(false).concatenate(
-                                ArmTrajectories.getStingTrajectory(true))
-                };
-
-                trajectoryLengths = new double[] {
-                        trajectories[0].getTotalTimeSeconds(),
-                        trajectories[1].getTotalTimeSeconds(),
-
-                };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage};
-                pauseLengths = new double[] { 0, 0.4};
-                return trajectories;
-
-            }
-            // if at mid, run the node to node
-            else if (currentSetpoint == ArmSetpoints.CONE_MID) {
-                System.out.println("mid to top node");
-                arm.setCurrentSetpoint(ArmSetpoints.CONE_TOP);
-                Trajectory trajectory = ArmTrajectories.getMidNodeToTopNodeTrajectory(false);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            }
-            // otherwise do it normally
-            else {
-                arm.setCurrentSetpoint(ArmSetpoints.CONE_TOP);
-                Trajectory trajectory = ArmTrajectories.getTopNodeTrajectory(false);
-                System.out.println("from sting to top node");
-
-                // if at sting, run the trajectory. If not at sting, go to sting then run the
-                // trajectory
-                if (currentSetpoint != ArmSetpoints.STING) {
-                    System.out.println("to sting to top node");
-                    trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
+        switch (desiredSetpoint) {
+            case PLACE_TOP:
+                // if already there, place and return
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return ArmPaths.TOP_TO_STOW;
                 }
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            }
-            // change the current setpoint and return
-        }
-
-        else if (desiredSetpoint == ArmSetpoints.CONE_MID) {
-            if (desiredSetpoint == currentSetpoint) {
-                arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-                Trajectory[] trajectories = new Trajectory[] {
-                        ArmTrajectories.getMidNodePlaceDownTrajectory(false),
-                        ArmTrajectories.getMidNodePlaceReturnTrajectory(false).concatenate(
-                                ArmTrajectories.getStingTrajectory(true))
-                };
-                trajectoryLengths = new double[] {
-                        trajectories[0].getTotalTimeSeconds(),
-                        trajectories[1].getTotalTimeSeconds(),
-                };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage, Constants.Claw.releaseObjectVoltage };
-                pauseLengths = new double[] { 0, 0.4};
-                return trajectories;
-            }
-
-            if (currentSetpoint == ArmSetpoints.CONE_TOP) {
-                arm.setCurrentSetpoint(ArmSetpoints.CONE_MID);
-                Trajectory trajectory = ArmTrajectories.getMidNodeToTopNodeTrajectory(true);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            } else {
-                arm.setCurrentSetpoint(ArmSetpoints.CONE_MID);
-                Trajectory trajectory;
-                trajectory = ArmTrajectories.getMidNodeTrajectory(false);
-                if (currentSetpoint != ArmSetpoints.STING) {
-                    trajectory = ArmTrajectories.getStingTrajectory(false).concatenate(trajectory);
+                // if at mid, run the node to node
+                else if (currentSetpoint == ArmSetpoints.PLACE_MID) {
+                    arm.setCurrentSetpoint(ArmSetpoints.PLACE_TOP);
+                    return ArmPaths.MID_TO_TOP;
                 }
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            }
-        }
+                // otherwise do it normally
+                else {
+                    arm.setCurrentSetpoint(ArmSetpoints.PLACE_TOP);
+                    // if at sting, run the trajectory. If not at sting, go to sting then run the
+                    // trajectory
+                    if (currentSetpoint == ArmSetpoints.STOW) {
+                        return ArmPaths.STOW_TO_TOP;
+                    }
+                    return ArmPaths.STING_TO_TOP;
+                }
 
-        else if (desiredSetpoint == ArmSetpoints.DOUBLE_SUBSTATION) {
-            if (desiredSetpoint == currentSetpoint) {
-                Trajectory trajectory = ArmTrajectories.getDoubleSubstationTrajectory(true);
-                arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            } else {
-                Trajectory trajectory = ArmTrajectories.getDoubleSubstationTrajectory(false);
-                arm.setCurrentSetpoint(ArmSetpoints.DOUBLE_SUBSTATION);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
+            case PLACE_MID:
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return ArmPaths.MID_TO_STOW;
+                }
+                if (currentSetpoint == ArmSetpoints.PLACE_TOP) {
+                    arm.setCurrentSetpoint(ArmSetpoints.PLACE_MID);
+                    return ArmPaths.TOP_TO_MID;
+                } else {
+                    arm.setCurrentSetpoint(ArmSetpoints.PLACE_MID);
+                    if (currentSetpoint != ArmSetpoints.STING) {
+                        return ArmPaths.STOW_TO_MID;
+                    }
+                    return ArmPaths.STING_TO_MID;
+                }
 
-            }
+            case DOUBLE_SUBSTATION:
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return ArmPaths.DOUBLESUB_TO_STOW;
+                } else {
+                    arm.setCurrentSetpoint(ArmSetpoints.DOUBLE_SUBSTATION);
+                    return ArmPaths.STOW_TO_DOUBLESUB;
+                }
 
-        }
+            case GROUND_INTAKE:
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return ArmPaths.GROUND_INTAKE_TO_STOW;
+                } else {
+                    arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE);
+                    return ArmPaths.STOW_TO_GROUND_INTAKE;
+                }
 
-        else if (desiredSetpoint == ArmSetpoints.TOP_INTAKE) {
-            if (desiredSetpoint == currentSetpoint) {
-                Trajectory trajectory = ArmTrajectories.getGroundIntakeTrajectory(true);
-                arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.intakeVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            } else {
-                Trajectory trajectory = ArmTrajectories.getGroundIntakeTrajectory(false);
-                arm.setCurrentSetpoint(ArmSetpoints.TOP_INTAKE);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            }
-        }
-
-        else if (desiredSetpoint == ArmSetpoints.STING) {
-            if (desiredSetpoint == currentSetpoint) {
-                Trajectory trajectory = ArmTrajectories.getStingTrajectory(true);
-                arm.setCurrentSetpoint(ArmSetpoints.STOWED);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            } 
-            else if (currentSetpoint == ArmSetpoints.CONE_TOP){
+            case STING:
                 arm.setCurrentSetpoint(ArmSetpoints.STING);
-                Trajectory trajectory = ArmTrajectories.getTopNodeTrajectory(true);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            }
-            else if (currentSetpoint == ArmSetpoints.CONE_MID){
-                arm.setCurrentSetpoint(ArmSetpoints.STING);
-                Trajectory trajectory = ArmTrajectories.getMidNodeTrajectory(true);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                return new Trajectory[] { trajectory };
-            }
-            else {
-                
-                Trajectory trajectory = ArmTrajectories.getStingTrajectory(false);
-                trajectoryLengths = new double[] { trajectory.getTotalTimeSeconds() };
-                clawVoltages = new double[] { Constants.Claw.idleVoltage };
-                pauseLengths = new double[] { 0 };
-                arm.setCurrentSetpoint(ArmSetpoints.STING);
-                return new Trajectory[] { trajectory };
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return ArmPaths.STING_TO_STOW;
+                } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
+                    return ArmPaths.TOP_TO_STING;
+                else if (currentSetpoint == ArmSetpoints.PLACE_MID)
+                    return ArmPaths.MID_TO_STING;
+                else
+                    return ArmPaths.STOW_TO_STING;
 
-            }
-        } else {
-            return null;
+            default:
+                return null;
         }
     }
 }
