@@ -61,10 +61,6 @@ public class RobotContainer {
         sideIntake.setDefaultCommand(
             Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
         );
-
-        // arm.setDefaultCommand(
-        //     new MoveArm(arm, claw, ArmSetpoints.CONE_TOP)
-        // );
     }
 
     /**
