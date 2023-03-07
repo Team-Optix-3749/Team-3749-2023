@@ -72,38 +72,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 8)),
-                new Pose2d(1.4, 1, new Rotation2d(Math.PI / 8)),
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-
-    /**
-     * Move arm to and from top node positon and onto the scoring node
-     * 
-     * @param isReversed
-     * @return Trajectory
-     */
-    public static Trajectory getTopNodePlaceDownTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(1.4, 1.0, new Rotation2d(3 * Math.PI / 2)),
-                new Pose2d(1.4, 0.85, new Rotation2d(3 * Math.PI / 2)),
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-
-    /**
-     * Move arm to and from top node placed positon and sting
-     * 
-     * @param isReversed
-     * @return Trajectory
-     */
-    public static Trajectory getTopNodePlaceReturnTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(1.4, 0.85, new Rotation2d(9 * Math.PI / 8)),
-                new Pose2d(0.5, 0.7, new Rotation2d(9 * Math.PI / 8)),
+                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 2.5)),
+                new Pose2d(1.1, 0.95, new Rotation2d(0)),
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -118,25 +88,7 @@ public class ArmTrajectories {
     public static Trajectory getMidNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.5, 0.7, new Rotation2d(0)),
-                new Pose2d(1.05, 0.7, new Rotation2d(0)),
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-
-    public static Trajectory getMidNodePlaceDownTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(1.05, 0.7, new Rotation2d(3 * Math.PI / 2)),
-                new Pose2d(1.05, 0.5, new Rotation2d(3 * Math.PI / 2)),
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-
-    public static Trajectory getMidNodePlaceReturnTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(1.05, 0.5, new Rotation2d(5 * Math.PI / 6)),
-                new Pose2d(0.5, 0.7, new Rotation2d(5 * Math.PI / 6)),
+                new Pose2d(0.8, 0.7, new Rotation2d(5 * Math.PI / 3)),
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -151,7 +103,7 @@ public class ArmTrajectories {
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
-                new Pose2d(0.75, 0.75, new Rotation2d(Math.PI / 2)),
+                new Pose2d(0.5, 0.75, new Rotation2d(Math.PI / 2)),
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -166,7 +118,7 @@ public class ArmTrajectories {
     public static Trajectory getGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(0)),
-                new Pose2d(0.7, -0.4, new Rotation2d(5 * Math.PI / 3)),
+                new Pose2d(0.9, -0.09, new Rotation2d(5 * Math.PI / 3)),
         };
 
         return createTrajectory(waypoints, isReversed);
