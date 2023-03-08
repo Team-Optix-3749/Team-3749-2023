@@ -12,6 +12,7 @@ import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
@@ -102,8 +103,9 @@ public class RobotContainer {
                         new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE)));
         Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
-        new SequentialCommandGroup(
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
-                new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE)));
+                new SequentialCommandGroup(
+                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                        new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE)));
+        Constants.AutoConstants.eventMap.put("AutoBalance", new AutoBalancingPID(swerve));
     }
 }
