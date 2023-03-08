@@ -66,7 +66,7 @@ public class AutoBalancingPID extends CommandBase {
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
         if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0) && !has_aligned) {
-            swerve.turnToRotation(0);            
+            // swerve.turnToRotation(0);            
         }
 
         // move forward if the angle hasn't started to move and it hasn't moved in the
