@@ -23,9 +23,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.commands.arm.MoveArm;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /***
@@ -55,7 +61,9 @@ public final class AutoCommands {
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {
+                        swerveSubsystem.setGyroOffset(180);
                         swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
+
                     }
                 }),
                 new PPSwerveControllerCommand(
@@ -151,13 +159,55 @@ public final class AutoCommands {
 
     // Essentially the template of a getPath command we should be using.
     public static Command getTestPathPlanner(Swerve swerveSubsystem, Alliance teamColor) {
-        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Distance Test", new PathConstraints(2.5, 2.5));
+        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Arm Test", new PathConstraints(2.5, 2.5));
 
         trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
         Command path = new FollowPathWithEvents(followTrajectoryCommand(trajectory, true, swerveSubsystem),
                 trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                path, Commands.run(() -> swerveSubsystem.zeroHeading(), swerveSubsystem).withTimeout(0.4),
+                path, Commands.run(() -> swerveSubsystem.resetGyro(), swerveSubsystem).withTimeout(0.4),
                 new AutoBalancingPID(swerveSubsystem));
     }
+
+    public static Command getBottomThreePiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+            Alliance teamColor) {
+        PathPlannerTrajectory first = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
+        PathPlannerTrajectory second = PathPlanner.loadPath("2 Piece 3 Piece", new PathConstraints(2.5, 2.5));
+
+        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
+        second = PathPlannerTrajectory.transformTrajectoryForAlliance(second, teamColor);
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
+                second.getMarkers(), Constants.AutoConstants.eventMap);
+        return new SequentialCommandGroup(
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                path_1,
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                path_2,
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+    }
+
+    public static Command getBottomTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+            Alliance teamColor) {
+        PathPlannerTrajectory first = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
+        PathPlannerTrajectory second = PathPlanner.loadPath("2 Piece Pickup Charge Station", new PathConstraints(2.5, 2.5));
+
+        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
+        second = PathPlannerTrajectory.transformTrajectoryForAlliance(second, teamColor);
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
+                second.getMarkers(), Constants.AutoConstants.eventMap);
+        return new SequentialCommandGroup(
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                path_1,
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                path_2);
+    }
+
 }

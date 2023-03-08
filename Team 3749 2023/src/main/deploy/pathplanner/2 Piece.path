@@ -1,0 +1,99 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.7634809592015757,
+        "y": 0.4688537765092641
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7634809592015737,
+        "y": 0.4688537765092641
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.360535060585099,
+        "y": 0.9262720950548883
+      },
+      "prevControl": {
+        "x": 3.478799653747666,
+        "y": 1.097803964509497
+      },
+      "nextControl": {
+        "x": 3.478799653747666,
+        "y": 1.097803964509497
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.75,
+        "y": 1.0
+      },
+      "prevControl": {
+        "x": 2.333208356145671,
+        "y": 1.01143545796364
+      },
+      "nextControl": null,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.8727272727272235,
+      "names": [
+        "Pickup"
+      ]
+    },
+    {
+      "position": 1.45,
+      "names": [
+        "Sting"
+      ]
+    },
+    {
+      "position": 1.1490909090908685,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "Stow"
+      ]
+    }
+  ]
+}
