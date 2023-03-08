@@ -169,6 +169,23 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerveSubsystem));
     }
 
+    public static Command getBottomTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+            Alliance teamColor) {
+        PathPlannerTrajectory first = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
+
+        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+        return new SequentialCommandGroup(
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                path_1,
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                new MoveArm(arm, armIntake, ArmSetpoints.STOW));
+    }
+
     public static Command getBottomThreePiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Alliance teamColor) {
         PathPlannerTrajectory first = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
@@ -183,16 +200,21 @@ public final class AutoCommands {
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
                 path_1,
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
                 path_2,
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25)
+                );
     }
 
     public static Command getBottomTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Alliance teamColor) {
         PathPlannerTrajectory first = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
-        PathPlannerTrajectory second = PathPlanner.loadPath("2 Piece Pickup Charge Station", new PathConstraints(2.5, 2.5));
+        PathPlannerTrajectory second = PathPlanner.loadPath("2 Piece Pickup Charge Station",
+                new PathConstraints(2.5, 2.5));
 
         first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
         second = PathPlannerTrajectory.transformTrajectoryForAlliance(second, teamColor);

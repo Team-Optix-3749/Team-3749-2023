@@ -90,7 +90,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
+        return AutoCommands.getBottomTwoPiece(swerve, arm, armIntake, Alliance.Blue);
     }
 
     /**
