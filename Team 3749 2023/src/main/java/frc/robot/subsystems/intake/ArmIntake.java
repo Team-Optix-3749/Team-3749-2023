@@ -31,7 +31,8 @@ public class ArmIntake extends SubsystemBase {
 
     private final PIDController clawPID = new PIDController(0.675, 0, 0);
     private final SimpleMotorFeedforward clawFeedForward = new SimpleMotorFeedforward(0, 0.675);
-    
+
+    private double voltage = Constants.ArmIntake.idleVoltage;
 
     public ArmIntake() {
         intakeMotor.restoreFactoryDefaults();
@@ -71,17 +72,9 @@ public class ArmIntake extends SubsystemBase {
      * @param voltage
      */
     public void setVoltage(double voltage) {
-        intakeMotor.setVoltage(voltage);
+        this.voltage = voltage;
     }
 
-    /**
-     * set % speed of the motor
-     * 
-     * @param speed -1.0 to 1.0
-     */
-    public void set(double speed) {
-        intakeMotor.set(speed);
-    }
 
     /**
      * set claw motor using feed forward control loop
@@ -94,8 +87,8 @@ public class ArmIntake extends SubsystemBase {
 
         SmartDashboard.putNumber("claw gain",
                 clawFeedForward.calculate(velocity) + clawPID.calculate(intakeEncoder.getVelocity(), velocity));
-        intakeMotor.setVoltage(
-                clawFeedForward.calculate(velocity) + clawPID.calculate(intakeEncoder.getVelocity(), velocity));
+        voltage = 
+                clawFeedForward.calculate(velocity) + clawPID.calculate(intakeEncoder.getVelocity(), velocity);
     }
 
     /**
@@ -107,7 +100,7 @@ public class ArmIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        intakeMotor.setVoltage();
+        intakeMotor.setVoltage(voltage);
         SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
         SmartDashboard.putNumber("Claw Position", intakeEncoder.getPosition());
         SmartDashboard.putNumber("Claw Velocity", intakeEncoder.getVelocity());
