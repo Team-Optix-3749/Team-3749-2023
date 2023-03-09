@@ -96,9 +96,6 @@ public class Swerve extends SubsystemBase {
         gyro.calibrate();
     }
 
-    public void setGyroOffset(double heading) {
-        gyro.setAngleAdjustment(heading);
-    }
     public void resetGyro(){
         gyro.reset();
     }

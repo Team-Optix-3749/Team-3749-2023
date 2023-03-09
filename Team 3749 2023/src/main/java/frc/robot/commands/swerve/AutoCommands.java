@@ -40,6 +40,7 @@ public final class AutoCommands {
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {
+                        swerveSubsystem.resetGyro();
                         swerveSubsystem.resetAutoOdometry(traj.getInitialHolonomicPose());
                     }
                 }),
@@ -68,6 +69,20 @@ public final class AutoCommands {
                 trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
                 path);
+    }
+
+    public static Command getMarkerTester(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+            Alliance teamColor) {
+        PathPlannerTrajectory first = PathPlanner.loadPath("Marker Test", new PathConstraints(0.75, 0.75));
+
+        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+        return new SequentialCommandGroup(
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(3),
+                path_1);
     }
 
     public static Command getBottomTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
@@ -107,8 +122,7 @@ public final class AutoCommands {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
                 path_2,
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25)
-                );
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25));
     }
 
     public static Command getBottomTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,

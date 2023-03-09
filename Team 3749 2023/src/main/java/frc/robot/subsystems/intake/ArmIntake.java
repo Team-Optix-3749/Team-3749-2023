@@ -31,6 +31,7 @@ public class ArmIntake extends SubsystemBase {
 
     private final PIDController clawPID = new PIDController(0.675, 0, 0);
     private final SimpleMotorFeedforward clawFeedForward = new SimpleMotorFeedforward(0, 0.675);
+    
 
     public ArmIntake() {
         intakeMotor.restoreFactoryDefaults();
@@ -106,6 +107,7 @@ public class ArmIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        intakeMotor.setVoltage();
         SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
         SmartDashboard.putNumber("Claw Position", intakeEncoder.getPosition());
         SmartDashboard.putNumber("Claw Velocity", intakeEncoder.getVelocity());

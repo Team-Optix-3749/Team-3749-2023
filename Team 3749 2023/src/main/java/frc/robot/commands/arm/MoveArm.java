@@ -17,10 +17,13 @@ import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 /***
  * @author Noah Simon
  * 
- * Moves the arm! It goes between setpoints listed in Constants.Arm.ArmSetpoints and 
- * travels with ArmPaths listed in ArmTrajectories. Uses Trajectory objects created 
- * in ArmTrajectories for motion profiling. Additionally controls the intake during 
- * the paths as described in the ArmPath
+ *         Moves the arm! It goes between setpoints listed in
+ *         Constants.Arm.ArmSetpoints and
+ *         travels with ArmPaths listed in ArmTrajectories. Uses Trajectory
+ *         objects created
+ *         in ArmTrajectories for motion profiling. Additionally controls the
+ *         intake during
+ *         the paths as described in the ArmPath
  */
 
 public class MoveArm extends CommandBase {
@@ -205,7 +208,19 @@ public class MoveArm extends CommandBase {
                     return ArmPaths.MID_TO_STING;
                 else
                     return ArmPaths.STOW_TO_STING;
-
+            case STOW:
+                arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STING);
+                    return ArmPaths.STOW_TO_STING;
+                } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
+                    return ArmPaths.TOP_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.PLACE_MID)
+                    return ArmPaths.MID_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION)
+                    return ArmPaths.DOUBLESUB_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE)
+                    return ArmPaths.GROUND_INTAKE_TO_STOW;
             default:
                 return null;
         }

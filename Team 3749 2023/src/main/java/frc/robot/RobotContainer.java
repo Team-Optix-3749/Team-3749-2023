@@ -90,7 +90,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getBottomTwoPiece(swerve, arm, armIntake, Alliance.Blue);
+        return AutoCommands.getMarkerTester(swerve, arm, armIntake, Alliance.Blue);
         // return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
 
     }
@@ -107,7 +107,7 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Stow",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
-                        new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE)));
+                        new MoveArm(arm, armIntake, ArmSetpoints.STOW)));
         Constants.AutoConstants.eventMap.put("AutoBalance", new AutoBalancingPID(swerve));
     }
 }
