@@ -40,14 +40,12 @@ public final class AutoCommands {
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {
-                        swerveSubsystem.setGyroOffset(180);
-                        swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
-
+                        swerveSubsystem.resetAutoOdometry(traj.getInitialHolonomicPose());
                     }
                 }),
                 new PPSwerveControllerCommand(
                         traj,
-                        swerveSubsystem::getPose, // Pose supplier
+                        swerveSubsystem::getAutoPose, // Pose supplier
                         Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
                         new PIDController(1.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0
                                                       // will only use feedforwards.
@@ -63,14 +61,13 @@ public final class AutoCommands {
 
     // Essentially the template of a getPath command we should be using.
     public static Command getTestPathPlanner(Swerve swerveSubsystem, Alliance teamColor) {
-        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Arm Test", new PathConstraints(2.5, 2.5));
+        PathPlannerTrajectory trajectory = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
 
         trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
         Command path = new FollowPathWithEvents(followTrajectoryCommand(trajectory, true, swerveSubsystem),
                 trajectory.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                path, Commands.run(() -> swerveSubsystem.resetGyro(), swerveSubsystem).withTimeout(0.4),
-                new AutoBalancingPID(swerveSubsystem));
+                path);
     }
 
     public static Command getBottomTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,

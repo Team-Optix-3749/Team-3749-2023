@@ -91,6 +91,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return AutoCommands.getBottomTwoPiece(swerve, arm, armIntake, Alliance.Blue);
+        // return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
+
     }
 
     /**

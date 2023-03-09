@@ -69,19 +69,25 @@ public class Swerve extends SubsystemBase {
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     // equivilant to a odometer, but also intakes vision
-    private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+    private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+    private SwerveDrivePoseEstimator autoSwerveDrivePoseEstimator;
 
     public Swerve() {
         new Thread(() -> {
             try {
                 Thread.sleep(3000);
-                setGyroOffset(0);
                 gyro.reset();
+
                 
             } catch (Exception e) {
             }
         }).start();
         swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
+                new Rotation2d(0),
+                new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
+                        backLeft.getPosition() },
+                new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
+        autoSwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
                 new Rotation2d(0),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() },
@@ -97,19 +103,47 @@ public class Swerve extends SubsystemBase {
         gyro.reset();
     }
 
-    public double getHeading() {
+    public double getAutoHeading() {
         // return Math.IEEEremainder(gyro.getAngle(), 360);
+        return new Rotation2d(Math.toRadians(gyro.getYaw()))
+        .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() ;
+    }
+
+    public double getHeading(){
         return gyro.getYaw();
+    }
+
+    public Rotation2d getAutoRotation2d(){
+        return Rotation2d.fromDegrees(-getAutoHeading());
+
     }
 
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(-getHeading());
     }
 
+    public Pose2d getAutoPose(){
+        Pose2d estimatedPose = autoSwerveDrivePoseEstimator.getEstimatedPosition();
+        return new Pose2d(estimatedPose.getTranslation(), getAutoRotation2d());
+    }
+
     public Pose2d getPose() {
         Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
         return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
     }
+    public void resetAutoOdometry(Pose2d pose) {
+        autoSwerveDrivePoseEstimator.resetPosition(getAutoRotation2d(),
+                new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
+                        backLeft.getPosition() },
+                pose);
+    }
+
+    public void updateAutoOdometry() {
+        autoSwerveDrivePoseEstimator.update(getAutoRotation2d(),
+                new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
+                        backLeft.getPosition() });
+    }
+
 
     public void resetOdometry(Pose2d pose) {
         swerveDrivePoseEstimator.resetPosition(getRotation2d(),
@@ -127,6 +161,9 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+        updateAutoOdometry();
+        SmartDashboard.putNumber("AUTO Heading", getAutoHeading());
+
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("pitch", getVerticalTilt());
         SmartDashboard.putNumber("Robot Pose X", getPose().getX());

@@ -31,7 +31,7 @@ public class SideIntake extends SubsystemBase {
         liftMotor.restoreFactoryDefaults();
 
         intakeMotor.setIdleMode(IdleMode.kBrake);
-        liftMotor.setIdleMode(IdleMode.kCoast);
+        liftMotor.setIdleMode(IdleMode.kBrake);
 
         intakeEncoder.setPositionConversionFactor(1.0 / 3.0);
         intakeEncoder.setVelocityConversionFactor(1.0 / (60.0 * 5.0));
