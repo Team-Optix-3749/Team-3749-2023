@@ -55,9 +55,6 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        armIntake.setDefaultCommand(
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
-
         sideIntake.setDefaultCommand(
                 Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
     }
@@ -78,8 +75,10 @@ public class RobotContainer {
         pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
-        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage));
-        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
+        pilot.rightTriggerWhileHeld(Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
+        pilot.leftTriggerWhileHeld(Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
 
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
@@ -90,8 +89,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getMarkerTester(swerve, arm, armIntake, Alliance.Blue);
-        // return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
+        return AutoCommands.getBottomThreePiece(swerve, arm, armIntake, Alliance.Blue);
 
     }
 

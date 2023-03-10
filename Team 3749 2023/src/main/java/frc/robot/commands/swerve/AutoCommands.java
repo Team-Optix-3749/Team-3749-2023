@@ -73,16 +73,16 @@ public final class AutoCommands {
 
     public static Command getMarkerTester(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Alliance teamColor) {
-        PathPlannerTrajectory first = PathPlanner.loadPath("Marker Test", new PathConstraints(0.75, 0.75));
+        // PathPlannerTrajectory first = PathPlanner.loadPath("Marker Test", new PathConstraints(0.75, 0.75));
 
-        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
+        // first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
 
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
+        // Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+        //         first.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(3),
-                path_1);
+                // new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(3));
+                // path_1);
     }
 
     public static Command getBottomTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
