@@ -89,7 +89,8 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getBottomThreePiece(swerve, arm, armIntake, Alliance.Blue);
+        return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
+        // return AutoCommands.getBottomThreePiece(swerve, arm, armIntake, Alliance.Blue);
 
     }
 

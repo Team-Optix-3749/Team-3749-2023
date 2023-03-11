@@ -83,8 +83,8 @@ public class MoveArm extends CommandBase {
             // e.printStackTrace();
         }
         // System.out.println(intakeVoltages[trajectoryIndex]);
-        System.out.println(
-                String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
+        // System.out.println(
+        //         String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
         logging();
     }
 
