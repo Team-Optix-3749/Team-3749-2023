@@ -18,7 +18,7 @@ import frc.robot.utils.Constants.VisionConstants;
  * 
  * @author Rohin Sood
  */
-public class VisionAlign extends CommandBase {
+public class RetroAlign extends CommandBase {
     private final Swerve swerve;
     private final VisionConstants.Nodes node;
     private final PIDController xController = new PIDController(VisionConstants.visionXKP.get(), 0, 0);
@@ -26,7 +26,7 @@ public class VisionAlign extends CommandBase {
     private boolean aligned;
     private double offset;
 
-    public VisionAlign(Swerve swerve, VisionConstants.Nodes node) {
+    public RetroAlign(Swerve swerve, VisionConstants.Nodes node) {
         this.swerve = swerve;
         this.node = node;
         this.setName("Vision Align");

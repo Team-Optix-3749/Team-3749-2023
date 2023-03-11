@@ -61,16 +61,16 @@ public class ApriltagAlign extends CommandBase {
     @Override
     public void execute() {
         var robotPose2d = swerve.getPose();
-        var robotPose = new Pose3d(
+        var robotPose3d = new Pose3d(
                 robotPose2d.getX(),
                 robotPose2d.getY(),
                 0.0,
                 new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
-        var photonRes = Limelight.getLatestResult();
-        if (photonRes.hasTargets()) {
+        var res = Limelight.getLatestResult();
+        if (res.hasTargets()) {
             // Find the tag we want to chase
-            var targetOpt = photonRes.getTargets().stream()
+            var targetOpt = res.getTargets().stream()
                     .filter(t -> t.getFiducialId() == tag_fid_id)
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
                     .findFirst();
@@ -80,7 +80,7 @@ public class ApriltagAlign extends CommandBase {
                 lastTarget = target;
 
                 // Transform the robot's pose to find the camera's pose
-                var cameraPose = robotPose.transformBy(VisionConstants.robot_to_cam);
+                var cameraPose = robotPose3d.transformBy(VisionConstants.robot_to_cam);
 
                 // Trasnform the camera's pose to the target's pose
                 var camToTarget = target.getBestCameraToTarget();
@@ -101,12 +101,12 @@ public class ApriltagAlign extends CommandBase {
             swerve.stop();
         } else {
             // Drive to the target
-            var xSpeed = xController.calculate(robotPose.getX());
+            var xSpeed = xController.calculate(robotPose3d.getX());
             if (xController.atGoal()) {
                 xSpeed = 0;
             }
 
-            var ySpeed = yController.calculate(robotPose.getY());
+            var ySpeed = yController.calculate(robotPose3d.getY());
             if (yController.atGoal()) {
                 ySpeed = 0;
             }
@@ -128,5 +128,10 @@ public class ApriltagAlign extends CommandBase {
     public void end(boolean interrupted) {
         swerve.stop();
     }
+
+    // @Override
+    // public boolean isFinished() {
+    //     return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
+    // }
 
 }
