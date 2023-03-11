@@ -1,4 +1,4 @@
-package frc.robot.subsystems.claw;
+package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -20,33 +20,30 @@ import frc.robot.utils.Constants;
  * @author Noah Simon
  * @author Rohin Sood
  * @author Raadwan Masum
- *         /**
- *         Double jointed arm subsystem built with 2 CANSparkMaxes at each joint
- *         and REV
- *         Through Bore Encoders
  * 
  *         Claw.java creates objects, dependencies, and motor controller groups
  *         to allow us to set the speed of each motor for intake and outtake
  */
-public class Claw extends SubsystemBase {
+public class ArmIntake extends SubsystemBase {
 
-    private final CANSparkMax clawMotor = new CANSparkMax(Constants.Claw.claw_id, MotorType.kBrushless);
-    private final RelativeEncoder clawEncoder = clawMotor.getEncoder();
+    private final CANSparkMax intakeMotor = new CANSparkMax(Constants.ArmIntake.arm_intake_id, MotorType.kBrushless);
+    private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
 
     private final PIDController clawPID = new PIDController(0.675, 0, 0);
     private final SimpleMotorFeedforward clawFeedForward = new SimpleMotorFeedforward(0, 0.675);
 
-    public Claw() {
-        clawMotor.restoreFactoryDefaults();
+    public ArmIntake() {
+        intakeMotor.restoreFactoryDefaults();
 
-        clawMotor.setIdleMode(IdleMode.kBrake);
-        // clawMotor.setSmartCurrentLimit(60);
+        intakeMotor.setIdleMode(IdleMode.kBrake);
+
+        intakeMotor.setInverted(true);
 
         // 1 wheel rotation / 5 motor rotations
-        clawEncoder.setPositionConversionFactor(1.0 / 5.0);
+        intakeEncoder.setPositionConversionFactor(1.0 / 5.0);
 
         // 1 minute / 60 seconds * 1 wheel rotation / 5 motor rotations
-        clawEncoder.setVelocityConversionFactor(1.0 / (60.0 * 5.0));
+        intakeEncoder.setVelocityConversionFactor(1.0 / (60.0 * 5.0));
     }
 
     /**
@@ -55,7 +52,7 @@ public class Claw extends SubsystemBase {
      * @return
      */
     public double getTemperature() {
-        return clawMotor.getMotorTemperature();
+        return intakeMotor.getMotorTemperature();
     }
 
     /**
@@ -64,7 +61,7 @@ public class Claw extends SubsystemBase {
      * @return
      */
     public double getPosition() {
-        return clawEncoder.getPosition();
+        return intakeEncoder.getPosition();
     }
 
     /**
@@ -73,7 +70,7 @@ public class Claw extends SubsystemBase {
      * @param voltage
      */
     public void setVoltage(double voltage) {
-        clawMotor.setVoltage(voltage);
+        intakeMotor.setVoltage(voltage);
     }
 
     /**
@@ -82,7 +79,7 @@ public class Claw extends SubsystemBase {
      * @param speed -1.0 to 1.0
      */
     public void set(double speed) {
-        clawMotor.set(speed);
+        intakeMotor.set(speed);
     }
 
     /**
@@ -91,29 +88,29 @@ public class Claw extends SubsystemBase {
      * @param velocity
      */
     public void setFeedForward(double velocity) {
-        SmartDashboard.putNumber("claw pid gain", clawPID.calculate(clawEncoder.getVelocity(), velocity));
+        SmartDashboard.putNumber("claw pid gain", clawPID.calculate(intakeEncoder.getVelocity(), velocity));
         SmartDashboard.putNumber("claw ff gain", clawFeedForward.calculate(velocity));
 
         SmartDashboard.putNumber("claw gain",
-                clawFeedForward.calculate(velocity) + clawPID.calculate(clawEncoder.getVelocity(), velocity));
-        clawMotor.setVoltage(
-                clawFeedForward.calculate(velocity) + clawPID.calculate(clawEncoder.getVelocity(), velocity));
+                clawFeedForward.calculate(velocity) + clawPID.calculate(intakeEncoder.getVelocity(), velocity));
+        intakeMotor.setVoltage(
+                clawFeedForward.calculate(velocity) + clawPID.calculate(intakeEncoder.getVelocity(), velocity));
     }
 
     /**
      * stops the motor
      */
     public void stop() {
-        clawMotor.stopMotor();
+        intakeMotor.stopMotor();
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
-        SmartDashboard.putNumber("Claw Position", clawEncoder.getPosition());
-        SmartDashboard.putNumber("Claw Velocity", clawEncoder.getVelocity());
-        SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Claw Voltage", clawMotor.getAppliedOutput() * clawMotor.getBusVoltage());
+        SmartDashboard.putNumber("Claw Position", intakeEncoder.getPosition());
+        SmartDashboard.putNumber("Claw Velocity", intakeEncoder.getVelocity());
+        SmartDashboard.putNumber("Claw Current", intakeMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Claw Voltage", intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage());
         SmartDashboard.putString("Claw Command",
                 this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
     }

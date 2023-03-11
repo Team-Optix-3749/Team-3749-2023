@@ -49,8 +49,25 @@ public class Constants {
         return false;
     }
 
-    public static final class Claw {
-        public static final int claw_id = 22;
+    public static final class ArmIntake {
+        public static final int arm_intake_id = 22;
+        public static final double idleVoltage = 1;
+        public static final double releaseObjectVoltage = -6;
+        public static final double intakeVoltage = 6;
+    }
+
+    public static final class SideIntake {
+        public static final int lift_motor_id = 23;
+        public static final int side_intake_id = 24;
+        
+        public static final double idleVoltage = 3;
+        public static final double releaseObjectVoltage = -3;
+        public static final double intakeVoltage = 6;
+
+        public static final double liftKG = 0.2;
+        public static final double liftKP = 7.0;
+
+        public static final double liftOutSetpoint = 1.3;
     }
 
     public static final class Arm {
@@ -86,8 +103,18 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 5;
+        public static final double maxSpeedMPS = 7;
         public static final double maxAccelerationMPS = 10;
+        
+        public static enum ArmSetpoints {
+            ZERO,
+            STOW,
+            STING,
+            DOUBLE_SUBSTATION,
+            GROUND_INTAKE,
+            PLACE_TOP,
+            PLACE_MID;
+        }
     }
 
     public static final class ModuleConstants {
@@ -163,6 +190,8 @@ public class Constants {
                 / 2;
         public static final double kAutoDriveMaxAngularAccelerationUnitsPerSecond = kTeleDriveMaxAngularAccelerationUnitsPerSecond
                 / 2;
+
+        
     }
 
     public static final class OIConstants {

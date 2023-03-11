@@ -4,7 +4,6 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -24,9 +23,6 @@ public class AutoBalancingPID extends CommandBase {
     private final Swerve swerve;
 
     private final PIDController controller = new PIDController(0.003, 0, 0.00075);
-    private final PIDController turnController = new PIDController(0.005, 0.001, 0);
-    private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
-            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     private double angle;
     private double heading;
@@ -70,22 +66,7 @@ public class AutoBalancingPID extends CommandBase {
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
         if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0) && !has_aligned) {
-            // negative so that we move towards the target, not away
-            double turning_speed = turnController.calculate(Math.abs(heading), 0);
-            turning_speed = turningLimiter.calculate(turning_speed)
-                    * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-            // signs the speed so we move in the correct direction
-            turning_speed = Math.abs(turning_speed) * Math.signum(heading);
-            // 4. Construct desired chassis speeds
-            ChassisSpeeds chassisSpeeds;
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turning_speed, swerve.getRotation2d());
-            // 5. Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-                    .toSwerveModuleStates(chassisSpeeds);
-            // 6. Output each module states to wheels
-            swerve.setModuleStates(moduleStates);
+            swerve.turnToRotation(0);            
         }
 
         // move forward if the angle hasn't started to move and it hasn't moved in the

@@ -72,8 +72,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 8)),
-                new Pose2d(1.33, 1.0, new Rotation2d(Math.PI / 8)),
+                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 2.5)),
+                new Pose2d(1.1, 0.98, new Rotation2d(0)),
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -87,15 +87,15 @@ public class ArmTrajectories {
      */
     public static Trajectory getMidNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 3)),
-                new Pose2d(0.9, 0.7, new Rotation2d(Math.PI / 3)),
+                new Pose2d(0.5, 0.7, new Rotation2d(0)),
+                new Pose2d(0.8, 0.7, new Rotation2d(5 * Math.PI / 3)),
         };
 
         return createTrajectory(waypoints, isReversed);
     }
 
     /**
-     * Move arm to and from sting position and double substiation loading position
+     * Move arm to and from stow position and double substiation loading position
      * 
      * @param isReversed
      * @return Trajectory
@@ -103,7 +103,22 @@ public class ArmTrajectories {
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
-                new Pose2d(0.75, 0.75, new Rotation2d(Math.PI / 2)),
+                new Pose2d(0.5, 0.75, new Rotation2d(Math.PI / 2)),
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    /**
+     * Move arm to and from stow position and further ground intake position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static Trajectory getGroundIntakeTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(0.3, -0.2, new Rotation2d(0)),
+                new Pose2d(0.9, -0.09, new Rotation2d(5 * Math.PI / 3)),
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -115,12 +130,133 @@ public class ArmTrajectories {
      * @param isReversed
      * @return Trajectory
      */
-    public static Trajectory getGroundIntakeTrajectory(boolean isReversed) {
+    public static Trajectory getGroundIntakeSweepTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 new Pose2d(0.3, -0.2, new Rotation2d(0)),
-                new Pose2d(0.7, -0.4, new Rotation2d(5 * Math.PI / 3)),
+                new Pose2d(1.4, -0.3, new Rotation2d(0)),
         };
 
         return createTrajectory(waypoints, isReversed);
     }
+
+    /**
+     * Move arm from mid node to top node position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static Trajectory getMidNodeToTopNodeTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                new Pose2d(0.8, 0.7, new Rotation2d(Math.PI / 3)),
+                new Pose2d(1.1, 0.98, new Rotation2d(Math.PI / 8)),
+
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    /**
+     * information on an arm path detailing the multiple trajectories, where and for
+     * how long to pause, and what the claw voltage should be during the trajectory.
+     * Pause times take effect before the trajectory in its identical index
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    public static enum ArmPaths {
+        STOW_TO_TOP(
+                new Trajectory[] { getTopNodeTrajectory(false) }, // trajectories
+                new double[] { 0 }, // pause lengths
+                new double[] { Constants.ArmIntake.idleVoltage }), // voltages
+        STING_TO_TOP(
+                new Trajectory[] { getTopNodeTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        TOP_TO_STOW(
+                new Trajectory[] {
+                        getTopNodeTrajectory(true).concatenate(
+                                getStingTrajectory(true))
+                },
+                new double[] { 0, 0.4 },
+                new double[] { Constants.ArmIntake.idleVoltage, Constants.ArmIntake.releaseObjectVoltage }),
+        TOP_TO_STING(
+                new Trajectory[] { getTopNodeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        TOP_TO_MID(
+                new Trajectory[] { getMidNodeToTopNodeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        STOW_TO_MID(
+                new Trajectory[] { getStingTrajectory(false).concatenate(getMidNodeTrajectory(false)) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        STING_TO_MID(
+                new Trajectory[] { getMidNodeTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        MID_TO_STOW(
+                new Trajectory[] {
+                        ArmTrajectories.getMidNodeTrajectory(true).concatenate(
+                                ArmTrajectories.getStingTrajectory(true))
+                },
+                new double[] { 0, 0.4 },
+                new double[] { Constants.ArmIntake.idleVoltage, Constants.ArmIntake.releaseObjectVoltage }),
+        MID_TO_STING(
+                new Trajectory[] { getMidNodeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        MID_TO_TOP(
+                new Trajectory[] { getMidNodeToTopNodeTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        STOW_TO_DOUBLESUB(
+                new Trajectory[] { getDoubleSubstationTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        DOUBLESUB_TO_STOW(
+                new Trajectory[] { getDoubleSubstationTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        STOW_TO_GROUND_INTAKE(
+                new Trajectory[] { getGroundIntakeTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        GROUND_INTAKE_TO_STOW(
+                new Trajectory[] { getGroundIntakeTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        STOW_TO_STING(
+                new Trajectory[] { getStingTrajectory(false) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage }),
+        STING_TO_STOW(
+                new Trajectory[] { getStingTrajectory(true) },
+                new double[] { 0 },
+                new double[] { Constants.ArmIntake.idleVoltage });
+
+        public int numTrajectories;
+        public Trajectory[] trajectories;
+        public double[] trajectoryLengths;
+        public double[] pauseLengths;
+        public double[] intakeVoltages;
+
+        ArmPaths(Trajectory[] trajectories,
+                double[] pauseLengths,
+                double[] intakeVoltages) {
+            this.numTrajectories = trajectories.length;
+            this.trajectoryLengths = new double[numTrajectories];
+            int index = 0;
+            for (Trajectory traj : trajectories) {
+                this.trajectoryLengths[index] = traj.getTotalTimeSeconds();
+                index++;
+            }
+
+            this.trajectories = trajectories;
+            this.pauseLengths = pauseLengths;
+            this.intakeVoltages = intakeVoltages;
+        }
+
+    }
+
 }

@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
+import frc.robot.subsystems.arm.*;
+import frc.robot.subsystems.intake.*;
+import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.ApriltagAlign;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.MoveToPose;
@@ -18,16 +21,16 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.commands.swerve.RetroAlign;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.VisionConstants.Nodes;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 public class RobotContainer {
-    // Controllers
     private final Xbox pilot = new Xbox(0);
 
     // Subsystems
     private final Swerve swerve = new Swerve();
-    // private final Claw claw = new Claw();
-    // private final Arm arm = new Arm();
+    private final ArmIntake armIntake = new ArmIntake();
+    private final SideIntake sideIntake = new SideIntake();
+    private final Arm arm = new Arm();
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -57,8 +60,13 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        // claw.setDefaultCommand(
-        //         Commands.run(() -> claw.setVoltage(1.0), claw));
+        armIntake.setDefaultCommand(
+            Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake)
+        );
+
+        sideIntake.setDefaultCommand(
+            Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
+        );
     }
 
     /**
@@ -71,7 +79,28 @@ public class RobotContainer {
             new ApriltagAlign(swerve)
         );
 
+        // arm setpoints (buttons)
+        // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+        pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
+        pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
+        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+
+        // arm setpoints (bumpers)
+        pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
+        pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
+        
+        // intake button bindings
+        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage));
+        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
+        
+        // swerve button bindings
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
+
+        // swerve rotation cardinals
+        pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
+        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
+        pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
+        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
 
     /**
