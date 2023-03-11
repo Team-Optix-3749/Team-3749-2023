@@ -4,11 +4,8 @@
 
 package frc.robot.subsystems.swerve;
 
-import org.photonvision.PhotonCamera;
 import org.photonvision.common.hardware.VisionLEDMode;
-
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -223,7 +220,7 @@ public class Swerve extends SubsystemBase {
     public SlewRateLimiter getTurnLimiter(){
         return turningLimiter;
     }
-    
+
     @Override
     public void periodic() {
         updateOdometry();
