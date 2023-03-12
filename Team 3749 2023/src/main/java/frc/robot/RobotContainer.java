@@ -39,9 +39,9 @@ public class RobotContainer {
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
 
-        // configureDefaultCommands();
-        // configureButtonBindings();
-        // configureAuto()
+        configureDefaultCommands();
+        configureButtonBindings();
+        configureAuto(); 
 
         try {
             FileWriter writer = new FileWriter("data.csv", false);
@@ -81,7 +81,6 @@ public class RobotContainer {
 
         // if both xbox controllers are connected
         if (DriverStation.isJoystickConnected(1)) {
-            System.out.println("op and pilot buttons");
 
             // arm setpoints (buttons)
             operator.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
@@ -113,7 +112,6 @@ public class RobotContainer {
 
             // if only one xbox controller is connected
         } else if (DriverStation.isJoystickConnected(0)) {
-            System.out.println("pilot buttons");
 
             // arm setpoints (buttons)
             pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
@@ -140,8 +138,6 @@ public class RobotContainer {
 
             // if no joysticks are connected (ShuffleBoard buttons)
         } else {
-            System.out.println("shuffleboard");
-
 
             ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
 
@@ -165,10 +161,10 @@ public class RobotContainer {
             liftSideIntake.setName("Toggle Lift");
             CommandBase outakeSideIntake = Commands
                     .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseObjectVoltage), sideIntake);
-            liftSideIntake.setName("Outake");
+            outakeSideIntake.setName("Side Outake");
             CommandBase intakeSideIntake = Commands
                     .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage), sideIntake);
-            liftSideIntake.setName("Intake");
+            intakeSideIntake.setName("Side Intake");
 
             sideIntakeCommands.add(liftSideIntake);
             sideIntakeCommands.add(outakeSideIntake);
@@ -181,10 +177,10 @@ public class RobotContainer {
 
             CommandBase outakeArmIntake = Commands
                     .run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage), sideIntake);
-            liftSideIntake.setName("Outake");
+            outakeArmIntake.setName("Arm Outake");
             CommandBase intakeArmIntake = Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
                     sideIntake);
-            liftSideIntake.setName("Intake");
+            intakeArmIntake.setName("Arm Intake");
 
             armIntakeCommands.add(outakeArmIntake);
             armIntakeCommands.add(intakeArmIntake);
