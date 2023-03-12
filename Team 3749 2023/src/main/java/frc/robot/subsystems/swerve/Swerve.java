@@ -143,7 +143,7 @@ public class Swerve extends SubsystemBase {
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
 
-        Limelight.updatePoseAprilTags(swerveDrivePoseEstimator);
+        // Limelight.updatePoseAprilTags(swerveDrivePoseEstimator);
     }
 
     public void stopModules() {
@@ -231,5 +231,7 @@ public class Swerve extends SubsystemBase {
 
         Limelight.logging();
         Limelight.setLED(VisionLEDMode.kOn);
+
+        SmartDashboard.putData(this);
     }
 }

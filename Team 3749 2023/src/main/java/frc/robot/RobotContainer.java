@@ -76,6 +76,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         pilot.aWhileHeld(
             // new MoveToPose(swerve, new Pose2d(new Translation2d(15.48, 1.79), new Rotation2d(0.0)))
+            // new MoveToPose(swerve, new Pose2d())
             new ApriltagAlign(swerve)
         );
 

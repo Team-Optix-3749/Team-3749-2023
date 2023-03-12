@@ -74,7 +74,7 @@ public class MoveToPose extends CommandBase {
                 .transformBy(translationToTransform(driveVelocityScalar, 0.0))
                 .getTranslation();
         
-        ChassisSpeeds chassisSpeeds =  ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(), driveVelocity.getY(), turnVelocity, currentPose.getRotation());
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(), driveVelocity.getY(), turnVelocity, currentPose.getRotation());
 
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
             .toSwerveModuleStates(chassisSpeeds);

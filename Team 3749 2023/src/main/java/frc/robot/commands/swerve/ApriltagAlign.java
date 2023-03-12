@@ -1,13 +1,21 @@
 package frc.robot.commands.swerve;
 
+import frc.robot.utils.Constants;
 import frc.robot.utils.Limelight;
+import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,30 +29,52 @@ import frc.robot.subsystems.swerve.Swerve;
  */
 public class ApriltagAlign extends CommandBase {
 
-    private static final TrapezoidProfile.Constraints xConstraints = new TrapezoidProfile.Constraints(1, 2);
-    private static final TrapezoidProfile.Constraints yConstraints = new TrapezoidProfile.Constraints(1, 2);
-    private static final TrapezoidProfile.Constraints thetaConstraints = new TrapezoidProfile.Constraints(1, 2);
+    // private static final TrapezoidProfile.Constraints xConstraints = new
+    // TrapezoidProfile.Constraints(1, 2);
+    // private static final TrapezoidProfile.Constraints yConstraints = new
+    // TrapezoidProfile.Constraints(1, 2);
+    // private static final TrapezoidProfile.Constraints thetaConstraints = new
+    // TrapezoidProfile.Constraints(1, 2);
 
-    private static final int tag_fid_id = 1;
+    private static final int tag_fid_id = 7;
     private static final Transform3d tagToGoal = new Transform3d(
-            new Translation3d(-1.5, 0.0, 0.0),
+            new Translation3d(1.5, 0.0, 0.0),
             new Rotation3d(0.0, 0.0, Math.PI));
 
     private final Swerve swerve;
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, xConstraints);
-    private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, yConstraints);
-    private final ProfiledPIDController thetaController = new ProfiledPIDController(2, 0, 0, thetaConstraints);
+    private final ProfiledPIDController driveController = new ProfiledPIDController(
+            0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
+    private final ProfiledPIDController turnController = new ProfiledPIDController(
+            0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
+
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 0.5);
+    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 0.5);
+
+    private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0);
+    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.5);
+
+    // private final ProfiledPIDController xController = new
+    // ProfiledPIDController(1, 0, 0, xConstraints);
+    // private final ProfiledPIDController yController = new
+    // ProfiledPIDController(1, 0, 0, yConstraints);
+    // private final ProfiledPIDController thetaController = new
+    // ProfiledPIDController(1, 0, 0, thetaConstraints);
 
     private PhotonTrackedTarget lastTarget;
+
+    private double driveErrorAbs;
+    private double turnErrorAbs;
+
+    private double count = 0;
 
     public ApriltagAlign(Swerve swerve) {
         this.swerve = swerve;
 
-        xController.setTolerance(0.2);
-        yController.setTolerance(0.2);
-        thetaController.setTolerance(Units.degreesToRadians(3));
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        // xController.setTolerance(0.2);
+        // yController.setTolerance(0.2);
+        // thetaController.setTolerance(Units.degreesToRadians(3));
+        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         addRequirements(swerve);
     }
@@ -53,13 +83,22 @@ public class ApriltagAlign extends CommandBase {
     public void initialize() {
         lastTarget = null;
         var robotPose = swerve.getPose();
-        thetaController.reset(robotPose.getRotation().getRadians());
-        xController.reset(robotPose.getX());
-        yController.reset(robotPose.getY());
+        turnController.reset(robotPose.getRotation().getRadians());
+        // xController.reset(robotPose.getX());
+        // yController.reset(robotPose.getY());
+        // driveController.reset(
+        //         robotPose.getTranslation().getDistance(targetPose.getTranslation()));
+        turnController.reset(robotPose.getRotation().getRadians());
+        turnController.setTolerance(turnTolerance.get());
+        driveController.setTolerance(driveTolerance.get());
     }
 
     @Override
     public void execute() {
+
+        driveController.setP(drivekP.get());
+        turnController.setP(turnKP.get());
+
         var robotPose2d = swerve.getPose();
         var robotPose3d = new Pose3d(
                 robotPose2d.getX(),
@@ -75,12 +114,16 @@ public class ApriltagAlign extends CommandBase {
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
                     .findFirst();
             if (targetOpt.isPresent()) {
+
                 var target = targetOpt.get();
                 // This is new target data, so recalculate the goal
                 lastTarget = target;
 
                 // Transform the robot's pose to find the camera's pose
                 var cameraPose = robotPose3d.transformBy(VisionConstants.robot_to_cam);
+
+                SmartDashboard.putNumberArray("Camera Pose",
+                        new double[] { cameraPose.getX(), cameraPose.getY(), cameraPose.getZ() });
 
                 // Trasnform the camera's pose to the target's pose
                 var camToTarget = target.getBestCameraToTarget();
@@ -89,39 +132,80 @@ public class ApriltagAlign extends CommandBase {
                 // Transform the tag's pose to set our goal
                 var goalPose = targetPose.transformBy(tagToGoal).toPose2d();
 
-                // Drive
-                xController.setGoal(goalPose.getX());
-                yController.setGoal(goalPose.getY());
-                thetaController.setGoal(goalPose.getRotation().getRadians());
+                if (count == 0) {
+                    driveController.reset(
+                        robotPose2d.getTranslation().getDistance(goalPose.getTranslation()));
+                }
+
+                SmartDashboard.putNumberArray("Goal Pose", new double[] { goalPose.getX(), goalPose.getY() });
+
+                double currentDistance = robotPose2d.getTranslation().getDistance(goalPose.getTranslation());
+                driveErrorAbs = currentDistance;
+                double driveVelocityScalar = driveController.calculate(driveErrorAbs, 0.0);
+                if (driveController.atGoal())
+                    driveVelocityScalar = 0.0;
+
+                SmartDashboard.putNumber("DRIVE SCALAR", driveVelocityScalar);
+
+                double turnVelocity = turnController.calculate(
+                    robotPose2d.getRotation().getRadians(), goalPose.getRotation().getRadians());
+                turnErrorAbs = Math.abs(robotPose2d.getRotation().minus(goalPose.getRotation()).getRadians());
+                if (turnController.atGoal())
+                    turnVelocity = 0.0;
+
+                Translation2d driveVelocity = new Pose2d(
+                        new Translation2d(),
+                        robotPose2d.getTranslation().minus(goalPose.getTranslation()).getAngle())
+                        .transformBy(translationToTransform(driveVelocityScalar, 0.0))
+                        .getTranslation();
+
+                ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(),
+                        driveVelocity.getY(), turnVelocity, robotPose2d.getRotation());
+
+                SmartDashboard.putNumber("Drive X Velo", driveVelocity.getX());
+                SmartDashboard.putNumber("Drive Y Velo", driveVelocity.getY());
+                SmartDashboard.putNumber("Turn velo", turnVelocity);
+                SmartDashboard.putNumber("Drive error", driveErrorAbs);
+                SmartDashboard.putNumber("Turn error", turnErrorAbs);
+
+                SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                        .toSwerveModuleStates(chassisSpeeds);
+
+                swerve.setModuleStates(moduleStates);
+
             }
         }
+        
 
         if (lastTarget == null) {
             // No target has been visible
             swerve.stop();
         } else {
             // Drive to the target
-            var xSpeed = xController.calculate(robotPose3d.getX());
-            if (xController.atGoal()) {
-                xSpeed = 0;
-            }
+            // var xSpeed = xController.calculate(robotPose3d.getX());
+            // if (xController.atGoal()) {
+            //     xSpeed = 0;
+            // }
 
-            var ySpeed = yController.calculate(robotPose3d.getY());
-            if (yController.atGoal()) {
-                ySpeed = 0;
-            }
+            // var ySpeed = yController.calculate(robotPose3d.getY());
+            // if (yController.atGoal()) {
+            //     ySpeed = 0;
+            // }
 
-            var thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
-            if (thetaController.atGoal()) {
-                thetaSpeed = 0;
-            }
+            // var thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
+            // if (thetaController.atGoal()) {
+            //     thetaSpeed = 0;
+            // }
 
-            SmartDashboard.putNumber("X Speed", xSpeed);
-            SmartDashboard.putNumber("Y Speed", ySpeed);
-            SmartDashboard.putNumber("TEHTA Speed", thetaSpeed);
+            // SmartDashboard.putNumber("X Speed", xSpeed);
+            // SmartDashboard.putNumber("Y Speed", ySpeed);
+            // SmartDashboard.putNumber("TEHTA Speed", thetaSpeed);
 
-            swerve.drive(xSpeed, ySpeed, thetaSpeed);
+            // swerve.drive(xSpeed, ySpeed, thetaSpeed);
+
         }
+
+        count++;
     }
 
     @Override
@@ -129,9 +213,30 @@ public class ApriltagAlign extends CommandBase {
         swerve.stop();
     }
 
-    // @Override
-    // public boolean isFinished() {
-    //     return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
-    // }
+    /** Checks if the robot pose is within the allowed drive and theta tolerances. */
+    public boolean withinTolerance(double driveTolerance, Rotation2d thetaTolerance) {
+        return Math.abs(driveErrorAbs) < driveTolerance
+            && Math.abs(turnErrorAbs) < thetaTolerance.getRadians();
+    }
+
+    /**
+     * Creates a pure translating transform
+     *
+     * @param x The x componenet of the translation
+     * @param y The y componenet of the translation
+     * @return The resulting transform
+     */
+    public static Transform2d translationToTransform(double x, double y) {
+        return new Transform2d(new Translation2d(x, y), new Rotation2d());
+    }
+
+    public boolean atGoal() {
+        return driveController.atGoal() && turnController.atGoal();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return atGoal();
+    }
 
 }
