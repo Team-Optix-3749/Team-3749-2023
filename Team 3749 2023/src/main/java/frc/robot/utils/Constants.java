@@ -215,4 +215,10 @@ public class Constants {
         public static final int apriltag_pipeline_index = 0;
         public static final int reflective_tape_pipeline_index = 1;
     }
+
+    public static class LEDs {
+        public static final int pwm_port = 0;
+        public static final int length = 0;
+        public static enum LEDsPattern {RAINBOW, RED, BLUE, GREEN, WHITE, BOUNCE, TWINKLE, NOTHING};
+    }
 }
