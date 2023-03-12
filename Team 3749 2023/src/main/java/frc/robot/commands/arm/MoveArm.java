@@ -39,6 +39,8 @@ public class MoveArm extends CommandBase {
         this.intake = intake;
         this.desiredSetpoint = setpoint;
         // this.trajectory = trajectory;
+
+        setName("Move Arm to " + setpoint.toString());
         addRequirements(arm);
     }
 
