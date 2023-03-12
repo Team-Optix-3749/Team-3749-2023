@@ -21,7 +21,6 @@ import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
-import frc.robot.subsystems.Base;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
@@ -37,8 +36,6 @@ public class RobotContainer {
     private final ArmIntake armIntake = new ArmIntake();
     private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
-
-    private final Base base = new Base();
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
