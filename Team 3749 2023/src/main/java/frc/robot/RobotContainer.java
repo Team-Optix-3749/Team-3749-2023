@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.led.LEDs;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
@@ -25,6 +26,7 @@ public class RobotContainer {
     private final ArmIntake armIntake = new ArmIntake();
     private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
+    private final LEDs leds = new LEDs();
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -68,14 +70,14 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // arm setpoints (buttons)
-        pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
-        pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
+        pilot.a().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_TOP));
+        pilot.b().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_MID));
+        pilot.x().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.GROUND_INTAKE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
         // arm setpoints (bumpers)
-        pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
-        pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
+        pilot.rightBumper().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.STING));
+        pilot.leftBumper().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
         
         // intake button bindings
         pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage));
