@@ -1,5 +1,8 @@
 package frc.robot.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableType;
@@ -13,9 +16,16 @@ import edu.wpi.first.networktables.NetworkTableValue;
  * @param <T> Type of data: Supported types include String, Double, and Boolean
  */
 public class SmartData<T> {
-    T defaultVal;
-    NetworkTableEntry entry;
+    private T defaultVal;
+    private NetworkTableEntry entry;
+    private Map<Integer, T> lastHasChangedVals = new HashMap<>();
 
+    /**
+     * Creates a new SmartData instance
+     * 
+     * @param name       Key on SmartDashboard
+     * @param defaultVal Default value
+     */
     public SmartData(String name, T defaultVal) {
         this.defaultVal = defaultVal;
         entry = NetworkTableInstance.getDefault().getTable("SmartDashboard").getEntry(name);
@@ -42,6 +52,27 @@ public class SmartData<T> {
         } else {
             return this.defaultVal;
         }
+    }
+
+    /**
+     * checks whether the number has changed since the last time this method has
+     * been called
+     * 
+     * @param id Unique identified for the called to avoid conflicts shared between
+     *           multiple instances. Recommended to pass in the result of
+     *           'Obj.hashCode()'
+     * @return true if the value has changed for its last check
+     */
+    public boolean hasChanged(int id) {
+        T currentVal = get();
+        T lastVal = lastHasChangedVals.get(id);
+
+        if (lastVal == null || !currentVal.equals(lastVal)) {
+            lastHasChangedVals.put(id, currentVal);
+            return true;
+        }
+
+        return false;
     }
 
     public void set(T val) {
