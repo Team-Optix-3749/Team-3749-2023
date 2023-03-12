@@ -65,6 +65,10 @@ public class ApriltagAlign extends CommandBase {
 
     @Override
     public void initialize() {
+
+        driveController.setP(drivekP.get());
+        turnController.setP(turnKP.get());
+
         lastTarget = null;
 
         var robotPose2d = swerve.getPose();
