@@ -162,3 +162,5 @@ bin/
 *-window.json
 
 data.csv
+
+src/main/java/frc/robot/BuildConstants.java
