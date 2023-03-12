@@ -83,7 +83,6 @@ public class ApriltagAlign extends CommandBase {
                 0.0,
                 new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
-
         var res = Limelight.getLatestResult();
         if (res.hasTargets()) {
             // Find the tag we want to chase
@@ -128,10 +127,8 @@ public class ApriltagAlign extends CommandBase {
         if (driveController.atGoal())
             driveVelocityScalar = 0.0;
 
-        SmartDashboard.putNumber("DRIVE SCALAR", driveVelocityScalar);
-
         double turnVelocity = turnController.calculate(
-            robotPose2d.getRotation().getRadians(), goalPose.getRotation().getRadians());
+                robotPose2d.getRotation().getRadians(), goalPose.getRotation().getRadians());
         turnErrorAbs = Math.abs(robotPose2d.getRotation().minus(goalPose.getRotation()).getRadians());
         if (turnController.atGoal())
             turnVelocity = 0.0;
@@ -145,17 +142,17 @@ public class ApriltagAlign extends CommandBase {
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(),
                 driveVelocity.getY(), turnVelocity, robotPose2d.getRotation());
 
-                
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-            .toSwerveModuleStates(chassisSpeeds);
-            
+                .toSwerveModuleStates(chassisSpeeds);
+
         swerve.setModuleStates(moduleStates);
-                
+
         SmartDashboard.putNumber("Drive X Velo", driveVelocity.getX());
         SmartDashboard.putNumber("Drive Y Velo", driveVelocity.getY());
         SmartDashboard.putNumber("Turn velo", turnVelocity);
         SmartDashboard.putNumber("Drive error", driveErrorAbs);
         SmartDashboard.putNumber("Turn error", turnErrorAbs);
+        SmartDashboard.putNumber("DRIVE SCALAR", driveVelocityScalar);
     }
 
     @Override
@@ -166,12 +163,6 @@ public class ApriltagAlign extends CommandBase {
     @Override
     public boolean isFinished() {
         return atGoal() || end;
-    }
-
-    /** Checks if the robot pose is within the allowed drive and theta tolerances. */
-    public boolean withinTolerance(double driveTolerance, Rotation2d thetaTolerance) {
-        return Math.abs(driveErrorAbs) < driveTolerance
-            && Math.abs(turnErrorAbs) < thetaTolerance.getRadians();
     }
 
     /**
