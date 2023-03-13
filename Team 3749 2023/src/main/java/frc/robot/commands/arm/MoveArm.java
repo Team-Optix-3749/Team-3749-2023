@@ -58,10 +58,10 @@ public class MoveArm extends CommandBase {
     @Override
     public void execute() {
         if (timer.get() < trajectoryInformation.pauseLengths[trajectoryIndex]) {
-            intake.setVoltage(Constants.ArmIntake.idleVoltage);
+            // intake.setVoltage(Constants.ArmIntake.idleVoltage);
             return;
         }
-        intake.setVoltage(trajectoryInformation.intakeVoltages[trajectoryIndex]);
+        // intake.setVoltage(trajectoryInformation.intakeVoltages[trajectoryIndex]);
 
         double cur_time = timer.get();
         desiredState = trajectoryInformation.trajectories[trajectoryIndex]
@@ -83,14 +83,14 @@ public class MoveArm extends CommandBase {
             // e.printStackTrace();
         }
         // System.out.println(intakeVoltages[trajectoryIndex]);
-        // System.out.println(
-        //         String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
+        System.out.println(
+                String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
         logging();
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.setVoltage(Constants.ArmIntake.idleVoltage);
+        // intake.setVoltage(Constants.ArmIntake.idleVoltage);
     }
 
     @Override
@@ -135,11 +135,14 @@ public class MoveArm extends CommandBase {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
             return ArmPaths.DOUBLESUB_TO_STOW;
         }
-        if (currentSetpoint == ArmSetpoints.GROUND_INTAKE && desiredSetpoint != ArmSetpoints.STOW) {
+        if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            return ArmPaths.GROUND_INTAKE_TO_STOW;
+            return ArmPaths.GROUND_INTAKE_CUBE_TO_STOW;
         }
-
+        if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE && desiredSetpoint != ArmSetpoints.STOW) {
+            arm.setCurrentSetpoint(ArmSetpoints.STOW);
+            return ArmPaths.GROUND_INTAKE_CONE_TO_STOW;
+        }
         switch (desiredSetpoint) {
             case PLACE_TOP:
                 // if already there, place and return
@@ -188,15 +191,22 @@ public class MoveArm extends CommandBase {
                     return ArmPaths.STOW_TO_DOUBLESUB;
                 }
 
-            case GROUND_INTAKE:
+            case GROUND_INTAKE_CUBE:
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    return ArmPaths.GROUND_INTAKE_TO_STOW;
+                    return ArmPaths.GROUND_INTAKE_CUBE_TO_STOW;
                 } else {
-                    arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE);
-                    return ArmPaths.STOW_TO_GROUND_INTAKE;
+                    arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CUBE);
+                    return ArmPaths.STOW_TO_GROUND_INTAKE_CUBE;
                 }
-
+            case GROUND_INTAKE_CONE:
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return ArmPaths.GROUND_INTAKE_CONE_TO_STOW;
+                } else {
+                    arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CONE);
+                    return ArmPaths.STOW_TO_GROUND_INTAKE_CONE;
+                }
             case STING:
                 arm.setCurrentSetpoint(ArmSetpoints.STING);
                 if (desiredSetpoint == currentSetpoint) {
@@ -219,8 +229,10 @@ public class MoveArm extends CommandBase {
                     return ArmPaths.MID_TO_STOW;
                 else if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION)
                     return ArmPaths.DOUBLESUB_TO_STOW;
-                else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE)
-                    return ArmPaths.GROUND_INTAKE_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE)
+                    return ArmPaths.GROUND_INTAKE_CUBE_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE)
+                    return ArmPaths.GROUND_INTAKE_CONE_TO_STOW;
             default:
                 return null;
         }

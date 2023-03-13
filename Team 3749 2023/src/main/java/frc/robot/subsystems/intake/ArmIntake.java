@@ -72,6 +72,7 @@ public class ArmIntake extends SubsystemBase {
      * @param voltage
      */
     public void setVoltage(double voltage) {
+
         this.voltage = voltage;
     }
 

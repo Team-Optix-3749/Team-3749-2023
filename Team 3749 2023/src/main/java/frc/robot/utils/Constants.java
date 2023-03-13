@@ -49,7 +49,7 @@ public class Constants {
         public static final int arm_intake_id = 22;
         public static final double idleVoltage = 1;
         public static final double releaseObjectVoltage = -6;
-        public static final double intakeVoltage = 6;
+        public static final double intakeVoltage = 7;
     }
 
     public static final class SideIntake {
@@ -107,7 +107,8 @@ public class Constants {
             STOW,
             STING,
             DOUBLE_SUBSTATION,
-            GROUND_INTAKE,
+            GROUND_INTAKE_CONE,
+            GROUND_INTAKE_CUBE,
             PLACE_TOP,
             PLACE_MID;
         }
@@ -209,6 +210,11 @@ public class Constants {
 
     public static final class AutoConstants {
         public static final Map<String, Command> eventMap = new HashMap<>();
+
+        public static enum TopBottom {
+            TOP,
+            BOTTOM;
+        }
     }
 
     public static class VisionConstants {

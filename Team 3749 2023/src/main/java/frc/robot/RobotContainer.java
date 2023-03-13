@@ -67,8 +67,8 @@ public class RobotContainer {
         // arm setpoints (buttons)
         pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
-        pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
-        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+        pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
+        pilot.y().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CONE));
 
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
@@ -89,8 +89,10 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
-        // return AutoCommands.getBottomThreePiece(swerve, arm, armIntake, Alliance.Blue);
+        return AutoCommands.getMarkerTester(swerve, arm, armIntake, Alliance.Blue,
+                Constants.AutoConstants.TopBottom.BOTTOM);
+        // return AutoCommands.getBottomThreePiece(swerve, arm, armIntake,
+        // Alliance.Blue);
 
     }
 
@@ -98,10 +100,14 @@ public class RobotContainer {
      * Set event maps for autonomous
      */
     public void configureAuto() {
-        Constants.AutoConstants.eventMap.put("Pickup",
+        Constants.AutoConstants.eventMap.put("Pickup Cube",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE)));
+                        new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE)));
+        Constants.AutoConstants.eventMap.put("Pickup Cone",
+                new SequentialCommandGroup(
+                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
+                        new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CONE)));
         Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
                 new SequentialCommandGroup(
