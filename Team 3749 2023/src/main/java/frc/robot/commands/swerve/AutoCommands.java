@@ -88,7 +88,9 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.4),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                new MoveArm(arm, armIntake, ArmSetpoints.STOW));
+
 
     }
 
@@ -146,7 +148,9 @@ public final class AutoCommands {
                 path_2,
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.4),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15));
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
+                new MoveArm(arm, armIntake, ArmSetpoints.STOW));
+
     }
 
     public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
