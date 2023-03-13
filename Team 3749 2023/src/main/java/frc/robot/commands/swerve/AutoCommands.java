@@ -85,7 +85,11 @@ public final class AutoCommands {
                 true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                path_1);
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+
     }
 
     public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
@@ -102,10 +106,12 @@ public final class AutoCommands {
                 first.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 path_1,
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 new MoveArm(arm, armIntake, ArmSetpoints.STOW));
     }
 
@@ -131,13 +137,16 @@ public final class AutoCommands {
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 path_1,
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 path_2,
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25));
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15));
     }
 
     public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
@@ -163,10 +172,12 @@ public final class AutoCommands {
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 path_1,
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.25),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 path_2);
     }
 
