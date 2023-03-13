@@ -97,23 +97,26 @@ public final class AutoCommands {
     public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Alliance teamColor, Constants.AutoConstants.TopBottom topBottom) {
         PathPlannerTrajectory first;
-        if (topBottom == TopBottom.TOP) {
-            first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(2.5, 2.5));
-        } else {
-            first = PathPlanner.loadPath("BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-        }
+        // if (topBottom == TopBottom.TOP) {
+        //     first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(2.5, 2.5));
+        // } else {
+        //     first = PathPlanner.loadPath("BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+        // }
+        first = PathPlanner.loadPath("pickup", new PathConstraints(0.75, 0.75));
+
         first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
+                Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.4),
+                Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 path_1,
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.4),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
+                // new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                // Commands.waitSeconds(0.5),
+                // Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)).withTimeout(0.15),
                 new MoveArm(arm, armIntake, ArmSetpoints.STOW));
     }
 

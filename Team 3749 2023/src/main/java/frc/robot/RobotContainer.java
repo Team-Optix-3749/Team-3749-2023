@@ -18,6 +18,7 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.AutoConstants.TopBottom;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -89,8 +90,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getMarkerTester(swerve, arm, armIntake, Alliance.Blue,
-                Constants.AutoConstants.TopBottom.BOTTOM);
+        return AutoCommands.getTwoPiece(swerve, arm, armIntake, Alliance.Blue, TopBottom.TOP);
         // return AutoCommands.getBottomThreePiece(swerve, arm, armIntake,
         // Alliance.Blue);
 

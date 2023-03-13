@@ -165,6 +165,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("pitch", getVerticalTilt());
         SmartDashboard.putNumber("Robot Pose X", getPose().getX());
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
+        SmartDashboard.putNumber("Auto Robot Pose X", getAutoPose().getX());
+        SmartDashboard.putNumber("Auto Robot Pose Y", getAutoPose().getY());
     }
 
     public void stopModules() {
