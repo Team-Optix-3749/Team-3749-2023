@@ -30,7 +30,7 @@ public class ApriltagAlign extends CommandBase {
 
     private static final int tag_fid_id = 7;
     private static final Transform3d tagToGoal = new Transform3d(
-            new Translation3d(1.5, 0.0, 0.0),
+            new Translation3d(1.0, 0.1, 0.0),
             new Rotation3d(0.0, 0.0, Math.PI));
 
     private final Swerve swerve;
@@ -39,12 +39,12 @@ public class ApriltagAlign extends CommandBase {
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
+            
+    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 2.0);
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
 
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 0.5);
-    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 0.5);
-
-    private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0);
-    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.5);
+    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.1);
+    private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.1);
 
     private PhotonTrackedTarget lastTarget;
 
@@ -68,14 +68,16 @@ public class ApriltagAlign extends CommandBase {
 
         driveController.setP(drivekP.get());
         turnController.setP(turnKP.get());
-
+        
         lastTarget = null;
-
+        
         var robotPose2d = swerve.getPose();
-
+        
         turnController.reset(robotPose2d.getRotation().getRadians());
-        turnController.setTolerance(turnTolerance.get());
         driveController.setTolerance(driveTolerance.get());
+        turnController.setTolerance(turnTolerance.get());
+        
+        System.out.println("INTIIALIZE");
 
         var robotPose3d = new Pose3d(
                 robotPose2d.getX(),
@@ -90,6 +92,14 @@ public class ApriltagAlign extends CommandBase {
                     .filter(t -> t.getFiducialId() == tag_fid_id)
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
                     .findFirst();
+
+            try {
+                SmartDashboard.putNumber("pose ambiguity", targetOpt.get().getPoseAmbiguity());
+                SmartDashboard.putBoolean("is present", targetOpt.isPresent());
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
             if (targetOpt.isPresent()) {
 
                 var target = targetOpt.get();
@@ -107,9 +117,15 @@ public class ApriltagAlign extends CommandBase {
                 var targetPose = cameraPose.transformBy(camToTarget);
 
                 // Transform the tag's pose to set our goal
-                goalPose = targetPose.transformBy(tagToGoal).toPose2d();
-            } else {
+                this.goalPose = targetPose.transformBy(tagToGoal).toPose2d();
+                System.out.println(goalPose.getX());
+                System.out.println(goalPose.getY());
 
+
+                SmartDashboard.putNumber("Goal Pose X", goalPose.getX());
+                SmartDashboard.putNumber("Goal Pose Y", goalPose.getY());
+                SmartDashboard.putNumber("Goal Pose HEADING", goalPose.getRotation().getDegrees());
+            } else {
                 // stop the command if target is not found
                 end = true;
             }
@@ -119,23 +135,28 @@ public class ApriltagAlign extends CommandBase {
     @Override
     public void execute() {
 
+        if (this.goalPose.getTranslation() == null) {
+            System.out.println("Goal Pose is null");
+            end = true;
+        }
+
         var robotPose2d = swerve.getPose();
 
-        double currentDistance = robotPose2d.getTranslation().getDistance(goalPose.getTranslation());
+        double currentDistance = robotPose2d.getTranslation().getDistance(this.goalPose.getTranslation());
         driveErrorAbs = currentDistance;
         driveVelocityScalar = driveController.calculate(driveErrorAbs, 0.0);
         if (driveController.atGoal())
             driveVelocityScalar = 0.0;
 
         double turnVelocity = turnController.calculate(
-                robotPose2d.getRotation().getRadians(), goalPose.getRotation().getRadians());
-        turnErrorAbs = Math.abs(robotPose2d.getRotation().minus(goalPose.getRotation()).getRadians());
+                robotPose2d.getRotation().getRadians(), this.goalPose.getRotation().getRadians());
+        turnErrorAbs = Math.abs(robotPose2d.getRotation().minus(this.goalPose.getRotation()).getRadians());
         if (turnController.atGoal())
             turnVelocity = 0.0;
 
         Translation2d driveVelocity = new Pose2d(
                 new Translation2d(),
-                robotPose2d.getTranslation().minus(goalPose.getTranslation()).getAngle())
+                robotPose2d.getTranslation().minus(this.goalPose.getTranslation()).getAngle())
                 .transformBy(translationToTransform(driveVelocityScalar, 0.0))
                 .getTranslation();
 
