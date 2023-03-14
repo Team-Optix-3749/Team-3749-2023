@@ -24,16 +24,41 @@
     },
     {
       "anchorPoint": {
-        "x": 6.360535060585099,
-        "y": 0.9262720950548883
+        "x": 6.0,
+        "y": 0.9
       },
       "prevControl": {
-        "x": 5.21698926422104,
-        "y": 0.4345474026183421
+        "x": 4.921375918405416,
+        "y": 0.9
       },
       "nextControl": {
-        "x": 5.21698926422104,
-        "y": 0.4345474026183421
+        "x": 6.371986067869318,
+        "y": 0.9
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.600679677821552,
+        "y": 0.9
+      },
+      "prevControl": {
+        "x": 6.600679677821552,
+        "y": 0.8576593472730455
+      },
+      "nextControl": {
+        "x": 6.600679677821552,
+        "y": 0.8576593472730455
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -72,19 +97,19 @@
   ],
   "markers": [
     {
-      "position": 0.8727272727272235,
+      "position": 0.65,
       "names": [
         "Pickup"
       ]
     },
     {
-      "position": 1.45,
+      "position": 2.35,
       "names": [
         "Sting"
       ]
     },
     {
-      "position": 1.1490909090908685,
+      "position": 2.14,
       "names": [
         "Stow"
       ]

@@ -24,19 +24,69 @@
     },
     {
       "anchorPoint": {
-        "x": 6.55,
-        "y": 3.84
+        "x": 6.2004386490941314,
+        "y": 4.3797804000743525
       },
       "prevControl": {
-        "x": 5.546629130683135,
-        "y": 5.402910750670081
+        "x": 4.93301173355931,
+        "y": 5.444419009123602
       },
       "nextControl": {
-        "x": 5.546629130683135,
-        "y": 5.402910750670081
+        "x": 6.486325098185147,
+        "y": 4.1396357828379
       },
-      "holonomicAngle": 45.0,
+      "holonomicAngle": -45.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.749340631348881,
+        "y": 3.762265670037759
+      },
+      "prevControl": {
+        "x": 6.662794813606746,
+        "y": 3.947546873239252
+      },
+      "nextControl": {
+        "x": 6.662794813606746,
+        "y": 3.947546873239252
+      },
+      "holonomicAngle": -45.0,
       "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.880245826112194,
+        "y": 4.471264063783477
+      },
+      "prevControl": {
+        "x": 6.303357770766897,
+        "y": 4.231119446547024
+      },
+      "nextControl": {
+        "x": 5.119060018744369,
+        "y": 4.903288440938189
+      },
+      "holonomicAngle": -60.0,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -70,5 +120,30 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.01,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 0.7272727272726944,
+      "names": [
+        "Pickup Cube"
+      ]
+    },
+    {
+      "position": 2.5309090909090717,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 3.229090909090744,
+      "names": [
+        "Sting"
+      ]
+    }
+  ]
 }

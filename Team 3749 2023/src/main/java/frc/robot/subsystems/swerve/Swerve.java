@@ -159,8 +159,10 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         updateOdometry();
         updateAutoOdometry();
-        SmartDashboard.putNumber("AUTO Heading", getAutoHeading());
+        SmartDashboard.putNumber("FL DRIVE ENCODER", frontLeft.getDrivePosition());
 
+        SmartDashboard.putNumber("AUTO Heading", getAutoHeading());
+        
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("pitch", getVerticalTilt());
         SmartDashboard.putNumber("Robot Pose X", getPose().getX());

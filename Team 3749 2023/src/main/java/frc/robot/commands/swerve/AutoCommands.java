@@ -93,6 +93,21 @@ public final class AutoCommands {
 
     }
 
+
+    public static Command getFieldTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Alliance teamColor,
+            TopBottom topBottom) {
+
+        PathPlannerTrajectory first;
+        first = PathPlanner.loadPath("Field Length", new PathConstraints(0.75, 0.75));
+
+        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(),
+                Constants.AutoConstants.eventMap);
+        return new SequentialCommandGroup(
+                path_1);
+    }
     public static Command getPickupTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Alliance teamColor,
             TopBottom topBottom) {
 
