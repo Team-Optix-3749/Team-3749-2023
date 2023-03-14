@@ -16,6 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Limelight;
+import org.photonvision.common.hardware.VisionLEDMode;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 
@@ -139,6 +141,8 @@ public class Swerve extends SubsystemBase {
         autoSwerveDrivePoseEstimator.update(getAutoRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
+        Limelight.updatePoseAprilTags(swerveDrivePoseEstimator);
+
     }
 
 
@@ -153,6 +157,8 @@ public class Swerve extends SubsystemBase {
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
+        Limelight.updatePoseAprilTags(swerveDrivePoseEstimator);
+
     }
 
     @Override
@@ -169,6 +175,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
         SmartDashboard.putNumber("Auto Robot Pose X", getAutoPose().getX());
         SmartDashboard.putNumber("Auto Robot Pose Y", getAutoPose().getY());
+        Limelight.logging();
+        Limelight.setLED(VisionLEDMode.kOn);
     }
 
     public void stopModules() {
