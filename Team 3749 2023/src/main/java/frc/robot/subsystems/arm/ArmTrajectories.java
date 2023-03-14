@@ -17,7 +17,6 @@ import frc.robot.utils.Constants;
  * Generate arm trajectories
  * 
  * @author Noah Simon
- * @author Rohin Sood
  * @author Raadwan Masum
  **/
 public class ArmTrajectories {

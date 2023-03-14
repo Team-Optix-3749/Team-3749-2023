@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.intake.ArmIntake;
-import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 
 /***
@@ -30,7 +29,6 @@ public class MoveArm extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     private final Arm arm;
-    private final ArmIntake intake;
     private final ArmSetpoints desiredSetpoint;
     private State desiredState;
     private Timer timer = new Timer();
@@ -39,7 +37,6 @@ public class MoveArm extends CommandBase {
 
     public MoveArm(Arm arm, ArmIntake intake, ArmSetpoints setpoint) {
         this.arm = arm;
-        this.intake = intake;
         this.desiredSetpoint = setpoint;
         // this.trajectory = trajectory;
         addRequirements(arm);
@@ -58,10 +55,8 @@ public class MoveArm extends CommandBase {
     @Override
     public void execute() {
         if (timer.get() < trajectoryInformation.pauseLengths[trajectoryIndex]) {
-            // intake.setVoltage(Constants.ArmIntake.idleVoltage);
             return;
         }
-        // intake.setVoltage(trajectoryInformation.intakeVoltages[trajectoryIndex]);
 
         double cur_time = timer.get();
         desiredState = trajectoryInformation.trajectories[trajectoryIndex]

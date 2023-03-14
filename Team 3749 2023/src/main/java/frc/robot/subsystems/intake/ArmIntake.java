@@ -12,14 +12,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
 /***
+ * @author Rohin Sood
+ * @author Noah Simon
+ * @author Raadwan Masum
  * @author Anusha Khobare
  * @author Aashray Reddy
  * @author Ryan R McWeeny
  * @author Hanlun Li
  * @author Harkirat Hattar
- * @author Noah Simon
- * @author Rohin Sood
- * @author Raadwan Masum
  * 
  *         Claw.java creates objects, dependencies, and motor controller groups
  *         to allow us to set the speed of each motor for intake and outtake

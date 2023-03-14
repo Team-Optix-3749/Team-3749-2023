@@ -22,8 +22,8 @@ import frc.robot.utils.Constants.DriveConstants;
 /***
  * @author Noah Simon
  * @author Rohin Sood
- * @author Raadwan ____
- * @author Harkirat ____
+ * @author Raadwan Masum
+ * @author Harkirat 
  * 
  *         Subsystem class for swerve drive, used to manage four swerve modules
  *         and set their states. Also includes a pose estimator, gyro, and

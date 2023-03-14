@@ -12,7 +12,7 @@ import frc.robot.utils.Constants.OIConstants;
 
 /***
  * @author Noah Simon
- * @author Raadwan _____
+ * @author Raadwan Masum
  * @author Rohin Sood
  *         Default command to control the SwervedriveSubsystem with joysticks
  */
