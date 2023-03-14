@@ -71,16 +71,15 @@ public class Limelight {
 
     public static double getDistance(PhotonTrackedTarget target, VisionConstants.Nodes node) {
         return PhotonUtils.calculateDistanceToTargetMeters(
-            Constants.VisionConstants.camera_height,
-            node.height,
-            Constants.VisionConstants.camera_pitch,
-            Units.degreesToRadians(getPitch(target)));
+                Constants.VisionConstants.camera_height,
+                node.height,
+                Constants.VisionConstants.camera_pitch,
+                Units.degreesToRadians(getPitch(target)));
     }
 
     public static Translation2d getTranslation2d(PhotonTrackedTarget target, VisionConstants.Nodes node) {
         return PhotonUtils.estimateCameraToTargetTranslation(
-            getDistance(target, node), getYaw(target)
-        ); 
+                getDistance(target, node), getYaw(target));
     }
 
     public static int getPipeline() {
@@ -97,9 +96,13 @@ public class Limelight {
 
     public static void updatePoseAprilTags(SwerveDrivePoseEstimator swerveDrivePoseEstimator) {
         var result = getLatestResult();
-        if (result.hasTargets()) {
+        var filter = result.getTargets().stream()
+                .filter(t -> t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
+                .findFirst();
+        if (filter.isPresent()) {
+            var target = filter.get();
             var imageCaptureTime = result.getTimestampSeconds();
-            var camToTargetTrans = result.getBestTarget().getBestCameraToTarget();
+            var camToTargetTrans = target.getBestCameraToTarget();
             var camPose = Constants.VisionConstants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
             SmartDashboard.putNumber("CAM POSE X", camPose.getX());
             SmartDashboard.putNumber("CAM POSE Y", camPose.getY());
@@ -116,9 +119,12 @@ public class Limelight {
             PhotonTrackedTarget target = result.getBestTarget();
             SmartDashboard.putNumber("target pitch: ", getPitch(target));
             SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
-            SmartDashboard.putNumber("target distance: ", getDistance(target, Constants.VisionConstants.Nodes.MID_CUBE));
-            SmartDashboard.putNumber("Target translation 2d X: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getX());
-            SmartDashboard.putNumber("Target translation 2d Y: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getY());
+            SmartDashboard.putNumber("target distance: ",
+                    getDistance(target, Constants.VisionConstants.Nodes.MID_CUBE));
+            SmartDashboard.putNumber("Target translation 2d X: ",
+                    getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getX());
+            SmartDashboard.putNumber("Target translation 2d Y: ",
+                    getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getY());
         }
     }
 
