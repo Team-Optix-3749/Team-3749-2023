@@ -48,7 +48,9 @@ public class Constants {
     public static final class ArmIntake {
         public static final int arm_intake_id = 22;
         public static final double idleVoltage = 1;
-        public static final double releaseObjectVoltage = -6;
+        public static final double releaseConeVoltage = -6;
+        public static final double releaseCubeVoltage = -2;
+
         public static final double intakeVoltage = 7;
     }
 

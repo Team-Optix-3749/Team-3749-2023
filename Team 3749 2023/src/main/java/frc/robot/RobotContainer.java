@@ -76,7 +76,7 @@ public class RobotContainer {
         pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
-        pilot.rightTriggerWhileHeld(Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage)),
+        pilot.rightTriggerWhileHeld(Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
         pilot.leftTriggerWhileHeld(Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
