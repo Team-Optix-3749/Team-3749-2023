@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
@@ -116,5 +117,8 @@ public class RobotContainer {
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                         new MoveArm(arm, armIntake, ArmSetpoints.STOW)));
         Constants.AutoConstants.eventMap.put("AutoBalance", new AutoBalancingPID(swerve));
+        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+        Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
+
     }
 }

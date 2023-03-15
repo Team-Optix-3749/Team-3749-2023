@@ -94,12 +94,15 @@ public class Limelight {
     public static void setLED(VisionLEDMode ledMode) {
         camera.setLED(ledMode);
     }
-
     public static void updatePoseAprilTags(SwerveDrivePoseEstimator swerveDrivePoseEstimator) {
         var result = getLatestResult();
-        if (result.hasTargets()) {
+        var filter = result.getTargets().stream()
+                .filter(t -> t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
+                .findFirst();
+        if (filter.isPresent()) {
+            var target = filter.get();
             var imageCaptureTime = result.getTimestampSeconds();
-            var camToTargetTrans = result.getBestTarget().getBestCameraToTarget();
+            var camToTargetTrans = target.getBestCameraToTarget();
             var camPose = Constants.VisionConstants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
             SmartDashboard.putNumber("CAM POSE X", camPose.getX());
             SmartDashboard.putNumber("CAM POSE Y", camPose.getY());
