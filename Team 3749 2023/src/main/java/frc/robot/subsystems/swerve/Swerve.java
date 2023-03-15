@@ -141,7 +141,7 @@ public class Swerve extends SubsystemBase {
         autoSwerveDrivePoseEstimator.update(getAutoRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
-        Limelight.updatePoseAprilTags(swerveDrivePoseEstimator);
+        Limelight.updatePoseAprilTags(autoSwerveDrivePoseEstimator);
 
     }
 
