@@ -1,14 +1,21 @@
 package frc.robot.utils;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
-
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -22,8 +29,18 @@ import frc.robot.utils.Constants.VisionConstants;
  */
 public class Limelight {
 
-    private static final PhotonCamera camera = new PhotonCamera("limelight");
+    private final static PhotonCamera camera = new PhotonCamera("limelight");
     private static PhotonPipelineResult result = getLatestResult();
+    private AprilTagFieldLayout aprilTagFieldLayout;
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, Constants.VisionConstants.robot_to_cam);
+
+    public Limelight() {
+        try {
+            aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
     public static PhotonPipelineResult getLatestResult() {
         return camera.getLatestResult();
@@ -108,8 +125,13 @@ public class Limelight {
             SmartDashboard.putNumber("CAM POSE Y", camPose.getY());
             SmartDashboard.putNumber("CAM POSE Z", camPose.getZ());
             swerveDrivePoseEstimator.addVisionMeasurement(
-                    camPose.toPose2d(), imageCaptureTime);
+                    getEstimatedGlobalgetPose(null), imageCaptureTime);
         }
+    }
+
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+        photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+        return photonPoseEstimator.update();
     }
 
     public static void logging() {
