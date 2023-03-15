@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
@@ -63,7 +62,7 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command waitTest(Arm arm, ArmIntake armIntake) {
+    public static Command waitTest(Arm arm, ArmIntake armIntake){
         return new SequentialCommandGroup(new MoveArm(arm, armIntake, ArmSetpoints.STING), new WaitCommand(120));
     }
 
@@ -96,6 +95,7 @@ public final class AutoCommands {
 
     }
 
+
     public static Command getFieldTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Alliance teamColor,
             TopBottom topBottom) {
 
@@ -110,7 +110,6 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 path_1);
     }
-
     public static Command getPickupTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Alliance teamColor,
             TopBottom topBottom) {
 
@@ -129,6 +128,7 @@ public final class AutoCommands {
                 path_1);
     }
 
+
     public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Alliance teamColor, TopBottom topBottom) {
         PathPlannerTrajectory first;
@@ -142,21 +142,17 @@ public final class AutoCommands {
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
-
-        SequentialCommandGroup armPlacing = new SequentialCommandGroup(                
-            new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-            Commands.waitSeconds(0.5),
-            Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseCubeVoltage)).withTimeout(0.15),
-            new MoveArm(arm, armIntake, ArmSetpoints.STOW));
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
-                path_1, 
-                new ParallelCommandGroup(MoveTopPos, armPlacing);
-
-;
+                path_1,
+                
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.waitSeconds(0.5),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseCubeVoltage)).withTimeout(0.15),
+                new MoveArm(arm, armIntake, ArmSetpoints.STOW));
     }
 
     public static Command getThreePiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
