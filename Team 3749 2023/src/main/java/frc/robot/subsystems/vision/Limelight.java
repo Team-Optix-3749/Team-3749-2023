@@ -34,7 +34,8 @@ public class Limelight extends SubsystemBase{
 
     private final  PhotonCamera camera = new PhotonCamera("limelight");
     private  PhotonPipelineResult result = getLatestResult();
-    private AprilTagFieldLayout aprilTagFieldLayout;
+    AprilTagFieldLayout aprilTagFieldLayout;
+
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, Constants.VisionConstants.robot_to_cam);
 
     public Limelight() {
@@ -43,6 +44,8 @@ public class Limelight extends SubsystemBase{
         } catch (Exception e) {
             System.out.println(e);
         }
+        setLED(VisionLEDMode.kOff);
+
     }
 
     public  PhotonPipelineResult getLatestResult() {
@@ -156,6 +159,8 @@ public class Limelight extends SubsystemBase{
     @Override
     public void periodic() {
 
+        logging();
+        setLED(VisionLEDMode.kOn);
     }
 
 }
