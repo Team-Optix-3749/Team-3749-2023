@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.swerve;
 
-import org.photonvision.common.hardware.VisionLEDMode;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -19,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 

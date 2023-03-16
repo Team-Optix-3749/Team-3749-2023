@@ -34,6 +34,7 @@ public class ApriltagAlign extends CommandBase {
             new Rotation3d(0.0, 0.0, Math.PI));
 
     private final Swerve swerve;
+    private final Limelight limelight;
 
     private final ProfiledPIDController driveController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
@@ -57,9 +58,9 @@ public class ApriltagAlign extends CommandBase {
 
     private boolean end = false;
 
-    public ApriltagAlign(Swerve swerve) {
+    public ApriltagAlign(Swerve swerve, Limelight limelight) {
         this.swerve = swerve;
-
+        this.limelight = limelight;
         addRequirements(swerve);
     }
 
@@ -85,7 +86,7 @@ public class ApriltagAlign extends CommandBase {
                 0.0,
                 new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
-        var res = Limelight.getLatestResult();
+        var res = limelight.getLatestResult();
         if (res.hasTargets()) {
             // Find the tag we want to chase
             var targetOpt = res.getTargets().stream()

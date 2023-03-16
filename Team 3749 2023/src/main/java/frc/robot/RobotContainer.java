@@ -81,7 +81,7 @@ public class RobotContainer {
                 // new MoveToPose(swerve, new Pose2d(new Translation2d(15.48, 1.79), new
                 // Rotation2d(0.0)))
                 // new MoveToPose(swerve, new Pose2d())
-                new ApriltagAlign(swerve));
+                new ApriltagAlign(swerve, limelight));
 
         // arm setpoints (buttons)
         // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));

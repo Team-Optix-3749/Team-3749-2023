@@ -20,15 +20,17 @@ import frc.robot.utils.Constants.VisionConstants;
  */
 public class RetroAlign extends CommandBase {
     private final Swerve swerve;
+    private final Limelight limelight;
     private final VisionConstants.Nodes node;
     private final PIDController xController = new PIDController(VisionConstants.visionXKP.get(), 0, 0);
     private final PIDController yController = new PIDController(VisionConstants.visionYKP.get(), 0, 0);
     private boolean aligned;
     private double offset;
 
-    public RetroAlign(Swerve swerve, VisionConstants.Nodes node) {
+    public RetroAlign(Swerve swerve, VisionConstants.Nodes node,Limelight limelight) {
         this.swerve = swerve;
         this.node = node;
+        this.limelight = limelight;
         this.setName("Vision Align");
         addRequirements(swerve);
     }
@@ -37,14 +39,14 @@ public class RetroAlign extends CommandBase {
     public void initialize() {
         SmartDashboard.putString("vision align", "init");
         if (node == VisionConstants.Nodes.MID_CONE || node == VisionConstants.Nodes.TOP_CONE) {
-            Limelight.setPipeline(VisionConstants.Pipelines.REFLECTIVE_TAPE.index);
+            limelight.setPipeline(VisionConstants.Pipelines.REFLECTIVE_TAPE.index);
             offset = VisionConstants.retro_cam_offset;
         } else {
-            Limelight.setPipeline(VisionConstants.Pipelines.APRILTAG.index);
+            limelight.setPipeline(VisionConstants.Pipelines.APRILTAG.index);
             offset = VisionConstants.apriltag_cam_offset;
         }
 
-        Limelight.setLED(VisionLEDMode.kOn);
+        limelight.setLED(VisionLEDMode.kOn);
 
         xController.setTolerance(0.1);
         yController.setTolerance(0.1);
@@ -56,13 +58,13 @@ public class RetroAlign extends CommandBase {
         SmartDashboard.putBoolean("at setpoint", xController.atSetpoint());
 
         PhotonTrackedTarget target;
-        if (Limelight.hasTarget(Limelight.getLatestResult())) {
-            target = Limelight.getBestTarget(Limelight.getLatestResult());
+        if (limelight.hasTarget(limelight.getLatestResult())) {
+            target = limelight.getBestTarget(limelight.getLatestResult());
         } else {
             return;
         }
 
-        Translation2d cameraToTargetTranslation = Limelight.getTranslation2d(target, node);
+        Translation2d cameraToTargetTranslation = limelight.getTranslation2d(target, node);
 
         aligned = (VisionConstants.retro_cam_offset == swerve.getPose().getTranslation().getX());
 
@@ -87,8 +89,7 @@ public class RetroAlign extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         SmartDashboard.putString("vision align", "end");
-
-        Limelight.setLED(VisionLEDMode.kOff);
+        limelight.setLED(VisionLEDMode.kOff);
     }
 
     @Override
