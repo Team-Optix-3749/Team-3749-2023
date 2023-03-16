@@ -19,8 +19,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Limelight;
 import frc.robot.utils.Constants.DriveConstants;
 
 /***
@@ -143,7 +143,10 @@ public class Swerve extends SubsystemBase {
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
 
-        Limelight.updatePoseAprilTags(swerveDrivePoseEstimator);
+    }
+
+    public SwerveDrivePoseEstimator getPoseEstimator(){
+        return swerveDrivePoseEstimator;
     }
 
     public void stopModules() {
