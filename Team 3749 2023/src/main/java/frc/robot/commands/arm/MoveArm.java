@@ -6,12 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import edu.wpi.first.math.trajectory.Trajectory.State;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 
 /***
@@ -34,13 +34,16 @@ public class MoveArm extends CommandBase {
     private ArmPaths trajectoryInformation;
     private int trajectoryIndex = 0;
 
+    private ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
+    private ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
+    private ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X", 0.0);
+    private ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y", 0.0);
+
     public MoveArm(Arm arm, ArmIntake intake, ArmSetpoints setpoint) {
         this.arm = arm;
         this.intake = intake;
         this.desiredSetpoint = setpoint;
         // this.trajectory = trajectory;
-
-        setName("Move Arm to " + setpoint.toString());
         addRequirements(arm);
     }
 
@@ -111,11 +114,11 @@ public class MoveArm extends CommandBase {
     }
 
     public void logging() {
-        SmartDashboard.putNumber("CURRENT WAYPOINT X", desiredState.poseMeters.getTranslation().getX());
-        SmartDashboard.putNumber("CURRENT WAYPOINT Y", desiredState.poseMeters.getTranslation().getY());
-
-        SmartDashboard.putNumber("Arm Coordinate X", arm.getArmCoordinate().getX());
-        SmartDashboard.putNumber("Arm Coordinate Y", arm.getArmCoordinate().getY());
+        currWaypointX.set(desiredState.poseMeters.getTranslation().getX());
+        currWaypointY.set(desiredState.poseMeters.getTranslation().getY());
+        
+        armCoordinateX.set(arm.getArmCoordinate().getX());
+        armCoordinateY.set(arm.getArmCoordinate().getY());
     }
 
     /***

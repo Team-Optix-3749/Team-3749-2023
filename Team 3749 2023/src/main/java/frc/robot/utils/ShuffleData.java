@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-/***
+/**
  * @author Rohin Sood
  * 
  *         Stores data that can be seen/edited in ShuffleBoard
@@ -80,5 +80,9 @@ public class ShuffleData<T> {
 
     public void set(T val) {
         entry.setValue(val);
+    }
+
+    public static void put() {
+        
     }
 }

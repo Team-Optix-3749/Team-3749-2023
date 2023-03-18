@@ -6,9 +6,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 
 /***
  * @author Rohin Sood
@@ -25,6 +25,10 @@ public class SideIntake extends SubsystemBase {
     private final PIDController liftPID =  new PIDController(Constants.SideIntake.liftKP, 0.0, 0.0);
 
     private double liftSetpoint = 0.0;
+
+    private ShuffleData<Double> intakeTemp = new ShuffleData<Double>("Side Intake", "Intake Temp (C)", 0.0);
+    private ShuffleData<Double> intakeCurrent = new ShuffleData<Double>("Side Intake", "Intake Current", 0.0);
+    private ShuffleData<Double> liftPositionRad = new ShuffleData<Double>("Side Intake", "Lift Position (Rad)", 0.0);
 
     public SideIntake() {
         intakeMotor.restoreFactoryDefaults();
@@ -110,8 +114,6 @@ public class SideIntake extends SubsystemBase {
     public void setLiftFF(double setpoint) {
         double ff_output = liftFF.calculate(setpoint + Math.PI, 0.0);
 
-        SmartDashboard.putNumber("Lift FF Output", ff_output);
-
         setLiftVoltage(ff_output);
     }
 
@@ -123,9 +125,6 @@ public class SideIntake extends SubsystemBase {
     public void setLiftPIDFF(double setpoint) {
         double ff_output = liftFF.calculate(setpoint + Math.PI, 0.0);
         double pid_output = liftPID.calculate(liftEncoder.getPosition(), setpoint);
-
-        SmartDashboard.putNumber("Lift FF Output", ff_output);
-        SmartDashboard.putNumber("Lift PID Output", pid_output);
 
         setLiftVoltage(pid_output + ff_output);
     }
@@ -156,10 +155,9 @@ public class SideIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Side Intake Temp (C)", getIntakeTemperature());
-        SmartDashboard.putNumber("Side Intake Lift Pos (Rad)", getLiftPosition());
-        SmartDashboard.putString("Side Intake Command",
-                this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
+        intakeTemp.set(getIntakeTemperature());
+        intakeCurrent.set(intakeMotor.getOutputCurrent());
+        liftPositionRad.set(getLiftPosition());
 
         setLiftPIDFF(liftSetpoint);
     }
