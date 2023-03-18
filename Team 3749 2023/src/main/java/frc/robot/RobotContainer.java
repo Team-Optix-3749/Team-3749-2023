@@ -77,14 +77,14 @@ public class RobotContainer {
      * 
      */
     private void configureButtonBindings() {
-        // pilot.aWhileHeld(
-        //         // new MoveToPose(swerve, new Pose2d(new Translation2d(15.48, 1.79), new
-        //         // Rotation2d(0.0)))
-        //         // new MoveToPose(swerve, new Pose2d())
-        //         new ApriltagAlign(swerve, limelight));
+        pilot.aWhileHeld(
+                new MoveToPose(swerve, new Pose2d(new Translation2d(2.2, 4.4), 
+                new Rotation2d(0.0))));
+                // new MoveToPose(swerve, new Pose2d())
+                // new ApriltagAlign(swerve, limelight));
 
         // arm setpoints (buttons)
-        pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+        // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));

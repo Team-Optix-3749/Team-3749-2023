@@ -133,9 +133,15 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putNumber("CAM POSE Z", camPose.getZ());
             Optional<EstimatedRobotPose> poseEstimate = getEstimatedGlobalPose(
                     swerveDrivePoseEstimator.getEstimatedPosition());
+            // if it recieved a pose update
             if (poseEstimate.isPresent()) {
-                swerveDrivePoseEstimator.addVisionMeasurement(
-                        poseEstimate.get().estimatedPose.toPose2d(), imageCaptureTime);
+                Pose2d newPose = poseEstimate.get().estimatedPose.toPose2d();
+                // if the update is sufficiantly different to the current one, done to not cause pid oscilation
+                if (!Constants.withinMargin(0.05, newPose.getTranslation(), swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())){
+                    swerveDrivePoseEstimator.addVisionMeasurement(
+                        newPose, imageCaptureTime);
+                }
+
 
             }
 
