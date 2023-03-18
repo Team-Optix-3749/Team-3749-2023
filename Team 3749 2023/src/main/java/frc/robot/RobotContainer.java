@@ -11,6 +11,7 @@ import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
@@ -54,12 +55,11 @@ public class RobotContainer {
                 () -> pilot.getRightX()));
 
         armIntake.setDefaultCommand(
-            Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake)
-        );
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
 
         sideIntake.setDefaultCommand(
-            Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
-        );
+                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
+                        .beforeStarting(new InitSideIntake(sideIntake)));
     }
 
     /**
@@ -76,11 +76,11 @@ public class RobotContainer {
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
         pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
-        
+
         // intake button bindings
         pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage));
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
-        
+
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 
