@@ -56,7 +56,7 @@ public class Constants {
         public static final int lift_motor_id = 23;
         public static final int side_intake_id = 24;
         
-        public static final double idleVoltage = 3;
+        public static final double idleVoltage = 1;
         public static final double releaseObjectVoltage = -3;
         public static final double intakeVoltage = 6;
 
@@ -218,7 +218,7 @@ public class Constants {
 
     public static class LEDs {
         public static final int pwm_port = 0;
-        public static final int length = 52 + 36;
+        public static final int length = 92;
         public static enum LEDsPattern {RAINBOW, RED, BLUE, GREEN, WHITE, BOUNCE, TWINKLE, NOTHING};
     }
 }

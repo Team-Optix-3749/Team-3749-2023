@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
@@ -12,7 +11,6 @@ import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.led.LEDs;
 import frc.robot.commands.arm.MoveArm;
-import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
@@ -91,13 +89,15 @@ public class RobotContainer {
         pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
         pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
         pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+
     }
 
     /**
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
+        return null;
+        // return AutoCommands.getTestPathPlanner(swerve, Alliance.Blue);
     }
 
     /**

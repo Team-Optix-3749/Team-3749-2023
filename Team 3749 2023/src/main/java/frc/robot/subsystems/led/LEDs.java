@@ -3,6 +3,7 @@ package frc.robot.subsystems.led;
 import java.util.Random;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.LEDs.LEDsPattern;
@@ -14,22 +15,35 @@ import frc.robot.utils.Constants.LEDs.LEDsPattern;
  */
 public class LEDs extends SubsystemBase {
     private LEDsPattern currentLEDsPattern = LEDsPattern.GREEN;
-    private AddressableLED LED = new AddressableLED(Constants.LEDs.pwm_port);
+    private AddressableLED LEDs = new AddressableLED(Constants.LEDs.pwm_port);
     private AddressableLEDBuffer LEDsBuffer = new AddressableLEDBuffer(Constants.LEDs.length);
     private int hue = 0;
     private int i = 0;
     
     public LEDs(){ 
-        LED.setLength(LEDsBuffer.getLength());
-        LED.setData(LEDsBuffer);
-        LED.start();
+        LEDs.setLength(LEDsBuffer.getLength());
+        LEDs.setData(LEDsBuffer);
+        LEDs.start();
     }
 
     private void setLEDsRainbow(){
-        setLEDsColor(hue++, 255, 255);
+        setLEDsHSV(hue++, 255, 255);
         if(hue >= 180){
             hue = 0;
         }          
+    }
+
+    /**
+     * Change LED colors in rainbow for launch, regular run
+     * 
+     * @param red
+     * @param green
+     * @param blue
+     */
+    private void setLEDsRGB(int red, int green, int blue){
+        for(int led = 0; led < LEDsBuffer.getLength(); led++){
+            LEDsBuffer.setRGB(led, red, green, blue);
+        }
     }
 
     /**
@@ -39,7 +53,7 @@ public class LEDs extends SubsystemBase {
      * @param saturation
      * @param value
      */
-    private void setLEDsColor(int hue, int saturation, int value){
+    private void setLEDsHSV(int hue, int saturation, int value){
         for(int led = 0; led < LEDsBuffer.getLength(); led++){
             LEDsBuffer.setHSV(led, hue, saturation, value);
         }
@@ -64,7 +78,6 @@ public class LEDs extends SubsystemBase {
     private void setLEDsBounce(){
         int led_max = LEDsBuffer.getLength();
         if(i == led_max){
-           LEDsBuffer.setHSV(i, 100, 255, 0);
            i = 0;
            return;
         }
@@ -85,7 +98,7 @@ public class LEDs extends SubsystemBase {
      * @param pattern
      */
     public void setLEDsPattern(LEDsPattern pattern){
-        currentLEDsPattern = pattern;
+        this.currentLEDsPattern = pattern;
     }
 
     // This method will be called once per scheduler run
@@ -96,37 +109,33 @@ public class LEDs extends SubsystemBase {
                 // not checking if already in this state because the rainbow moves in a wave pattern
                 setLEDsRainbow();
                 break;
-            case BLUE:
-                if (currentLEDsPattern != LEDsPattern.BLUE) {
+            case RED:
                     // Blue Hue: 85-135
-                    setLEDsColor(100, 255, 255);
-                    this.setLEDsPattern(LEDsPattern.BLUE);
-                    break;
-                }
-                
-            case RED: 
-                if (currentLEDsPattern != LEDsPattern.RED) {
-                    // Red Hue: 170-15 
-                    setLEDsColor(180, 255, 255);
+                    setLEDsRGB(255, 0, 0);
                     this.setLEDsPattern(LEDsPattern.RED);
                     break;
-                }
-            case GREEN:
-                if (currentLEDsPattern != LEDsPattern.GREEN) {
-                    // Green Hue: 40-75
-                    setLEDsColor(50, 255, 255);
+                
+            case GREEN: 
+                    // Red Hue: 170-15 
+                    setLEDsRGB(0, 255, 0);
                     this.setLEDsPattern(LEDsPattern.GREEN);
                     break;
-                }
+                
+            case BLUE:
+                    // Green Hue: 40-75
+                    setLEDsRGB(0, 0, 255);
+                    this.setLEDsPattern(LEDsPattern.BLUE);
+                    break;
 
             case WHITE:
-                if (currentLEDsPattern != LEDsPattern.WHITE) {
                     // Green Hue: 40-75
-                    setLEDsColor(200, 33, 98);
+                    setLEDsRGB(100, 100, 100);
                     this.setLEDsPattern(LEDsPattern.WHITE);
                     break;
-                }
+
             case BOUNCE:
+                if (currentLEDsPattern != LEDsPattern.BOUNCE) i = 0;
+            
                 setLEDsBounce();
                 break;
             case TWINKLE:
@@ -136,11 +145,14 @@ public class LEDs extends SubsystemBase {
             case NOTHING:
                 break;
             default: 
-                setLEDsColor(180, 255, 255);
+                setLEDsRGB(180, 255, 255);
                 System.out.println("ERROR: LEDs switch case Not getting a color pattern");
                 break;   
         }
-        // Sends the LED buffer data to the LEDS 
-        LED.setData(LEDsBuffer);
+
+        SmartDashboard.putString("Current LED PAttern", currentLEDsPattern.name());
+    
+        LEDs.setData(LEDsBuffer);
     }
+    
 }

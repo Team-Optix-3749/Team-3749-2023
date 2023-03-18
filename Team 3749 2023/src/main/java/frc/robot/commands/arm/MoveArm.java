@@ -91,7 +91,6 @@ public class MoveArm extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         intake.setVoltage(Constants.ArmIntake.idleVoltage);
-        leds.setLEDsPattern(LEDsPattern.GREEN);
     }
 
     @Override
@@ -134,19 +133,22 @@ public class MoveArm extends CommandBase {
         // intake
         if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
+            leds.setLEDsPattern(LEDsPattern.GREEN);
             return ArmPaths.DOUBLESUB_TO_STOW;
         }
         if (currentSetpoint == ArmSetpoints.GROUND_INTAKE && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
+            leds.setLEDsPattern(LEDsPattern.GREEN);
             return ArmPaths.GROUND_INTAKE_TO_STOW;
         }
 
         switch (desiredSetpoint) {
             case PLACE_TOP:
-                leds.setLEDsPattern(LEDsPattern.RED);
+                leds.setLEDsPattern(LEDsPattern.BOUNCE);
 
                 // if already there, place and return
                 if (desiredSetpoint == currentSetpoint) {
+                    leds.setLEDsPattern(LEDsPattern.GREEN);
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.TOP_TO_STOW;
                 }
@@ -167,9 +169,10 @@ public class MoveArm extends CommandBase {
                 }
 
             case PLACE_MID:
-                leds.setLEDsPattern(LEDsPattern.BLUE);
+                leds.setLEDsPattern(LEDsPattern.TWINKLE);
 
                 if (desiredSetpoint == currentSetpoint) {
+                    leds.setLEDsPattern(LEDsPattern.GREEN);
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.MID_TO_STOW;
                 }
@@ -189,6 +192,7 @@ public class MoveArm extends CommandBase {
 
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    leds.setLEDsPattern(LEDsPattern.GREEN);
                     return ArmPaths.DOUBLESUB_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.DOUBLE_SUBSTATION);
@@ -200,6 +204,7 @@ public class MoveArm extends CommandBase {
 
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    leds.setLEDsPattern(LEDsPattern.GREEN);
                     return ArmPaths.GROUND_INTAKE_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE);
@@ -212,6 +217,7 @@ public class MoveArm extends CommandBase {
                 arm.setCurrentSetpoint(ArmSetpoints.STING);
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    leds.setLEDsPattern(LEDsPattern.GREEN);
                     return ArmPaths.STING_TO_STOW;
                 } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
                     return ArmPaths.TOP_TO_STING;
