@@ -29,17 +29,19 @@ import frc.robot.utils.Constants.VisionConstants;
  * 
  * @author Rohin Sood
  */
-public class Limelight extends SubsystemBase{
+public class Limelight extends SubsystemBase {
 
-    private final  PhotonCamera camera = new PhotonCamera("limelight");
-    private  PhotonPipelineResult result = getLatestResult();
-    AprilTagFieldLayout aprilTagFieldLayout;
+    private final PhotonCamera camera = new PhotonCamera("limelight");
+    private PhotonPipelineResult result = getLatestResult();
+    private AprilTagFieldLayout aprilTagFieldLayout;
 
-    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, Constants.VisionConstants.robot_to_cam);
+    private PhotonPoseEstimator photonPoseEstimator;
 
     public Limelight() {
         try {
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+            photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+                    camera, Constants.VisionConstants.robot_to_cam);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -47,51 +49,51 @@ public class Limelight extends SubsystemBase{
 
     }
 
-    public  PhotonPipelineResult getLatestResult() {
+    public PhotonPipelineResult getLatestResult() {
         return camera.getLatestResult();
     }
 
-    public  boolean hasTarget(PhotonPipelineResult result) {
+    public boolean hasTarget(PhotonPipelineResult result) {
         return result.hasTargets();
     }
 
-    public  List<PhotonTrackedTarget> getTargets(PhotonPipelineResult result) {
+    public List<PhotonTrackedTarget> getTargets(PhotonPipelineResult result) {
         return result.getTargets();
     }
 
-    public  PhotonTrackedTarget getBestTarget(PhotonPipelineResult result) {
+    public PhotonTrackedTarget getBestTarget(PhotonPipelineResult result) {
         return result.getBestTarget();
     }
 
-    public  Rotation2d getYaw(PhotonTrackedTarget target) {
+    public Rotation2d getYaw(PhotonTrackedTarget target) {
         return new Rotation2d(Math.toRadians(target.getYaw()));
     }
 
-    public  double getPitch(PhotonTrackedTarget target) {
+    public double getPitch(PhotonTrackedTarget target) {
         return target.getPitch();
     }
 
-    public  double getArea(PhotonTrackedTarget target) {
+    public double getArea(PhotonTrackedTarget target) {
         return target.getArea();
     }
 
-    public  double getSkew(PhotonTrackedTarget target) {
+    public double getSkew(PhotonTrackedTarget target) {
         return target.getSkew();
     }
 
-    public  List<TargetCorner> getBoundingCorners(PhotonTrackedTarget target) {
+    public List<TargetCorner> getBoundingCorners(PhotonTrackedTarget target) {
         return target.getDetectedCorners();
     }
 
-    public  int getTargetId(PhotonTrackedTarget target) {
+    public int getTargetId(PhotonTrackedTarget target) {
         return target.getFiducialId();
     }
 
-    public  double getPoseAbmiguity(PhotonTrackedTarget target) {
+    public double getPoseAbmiguity(PhotonTrackedTarget target) {
         return target.getPoseAmbiguity();
     }
 
-    public  double getDistance(PhotonTrackedTarget target, VisionConstants.Nodes node) {
+    public double getDistance(PhotonTrackedTarget target, VisionConstants.Nodes node) {
         return PhotonUtils.calculateDistanceToTargetMeters(
                 Constants.VisionConstants.camera_height,
                 node.height,
@@ -99,20 +101,20 @@ public class Limelight extends SubsystemBase{
                 Units.degreesToRadians(getPitch(target)));
     }
 
-    public  Translation2d getTranslation2d(PhotonTrackedTarget target, VisionConstants.Nodes node) {
+    public Translation2d getTranslation2d(PhotonTrackedTarget target, VisionConstants.Nodes node) {
         return PhotonUtils.estimateCameraToTargetTranslation(
                 getDistance(target, node), getYaw(target));
     }
 
-    public  int getPipeline() {
+    public int getPipeline() {
         return camera.getPipelineIndex();
     }
 
-    public  void setPipeline(int index) {
+    public void setPipeline(int index) {
         camera.setPipelineIndex(index);
     }
 
-    public  void setLED(VisionLEDMode ledMode) {
+    public void setLED(VisionLEDMode ledMode) {
         camera.setLED(ledMode);
     }
 
@@ -129,8 +131,14 @@ public class Limelight extends SubsystemBase{
             SmartDashboard.putNumber("CAM POSE X", camPose.getX());
             SmartDashboard.putNumber("CAM POSE Y", camPose.getY());
             SmartDashboard.putNumber("CAM POSE Z", camPose.getZ());
-            swerveDrivePoseEstimator.addVisionMeasurement(
-                getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).get().estimatedPose.toPose2d(), imageCaptureTime);
+            Optional<EstimatedRobotPose> poseEstimate = getEstimatedGlobalPose(
+                    swerveDrivePoseEstimator.getEstimatedPosition());
+            if (poseEstimate.isPresent()) {
+                swerveDrivePoseEstimator.addVisionMeasurement(
+                        poseEstimate.get().estimatedPose.toPose2d(), imageCaptureTime);
+
+            }
+
         }
     }
 
@@ -139,7 +147,7 @@ public class Limelight extends SubsystemBase{
         return photonPoseEstimator.update();
     }
 
-    public  void logging() {
+    public void logging() {
 
         result = getLatestResult();
         if (result.hasTargets()) {

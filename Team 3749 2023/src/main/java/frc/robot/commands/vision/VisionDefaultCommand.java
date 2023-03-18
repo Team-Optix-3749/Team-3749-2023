@@ -19,7 +19,7 @@ public class VisionDefaultCommand extends CommandBase {
     public VisionDefaultCommand(Limelight limelight, SwerveDrivePoseEstimator swervePoseEstimator) {
         this.swervePoseEstimator = swervePoseEstimator;
         this.limelight = limelight;
-        addRequirements();
+        addRequirements(limelight);
     }
 
     @Override
