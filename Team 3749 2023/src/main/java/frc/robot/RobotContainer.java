@@ -92,10 +92,10 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return AutoCommands.waitTest(arm, armIntake);
-        // return AutoCommands.getTwoPiece(swerve, arm, armIntake, Alliance.Blue,
-        // TopBottom.TOP);
+        // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
+        //         TopBottom.TOP);
         // return AutoCommands.getThreePiece(swerve, arm, armIntake,
-        //         Alliance.Blue, TopBottom.TOP);
+        //         TopBottom.TOP);
 
     }
 

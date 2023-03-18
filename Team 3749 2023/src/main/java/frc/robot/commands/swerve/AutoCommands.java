@@ -6,6 +6,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -43,12 +44,12 @@ public final class AutoCommands {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {
                         swerveSubsystem.resetGyro();
-                        swerveSubsystem.resetAutoOdometry(traj.getInitialHolonomicPose());
+                        swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
                     }
                 }),
                 new PPSwerveControllerCommand(
                         traj,
-                        swerveSubsystem::getAutoPose, // Pose supplier
+                        swerveSubsystem::getPose, // Pose supplier
                         Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
                         new PIDController(1.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0
                                                       // will only use feedforwards.
@@ -62,12 +63,13 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command waitTest(Arm arm, ArmIntake armIntake){
+    public static Command waitTest(Arm arm, ArmIntake armIntake) {
         return new SequentialCommandGroup(new MoveArm(arm, armIntake, ArmSetpoints.STING), new WaitCommand(120));
     }
 
     // Essentially the template of a getPath command we should be using.
-    public static Command getTestPathPlanner(Swerve swerveSubsystem, Alliance teamColor) {
+    public static Command getTestPathPlanner(Swerve swerveSubsystem) {
+        Alliance teamColor = DriverStation.getAlliance();
         PathPlannerTrajectory trajectory = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
         trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
         Command path = new FollowPathWithEvents(followTrajectoryCommand(trajectory, true, swerveSubsystem),
@@ -77,9 +79,10 @@ public final class AutoCommands {
     }
 
     public static Command getMarkerTester(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
-            Alliance teamColor, Constants.AutoConstants.TopBottom topBottom) {
-        PathPlannerTrajectory first = PathPlanner.loadPath("Ground Pickup Test", new PathConstraints(0.75, 0.75));
+            Constants.AutoConstants.TopBottom topBottom) {
+        Alliance teamColor = DriverStation.getAlliance();
 
+        PathPlannerTrajectory first = PathPlanner.loadPath("Ground Pickup Test", new PathConstraints(0.75, 0.75));
         first = PathPlannerTrajectory.transformTrajectoryForAlliance(first,
                 teamColor);
 
@@ -95,9 +98,9 @@ public final class AutoCommands {
 
     }
 
-
-    public static Command getFieldTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Alliance teamColor,
+    public static Command getFieldTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             TopBottom topBottom) {
+        Alliance teamColor = DriverStation.getAlliance();
 
         PathPlannerTrajectory first;
         first = PathPlanner.loadPath("Field Length", new PathConstraints(0.75, 0.75));
@@ -110,8 +113,10 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 path_1);
     }
-    public static Command getPickupTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Alliance teamColor,
+
+    public static Command getPickupTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             TopBottom topBottom) {
+        Alliance teamColor = DriverStation.getAlliance();
 
         PathPlannerTrajectory first;
         first = PathPlanner.loadPath("pickup", new PathConstraints(0.75, 0.75));
@@ -128,9 +133,10 @@ public final class AutoCommands {
                 path_1);
     }
 
-
     public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
-            Alliance teamColor, TopBottom topBottom) {
+            TopBottom topBottom) {
+        Alliance teamColor = DriverStation.getAlliance();
+
         PathPlannerTrajectory first;
         if (topBottom == TopBottom.TOP) {
             first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(2.5, 2.5));
@@ -148,7 +154,7 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
                 path_1,
-                
+
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseCubeVoltage)).withTimeout(0.15),
@@ -156,7 +162,9 @@ public final class AutoCommands {
     }
 
     public static Command getThreePiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
-            Alliance teamColor, Constants.AutoConstants.TopBottom topBottom) {
+            Constants.AutoConstants.TopBottom topBottom) {
+        Alliance teamColor = DriverStation.getAlliance();
+
         PathPlannerTrajectory first;
         PathPlannerTrajectory second;
         if (topBottom == TopBottom.TOP) {
@@ -192,7 +200,9 @@ public final class AutoCommands {
     }
 
     public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
-            Alliance teamColor, Constants.AutoConstants.TopBottom topBottom) {
+            Constants.AutoConstants.TopBottom topBottom) {
+        Alliance teamColor = DriverStation.getAlliance();
+
         PathPlannerTrajectory first;
         PathPlannerTrajectory second;
         if (topBottom == TopBottom.TOP) {
