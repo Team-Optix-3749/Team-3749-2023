@@ -105,6 +105,10 @@ public class Limelight extends SubsystemBase {
         return PhotonUtils.estimateCameraToTargetTranslation(
                 getDistance(target, node), getYaw(target));
     }
+    
+    public AprilTagFieldLayout getAprilTagFieldLayout(){
+        return aprilTagFieldLayout;
+    }
 
     public int getPipeline() {
         return camera.getPipelineIndex();
@@ -124,13 +128,7 @@ public class Limelight extends SubsystemBase {
                 .filter(t -> t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
                 .findFirst();
         if (filter.isPresent()) {
-            var target = filter.get();
             var imageCaptureTime = result.getTimestampSeconds();
-            var camToTargetTrans = target.getBestCameraToTarget();
-            var camPose = Constants.VisionConstants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
-            SmartDashboard.putNumber("CAM POSE X", camPose.getX());
-            SmartDashboard.putNumber("CAM POSE Y", camPose.getY());
-            SmartDashboard.putNumber("CAM POSE Z", camPose.getZ());
             Optional<EstimatedRobotPose> poseEstimate = getEstimatedGlobalPose(
                     swerveDrivePoseEstimator.getEstimatedPosition());
             // if it recieved a pose update
@@ -141,10 +139,8 @@ public class Limelight extends SubsystemBase {
                     swerveDrivePoseEstimator.addVisionMeasurement(
                         newPose, imageCaptureTime);
                 }
-
-
+                swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
             }
-
         }
     }
 

@@ -26,11 +26,11 @@ public class MoveToPose extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
-    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 2.5);
+    private SmartData<Double> turnKP = new SmartData<Double>("Turn KP", 2.6);
+    private SmartData<Double> drivekP = new SmartData<Double>("Drive KP", 2.5);
 
-    private SmartData<Double> turnTolerance = new SmartData<Double>("Driving tolerance", 0.1);
-    private SmartData<Double> driveTolerance = new SmartData<Double>("Turning tolerance", 0.0);
+    private SmartData<Double> turnTolerance = new SmartData<Double>("Turn tolerance", 0.1);
+    private SmartData<Double> driveTolerance = new SmartData<Double>("Drive tolerance", 0.0);
 
     public MoveToPose(Swerve swerve, Pose2d targetPose) {
         this.swerve = swerve;
