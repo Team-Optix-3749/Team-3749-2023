@@ -78,7 +78,7 @@ public class Swerve extends SubsystemBase {
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     private ShuffleData<Double> robotHeading = new ShuffleData<Double>("Swerve", "Robot Heading", 0.0);
-    private ShuffleData<Double> pitch = new ShuffleData<Double>("Swerve", "Robot Heading", 0.0);
+    private ShuffleData<Double> pitch = new ShuffleData<Double>("Swerve", "Robot Pitch", 0.0);
     private ShuffleData<Double> robotPoseX = new ShuffleData<Double>("Swerve", "Robot Pose X", 0.0);
     private ShuffleData<Double> robotPoseY = new ShuffleData<Double>("Swerve", "Robot Pose Y", 0.0);
 
