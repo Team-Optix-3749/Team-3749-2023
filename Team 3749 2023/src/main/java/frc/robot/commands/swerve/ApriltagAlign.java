@@ -43,8 +43,8 @@ public class ApriltagAlign extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
             
-    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 1.0); //2
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 0.8);
+    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 1.5); //2
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
 
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
     private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
@@ -63,6 +63,7 @@ public class ApriltagAlign extends CommandBase {
         this.swerve = swerve;
         this.limelight = limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
+        this.turnController.enableContinuousInput(-Math.PI, Math.PI);
         addRequirements(swerve);
     }
 
@@ -101,7 +102,7 @@ public class ApriltagAlign extends CommandBase {
                 .getTranslation();
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(),
-                driveVelocity.getY(), -turnVelocity, robotPose2d.getRotation());
+               driveVelocity.getY() , turnVelocity, robotPose2d.getRotation());
         // ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0,
         // 0, turnVelocity, robotPose2d.getRotation());
 
