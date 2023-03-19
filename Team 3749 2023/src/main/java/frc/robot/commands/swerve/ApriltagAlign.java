@@ -31,7 +31,7 @@ import frc.robot.subsystems.vision.Limelight;
 public class ApriltagAlign extends CommandBase {
 
     private static final Transform3d tagToGoal = new Transform3d(
-            new Translation3d(1.0, 0.1, 0.0),
+            new Translation3d(0.75, 0.05, 0.0),
             new Rotation3d(0.0, 0.0, Math.PI));
 
     private final Swerve swerve;
@@ -43,8 +43,8 @@ public class ApriltagAlign extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
             
-    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 2.0);
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
+    private SmartData<Double> drivekP = new SmartData<Double>("Driving KP", 1.0); //2
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 0.8);
 
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
     private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
@@ -73,13 +73,13 @@ public class ApriltagAlign extends CommandBase {
 
     @Override
     public void execute() {
-        updateGoalPose();
-
-        if (this.goalPose == null) {
-            System.out.println("Goal Pose is null");
+    
+        if (goalPose == null){
+            updateGoalPose();
+            System.out.println("Goal Pose Is Null");
             return;
-        }
 
+        }
         var robotPose2d = swerve.getPose();
 
         double currentDistance = robotPose2d.getTranslation().getDistance(this.goalPose.getTranslation());
@@ -101,12 +101,14 @@ public class ApriltagAlign extends CommandBase {
                 .getTranslation();
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(),
-                driveVelocity.getY(), turnVelocity, robotPose2d.getRotation());
+                driveVelocity.getY(), -turnVelocity, robotPose2d.getRotation());
+        // ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0,
+        // 0, turnVelocity, robotPose2d.getRotation());
 
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
-        // swerve.setModuleStates(moduleStates);
+        swerve.setModuleStates(moduleStates);
 
         SmartDashboard.putNumber("Drive X Velo", driveVelocity.getX());
         SmartDashboard.putNumber("Drive Y Velo", driveVelocity.getY());
@@ -196,10 +198,10 @@ public class ApriltagAlign extends CommandBase {
 
                 var targetId = target.getFiducialId();
                 Pose3d aprilTagPose = aprilTagFieldLayout.getTagPose(targetId).get();
+                SmartDashboard.putNumber("April Tag X", aprilTagPose.getX());
+                SmartDashboard.putNumber("April Tag Y", aprilTagPose.getY());
+                SmartDashboard.putNumber("April Tag Heading", aprilTagPose.getRotation().getAngle());
                 this.goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
-
-                System.out.println(goalPose.getX());
-                System.out.println(goalPose.getY());
 
 
                 SmartDashboard.putNumber("Goal Pose X", goalPose.getX());

@@ -139,7 +139,7 @@ public class Limelight extends SubsystemBase {
                     swerveDrivePoseEstimator.addVisionMeasurement(
                         newPose, imageCaptureTime);
                 }
-                swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
+                // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
             }
         }
     }
