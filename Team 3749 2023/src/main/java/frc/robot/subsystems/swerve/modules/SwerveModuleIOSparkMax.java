@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.swerve;
+package frc.robot.subsystems.swerve.modules;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -15,7 +15,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.ModuleConstants;
 
@@ -29,7 +28,7 @@ import frc.robot.utils.Constants.ModuleConstants;
  *         motor, a turning motor, a drive encoder, and an Absolute CanCoder
  * 
  */
-public class SwerveModule {
+public class SwerveModuleIOSparkMax implements SwerveModuleIO{
     private final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
 
@@ -40,7 +39,8 @@ public class SwerveModule {
     private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
 
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
+    public SwerveModuleIOSparkMax(int driveMotorId, int turningMotorId, boolean driveMotorReversed,
+            boolean turningMotorReversed,
             int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
 
         this.absoluteEncoderReversed = absoluteEncoderReversed;
@@ -128,11 +128,19 @@ public class SwerveModule {
         turningMotor.set(0);
     }
 
-    // Turn to the set degree amount, -180 to 180
-    public void turnToDegrees(double angleDegrees) {
-        double angleRad = Units.degreesToRadians(angleDegrees);
-        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), angleRad));
+    public void updateInputs(SwerveModuleIOInputs inputs) {
+        inputs.drivePositionMeters = getDrivePosition();
+        inputs.driveVelocityMetersPerSec = getDriveVelocity();
+        inputs.driveAppliedVolts = driveMotor.getBusVoltage();
+        inputs.driveCurrentAmps = driveMotor.getOutputCurrent();
+        inputs.driveTempCelcius = driveMotor.getMotorTemperature();
 
+        inputs.turnAbsolutePositionRad = getAbsoluteEncoderRad();
+        inputs.turnPositionRad = turningEncoder.getPosition();
+        inputs.turnVelocityRadPerSec = turningEncoder.getVelocity();
+        inputs.turnAppliedVolts = turningMotor.getBusVoltage();
+        inputs.turnCurrentAmps = turningMotor.getOutputCurrent();
+        inputs.turnTempCelcius = turningMotor.getMotorTemperature();
     }
 
 }

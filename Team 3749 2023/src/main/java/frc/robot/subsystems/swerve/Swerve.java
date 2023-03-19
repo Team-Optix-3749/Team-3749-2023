@@ -21,6 +21,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.swerve.gyro.GyroIO;
 import frc.robot.subsystems.swerve.gyro.GyroIOInputsAutoLogged;
 import frc.robot.subsystems.swerve.gyro.GyroIONavX2;
+import frc.robot.subsystems.swerve.modules.SwerveModuleIO;
+import frc.robot.subsystems.swerve.modules.SwerveModuleIOInputsAutoLogged;
+import frc.robot.subsystems.swerve.modules.SwerveModuleIOSparkMax;
+import frc.robot.subsystems.swerve.modules.SwerveModuleIO.SwerveModuleIOInputs;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 
@@ -36,7 +40,7 @@ import frc.robot.utils.Constants.DriveConstants;
  */
 
 public class Swerve extends SubsystemBase {
-    private final SwerveModule frontLeft = new SwerveModule(
+    private final SwerveModuleIO frontLeft = new SwerveModuleIOSparkMax(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
             DriveConstants.kFrontLeftDriveEncoderReversed,
@@ -44,8 +48,9 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kFrontLeftDriveAbsoluteEncoderPort,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetDeg,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
+    SwerveModuleIOInputsAutoLogged frontLeftInputs = new SwerveModuleIOInputsAutoLogged();
 
-    private final SwerveModule frontRight = new SwerveModule(
+    private final SwerveModuleIO frontRight = new SwerveModuleIOSparkMax(
             DriveConstants.kFrontRightDriveMotorPort,
             DriveConstants.kFrontRightTurningMotorPort,
             DriveConstants.kFrontRightDriveEncoderReversed,
@@ -53,8 +58,9 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kFrontRightDriveAbsoluteEncoderPort,
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetDeg,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
+    SwerveModuleIOInputsAutoLogged frontRightInputs = new SwerveModuleIOInputsAutoLogged();
 
-    private final SwerveModule backLeft = new SwerveModule(
+    private final SwerveModuleIO backLeft = new SwerveModuleIOSparkMax(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
@@ -62,8 +68,9 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetDeg,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
+    SwerveModuleIOInputsAutoLogged backLeftInputs = new SwerveModuleIOInputsAutoLogged();
 
-    private final SwerveModule backRight = new SwerveModule(
+    private final SwerveModuleIO backRight = new SwerveModuleIOSparkMax(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
@@ -71,6 +78,7 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderPort,
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDeg,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
+    SwerveModuleIOInputsAutoLogged backRightInputs = new SwerveModuleIOInputsAutoLogged();
 
     // equivilant to a odometer, but also intakes vision
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
@@ -142,6 +150,16 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
         gyroIO.updateInputs(gyroInputs);
         Logger.getInstance().processInputs("Drive/Gyro", gyroInputs);
+        frontLeft.updateInputs(frontLeftInputs);
+        frontRight.updateInputs(frontRightInputs);
+        backLeft.updateInputs(backLeftInputs);
+        backRight.updateInputs(backRightInputs);
+        Logger.getInstance().processInputs("Drive/FrontLeft", frontLeftInputs);
+        Logger.getInstance().processInputs("Drive/FrontRight", frontRightInputs);
+        Logger.getInstance().processInputs("Drive/BackLeft", backLeftInputs);
+        Logger.getInstance().processInputs("Drive/BackRight", backRightInputs);
+
+
 
         // for (int i = 0; i < 4; i++) {
         // moduleIOs[i].updateInputs(moduleInputs[i]);
