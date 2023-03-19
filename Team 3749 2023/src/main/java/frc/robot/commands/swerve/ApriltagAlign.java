@@ -24,7 +24,7 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 
 /**
- * Adapted from 7028's ChaseTagCommand
+ * Determines a goal pose from the ArilTag fiducial ID and drives to it using the techniques from the MoveToPose command
  * 
  * @author Rohin Sood
  */
@@ -78,8 +78,8 @@ public class ApriltagAlign extends CommandBase {
             updateGoalPose();
             System.out.println("Goal Pose Is Null");
             return;
-
         }
+        
         var robotPose2d = swerve.getPose();
 
         double currentDistance = robotPose2d.getTranslation().getDistance(this.goalPose.getTranslation());
