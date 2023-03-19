@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.swerve;
 
-import com.kauailabs.navx.frc.AHRS;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -16,9 +16,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.swerve.gyro.GyroIO;
+import frc.robot.subsystems.swerve.gyro.GyroIOInputsAutoLogged;
+import frc.robot.subsystems.swerve.gyro.GyroIONavX2;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 
@@ -70,7 +72,6 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDeg,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     // equivilant to a odometer, but also intakes vision
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
@@ -78,9 +79,15 @@ public class Swerve extends SubsystemBase {
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
+    private final GyroIO gyroIO;
+
+    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+
     public Swerve() {
+        gyroIO = new GyroIONavX2();
         new Thread(() -> {
             try {
+                gyroIO.calibrate();
                 Thread.sleep(3000);
                 zeroHeading();
             } catch (Exception e) {
@@ -92,21 +99,20 @@ public class Swerve extends SubsystemBase {
                         backLeft.getPosition() },
                 new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
-        gyro.calibrate();
-        turnController.enableContinuousInput(-180,180);
+        turnController.enableContinuousInput(-180, 180);
     }
 
     public void zeroHeading() {
-        gyro.reset();
+        gyroIO.reset();
     }
 
     public double getHeading() {
         // return Math.IEEEremainder(gyro.getAngle(), 360);
-        return gyro.getYaw();
+        return gyroInputs.yawAngle;
     }
 
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(-getHeading());
+        return Rotation2d.fromDegrees(getHeading());
     }
 
     public Pose2d getPose() {
@@ -134,6 +140,15 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("pitch", getVerticalTilt());
         SmartDashboard.putNumber("Robot Pose X", getPose().getX());
         SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
+        gyroIO.updateInputs(gyroInputs);
+        Logger.getInstance().processInputs("Drive/Gyro", gyroInputs);
+
+        // for (int i = 0; i < 4; i++) {
+        // moduleIOs[i].updateInputs(moduleInputs[i]);
+        // Logger.getInstance().processInputs("Drive/Module" + Integer.toString(i),
+        // moduleInputs[i]);
+        // }
+
     }
 
     public void stopModules() {
@@ -150,6 +165,7 @@ public class Swerve extends SubsystemBase {
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
     }
+
     /***
      * 
      * @param angle the angle to move at, in degrees, -180 to 180
@@ -172,42 +188,42 @@ public class Swerve extends SubsystemBase {
         // 6. Output each module states to wheels
         setModuleStates(moduleStates);
     }
-    /***
 
+    /***
+     * 
      * @param angle the rotational angle to move to, -180 to 180
      */
-    public void turnToRotation(double angle){
-            SmartDashboard.putNumber("ANGLE SETPOINT", angle);  
+    public void turnToRotation(double angle) {
+        SmartDashboard.putNumber("ANGLE SETPOINT", angle);
 
-            // negative so that we move towards the target, not away
-            double turning_speed = -turnController.calculate(getHeading(), angle);
-            turning_speed = turningLimiter.calculate(turning_speed);
-            // signs the speed so we move in the correct direction
-            // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
+        // negative so that we move towards the target, not away
+        double turning_speed = -turnController.calculate(getHeading(), angle);
+        turning_speed = turningLimiter.calculate(turning_speed);
+        // signs the speed so we move in the correct direction
+        // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
 
-
-            SmartDashboard.putNumber("SPEEEEED", turning_speed);
-            // 4. Construct desired chassis speeds
-            ChassisSpeeds chassisSpeeds;
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turning_speed, getRotation2d());
-            // 5. Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-                    .toSwerveModuleStates(chassisSpeeds);
-            // 6. Output each module states to wheels
-            setModuleStates(moduleStates);
+        SmartDashboard.putNumber("SPEEEEED", turning_speed);
+        // 4. Construct desired chassis speeds
+        ChassisSpeeds chassisSpeeds;
+        // Relative to field
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, 0, turning_speed, getRotation2d());
+        // 5. Convert chassis speeds to individual module states
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
+        // 6. Output each module states to wheels
+        setModuleStates(moduleStates);
     }
 
     public double getVerticalTilt() {
-        return gyro.getPitch();
+        return gyroInputs.pitchAngle;
     }
-    
-    public PIDController getTurnController(){
+
+    public PIDController getTurnController() {
         return turnController;
     }
 
-    public SlewRateLimiter getTurnLimiter(){
+    public SlewRateLimiter getTurnLimiter() {
         return turningLimiter;
     }
 }
