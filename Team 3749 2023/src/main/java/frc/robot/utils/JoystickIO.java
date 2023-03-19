@@ -16,7 +16,7 @@ import frc.robot.subsystems.intake.SideIntake;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
-public class JoystickOI {
+public class JoystickIO {
     private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
 
     private Xbox pilot;
@@ -27,7 +27,7 @@ public class JoystickOI {
     private SideIntake sideIntake;
     private Arm arm;
 
-    public JoystickOI(Xbox pilot, Xbox operator, Swerve swerve, ArmIntake armIntake, SideIntake sideIntake, Arm arm) {
+    public JoystickIO(Xbox pilot, Xbox operator, Swerve swerve, ArmIntake armIntake, SideIntake sideIntake, Arm arm) {
         this.pilot = pilot;
         this.operator = operator;
         this.swerve = swerve;

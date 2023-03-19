@@ -25,7 +25,7 @@ public class RobotContainer {
     private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
 
-    JoystickOI joystickOI = new JoystickOI(pilot, operator, swerve, armIntake, sideIntake, arm);
+    JoystickIO joystickOI = new JoystickIO(pilot, operator, swerve, armIntake, sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -66,7 +66,7 @@ public class RobotContainer {
      */
     public void configureButtonBindings() {
 
-        if (!JoystickOI.didJoysticksChange())
+        if (!JoystickIO.didJoysticksChange())
             return;
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
