@@ -44,7 +44,8 @@ public class ApriltagAlign extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3);
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3
+    );
     private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
 
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1

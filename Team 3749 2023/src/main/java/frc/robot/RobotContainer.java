@@ -41,7 +41,7 @@ public class RobotContainer {
 
         configureDefaultCommands();
         configureButtonBindings();
-        configureAuto(); 
+        configureAuto();
 
         try {
             FileWriter writer = new FileWriter("data.csv", false);
@@ -63,12 +63,13 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        armIntake.setDefaultCommand(
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
+        // armIntake.setDefaultCommand(
+        // Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage),
+        // armIntake));
 
         sideIntake.setDefaultCommand(
                 Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
-                
+
         limelight.setDefaultCommand(new VisionDefaultCommand(limelight, swerve.getPoseEstimator()));
     }
 
@@ -89,11 +90,13 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getAlexHouse(swerve, arm, armIntake, limelight, TopBottom.TOP);
+        return AutoCommands.getRetroTest(swerve, limelight);
+        // return AutoCommands.getAlexHouse(swerve, arm, armIntake, limelight,
+        // TopBottom.TOP);
         // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
-        //         TopBottom.TOP);
+        // TopBottom.TOP);
         // return AutoCommands.getThreePiece(swerve, arm, armIntake,
-        //         TopBottom.TOP);
+        // TopBottom.TOP);
 
     }
 

@@ -68,77 +68,45 @@ public final class AutoCommands {
 
     public static Command getPlaceTopCommand(Arm arm, ArmIntake armIntake) {
         return new SequentialCommandGroup(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.4),
+                Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15));
     }
-
-    public static Command waitTest(Arm arm, ArmIntake armIntake) {
-        return new SequentialCommandGroup(new MoveArm(arm, armIntake, ArmSetpoints.STING), new WaitCommand(120));
+    public static Command getRetroTest(Swerve swerveSubsystem, Limelight limelight){
+        return new SequentialCommandGroup(new AlignHeading(swerveSubsystem),
+        new RetroAlign(swerveSubsystem, limelight));
     }
-
-    // Essentially the template of a getPath command we should be using.
-    public static Command getTestPathPlanner(Swerve swerveSubsystem) {
-        Alliance teamColor = DriverStation.getAlliance();
-        PathPlannerTrajectory trajectory = PathPlanner.loadPath("2 Piece", new PathConstraints(2.5, 2.5));
-        trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, teamColor);
-        Command path = new FollowPathWithEvents(followTrajectoryCommand(trajectory, true, swerveSubsystem),
-                trajectory.getMarkers(), Constants.AutoConstants.eventMap);
-        return new SequentialCommandGroup(
-                path);
-    }
-
     public static Command getAlexHouse(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             Constants.AutoConstants.TopBottom topBottom) {
         Alliance teamColor = DriverStation.getAlliance();
 
-        PathPlannerTrajectory first = PathPlanner.loadPath("Alex House", new PathConstraints(0.75, 0.75));
+        PathPlannerTrajectory first = PathPlanner.loadPath("Alex House", new PathConstraints(1, 1));
         first = PathPlannerTrajectory.transformTrajectoryForAlliance(first,
                 teamColor);
-
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first,
                 true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
-        return new SequentialCommandGroup(
-                getPlaceTopCommand(arm, armIntake),
-                path_1,
-                new ApriltagAlign(swerveSubsystem, limelight));
-                // new ParallelDeadlineGroup(getPlaceTopCommand(arm, armIntake),
-                //         new ApriltagAlign(swerveSubsystem, limelight)));
-    }
 
-    public static Command getFieldTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
-            TopBottom topBottom) {
-        Alliance teamColor = DriverStation.getAlliance();
+        PathPlannerTrajectory second = PathPlanner.loadPath("Alex House 3 Piece", new PathConstraints(1, 1));
+        second = PathPlannerTrajectory.transformTrajectoryForAlliance(second,
+                teamColor);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second,
+                false, swerveSubsystem),
+                second.getMarkers(), Constants.AutoConstants.eventMap);
 
-        PathPlannerTrajectory first;
-        first = PathPlanner.loadPath("Field Length", new PathConstraints(0.75, 0.75));
-
-        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
-
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
-                first.getMarkers(),
-                Constants.AutoConstants.eventMap);
-        return new SequentialCommandGroup(
-                path_1);
-    }
-
-    public static Command getPickupTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
-            TopBottom topBottom) {
-        Alliance teamColor = DriverStation.getAlliance();
-
-        PathPlannerTrajectory first;
-        first = PathPlanner.loadPath("pickup", new PathConstraints(0.75, 0.75));
-
-        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
-
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
-                first.getMarkers(),
-                Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP), Commands.waitSeconds(0.5),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
-                path_1);
+                getPlaceTopCommand(arm, armIntake),
+                path_1,
+                new ParallelDeadlineGroup(getPlaceTopCommand(arm, armIntake),
+                        new ApriltagAlign(swerveSubsystem, limelight)),
+                path_2,
+                getPlaceTopCommand(arm, armIntake),
+                // new ParallelDeadlineGroup(getPlaceTopCommand(arm, armIntake),
+                //         new SequentialCommandGroup(new AlignHeading(swerveSubsystem),
+                //                 new RetroAlign(swerveSubsystem, limelight))),
+                new MoveArm(arm, armIntake, ArmSetpoints.STOW),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
+
     }
 
     public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,

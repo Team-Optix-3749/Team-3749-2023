@@ -125,8 +125,8 @@ public class JoystickIO {
         pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
-        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage));
-        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
+        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);

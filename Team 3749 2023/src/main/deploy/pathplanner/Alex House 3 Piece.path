@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.78,
-        "y": 5.008730588074586
+        "y": 4.44
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.780000000000001,
-        "y": 5.008730588074586
+        "x": 2.4970117849002866,
+        "y": 4.44
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -25,15 +25,15 @@
     {
       "anchorPoint": {
         "x": 3.35,
-        "y": 4.36
+        "y": 3.38
       },
       "prevControl": {
-        "x": 2.932669472136102,
-        "y": 4.36
+        "x": 2.9984113718886305,
+        "y": 3.38
       },
       "nextControl": {
-        "x": 3.4646987819204247,
-        "y": 4.36
+        "x": 3.6254022972419633,
+        "y": 3.38
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -50,15 +50,15 @@
     {
       "anchorPoint": {
         "x": 3.73,
-        "y": 4.36
+        "y": 3.38
       },
       "prevControl": {
-        "x": 3.5262913496894996,
-        "y": 4.36
+        "x": 3.5245414856022292,
+        "y": 3.35394215672882
       },
       "nextControl": {
-        "x": 3.5262913496894996,
-        "y": 4.36
+        "x": 3.5245414856022292,
+        "y": 3.35394215672882
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -75,11 +75,11 @@
     {
       "anchorPoint": {
         "x": 1.78,
-        "y": 4.44
+        "y": 3.86
       },
       "prevControl": {
-        "x": 2.620082821219444,
-        "y": 4.42652192092525
+        "x": 3.3318722681810558,
+        "y": 4.0559962490538375
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -97,27 +97,27 @@
   ],
   "markers": [
     {
-      "position": 0.19636363636364967,
-      "names": [
-        "Pickup Cube"
-      ]
-    },
-    {
-      "position": 2.203636363636241,
-      "names": [
-        "Stow"
-      ]
-    },
-    {
-      "position": 2.5309090909089433,
-      "names": [
-        "Sting"
-      ]
-    },
-    {
       "position": 0.01,
       "names": [
         "Stow"
+      ]
+    },
+    {
+      "position": 0.2836363636363599,
+      "names": [
+        "Pickup Cone"
+      ]
+    },
+    {
+      "position": 2.38,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 2.7490909090907687,
+      "names": [
+        "Sting"
       ]
     }
   ]
