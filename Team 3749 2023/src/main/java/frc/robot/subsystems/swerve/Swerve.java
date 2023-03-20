@@ -158,7 +158,14 @@ public class Swerve extends SubsystemBase {
         Logger.getInstance().processInputs("Drive/FrontRight", frontRightInputs);
         Logger.getInstance().processInputs("Drive/BackLeft", backLeftInputs);
         Logger.getInstance().processInputs("Drive/BackRight", backRightInputs);
+        double[] states = new double [] {
+            frontLeftInputs.turnPositionRad, frontLeftInputs.driveVelocityMetersPerSec,
+            frontRightInputs.turnPositionRad, frontRightInputs.driveVelocityMetersPerSec,
+            backLeftInputs.turnPositionRad, backLeftInputs.driveVelocityMetersPerSec,
+            backRightInputs.turnPositionRad, backRightInputs.driveVelocityMetersPerSec
+        };
 
+        Logger.getInstance().recordOutput("Drive/Modules", states);
 
 
         // for (int i = 0; i < 4; i++) {
