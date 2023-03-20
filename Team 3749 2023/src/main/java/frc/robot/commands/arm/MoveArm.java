@@ -107,7 +107,7 @@ public class MoveArm extends CommandBase {
     public void logging() {
         Constants.Arm.currWaypointX.set(desiredState.poseMeters.getTranslation().getX());
         Constants.Arm.currWaypointY.set(desiredState.poseMeters.getTranslation().getY());
-        
+
         Constants.Arm.armCoordinateX.set(arm.getArmCoordinate().getX());
         Constants.Arm.armCoordinateY.set(arm.getArmCoordinate().getY());
     }
@@ -176,10 +176,21 @@ public class MoveArm extends CommandBase {
                 }
 
             case DOUBLE_SUBSTATION:
+                arm.setCurrentSetpoint(ArmSetpoints.STOW);
+
                 if (desiredSetpoint == currentSetpoint) {
-                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.DOUBLESUB_TO_STOW;
-                } else {
+                } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
+                    return ArmPaths.TOP_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.PLACE_MID)
+                    return ArmPaths.MID_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE)
+                    return ArmPaths.GROUND_INTAKE_CUBE_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE)
+                    return ArmPaths.GROUND_INTAKE_CONE_TO_STOW;
+                else if (currentSetpoint == ArmSetpoints.STING)
+                    return ArmPaths.STING_TO_STOW;
+                else {
                     arm.setCurrentSetpoint(ArmSetpoints.DOUBLE_SUBSTATION);
                     return ArmPaths.STOW_TO_DOUBLESUB;
                 }
