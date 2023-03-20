@@ -2,9 +2,6 @@ package frc.robot;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,8 +11,6 @@ import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
-import frc.robot.commands.arm.MoveArm;
-import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.commands.vision.VisionDefaultCommand;
