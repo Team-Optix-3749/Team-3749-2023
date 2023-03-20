@@ -71,10 +71,7 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15));
     }
-    public static Command getRetroTest(Swerve swerveSubsystem, Limelight limelight){
-        return new SequentialCommandGroup(new AlignHeading(swerveSubsystem),
-        new RetroAlign(swerveSubsystem, limelight));
-    }
+
     public static Command getAlexHouse(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             Constants.AutoConstants.TopBottom topBottom) {
         Alliance teamColor = DriverStation.getAlliance();
