@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 
-/***
+/**
+ * Class for controlling the SideIntake lift & intake motors
+ * 
  * @author Rohin Sood
  */
 public class SideIntake extends SubsystemBase {
@@ -42,6 +44,8 @@ public class SideIntake extends SubsystemBase {
 
         liftEncoder.setPositionConversionFactor((2 * Math.PI) / 100.0);
         liftEncoder.setVelocityConversionFactor((2 * Math.PI) / (60.0 * 100.0));
+
+        liftPID.setTolerance(0.1);
     }
 
     /**
@@ -130,10 +134,19 @@ public class SideIntake extends SubsystemBase {
     }
 
     /**
-     * toggle lift setpoint
+     * toggle lift setpoint (Out & In)
      */
-    public void toggleLiftSetpoint( ) {
-        liftSetpoint = liftSetpoint == Constants.SideIntake.liftOutSetpoint ? 0 : Constants.SideIntake.liftOutSetpoint;
+    public void toggleLiftSetpoint() {
+        liftSetpoint = liftSetpoint == Constants.SideIntake.liftOutSetpoint ? 0.0 : Constants.SideIntake.liftOutSetpoint;
+    }
+
+    /**
+     * get if at the setpoint
+     * 
+     * @return if the lift PID loop is at its setpoint
+     */
+    public boolean liftAtSetpoint() {
+        return liftPID.atSetpoint();
     }
 
     /**

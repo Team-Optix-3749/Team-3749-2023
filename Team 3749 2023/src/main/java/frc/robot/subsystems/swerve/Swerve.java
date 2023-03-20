@@ -5,7 +5,6 @@
 package frc.robot.subsystems.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -70,7 +69,7 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    // equivilant to a odometer, but also intakes vision
+
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
     private final PIDController turnController = new PIDController(0.045, 0.00, 0);
@@ -91,14 +90,31 @@ public class Swerve extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+
         swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
                 new Rotation2d(0),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() },
                 new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
+        // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
         gyro.calibrate();
-        turnController.enableContinuousInput(-180,180);
+        turnController.enableContinuousInput(-180, 180);
+    }
+
+    public void drive(double xSpeed, double ySpeed, double thetaSpeed) {
+
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, xSpeed, 0, getRotation2d());
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
+
+        setModuleStates(moduleStates);
+    }
+
+    public void stop() {
+
+        drive(0, 0, 0);
     }
 
     public void zeroHeading() {
@@ -106,7 +122,6 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getHeading() {
-        // return Math.IEEEremainder(gyro.getAngle(), 360);
         return gyro.getYaw();
     }
 
@@ -127,19 +142,15 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
+        // update pose estimation using encoders and gyro
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
+
     }
-
-    @Override
-    public void periodic() {
-        updateOdometry();
-
-        robotHeading.set(getHeading());
-        pitch.set(getVerticalTilt());
-        robotPoseX.set(getPose().getX());
-        robotPoseY.set(getPose().getY());
+   
+    public SwerveDrivePoseEstimator getPoseEstimator() {
+        return swerveDrivePoseEstimator;
     }
 
     public void stopModules() {
@@ -156,6 +167,7 @@ public class Swerve extends SubsystemBase {
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
     }
+
     /***
      * 
      * @param angle the angle to move at, in degrees, -180 to 180
@@ -178,8 +190,9 @@ public class Swerve extends SubsystemBase {
         // 6. Output each module states to wheels
         setModuleStates(moduleStates);
     }
-    /***
 
+    /***
+     * 
      * @param angle the rotational angle to move to, -180 to 180
      */
     public void turnToRotation(double angle){
@@ -189,6 +202,11 @@ public class Swerve extends SubsystemBase {
             // signs the speed so we move in the correct direction
             // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
 
+        // negative so that we move towards the target, not away
+        double turning_speed = -turnController.calculate(getHeading(), angle);
+        turning_speed = turningLimiter.calculate(turning_speed);
+        // signs the speed so we move in the correct direction
+        // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
 
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
@@ -205,12 +223,22 @@ public class Swerve extends SubsystemBase {
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
-    
-    public PIDController getTurnController(){
+
+    public PIDController getTurnController() {
         return turnController;
     }
 
-    public SlewRateLimiter getTurnLimiter(){
+    public SlewRateLimiter getTurnLimiter() {
         return turningLimiter;
+    }
+
+    @Override
+    public void periodic() {
+        updateOdometry();
+
+        robotHeading.set(getHeading());
+        pitch.set(getVerticalTilt());
+        robotPoseX.set(getPose().getX());
+        robotPoseY.set(getPose().getY());
     }
 }

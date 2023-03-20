@@ -2,16 +2,23 @@ package frc.robot;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
+import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
+import frc.robot.commands.vision.VisionDefaultCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 
@@ -24,11 +31,13 @@ public class RobotContainer {
     private final ArmIntake armIntake = new ArmIntake();
     private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
+    private final Limelight limelight = new Limelight();
 
     JoystickIO joystickOI = new JoystickIO(pilot, operator, swerve, armIntake, sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
+        DriverStation.removeRefreshedDataEventHandle(44000);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -59,6 +68,8 @@ public class RobotContainer {
 
         sideIntake.setDefaultCommand(
                 Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
+                
+        limelight.setDefaultCommand(new VisionDefaultCommand(limelight, swerve.getPoseEstimator()));
     }
 
     /**
