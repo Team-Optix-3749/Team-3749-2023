@@ -38,11 +38,9 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(2);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP, 0, 0);
 
-    // safety stow
-    private Translation2d position = new Translation2d(0.3, -0.2);
-    private ArmSetpoints currentSetpoint = ArmSetpoints.STOW;
-
-
+    // move arm to sting for vision
+    private Translation2d position = new Translation2d(0.5, 0.7);
+    private ArmSetpoints currentSetpoint = ArmSetpoints.STING;
 
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();

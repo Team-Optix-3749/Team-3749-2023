@@ -3,17 +3,22 @@ package frc.robot;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
+import frc.robot.commands.vision.VisionDefaultCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
@@ -26,9 +31,11 @@ public class RobotContainer {
     private final ArmIntake armIntake = new ArmIntake();
     private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
+    private final Limelight limelight = new Limelight();
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
+        DriverStation.removeRefreshedDataEventHandle(44000);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -58,8 +65,9 @@ public class RobotContainer {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
 
         sideIntake.setDefaultCommand(
-                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
-                        .beforeStarting(new InitSideIntake(sideIntake)));
+                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
+                
+        limelight.setDefaultCommand(new VisionDefaultCommand(limelight, swerve.getPoseEstimator()));
     }
 
     /**
@@ -68,8 +76,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // arm setpoints (buttons)
-        pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
+        // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+        // pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
@@ -89,6 +97,10 @@ public class RobotContainer {
         pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
         pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
         pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+
+        pilot.startWhileHeld(
+                Commands.run(() -> swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)))));
+
     }
 
     /**
