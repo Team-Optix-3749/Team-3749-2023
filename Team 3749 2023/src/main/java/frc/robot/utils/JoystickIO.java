@@ -16,6 +16,11 @@ import frc.robot.subsystems.intake.SideIntake;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
+/**
+ * Util class for button bindings
+ * 
+ * @author Rohin Sood
+ */
 public class JoystickIO {
     private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
 
@@ -48,25 +53,29 @@ public class JoystickIO {
         return joysticksChanged;
     }
 
+    /**
+     * Calls binding methods according to the joysticks connected
+     */
     public void getButtonBindings() {
 
-        // if both xbox controllers are connected
         if (DriverStation.isJoystickConnected(1)) {
+            // if both xbox controllers are connected
             pilotAndOperatorBindings();
 
-            // if only one xbox controller is connected
         } else if (DriverStation.isJoystickConnected(0)) {
+            // if only one xbox controller is connected
             pilotBindings();
 
-            // if no joysticks are connected (ShuffleBoard buttons)
         } else {
-            System.out.println("shuffleboard");
-
+            // if no joysticks are connected (ShuffleBoard buttons)
             noJoystickBindings();
 
         }
     }
 
+    /**
+     * If both controllers are plugged in (pi and op)
+     */
     public void pilotAndOperatorBindings() {
         // arm setpoints (buttons)
         operator.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
@@ -97,6 +106,9 @@ public class JoystickIO {
         pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
 
+    /**
+     * If only one controller is plugged in (pi)
+     */
     public void pilotBindings() {
         // arm setpoints (buttons)
         pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
@@ -122,9 +134,10 @@ public class JoystickIO {
         pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
 
+    /**
+     * If NO joysticks are plugged in (Buttons for commands are runnable in the "Controls" tab in ShuffleBoard)
+     */
     public void noJoystickBindings() {
-        System.out.println("shuffleboard");
-
         ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
 
         ShuffleboardLayout armCommands = controlsTab
