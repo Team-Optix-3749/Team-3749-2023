@@ -63,6 +63,12 @@ public final class AutoCommands {
                 ));
     }
 
+    public static Command getPlaceTopCommand(Arm arm, ArmIntake armIntake) {
+        return new SequentialCommandGroup(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15));
+    }
+
     public static Command waitTest(Arm arm, ArmIntake armIntake) {
         return new SequentialCommandGroup(new MoveArm(arm, armIntake, ArmSetpoints.STING), new WaitCommand(120));
     }
@@ -78,11 +84,11 @@ public final class AutoCommands {
                 path);
     }
 
-    public static Command getMarkerTester(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+    public static Command getAlexHouse(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Constants.AutoConstants.TopBottom topBottom) {
         Alliance teamColor = DriverStation.getAlliance();
 
-        PathPlannerTrajectory first = PathPlanner.loadPath("Ground Pickup Test", new PathConstraints(0.75, 0.75));
+        PathPlannerTrajectory first = PathPlanner.loadPath("Alex House", new PathConstraints(0.75, 0.75));
         first = PathPlannerTrajectory.transformTrajectoryForAlliance(first,
                 teamColor);
 
@@ -90,11 +96,9 @@ public final class AutoCommands {
                 true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.4),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                new MoveArm(arm, armIntake, ArmSetpoints.STOW));
+                getPlaceTopCommand(arm, armIntake),
+                path_1,
+                getPlaceTopCommand(arm, armIntake));
 
     }
 

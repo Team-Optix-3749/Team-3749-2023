@@ -91,7 +91,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.waitTest(arm, armIntake);
+        return AutoCommands.getAlexHouse(swerve, arm, armIntake, TopBottom.TOP);
         // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
         //         TopBottom.TOP);
         // return AutoCommands.getThreePiece(swerve, arm, armIntake,

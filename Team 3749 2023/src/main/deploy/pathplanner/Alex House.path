@@ -1,0 +1,118 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.78,
+        "y": 5.008730588074586
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.780000000000001,
+        "y": 5.008730588074586
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.1,
+        "y": 4.4
+      },
+      "prevControl": {
+        "x": 3.6826694721361015,
+        "y": 4.4
+      },
+      "nextControl": {
+        "x": 4.214698781920425,
+        "y": 4.4
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.52,
+        "y": 4.4
+      },
+      "prevControl": {
+        "x": 4.316291349689499,
+        "y": 4.4
+      },
+      "nextControl": {
+        "x": 4.316291349689499,
+        "y": 4.4
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.78,
+        "y": 4.44
+      },
+      "prevControl": {
+        "x": 2.620082821219444,
+        "y": 4.42652192092525
+      },
+      "nextControl": null,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.19636363636364967,
+      "names": [
+        "Pickup Cube"
+      ]
+    },
+    {
+      "position": 2.203636363636241,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 2.5309090909089433,
+      "names": [
+        "Sting"
+      ]
+    }
+  ]
+}
