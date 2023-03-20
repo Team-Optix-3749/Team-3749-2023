@@ -9,11 +9,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 /**
@@ -38,9 +38,16 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(2);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP, 0, 0);
 
-    // move arm to sting for vision
-    private Translation2d position = new Translation2d(0.5, 0.7);
-    private ArmSetpoints currentSetpoint = ArmSetpoints.STING;
+    // safety stow
+    private Translation2d position = new Translation2d(0.3, -0.2);
+    private ArmSetpoints currentSetpoint = ArmSetpoints.STOW;
+
+    private ShuffleData<Double> armCacheX = new ShuffleData<Double>("Arm", "Arm Cache X", 0.0);
+    private ShuffleData<Double> armCacheY = new ShuffleData<Double>("Arm", "Arm Cache Y", 0.0);
+    private ShuffleData<Double> armX = new ShuffleData<Double>("Arm", "Arm X", 0.0);
+    private ShuffleData<Double> armY = new ShuffleData<Double>("Arm", "Arm Y", 0.0);
+    private ShuffleData<Double> shoulderVoltage = new ShuffleData<Double>("Arm", "Shoulder Voltage", 0.0);
+    private ShuffleData<Double> elbowVoltage = new ShuffleData<Double>("Arm", "Elbow Voltage", 0.0);
 
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();
@@ -181,23 +188,15 @@ public class Arm extends SubsystemBase {
             System.out.println(e);
         }
 
-        // for testing arm feedforward
-        // try {
-        //     feedForwardTesting(ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX(),
-        //         ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
-        // }  catch (Exception e) {
-        //     System.out.println(e);
-        // }
+        armCacheX.set(position.getX());
+        armCacheY.set(position.getY());
 
-        SmartDashboard.putNumber("ARM X CACHE", position.getX());
-        SmartDashboard.putNumber("ARM Y CACHE", position.getY());
+        var kinematicsOutput = ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle()));
 
-        SmartDashboard.putNumber("ARM X",
-                ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getX());
-        SmartDashboard.putNumber("ARM Y",
-                ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle())).getY());
+        armX.set(kinematicsOutput.getX());
+        armY.set(kinematicsOutput.getY());
 
-        SmartDashboard.putNumber("shoulder voltage", shoulderMotor.getBusVoltage() * shoulderMotor.getAppliedOutput());
-        SmartDashboard.putNumber("elbow voltage", elbowMotor.getBusVoltage() * elbowMotor.getAppliedOutput());
+        shoulderVoltage.set(shoulderMotor.getBusVoltage() * shoulderMotor.getAppliedOutput());
+        elbowVoltage.set(elbowMotor.getBusVoltage() * elbowMotor.getAppliedOutput());
     }
 }

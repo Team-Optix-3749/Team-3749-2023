@@ -6,12 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import edu.wpi.first.math.trajectory.Trajectory.State;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 
 /***
@@ -38,6 +38,7 @@ public class MoveArm extends CommandBase {
         this.arm = arm;
         this.intake = intake;
         this.desiredSetpoint = setpoint;
+        setName(setpoint.toString() + " Trajectory");
         addRequirements(arm);
     }
 
@@ -106,11 +107,11 @@ public class MoveArm extends CommandBase {
     }
 
     public void logging() {
-        SmartDashboard.putNumber("CURRENT WAYPOINT X", desiredState.poseMeters.getTranslation().getX());
-        SmartDashboard.putNumber("CURRENT WAYPOINT Y", desiredState.poseMeters.getTranslation().getY());
-
-        SmartDashboard.putNumber("Arm Coordinate X", arm.getArmCoordinate().getX());
-        SmartDashboard.putNumber("Arm Coordinate Y", arm.getArmCoordinate().getY());
+        Constants.Arm.currWaypointX.set(desiredState.poseMeters.getTranslation().getX());
+        Constants.Arm.currWaypointY.set(desiredState.poseMeters.getTranslation().getY());
+        
+        Constants.Arm.armCoordinateX.set(arm.getArmCoordinate().getX());
+        Constants.Arm.armCoordinateY.set(arm.getArmCoordinate().getY());
     }
 
     /***

@@ -7,9 +7,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 
 /***
  * @author Anusha Khobare
@@ -21,7 +21,7 @@ import frc.robot.utils.Constants;
  * @author Rohin Sood
  * @author Raadwan Masum
  * 
- *         Claw.java creates objects, dependencies, and motor controller groups
+ *         ArmIntake.java creates objects, dependencies, and motor controller groups
  *         to allow us to set the speed of each motor for intake and outtake
  */
 public class ArmIntake extends SubsystemBase {
@@ -29,8 +29,12 @@ public class ArmIntake extends SubsystemBase {
     private final CANSparkMax intakeMotor = new CANSparkMax(Constants.ArmIntake.arm_intake_id, MotorType.kBrushless);
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
 
-    private final PIDController clawPID = new PIDController(0.675, 0, 0);
-    private final SimpleMotorFeedforward clawFeedForward = new SimpleMotorFeedforward(0, 0.675);
+    private final PIDController intakePID = new PIDController(0.675, 0, 0);
+    private final SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(0, 0.675);
+
+    private final ShuffleData<Double> intakeVoltage = new ShuffleData<Double>("Arm Intake", "Intake Voltage", 0.0);
+    private final ShuffleData<Double> intakeCurrent = new ShuffleData<Double>("Arm Intake", "Intake Current", 0.0);
+    private final ShuffleData<Double> intakeTemp = new ShuffleData<Double>("Arm Intake", "Intake Temperature", 0.0);
 
     public ArmIntake() {
         intakeMotor.restoreFactoryDefaults();
@@ -88,13 +92,8 @@ public class ArmIntake extends SubsystemBase {
      * @param velocity
      */
     public void setFeedForward(double velocity) {
-        SmartDashboard.putNumber("claw pid gain", clawPID.calculate(intakeEncoder.getVelocity(), velocity));
-        SmartDashboard.putNumber("claw ff gain", clawFeedForward.calculate(velocity));
-
-        SmartDashboard.putNumber("claw gain",
-                clawFeedForward.calculate(velocity) + clawPID.calculate(intakeEncoder.getVelocity(), velocity));
         intakeMotor.setVoltage(
-                clawFeedForward.calculate(velocity) + clawPID.calculate(intakeEncoder.getVelocity(), velocity));
+                intakeFF.calculate(velocity) + intakePID.calculate(intakeEncoder.getVelocity(), velocity));
     }
 
     /**
@@ -106,12 +105,8 @@ public class ArmIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Claw Temp (C)", getTemperature());
-        SmartDashboard.putNumber("Claw Position", intakeEncoder.getPosition());
-        SmartDashboard.putNumber("Claw Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("Claw Current", intakeMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Claw Voltage", intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage());
-        SmartDashboard.putString("Claw Command",
-                this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
+        intakeTemp.set(getTemperature());
+        intakeCurrent.set(intakeMotor.getOutputCurrent());
+        intakeVoltage.set(intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage());
     }
 }
