@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 import frc.robot.utils.Constants.AutoConstants.TopBottom;
@@ -84,7 +87,7 @@ public final class AutoCommands {
                 path);
     }
 
-    public static Command getAlexHouse(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+    public static Command getAlexHouse(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             Constants.AutoConstants.TopBottom topBottom) {
         Alliance teamColor = DriverStation.getAlliance();
 
@@ -98,8 +101,9 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTopCommand(arm, armIntake),
                 path_1,
-                getPlaceTopCommand(arm, armIntake));
-
+                new ApriltagAlign(swerveSubsystem, limelight));
+                // new ParallelDeadlineGroup(getPlaceTopCommand(arm, armIntake),
+                //         new ApriltagAlign(swerveSubsystem, limelight)));
     }
 
     public static Command getFieldTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,

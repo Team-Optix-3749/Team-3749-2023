@@ -237,18 +237,6 @@ public class Constants {
         // page 197
         public static final double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
 
-        // See
-        // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
-        // pages 4 and 5
-        public static final double kFarTgtXPos = Units.feetToMeters(54);
-        public static final double kFarTgtYPos = Units.feetToMeters(27 / 2) - Units.inchesToMeters(43.75)
-                - Units.inchesToMeters(48.0 / 2.0);
-        public static final double kFarTgtZPos = (Units.inchesToMeters(98.19) - targetHeight) / 2 + targetHeight;
-
-        public static final Pose3d kFarTargetPose = new Pose3d(
-                new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
-                new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
-
         public static final Transform3d cam_to_robot = new Transform3d(
                 new Translation3d(0.0, -Units.inchesToMeters(7), -Units.inchesToMeters(18)), new Rotation3d());
         public static final Transform3d robot_to_cam = cam_to_robot.inverse();

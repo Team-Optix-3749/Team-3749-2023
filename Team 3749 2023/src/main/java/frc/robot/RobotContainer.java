@@ -3,7 +3,6 @@ package frc.robot;
 import java.io.FileWriter;
 import java.io.IOException;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -90,7 +89,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getAlexHouse(swerve, arm, armIntake, TopBottom.TOP);
+        return AutoCommands.getAlexHouse(swerve, arm, armIntake, limelight, TopBottom.TOP);
         // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
         //         TopBottom.TOP);
         // return AutoCommands.getThreePiece(swerve, arm, armIntake,
