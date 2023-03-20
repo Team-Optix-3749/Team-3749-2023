@@ -199,7 +199,7 @@ public class Constants {
     }
 
     public static final class AutoBalancing {
-        public static final double max_yaw_offset = 2.2;
+        public static final double max_yaw_offset = 1.5;
         public static final double max_pitch_offset = 2;
         public static final double max_pitch_margin = 3;
         public static final double max_movement_offset = 0.025; // around 1 inch
@@ -254,14 +254,9 @@ public class Constants {
         public static final double retro_cam_offset = 0.56;
         public static final double apriltag_cam_offset = 3.1;
 
-        public static SmartData<Double> visionXKP = new SmartData<Double>("Vision X KP", 0.1);
-        public static SmartData<Double> visionYKP = new SmartData<Double>("Vision Y KP", 0.1);
-
         public static enum Nodes {
             MID_CONE(Units.inchesToMeters(22.125)),
-            TOP_CONE(0.0),
-            MID_CUBE(Units.inchesToMeters(14.25)),
-            TOP_CUBE(Units.inchesToMeters(14.25));
+            TOP_CONE(Units.inchesToMeters(41.5));
 
             public double height;
 

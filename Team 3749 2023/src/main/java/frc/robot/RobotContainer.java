@@ -10,11 +10,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.swerve.AlignHeading;
 import frc.robot.commands.swerve.ApriltagAlign;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.MoveToPose;
@@ -78,14 +80,17 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.aWhileHeld(
-                // new MoveToPose(swerve, new Pose2d(new Translation2d(2.2, 4.4), 
-                // new Rotation2d(0.0))));
-                // new MoveToPose(swerve, new Pose2d())
-                new ApriltagAlign(swerve, limelight));
+                new SequentialCommandGroup(
+                        new AlignHeading(swerve).withTimeout(1),
+                        new RetroAlign(swerve, limelight)));
+
+        pilot.bWhileHeld(
+            new AlignHeading(swerve).withTimeout(1)
+        );
 
         // arm setpoints (buttons)
         // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
+        // pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 

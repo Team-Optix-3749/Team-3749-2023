@@ -19,6 +19,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -32,10 +35,11 @@ import frc.robot.utils.Constants.VisionConstants;
 public class Limelight extends SubsystemBase {
 
     private final PhotonCamera camera = new PhotonCamera("limelight");
-    private PhotonPipelineResult result = getLatestResult();
     private AprilTagFieldLayout aprilTagFieldLayout;
-
     private PhotonPoseEstimator photonPoseEstimator;
+
+    private final NetworkTable photonTable = NetworkTableInstance.getDefault().getTable("photonvision");
+    private final NetworkTableEntry ledMode = photonTable.getEntry("ledMode");
 
     public Limelight() {
         try {
@@ -45,8 +49,8 @@ public class Limelight extends SubsystemBase {
         } catch (Exception e) {
             System.out.println(e);
         }
-        setLED(VisionLEDMode.kOff);
 
+        setLED(VisionLEDMode.kOff);
     }
 
     public PhotonPipelineResult getLatestResult() {
@@ -119,6 +123,21 @@ public class Limelight extends SubsystemBase {
     }
 
     public void setLED(VisionLEDMode ledMode) {
+
+        switch (ledMode) {
+            case kOn:
+                this.ledMode.setInteger(1);
+                break;
+            case kOff:
+                this.ledMode.setInteger(0);
+                break;
+            case kBlink:
+                this.ledMode.setInteger(2);
+                break;
+            default:
+                this.ledMode.setInteger(-1);
+                break;
+        }
         camera.setLED(ledMode);
     }
 
@@ -151,25 +170,22 @@ public class Limelight extends SubsystemBase {
 
     public void logging() {
 
-        result = getLatestResult();
-        if (result.hasTargets()) {
-            PhotonTrackedTarget target = result.getBestTarget();
-            SmartDashboard.putNumber("target pitch: ", getPitch(target));
-            SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
-            SmartDashboard.putNumber("target distance: ",
-                    getDistance(target, Constants.VisionConstants.Nodes.MID_CUBE));
-            SmartDashboard.putNumber("Target translation 2d X: ",
-                    getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getX());
-            SmartDashboard.putNumber("Target translation 2d Y: ",
-                    getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getY());
-        }
+        // result = getLatestResult();
+        // if (result.hasTargets()) {
+        //     PhotonTrackedTarget target = result.getBestTarget();
+        //     SmartDashboard.putNumber("target pitch: ", getPitch(target));
+        //     SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
+        //     SmartDashboard.putNumber("Target translation 2d X: ",
+        //             getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CONE).getX());
+        //     SmartDashboard.putNumber("Target translation 2d Y: ",
+        //             getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CONE).getY());
+        // }
     }
 
     @Override
     public void periodic() {
 
         logging();
-        setLED(VisionLEDMode.kOn);
     }
 
 }

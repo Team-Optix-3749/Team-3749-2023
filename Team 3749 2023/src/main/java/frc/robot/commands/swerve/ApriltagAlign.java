@@ -75,9 +75,6 @@ public class ApriltagAlign extends CommandBase {
     @Override
     public void execute() {
 
-        driveController.setP(this.driveKP.get());
-        turnController.setP(this.turnKP.get());
-    
         if (goalPose == null){
             updateGoalPose();
             System.out.println("Goal Pose Is Null");
@@ -106,9 +103,6 @@ public class ApriltagAlign extends CommandBase {
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(),
                driveVelocity.getY() , turnVelocity, robotPose2d.getRotation());
-        // ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0,
-        // 0, turnVelocity, robotPose2d.getRotation());
-
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
@@ -160,7 +154,6 @@ public class ApriltagAlign extends CommandBase {
         driveController.setTolerance(driveTolerance.get());
         turnController.setTolerance(turnTolerance.get());
         
-        System.out.println("INTIIALIZE");
         var robotPose3d = new Pose3d(
             robotPose2d.getX(),
             robotPose2d.getY(),
@@ -173,13 +166,6 @@ public class ApriltagAlign extends CommandBase {
             var targetOpt = res.getTargets().stream()
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
                     .findFirst();
-
-            try {
-                SmartDashboard.putNumber("pose ambiguity", targetOpt.get().getPoseAmbiguity());
-                SmartDashboard.putBoolean("is present", targetOpt.isPresent());
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
 
             if (targetOpt.isPresent()) {
 

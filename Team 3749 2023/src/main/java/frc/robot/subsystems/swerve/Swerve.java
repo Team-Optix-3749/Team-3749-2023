@@ -231,7 +231,6 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Current Pose X", getPose().getX());
         SmartDashboard.putNumber("Current Pose Y", getPose().getY());
 
-
         SmartDashboard.putData(this);
     }
 }
