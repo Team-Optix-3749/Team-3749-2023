@@ -52,20 +52,22 @@ public class JoystickIO {
 
         // if both xbox controllers are connected
         if (DriverStation.isJoystickConnected(1)) {
-            pilotOperatorBindings();
+            pilotAndOperatorBindings();
 
-        // if only one xbox controller is connected
+            // if only one xbox controller is connected
         } else if (DriverStation.isJoystickConnected(0)) {
             pilotBindings();
 
-        // if no joysticks are connected (ShuffleBoard buttons)
+            // if no joysticks are connected (ShuffleBoard buttons)
         } else {
+            System.out.println("shuffleboard");
+
             noJoystickBindings();
 
         }
     }
 
-    public void pilotOperatorBindings() {
+    public void pilotAndOperatorBindings() {
         // arm setpoints (buttons)
         operator.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
         operator.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
@@ -121,50 +123,52 @@ public class JoystickIO {
     }
 
     public void noJoystickBindings() {
+        System.out.println("shuffleboard");
+
         ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
 
-            ShuffleboardLayout armCommands = controlsTab
-                    .getLayout("Arm", BuiltInLayouts.kList)
-                    .withSize(2, 2)
-                    .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
+        ShuffleboardLayout armCommands = controlsTab
+                .getLayout("Arm", BuiltInLayouts.kList)
+                .withSize(2, 2)
+                .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
-            armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-            armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
-            armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
-            armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.STING));
-            armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
+        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
+        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE));
+        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.STING));
+        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
 
-            ShuffleboardLayout sideIntakeCommands = controlsTab
-                    .getLayout("Side Intake", BuiltInLayouts.kList)
-                    .withSize(2, 2)
-                    .withProperties(Map.of("Label position", "HIDDEN"));
+        ShuffleboardLayout sideIntakeCommands = controlsTab
+                .getLayout("Side Intake", BuiltInLayouts.kList)
+                .withSize(2, 2)
+                .withProperties(Map.of("Label position", "HIDDEN"));
 
-            CommandBase liftSideIntake = Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake);
-            liftSideIntake.setName("Toggle Lift");
-            CommandBase outakeSideIntake = Commands
-                    .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseObjectVoltage), sideIntake);
-            outakeSideIntake.setName("Side Outake");
-            CommandBase intakeSideIntake = Commands
-                    .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage), sideIntake);
-            intakeSideIntake.setName("Side Intake");
+        CommandBase liftSideIntake = Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake);
+        liftSideIntake.setName("Toggle Lift");
+        CommandBase outakeSideIntake = Commands
+                .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseObjectVoltage), sideIntake);
+        outakeSideIntake.setName("Side Outake");
+        CommandBase intakeSideIntake = Commands
+                .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage), sideIntake);
+        intakeSideIntake.setName("Side Intake");
 
-            sideIntakeCommands.add(liftSideIntake);
-            sideIntakeCommands.add(outakeSideIntake);
-            sideIntakeCommands.add(intakeSideIntake);
+        sideIntakeCommands.add(liftSideIntake);
+        sideIntakeCommands.add(outakeSideIntake);
+        sideIntakeCommands.add(intakeSideIntake);
 
-            ShuffleboardLayout armIntakeCommands = controlsTab
-                    .getLayout("arm", BuiltInLayouts.kList)
-                    .withSize(2, 2)
-                    .withProperties(Map.of("Label position", "HIDDEN"));
+        ShuffleboardLayout armIntakeCommands = controlsTab
+                .getLayout("Arm Intake", BuiltInLayouts.kList)
+                .withSize(2, 2)
+                .withProperties(Map.of("Label position", "HIDDEN"));
 
-            CommandBase outakeArmIntake = Commands
-                    .run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage), sideIntake);
-            outakeArmIntake.setName("Arm Outake");
-            CommandBase intakeArmIntake = Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
-                    sideIntake);
-            intakeArmIntake.setName("Arm Intake");
+        CommandBase outakeArmIntake = Commands
+                .run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseObjectVoltage), sideIntake);
+        outakeArmIntake.setName("Arm Outake");
+        CommandBase intakeArmIntake = Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+                sideIntake);
+        intakeArmIntake.setName("Arm Intake");
 
-            armIntakeCommands.add(outakeArmIntake);
-            armIntakeCommands.add(intakeArmIntake);
+        armIntakeCommands.add(outakeArmIntake);
+        armIntakeCommands.add(intakeArmIntake);
     }
 }

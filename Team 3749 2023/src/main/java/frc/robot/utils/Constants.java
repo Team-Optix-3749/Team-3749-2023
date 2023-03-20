@@ -101,6 +101,11 @@ public class Constants {
 
         public static final double maxSpeedMPS = 7;
         public static final double maxAccelerationMPS = 10;
+
+        public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
+        public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
+        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X", 0.0);
+        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y", 0.0);
         
         public static enum ArmSetpoints {
             ZERO,

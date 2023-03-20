@@ -34,16 +34,14 @@ public class MoveArm extends CommandBase {
     private ArmPaths trajectoryInformation;
     private int trajectoryIndex = 0;
 
-    private ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
-    private ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
-    private ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X", 0.0);
-    private ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y", 0.0);
-
     public MoveArm(Arm arm, ArmIntake intake, ArmSetpoints setpoint) {
         this.arm = arm;
         this.intake = intake;
         this.desiredSetpoint = setpoint;
         // this.trajectory = trajectory;
+
+        setName(setpoint.toString() + " Trajectory");
+
         addRequirements(arm);
     }
 
@@ -114,11 +112,11 @@ public class MoveArm extends CommandBase {
     }
 
     public void logging() {
-        currWaypointX.set(desiredState.poseMeters.getTranslation().getX());
-        currWaypointY.set(desiredState.poseMeters.getTranslation().getY());
+        Constants.Arm.currWaypointX.set(desiredState.poseMeters.getTranslation().getX());
+        Constants.Arm.currWaypointY.set(desiredState.poseMeters.getTranslation().getY());
         
-        armCoordinateX.set(arm.getArmCoordinate().getX());
-        armCoordinateY.set(arm.getArmCoordinate().getY());
+        Constants.Arm.armCoordinateX.set(arm.getArmCoordinate().getX());
+        Constants.Arm.armCoordinateY.set(arm.getArmCoordinate().getY());
     }
 
     /***
