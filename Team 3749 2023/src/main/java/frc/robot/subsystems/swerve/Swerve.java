@@ -81,7 +81,6 @@ public class Swerve extends SubsystemBase {
     private ShuffleData<Double> robotPoseX = new ShuffleData<Double>("Swerve", "Robot Pose X", 0.0);
     private ShuffleData<Double> robotPoseY = new ShuffleData<Double>("Swerve", "Robot Pose Y", 0.0);
 
-
     public Swerve() {
         new Thread(() -> {
             try {
@@ -148,7 +147,7 @@ public class Swerve extends SubsystemBase {
                         backLeft.getPosition() });
 
     }
-   
+
     public SwerveDrivePoseEstimator getPoseEstimator() {
         return swerveDrivePoseEstimator;
     }
@@ -195,29 +194,23 @@ public class Swerve extends SubsystemBase {
      * 
      * @param angle the rotational angle to move to, -180 to 180
      */
-    public void turnToRotation(double angle){
-            // negative so that we move towards the target, not away
-            double turning_speed = -turnController.calculate(getHeading(), angle);
-            turning_speed = turningLimiter.calculate(turning_speed);
-            // signs the speed so we move in the correct direction
-            // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
-
+    public void turnToRotation(double angle) {
         // negative so that we move towards the target, not away
         double turning_speed = -turnController.calculate(getHeading(), angle);
         turning_speed = turningLimiter.calculate(turning_speed);
         // signs the speed so we move in the correct direction
         // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
 
-            // 4. Construct desired chassis speeds
-            ChassisSpeeds chassisSpeeds;
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turning_speed, getRotation2d());
-            // 5. Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-                    .toSwerveModuleStates(chassisSpeeds);
-            // 6. Output each module states to wheels
-            setModuleStates(moduleStates);
+        // 4. Construct desired chassis speeds
+        ChassisSpeeds chassisSpeeds;
+        // Relative to field
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, 0, turning_speed, getRotation2d());
+        // 5. Convert chassis speeds to individual module states
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
+        // 6. Output each module states to wheels
+        setModuleStates(moduleStates);
     }
 
     public double getVerticalTilt() {
