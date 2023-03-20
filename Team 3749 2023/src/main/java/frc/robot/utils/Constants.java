@@ -59,7 +59,6 @@ public class Constants {
     public static final class SideIntake {
         public static final int lift_motor_id = 23;
         public static final int side_intake_id = 24;
-
         public static final double idleVoltage = 1;
         public static final double releaseObjectVoltage = -3;
         public static final double intakeVoltage = 6;

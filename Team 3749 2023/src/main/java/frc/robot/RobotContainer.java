@@ -15,6 +15,7 @@ import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.commands.vision.VisionDefaultCommand;
@@ -65,8 +66,8 @@ public class RobotContainer {
 
         sideIntake.setDefaultCommand(
                 Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
+                
         limelight.setDefaultCommand(new VisionDefaultCommand(limelight, swerve.getPoseEstimator()));
-
     }
 
     /**
