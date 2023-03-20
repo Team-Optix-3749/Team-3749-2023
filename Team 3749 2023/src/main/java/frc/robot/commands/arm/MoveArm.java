@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.intake.ArmIntake;
+import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;;
 
 /***

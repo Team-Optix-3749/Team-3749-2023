@@ -81,6 +81,7 @@ public class JoystickIO {
         operator.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
         operator.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
         operator.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
+        operator.y().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CONE));
 
         // arm setpoints (bumpers)
         operator.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
