@@ -38,7 +38,6 @@ public class MoveArm extends CommandBase {
         this.arm = arm;
         this.intake = intake;
         this.desiredSetpoint = setpoint;
-        // this.trajectory = trajectory;
         addRequirements(arm);
     }
 
@@ -49,7 +48,6 @@ public class MoveArm extends CommandBase {
         trajectoryIndex = 0;
         timer.reset();
         timer.start();
-        // System.out.println("START TRAJECTORY");
     }
 
     @Override
@@ -79,7 +77,6 @@ public class MoveArm extends CommandBase {
             // System.out.println("An error occurred.");
             // e.printStackTrace();
         }
-        // System.out.println(intakeVoltages[trajectoryIndex]);
         System.out.println(
                 String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
         logging();

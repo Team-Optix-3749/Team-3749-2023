@@ -94,11 +94,11 @@ public class Swerve extends SubsystemBase {
 
         // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
         gyro.calibrate();
-        turnController.enableContinuousInput(-180,180);
+        turnController.enableContinuousInput(-180, 180);
     }
 
     public void drive(double xSpeed, double ySpeed, double thetaSpeed) {
-        
+
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 0, xSpeed, 0, getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
@@ -108,7 +108,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void stop() {
-        
+
         drive(0, 0, 0);
     }
 
@@ -144,7 +144,7 @@ public class Swerve extends SubsystemBase {
 
     }
 
-    public SwerveDrivePoseEstimator getPoseEstimator(){
+    public SwerveDrivePoseEstimator getPoseEstimator() {
         return swerveDrivePoseEstimator;
     }
 
@@ -162,6 +162,7 @@ public class Swerve extends SubsystemBase {
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
     }
+
     /***
      * 
      * @param angle the angle to move at, in degrees, -180 to 180
@@ -184,42 +185,42 @@ public class Swerve extends SubsystemBase {
         // 6. Output each module states to wheels
         setModuleStates(moduleStates);
     }
-    /***
 
+    /***
+     * 
      * @param angle the rotational angle to move to, -180 to 180
      */
-    public void turnToRotation(double angle){
-            SmartDashboard.putNumber("ANGLE SETPOINT", angle);  
+    public void turnToRotation(double angle) {
+        SmartDashboard.putNumber("ANGLE SETPOINT", angle);
 
-            // negative so that we move towards the target, not away
-            double turning_speed = -turnController.calculate(getHeading(), angle);
-            turning_speed = turningLimiter.calculate(turning_speed);
-            // signs the speed so we move in the correct direction
-            // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
+        // negative so that we move towards the target, not away
+        double turning_speed = -turnController.calculate(getHeading(), angle);
+        turning_speed = turningLimiter.calculate(turning_speed);
+        // signs the speed so we move in the correct direction
+        // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
 
-
-            SmartDashboard.putNumber("SPEEEEED", turning_speed);
-            // 4. Construct desired chassis speeds
-            ChassisSpeeds chassisSpeeds;
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turning_speed, getRotation2d());
-            // 5. Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-                    .toSwerveModuleStates(chassisSpeeds);
-            // 6. Output each module states to wheels
-            setModuleStates(moduleStates);
+        SmartDashboard.putNumber("SPEEEEED", turning_speed);
+        // 4. Construct desired chassis speeds
+        ChassisSpeeds chassisSpeeds;
+        // Relative to field
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, 0, turning_speed, getRotation2d());
+        // 5. Convert chassis speeds to individual module states
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
+        // 6. Output each module states to wheels
+        setModuleStates(moduleStates);
     }
 
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
-    
-    public PIDController getTurnController(){
+
+    public PIDController getTurnController() {
         return turnController;
     }
 
-    public SlewRateLimiter getTurnLimiter(){
+    public SlewRateLimiter getTurnLimiter() {
         return turningLimiter;
     }
 

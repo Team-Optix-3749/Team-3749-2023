@@ -73,16 +73,15 @@ public class MoveToPose extends CommandBase {
                 currentPose.getTranslation().minus(targetPose.getTranslation()).getAngle())
                 .transformBy(translationToTransform(driveVelocityScalar, 0.0))
                 .getTranslation();
-        
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-driveVelocity.getX(), -
-        driveVelocity.getY(), turnVelocity, currentPose.getRotation());
 
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-driveVelocity.getX(),
+                -driveVelocity.getY(), turnVelocity, currentPose.getRotation());
 
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-            .toSwerveModuleStates(chassisSpeeds);
+                .toSwerveModuleStates(chassisSpeeds);
 
         swerve.setModuleStates(moduleStates);
-            
+
         SmartDashboard.putNumber("Drive X Velo", driveVelocity.getX());
         SmartDashboard.putNumber("Drive Y Velo", driveVelocity.getY());
         SmartDashboard.putNumber("Turn velo", turnVelocity);
@@ -105,10 +104,12 @@ public class MoveToPose extends CommandBase {
         return driveController.atGoal() && turnController.atGoal();
     }
 
-    /** Checks if the robot pose is within the allowed drive and theta tolerances. */
+    /**
+     * Checks if the robot pose is within the allowed drive and theta tolerances.
+     */
     public boolean withinTolerance(double driveTolerance, Rotation2d thetaTolerance) {
         return Math.abs(driveErrorAbs) < driveTolerance
-            && Math.abs(turnErrorAbs) < thetaTolerance.getRadians();
+                && Math.abs(turnErrorAbs) < thetaTolerance.getRadians();
     }
 
     /**

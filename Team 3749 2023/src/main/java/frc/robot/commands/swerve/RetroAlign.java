@@ -1,9 +1,7 @@
 package frc.robot.commands.swerve;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,8 +19,7 @@ import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants.Nodes;
 
 /**
- * Aligns the robot with the tracked target and drives to its required distance
- * for placing
+ * Using the target Translation2d, drive to the predetermined setpoint using PIDControllers
  * 
  * @author Rohin Sood
  */
@@ -53,7 +50,7 @@ public class RetroAlign extends CommandBase {
 
         xController.setSetpoint(setpoint.getX());
         xController.setTolerance(0.1);
-        
+
         yController.setSetpoint(setpoint.getY());
         yController.setTolerance(0.1);
     }
@@ -111,13 +108,11 @@ public class RetroAlign extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("FINSIDHIFHSIDGFAJKSDGFKASDHF");
         limelight.setLED(VisionLEDMode.kOff);
     }
 
     @Override
     public boolean isFinished() {
-        System.out.println("FINSIDHIFHSIDGFAJKSDGFKASDHF");
         return atGoal();
     }
 
