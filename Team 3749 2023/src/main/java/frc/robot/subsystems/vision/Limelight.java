@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -14,6 +15,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,9 +25,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.VisionConstants;
 
 /**
@@ -41,6 +48,16 @@ public class Limelight extends SubsystemBase {
     private final NetworkTable photonTable = NetworkTableInstance.getDefault().getTable("photonvision");
     private final NetworkTableEntry ledMode = photonTable.getEntry("ledMode");
 
+    private final HttpCamera raw;
+    private final HttpCamera processed;
+
+    private final ShuffleData<Double> targetPitch = new ShuffleData<Double>("Limelight", "Target Pitch", 0.0);
+    private final ShuffleData<Double> targetYaw = new ShuffleData<Double>("Limelight", "Target Yaw", 0.0);
+    private final ShuffleData<Double> targetTranslationX = new ShuffleData<Double>("Limelight",
+            "Target Translation2d X (MID)", 0.0);
+    private final ShuffleData<Double> targetTranslationY = new ShuffleData<Double>("Limelight",
+            "Target Translation2d Y (MID)", 0.0);
+
     public Limelight() {
         try {
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
@@ -49,6 +66,9 @@ public class Limelight extends SubsystemBase {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        raw = new HttpCamera("Raw", "http://10.37.49.2:1181/?action=stream");
+        processed = new HttpCamera("Raw", "http://10.37.49.2:1182/?action=stream");
 
         setLED(VisionLEDMode.kOff);
     }
@@ -109,8 +129,8 @@ public class Limelight extends SubsystemBase {
         return PhotonUtils.estimateCameraToTargetTranslation(
                 getDistance(target, node), getYaw(target));
     }
-    
-    public AprilTagFieldLayout getAprilTagFieldLayout(){
+
+    public AprilTagFieldLayout getAprilTagFieldLayout() {
         return aprilTagFieldLayout;
     }
 
@@ -153,10 +173,12 @@ public class Limelight extends SubsystemBase {
             // if it recieved a pose update
             if (poseEstimate.isPresent()) {
                 Pose2d newPose = poseEstimate.get().estimatedPose.toPose2d();
-                // if the update is sufficiantly different to the current one, done to not cause pid oscilation
-                if (!Constants.withinMargin(0.05, newPose.getTranslation(), swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())){
+                // if the update is sufficiantly different to the current one, done to not cause
+                // pid oscilation
+                if (!Constants.withinMargin(0.05, newPose.getTranslation(),
+                        swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())) {
                     swerveDrivePoseEstimator.addVisionMeasurement(
-                        newPose, imageCaptureTime);
+                            newPose, imageCaptureTime);
                 }
                 // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
             }
@@ -170,21 +192,33 @@ public class Limelight extends SubsystemBase {
 
     public void logging() {
 
+        ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
+
+        CameraServer.addCamera(raw);
+        CameraServer.addCamera(processed);
+
+        // add HttpCameras
+        limelightTab.add(raw).withWidget(BuiltInWidgets.kCameraStream).withPosition(0, 0)
+                .withSize(5, 4).withProperties(Map.of("Show controls", false));
+        limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
+                .withSize(5, 4).withProperties(Map.of("Show controls", false));
+
         var result = getLatestResult();
+
         if (result.hasTargets()) {
-            PhotonTrackedTarget target = result.getBestTarget();
-            SmartDashboard.putNumber("target pitch: ", getPitch(target));
-            SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
-            SmartDashboard.putNumber("Target translation 2d X: ",
-                    getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CONE).getX());
-            SmartDashboard.putNumber("Target translation 2d Y: ",
-                    getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CONE).getY());
+            var target = getBestTarget(getLatestResult());
+
+            targetPitch.set(getPitch(target));
+            targetYaw.set(getYaw(target).getDegrees());
+
+            targetTranslationX.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getX());
+            targetTranslationY.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getY());
         }
+
     }
 
     @Override
     public void periodic() {
-
         logging();
     }
 
