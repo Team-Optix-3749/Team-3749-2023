@@ -179,7 +179,6 @@ public class Limelight extends SubsystemBase {
                     swerveDrivePoseEstimator.addVisionMeasurement(
                             newPose, imageCaptureTime);
                 }
-                // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
             }
         }
     }
@@ -197,10 +196,10 @@ public class Limelight extends SubsystemBase {
         CameraServer.addCamera(processed);
 
         // add HttpCameras
-        limelightTab.add(raw).withWidget(BuiltInWidgets.kCameraStream).withPosition(0, 0)
-                .withSize(5, 4).withProperties(Map.of("Show controls", false));
-        limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
-                .withSize(5, 4).withProperties(Map.of("Show controls", false));
+        // limelightTab.add(raw).withWidget(BuiltInWidgets.kCameraStream).withPosition(0, 0)
+        //         .withSize(5, 4).withProperties(Map.of("Show controls", false));
+        // limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
+        //         .withSize(5, 4).withProperties(Map.of("Show controls", false));
 
         var result = getLatestResult();
 
