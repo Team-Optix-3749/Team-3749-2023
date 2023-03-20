@@ -66,12 +66,6 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command getPlaceTopCommand(Arm arm, ArmIntake armIntake) {
-        return new SequentialCommandGroup(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.5),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15));
-    }
-
     public static Command getAlexHouse(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             Constants.AutoConstants.TopBottom topBottom) {
         Alliance teamColor = DriverStation.getAlliance();
@@ -92,15 +86,25 @@ public final class AutoCommands {
 
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
-                getPlaceTopCommand(arm, armIntake),
+                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                new SequentialCommandGroup(
+                        Commands.waitSeconds(0.3),
+                        Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                                .withTimeout(0.15)),
                 path_1,
-                new ParallelDeadlineGroup(getPlaceTopCommand(arm, armIntake),
+                new ParallelDeadlineGroup(new SequentialCommandGroup(
+                        Commands.waitSeconds(0.3),
+                        Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                                .withTimeout(0.15)),
                         new ApriltagAlign(swerveSubsystem, limelight)),
                 path_2,
-                getPlaceTopCommand(arm, armIntake),
-                // new ParallelDeadlineGroup(getPlaceTopCommand(arm, armIntake),
-                //         new SequentialCommandGroup(new AlignHeading(swerveSubsystem),
-                //                 new RetroAlign(swerveSubsystem, limelight))),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.15),
+                // new ParallelDeadlineGroup(new SequentialCommandGroup(
+                //         Commands.waitSeconds(0.3),
+                //         Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                //                 .withTimeout(0.15)),
+                //         new RetroAlign(swerveSubsystem, limelight)),
                 new MoveArm(arm, armIntake, ArmSetpoints.STOW),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
 
