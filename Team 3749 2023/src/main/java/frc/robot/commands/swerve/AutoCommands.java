@@ -87,13 +87,12 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                new SequentialCommandGroup(
-                        Commands.waitSeconds(0.3),
-                        Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                                .withTimeout(0.15)),
+                Commands.waitSeconds(0.4),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.15),
                 path_1,
                 new ParallelDeadlineGroup(new SequentialCommandGroup(
-                        Commands.waitSeconds(0.3),
+                        Commands.waitSeconds(1),
                         Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                                 .withTimeout(0.15)),
                         new ApriltagAlign(swerveSubsystem, limelight)),
@@ -101,10 +100,11 @@ public final class AutoCommands {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.15),
                 // new ParallelDeadlineGroup(new SequentialCommandGroup(
-                //         Commands.waitSeconds(0.3),
-                //         Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                //                 .withTimeout(0.15)),
-                //         new RetroAlign(swerveSubsystem, limelight)),
+                // Commands.waitSeconds(0.3),
+                // Commands.run(() ->
+                // armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                // .withTimeout(0.15)),
+                // new RetroAlign(swerveSubsystem, limelight)),
                 new MoveArm(arm, armIntake, ArmSetpoints.STOW),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
 
