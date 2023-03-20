@@ -2,20 +2,22 @@ package frc.robot;
 
 import java.io.FileWriter;
 import java.io.IOException;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.swerve.*;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
+import frc.robot.commands.vision.VisionDefaultCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
@@ -23,19 +25,24 @@ import frc.robot.utils.Constants.AutoConstants.TopBottom;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
+    private final Xbox operator = new Xbox(1);
 
     // Subsystems
     private final Swerve swerve = new Swerve();
     private final ArmIntake armIntake = new ArmIntake();
     private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
+    private final Limelight limelight = new Limelight();
+
+    JoystickIO joystickOI = new JoystickIO(pilot, operator, swerve, armIntake, sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
+        DriverStation.removeRefreshedDataEventHandle(44000);
 
         configureDefaultCommands();
         configureButtonBindings();
-        configureAuto();
+        configureAuto(); 
 
         try {
             FileWriter writer = new FileWriter("data.csv", false);
@@ -50,40 +57,32 @@ public class RobotContainer {
      * Set default commands
      * 
      */
-    private void configureDefaultCommands() {
+    public void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveTeleopCommand(
                 swerve,
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
+        armIntake.setDefaultCommand(
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
+
         sideIntake.setDefaultCommand(
                 Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
+                
+        limelight.setDefaultCommand(new VisionDefaultCommand(limelight, swerve.getPoseEstimator()));
     }
 
     /**
      * Set controller button bindings
-     * 
      */
-    private void configureButtonBindings() {
-        // arm setpoints (buttons)
-        pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
-        pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
-        pilot.y().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CONE));
+    public void configureButtonBindings() {
 
-        // arm setpoints (bumpers)
-        pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
-        pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
+        if (!JoystickIO.didJoysticksChange())
+            return;
+        CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        // intake button bindings
-        pilot.rightTriggerWhileHeld(Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
-        pilot.leftTriggerWhileHeld(Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
-
-        // swerve button bindings
-        pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
+        joystickOI.getButtonBindings();
 
     }
 

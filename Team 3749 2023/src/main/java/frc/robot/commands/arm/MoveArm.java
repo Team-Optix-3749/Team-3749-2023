@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import edu.wpi.first.math.trajectory.Trajectory.State;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
@@ -38,7 +37,7 @@ public class MoveArm extends CommandBase {
     public MoveArm(Arm arm, ArmIntake intake, ArmSetpoints setpoint) {
         this.arm = arm;
         this.desiredSetpoint = setpoint;
-        // this.trajectory = trajectory;
+        setName(setpoint.toString() + " Trajectory");
         addRequirements(arm);
     }
 
@@ -49,7 +48,6 @@ public class MoveArm extends CommandBase {
         trajectoryIndex = 0;
         timer.reset();
         timer.start();
-        // System.out.println("START TRAJECTORY");
     }
 
     @Override
@@ -77,7 +75,6 @@ public class MoveArm extends CommandBase {
             // System.out.println("An error occurred.");
             // e.printStackTrace();
         }
-        // System.out.println(intakeVoltages[trajectoryIndex]);
         System.out.println(
                 String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
         logging();
@@ -107,11 +104,11 @@ public class MoveArm extends CommandBase {
     }
 
     public void logging() {
-        SmartDashboard.putNumber("CURRENT WAYPOINT X", desiredState.poseMeters.getTranslation().getX());
-        SmartDashboard.putNumber("CURRENT WAYPOINT Y", desiredState.poseMeters.getTranslation().getY());
-
-        SmartDashboard.putNumber("Arm Coordinate X", arm.getArmCoordinate().getX());
-        SmartDashboard.putNumber("Arm Coordinate Y", arm.getArmCoordinate().getY());
+        Constants.Arm.currWaypointX.set(desiredState.poseMeters.getTranslation().getX());
+        Constants.Arm.currWaypointY.set(desiredState.poseMeters.getTranslation().getY());
+        
+        Constants.Arm.armCoordinateX.set(arm.getArmCoordinate().getX());
+        Constants.Arm.armCoordinateY.set(arm.getArmCoordinate().getY());
     }
 
     /***

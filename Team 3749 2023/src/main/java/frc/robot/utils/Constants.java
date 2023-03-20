@@ -61,8 +61,7 @@ public class Constants {
     public static final class SideIntake {
         public static final int lift_motor_id = 23;
         public static final int side_intake_id = 24;
-        
-        public static final double idleVoltage = 1.5;
+        public static final double idleVoltage = 1;
         public static final double releaseObjectVoltage = -3;
         public static final double intakeVoltage = 6;
 
@@ -107,6 +106,11 @@ public class Constants {
 
         public static final double maxSpeedMPS = 7;
         public static final double maxAccelerationMPS = 10;
+
+        public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
+        public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
+        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X", 0.0);
+        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y", 0.0);
         
         public static enum ArmSetpoints {
             ZERO,
@@ -194,7 +198,6 @@ public class Constants {
         public static final double kAutoDriveMaxAngularAccelerationUnitsPerSecond = kTeleDriveMaxAngularAccelerationUnitsPerSecond
                 / 2;
 
-        
     }
 
     public static final class OIConstants {
@@ -202,7 +205,7 @@ public class Constants {
     }
 
     public static final class AutoBalancing {
-        public static final double max_yaw_offset = 2.2;
+        public static final double max_yaw_offset = 1.5;
         public static final double max_pitch_offset = 2;
         public static final double max_pitch_margin = 3;
         public static final double max_movement_offset = 0.025; // around 1 inch
@@ -246,8 +249,8 @@ public class Constants {
                 new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
                 new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
 
-        public static final Transform3d cam_to_robot =
-            new Transform3d(new Translation3d(0.0, -Units.inchesToMeters(7), -Units.inchesToMeters(18)), new Rotation3d());
+        public static final Transform3d cam_to_robot = new Transform3d(
+                new Translation3d(0.0, -Units.inchesToMeters(7), -Units.inchesToMeters(18)), new Rotation3d());
         public static final Transform3d robot_to_cam = cam_to_robot.inverse();
 
         public static final int reflective_tape_pipeline_index = 0;
@@ -256,19 +259,14 @@ public class Constants {
         public static final double camera_height = Units.inchesToMeters(20); // meters
         public static final double camera_yaw = 0;
         public static final double camera_pitch = 0;
-        // public static final double camera_pitch = -2.66	;
+        // public static final double camera_pitch = -2.66 ;
 
         public static final double retro_cam_offset = 0.56;
         public static final double apriltag_cam_offset = 3.1;
 
-        public static SmartData<Double> visionXKP = new SmartData<Double>("Vision X KP", 0.1);
-        public static SmartData<Double> visionYKP = new SmartData<Double>("Vision Y KP", 0.1);
-
         public static enum Nodes {
             MID_CONE(Units.inchesToMeters(22.125)),
-            TOP_CONE(0.0),
-            MID_CUBE(Units.inchesToMeters(14.25)),
-            TOP_CUBE(Units.inchesToMeters(14.25));
+            TOP_CONE(Units.inchesToMeters(41.5));
 
             public double height;
 

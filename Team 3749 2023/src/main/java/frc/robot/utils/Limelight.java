@@ -119,9 +119,9 @@ public class Limelight {
             PhotonTrackedTarget target = result.getBestTarget();
             SmartDashboard.putNumber("target pitch: ", getPitch(target));
             SmartDashboard.putNumber("target yaw (degrees): ", getYaw(target).getDegrees());
-            SmartDashboard.putNumber("target distance: ", getDistance(target, Constants.VisionConstants.Nodes.MID_CUBE));
-            SmartDashboard.putNumber("Target translation 2d X: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getX());
-            SmartDashboard.putNumber("Target translation 2d Y: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CUBE).getY());
+            SmartDashboard.putNumber("target distance: ", getDistance(target, Constants.VisionConstants.Nodes.MID_CONE));
+            SmartDashboard.putNumber("Target translation 2d X: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CONE).getX());
+            SmartDashboard.putNumber("Target translation 2d Y: ", getTranslation2d(target, Constants.VisionConstants.Nodes.MID_CONE).getY());
         }
     }
 

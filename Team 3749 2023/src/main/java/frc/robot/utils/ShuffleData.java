@@ -3,32 +3,35 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-/***
- * @author Rohan Juneja
+/**
  * @author Rohin Sood
  * 
- *         Stores data that can be seen/edited in Smart Dashboard
+ *         Stores data that can be seen/edited in ShuffleBoard
  * @param <T> Type of data: Supported types include String, Double, and Boolean
  */
-public class SmartData<T> {
+public class ShuffleData<T> {
     private T defaultVal;
-    private NetworkTableEntry entry;
+    private ShuffleboardTab tab;
+    private GenericEntry entry;
     private Map<Integer, T> lastHasChangedVals = new HashMap<>();
 
     /**
      * Creates a new SmartData instance
      * 
-     * @param name       Key on SmartDashboard
+     * @param tab        Tab on ShuffleBoard
+     * @param name       Key on ShuffleBoard
      * @param defaultVal Default value
      */
-    public SmartData(String name, T defaultVal) {
+    public ShuffleData(String tab, String name, T defaultVal) {
         this.defaultVal = defaultVal;
-        entry = NetworkTableInstance.getDefault().getTable("SmartDashboard").getEntry(name);
+        this.tab = Shuffleboard.getTab(tab);
+        this.entry = this.tab.add(name, defaultVal).getEntry();
         entry.setValue(defaultVal);
     }
 
@@ -38,7 +41,7 @@ public class SmartData<T> {
 
     @SuppressWarnings("unchecked")
     public T get() {
-        NetworkTableValue value = entry.getValue();
+        NetworkTableValue value = entry.get();
 
         if (value.getType() == NetworkTableType.kBoolean) {
             return (T) (Boolean) value.getBoolean();
@@ -77,5 +80,9 @@ public class SmartData<T> {
 
     public void set(T val) {
         entry.setValue(val);
+    }
+
+    public static void put() {
+        
     }
 }
