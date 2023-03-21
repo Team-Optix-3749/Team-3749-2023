@@ -110,30 +110,38 @@ public final class AutoCommands {
 
     }
 
-    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             TopBottom topBottom) {
         Alliance teamColor = DriverStation.getAlliance();
 
         PathPlannerTrajectory first;
+        PathPlannerTrajectory second;
         if (topBottom == TopBottom.TOP) {
             first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(2.5, 2.5));
+
         } else {
             first = PathPlanner.loadPath("BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-        }
 
+        }
         first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
+
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.5),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.5),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseCubeVoltage)).withTimeout(0.15),
+
+                new ParallelDeadlineGroup(new SequentialCommandGroup(
+                        Commands.waitSeconds(0.5),
+                        Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                                .withTimeout(0.1)),
+                        new ApriltagAlign(swerveSubsystem, limelight)),
+
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.15),
                 new MoveArm(arm, armIntake, ArmSetpoints.STOW));
     }
 
@@ -144,7 +152,7 @@ public final class AutoCommands {
         PathPlannerTrajectory first;
         PathPlannerTrajectory second;
         if (topBottom == TopBottom.TOP) {
-            first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(1, 1));
+            first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(2.5, 2.5));
             second = PathPlanner.loadPath("TOP 2 Piece 3 Piece",
                     new PathConstraints(2.0, 2.0));
         } else {
@@ -160,24 +168,27 @@ public final class AutoCommands {
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
+                Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.4),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
+                Commands.waitSeconds(0.5),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new ApriltagAlign(swerveSubsystem, limelight).withTimeout(1),
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(.5),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.15));
+
+                new ParallelDeadlineGroup(new SequentialCommandGroup(
+                        Commands.waitSeconds(0.5),
+                        Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                                .withTimeout(0.1)),
+                        new ApriltagAlign(swerveSubsystem, limelight)),
+
                 // path_2,
                 // new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
                 // Commands.waitSeconds(0.4),
-                // Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
-                // new MoveArm(arm, armIntake, ArmSetpoints.STOW));
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.15),
+                new MoveArm(arm, armIntake, ArmSetpoints.STOW));
 
     }
 
-    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             Constants.AutoConstants.TopBottom topBottom) {
         Alliance teamColor = DriverStation.getAlliance();
 
@@ -185,11 +196,11 @@ public final class AutoCommands {
         PathPlannerTrajectory second;
         if (topBottom == TopBottom.TOP) {
             first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(2.5, 2.5));
-            second = PathPlanner.loadPath("TOP 2 Piece Pickup Charge Station",
+            second = PathPlanner.loadPath("TOP 2 Piece - Charge",
                     new PathConstraints(2.5, 2.5));
         } else {
             first = PathPlanner.loadPath("BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-            second = PathPlanner.loadPath("BOTTOM 2 Piece Pickup Charge Station",
+            second = PathPlanner.loadPath("BOTTOM 2 Piece - Charge Station",
                     new PathConstraints(2.5, 2.5));
         }
 
@@ -201,14 +212,17 @@ public final class AutoCommands {
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.4),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.15),
-                path_1,
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.4),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseCubeVoltage)).withTimeout(0.15),
-                path_2);
+            Commands.waitSeconds(0.1),
+            new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+            Commands.waitSeconds(0.5),
+            Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+            path_1,
+            
+            new ParallelDeadlineGroup(new SequentialCommandGroup(
+                    Commands.waitSeconds(0.5),
+                    Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                            .withTimeout(0.1)),
+                    new ApriltagAlign(swerveSubsystem, limelight)),
+            path_2);
     }
-
 }
