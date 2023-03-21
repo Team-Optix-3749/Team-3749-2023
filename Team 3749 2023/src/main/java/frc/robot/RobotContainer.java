@@ -28,7 +28,7 @@ public class RobotContainer {
     private final Arm arm = new Arm();
     private final Limelight limelight = new Limelight();
 
-    JoystickIO joystickOI = new JoystickIO(pilot, operator, swerve, armIntake, sideIntake, arm);
+    JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, armIntake, sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -76,7 +76,7 @@ public class RobotContainer {
             return;
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickOI.getButtonBindings();
+        joystickIO.getButtonBindings();
 
     }
 
