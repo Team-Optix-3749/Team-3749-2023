@@ -9,12 +9,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
-import frc.robot.subsystems.led.LEDs;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.LEDs.LEDPattern;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -68,10 +69,12 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // arm setpoints (buttons)
-        pilot.a().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_MID));
-        pilot.x().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.GROUND_INTAKE));
-        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+        // pilot.a().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_TOP));
+        // pilot.b().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_MID));
+        // pilot.x().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.GROUND_INTAKE));
+        // pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+
+        pilot.aWhileHeld(() -> leds.setLEDPattern(LEDPattern.BLINK));
 
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.STING));

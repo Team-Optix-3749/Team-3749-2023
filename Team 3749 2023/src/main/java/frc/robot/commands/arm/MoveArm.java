@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.intake.ArmIntake;
-import frc.robot.subsystems.led.LEDs;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.LEDs.LEDsPattern;;
+import frc.robot.utils.Constants.LEDs.LEDPattern;;
 
 /***
  * @author Noah Simon
@@ -133,22 +133,22 @@ public class MoveArm extends CommandBase {
         // intake
         if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            leds.setLEDsPattern(LEDsPattern.GREEN);
+            leds.setLEDPattern(LEDPattern.GREEN);
             return ArmPaths.DOUBLESUB_TO_STOW;
         }
         if (currentSetpoint == ArmSetpoints.GROUND_INTAKE && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            leds.setLEDsPattern(LEDsPattern.GREEN);
+            leds.setLEDPattern(LEDPattern.GREEN);
             return ArmPaths.GROUND_INTAKE_TO_STOW;
         }
 
         switch (desiredSetpoint) {
             case PLACE_TOP:
-                leds.setLEDsPattern(LEDsPattern.BOUNCE);
+                leds.setLEDPattern(LEDPattern.BOUNCE);
 
                 // if already there, place and return
                 if (desiredSetpoint == currentSetpoint) {
-                    leds.setLEDsPattern(LEDsPattern.GREEN);
+                    leds.setLEDPattern(LEDPattern.GREEN);
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.TOP_TO_STOW;
                 }
@@ -169,10 +169,10 @@ public class MoveArm extends CommandBase {
                 }
 
             case PLACE_MID:
-                leds.setLEDsPattern(LEDsPattern.TWINKLE);
+                leds.setLEDPattern(LEDPattern.TWINKLE);
 
                 if (desiredSetpoint == currentSetpoint) {
-                    leds.setLEDsPattern(LEDsPattern.GREEN);
+                    leds.setLEDPattern(LEDPattern.GREEN);
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.MID_TO_STOW;
                 }
@@ -188,11 +188,11 @@ public class MoveArm extends CommandBase {
                 }
 
             case DOUBLE_SUBSTATION:
-                leds.setLEDsPattern(LEDsPattern.RAINBOW);
+                leds.setLEDPattern(LEDPattern.RAINBOW);
 
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    leds.setLEDsPattern(LEDsPattern.GREEN);
+                    leds.setLEDPattern(LEDPattern.GREEN);
                     return ArmPaths.DOUBLESUB_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.DOUBLE_SUBSTATION);
@@ -200,11 +200,11 @@ public class MoveArm extends CommandBase {
                 }
 
             case GROUND_INTAKE:
-                leds.setLEDsPattern(LEDsPattern.WHITE);
+                leds.setLEDPattern(LEDPattern.WHITE);
 
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    leds.setLEDsPattern(LEDsPattern.GREEN);
+                    leds.setLEDPattern(LEDPattern.GREEN);
                     return ArmPaths.GROUND_INTAKE_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE);
@@ -212,12 +212,12 @@ public class MoveArm extends CommandBase {
                 }
 
             case STING:
-                leds.setLEDsPattern(LEDsPattern.RED);
+                leds.setLEDPattern(LEDPattern.RED);
                 
                 arm.setCurrentSetpoint(ArmSetpoints.STING);
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    leds.setLEDsPattern(LEDsPattern.GREEN);
+                    leds.setLEDPattern(LEDPattern.GREEN);
                     return ArmPaths.STING_TO_STOW;
                 } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
                     return ArmPaths.TOP_TO_STING;
