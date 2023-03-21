@@ -75,7 +75,7 @@ public class Swerve extends SubsystemBase {
     private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
 
-    private final PIDController turnController = new PIDController(0.045, 0.00, 0);
+    private final PIDController turnController = new PIDController(0.0335, 0.00, 0);
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 

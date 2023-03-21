@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.subsystems.intake.SideIntake;
@@ -115,7 +116,8 @@ public class JoystickIO {
      */
     public void pilotBindings() {
         // arm setpoints (buttons)
-        pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+        pilot.aWhileHeld(new AutoBalancingPID(swerve));
+        // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));

@@ -55,7 +55,7 @@ public class AutoBalancingPID extends CommandBase {
     public void execute() {
 
         if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), 180)) {
-            swerve.turnToRotation(180);
+            swerve.turnToRotation(0);
         }
 
 

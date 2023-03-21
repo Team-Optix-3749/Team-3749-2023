@@ -200,7 +200,7 @@ public final class AutoCommands {
                     new PathConstraints(2.5, 2.5));
         } else {
             first = PathPlanner.loadPath("BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-            second = PathPlanner.loadPath("BOTTOM 2 Piece - Charge Station",
+            second = PathPlanner.loadPath("BOTTOM 2 Piece - Charge",
                     new PathConstraints(2.5, 2.5));
         }
 
@@ -209,20 +209,21 @@ public final class AutoCommands {
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, true, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-            Commands.waitSeconds(0.1),
-            new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-            Commands.waitSeconds(0.5),
-            Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
-            path_1,
+            // Commands.waitSeconds(0.1),
+            // new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+            // Commands.waitSeconds(0.5),
+            // Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+            // path_1,
             
-            new ParallelDeadlineGroup(new SequentialCommandGroup(
-                    Commands.waitSeconds(0.5),
-                    Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                            .withTimeout(0.1)),
-                    new ApriltagAlign(swerveSubsystem, limelight)),
-            path_2);
+            // new ParallelDeadlineGroup(new SequentialCommandGroup(
+            //         Commands.waitSeconds(0.5),
+            //         Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+            //                 .withTimeout(0.1)),
+            //         new ApriltagAlign(swerveSubsystem, limelight)),
+            path_2,
+            new AutoBalancingPID(swerveSubsystem));
     }
 }

@@ -83,7 +83,6 @@ public class MoveArm extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("ballsasjdhfkjashgfjshgfashdfhgasd");
         // intake.setVoltage(Constants.ArmIntake.idleVoltage);
     }
 
@@ -98,6 +97,7 @@ public class MoveArm extends CommandBase {
                 timer.reset();
                 timer.start();
             } else {
+                
                 return true;
             }
         }

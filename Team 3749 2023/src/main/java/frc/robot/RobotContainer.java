@@ -90,7 +90,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getThreePiece(swerve, arm, armIntake, limelight,
+        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight,
                 TopBottom.TOP);
         // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
         // TopBottom.TOP);
