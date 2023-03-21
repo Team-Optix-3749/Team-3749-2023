@@ -27,13 +27,6 @@ public class LEDs extends SubsystemBase {
         LEDs.start();
     }
 
-    private void rainbowLEDs(){
-        setHSV(hue++, 255, 255);
-        if(hue >= 180){
-            hue = 0;
-        }          
-    }
-
     /**
      * Set RGB values
      * 
@@ -58,6 +51,13 @@ public class LEDs extends SubsystemBase {
         for(int led = 0; led < LEDBuffer.getLength(); led++){
             LEDBuffer.setHSV(led, hue, saturation, value);
         }
+    }
+
+    private void rainbowLEDs(){
+        setHSV(hue++, 255, 255);
+        if(hue >= 180){
+            hue = 0;
+        }          
     }
 
     private void twinkleLEDs(){
@@ -98,9 +98,10 @@ public class LEDs extends SubsystemBase {
 
         for (int i= 0; i < led_max; i++) {
             if (blink) {
-                setHSV(100, 0, 0);
+                setLEDPattern(LEDPattern.GREEN);
+                setHSV(180, 255, 255);
             } else {
-                setHSV(0, 0, 0);
+                setHSV(0, 255, 255);
             }
         }
 
