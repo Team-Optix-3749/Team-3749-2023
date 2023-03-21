@@ -19,11 +19,12 @@ import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants.Nodes;
 
 /**
- * Using the target Translation2d, drive to the predetermined setpoint using PIDControllers
+ * Using the target Translation2d, drive to the predetermined setpoint using
+ * PIDControllers
  * 
  * @author Rohin Sood
  */
-public class RetroAlign extends CommandBase {
+public class AlignRetro extends CommandBase {
     private final Swerve swerve;
     private final Limelight limelight;
 
@@ -36,17 +37,21 @@ public class RetroAlign extends CommandBase {
 
     private final PIDController xController = new PIDController(0.0, 0, 0);
     private final PIDController yController = new PIDController(0.0, 0, 0);
+    private final PIDController turnController = new PIDController(2.6, 0, 0);
 
-    public RetroAlign(Swerve swerve, Limelight limelight) {
+    public AlignRetro(Swerve swerve, Limelight limelight) {
         this.swerve = swerve;
         this.limelight = limelight;
-        addRequirements(swerve);
         this.setName("Vision Align");
+        turnController.enableContinuousInput(-Math.PI, Math.PI);
+        addRequirements(swerve, limelight);
     }
 
     @Override
     public void initialize() {
         limelight.setLED(VisionLEDMode.kOn);
+        limelight.setPipeline(2);
+        // limelight.setPipeline(1); // alexs garage
 
         xController.setSetpoint(setpoint.getX());
         xController.setTolerance(0.1);
@@ -71,36 +76,35 @@ public class RetroAlign extends CommandBase {
             // if more than one target is found, its obviously not detecting pieces of
             // reflective tape that should be on the field and the rest of the command
             // should not be run
-            if (targetList.size() > 1) {
-                System.out.println("Detecting too many targets");
+            if (targetList.size() > 1 || targetList.isEmpty()) {
+                System.out.println("targets detected: " + targetList.size());
                 return;
             }
 
-            if (!targetList.isEmpty()) {
+            var target = targetList.get(0);
 
-                var target = targetList.get(0);
+            lastTarget = target;
 
-                lastTarget = target;
+            var targetTranslation = limelight.getTranslation2d(target, Nodes.TOP_CONE);
 
-                var targetTranslation = limelight.getTranslation2d(target, Nodes.TOP_CONE);
+            SmartDashboard.putNumber("Target X", targetTranslation.getX());
+            SmartDashboard.putNumber("Target Y", targetTranslation.getY());
 
-                SmartDashboard.putNumber("Target X", targetTranslation.getX());
-                SmartDashboard.putNumber("Target Y", targetTranslation.getY());
+            // getX() is vertical, getY() is horizontal
+            double xSpeed = xController.calculate(targetTranslation.getX());
+            double ySpeed = yController.calculate(targetTranslation.getY());
+            double thetaSpeed = turnController.calculate(swerve.getHeading());
 
-                // getX() is vertical, getY() is horizontal
-                double xSpeed = xController.calculate(targetTranslation.getX());
-                double ySpeed = yController.calculate(targetTranslation.getY());
+            SmartDashboard.putNumber("X Speed", xSpeed);
+            SmartDashboard.putNumber("Y Speed", ySpeed);
+            SmartDashboard.putNumber("theta Speed", thetaSpeed);
 
-                SmartDashboard.putNumber("X Speed", xSpeed);
-                SmartDashboard.putNumber("Y Speed", ySpeed);
+            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed,
+                    ySpeed, thetaSpeed, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
+            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                    .toSwerveModuleStates(chassisSpeeds);
 
-                ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed,
-                        ySpeed, 0.0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
-                SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-                        .toSwerveModuleStates(chassisSpeeds);
-
-                swerve.setModuleStates(moduleStates);
-            }
+            // swerve.setModuleStates(moduleStates);
         } else {
             System.out.println("Reflective tape not found");
         }

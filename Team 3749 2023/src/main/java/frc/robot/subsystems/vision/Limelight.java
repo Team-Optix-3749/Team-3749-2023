@@ -43,9 +43,12 @@ public class Limelight extends SubsystemBase {
     private final PhotonCamera camera = new PhotonCamera("limelight");
     private AprilTagFieldLayout aprilTagFieldLayout;
     private PhotonPoseEstimator photonPoseEstimator;
+    private ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
 
     private final NetworkTable photonTable = NetworkTableInstance.getDefault().getTable("photonvision");
     private final NetworkTableEntry ledMode = photonTable.getEntry("ledMode");
+    private final NetworkTableEntry ledModeState = photonTable.getEntry("ledModeState");
+    private final NetworkTableEntry ledModeRequest = photonTable.getEntry("ledModeRequest");
 
     private final HttpCamera raw;
     private final HttpCamera processed;
@@ -56,6 +59,8 @@ public class Limelight extends SubsystemBase {
             "Target Translation2d X (MID)", 0.0);
     private final ShuffleData<Double> targetTranslationY = new ShuffleData<Double>("Limelight",
             "Target Translation2d Y (MID)", 0.0);
+    private final ShuffleData<Integer> pipeline = new ShuffleData<Integer>("Limelight",
+            "Pipeline", -1000);
 
     public Limelight() {
         try {
@@ -66,8 +71,17 @@ public class Limelight extends SubsystemBase {
             System.out.println(e);
         }
 
-        raw = new HttpCamera("Raw", "http://10.37.49.2:1181/?action=stream");
-        processed = new HttpCamera("Raw", "http://10.37.49.2:1182/?action=stream");
+        raw = new HttpCamera("Raw", "http://photonvision.local:1181/stream.mjpg?1679365741443");
+        processed = new HttpCamera("Processed", "http://photonvision.local:1182/stream.mjpg?1679365741443stream");
+        
+        CameraServer.addCamera(raw);
+        CameraServer.addCamera(processed);
+
+        // add HttpCameras
+        limelightTab.add(raw).withWidget(BuiltInWidgets.kCameraStream).withPosition(0, 0)
+                .withSize(5, 4).withProperties(Map.of("Show controls", false));
+        limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
+                .withSize(5, 4).withProperties(Map.of("Show controls", false));
 
         setLED(VisionLEDMode.kOff);
     }
@@ -146,15 +160,23 @@ public class Limelight extends SubsystemBase {
         switch (ledMode) {
             case kOn:
                 this.ledMode.setInteger(1);
+                ledModeState.setInteger(1);
+                ledModeRequest.setInteger(1);
                 break;
             case kOff:
                 this.ledMode.setInteger(0);
+                ledModeState.setInteger(0);
+                ledModeRequest.setInteger(0);
                 break;
             case kBlink:
                 this.ledMode.setInteger(2);
+                ledModeState.setInteger(2);
+                ledModeRequest.setInteger(2);
                 break;
             default:
                 this.ledMode.setInteger(-1);
+                ledModeState.setInteger(-1);
+                ledModeRequest.setInteger(-1);
                 break;
         }
         camera.setLED(ledMode);
@@ -191,17 +213,6 @@ public class Limelight extends SubsystemBase {
 
     public void logging() {
 
-        ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
-
-        CameraServer.addCamera(raw);
-        CameraServer.addCamera(processed);
-
-        // add HttpCameras
-        limelightTab.add(raw).withWidget(BuiltInWidgets.kCameraStream).withPosition(0, 0)
-                .withSize(5, 4).withProperties(Map.of("Show controls", false));
-        limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
-                .withSize(5, 4).withProperties(Map.of("Show controls", false));
-
         var result = getLatestResult();
 
         if (result.hasTargets()) {
@@ -213,6 +224,8 @@ public class Limelight extends SubsystemBase {
             targetTranslationX.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getX());
             targetTranslationY.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getY());
         }
+
+        pipeline.set(getPipeline());
 
     }
 

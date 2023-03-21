@@ -28,6 +28,7 @@ public class VisionDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
+        limelight.setPipeline(0);
         limelight.updatePoseAprilTags(swervePoseEstimator);
 
     }

@@ -32,16 +32,12 @@ public class AlignHeading extends CommandBase {
         swerve.stopModules();
         turnController.setTolerance(2.2);
         turnController.setSetpoint(0.0);
+        turnController.enableContinuousInput(-180, 180);
     }
 
     @Override
     public void execute() {
         heading = swerve.getHeading();
-
-        System.out.println("margin " + Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0.0));
-        System.out.println("turn " + turnController.atSetpoint());
-        System.out.println("turn error" + turnController.getPositionError());
-        System.out.println("turn setpoint" + turnController.getSetpoint());
 
         if (atGoal())
             return;
@@ -69,16 +65,15 @@ public class AlignHeading extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerve.stopModules();
-        System.out.println("tang finished");
     }
-
+    
     @Override
     public boolean isFinished() {
         return atGoal();
     }
-
+    
     public boolean atGoal() {
-        return Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0.0)
-                || turnController.atSetpoint();
+        System.out.println("ATL GAOL");
+        return Math.abs(heading) < 2.2 || turnController.atSetpoint();
     }
 }

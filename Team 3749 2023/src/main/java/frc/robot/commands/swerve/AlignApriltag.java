@@ -29,7 +29,7 @@ import frc.robot.subsystems.vision.Limelight;
  * 
  * @author Rohin Sood
  */
-public class ApriltagAlign extends CommandBase {
+public class AlignApriltag extends CommandBase {
 
     private static final Transform3d tagToGoal = new Transform3d(
             new Translation3d(0.75, 0.05, 0.0),
@@ -59,17 +59,18 @@ public class ApriltagAlign extends CommandBase {
 
     private Pose2d goalPose;
 
-    public ApriltagAlign(Swerve swerve, Limelight limelight) {
+    public AlignApriltag(Swerve swerve, Limelight limelight, Node node) {
         this.swerve = swerve;
         this.limelight = limelight;
+        this.node = node;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
-        this.turnController.enableContinuousInput(-Math.PI, Math.PI);
         addRequirements(swerve);
     }
-
+    
     @Override
     public void initialize() {
-
+        limelight.setPipeline(0);
+        turnController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override

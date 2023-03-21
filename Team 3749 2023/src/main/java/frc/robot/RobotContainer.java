@@ -28,7 +28,7 @@ public class RobotContainer {
     private final Arm arm = new Arm();
     private final Limelight limelight = new Limelight();
 
-    JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, armIntake, sideIntake, arm);
+    private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, armIntake, sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
