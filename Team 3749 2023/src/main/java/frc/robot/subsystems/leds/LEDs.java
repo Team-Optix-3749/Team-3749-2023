@@ -3,6 +3,8 @@ package frc.robot.subsystems.leds;
 import java.util.Random;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -14,7 +16,7 @@ import frc.robot.utils.Constants.LEDs.LEDPattern;
  * @author Rohin Sood
  */
 public class LEDs extends SubsystemBase {
-    private LEDPattern currentLEDPattern = LEDPattern.GREEN;
+    private LEDPattern currentLEDPattern = getDefaultColor();
     private AddressableLED LEDs = new AddressableLED(Constants.LEDs.pwm_port);
     private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDs.length);
     private int hue = 0;
@@ -25,6 +27,10 @@ public class LEDs extends SubsystemBase {
         LEDs.setLength(LEDBuffer.getLength());
         LEDs.setData(LEDBuffer);
         LEDs.start();
+    }
+
+    public LEDPattern getDefaultColor() {
+        return DriverStation.getAlliance() == Alliance.Blue ? LEDPattern.BLUE : LEDPattern.RED;
     }
 
     /**
@@ -72,7 +78,7 @@ public class LEDs extends SubsystemBase {
         /* Grab random led ten times */
         for(int i = 0; i < 30; i++){
             /* Set to lower value */
-            LEDBuffer.setHSV(rand.nextInt(led_max),100, 255, rand.nextInt(255));
+            LEDBuffer.setRGB(rand.nextInt(led_max), 0, 255, 0);
         }
     }
 
@@ -99,7 +105,6 @@ public class LEDs extends SubsystemBase {
         for (int i= 0; i < led_max; i++) {
             if (blink) {
                 setLEDPattern(LEDPattern.GREEN);
-                setHSV(180, 255, 255);
             } else {
                 setHSV(0, 255, 255);
             }

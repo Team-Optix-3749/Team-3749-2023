@@ -133,12 +133,12 @@ public class MoveArm extends CommandBase {
         // intake
         if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            leds.setLEDPattern(LEDPattern.GREEN);
+            leds.setLEDPattern(leds.getDefaultColor());
             return ArmPaths.DOUBLESUB_TO_STOW;
         }
         if (currentSetpoint == ArmSetpoints.GROUND_INTAKE && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            leds.setLEDPattern(LEDPattern.GREEN);
+            leds.setLEDPattern(leds.getDefaultColor());
             return ArmPaths.GROUND_INTAKE_TO_STOW;
         }
 
@@ -148,7 +148,7 @@ public class MoveArm extends CommandBase {
 
                 // if already there, place and return
                 if (desiredSetpoint == currentSetpoint) {
-                    leds.setLEDPattern(LEDPattern.GREEN);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.TOP_TO_STOW;
                 }
@@ -169,10 +169,10 @@ public class MoveArm extends CommandBase {
                 }
 
             case PLACE_MID:
-                leds.setLEDPattern(LEDPattern.TWINKLE);
+                leds.setLEDPattern(LEDPattern.BOUNCE);
 
                 if (desiredSetpoint == currentSetpoint) {
-                    leds.setLEDPattern(LEDPattern.GREEN);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.MID_TO_STOW;
                 }
@@ -188,11 +188,11 @@ public class MoveArm extends CommandBase {
                 }
 
             case DOUBLE_SUBSTATION:
-                leds.setLEDPattern(LEDPattern.RAINBOW);
+                leds.setLEDPattern(LEDPattern.TWINKLE);
 
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    leds.setLEDPattern(LEDPattern.GREEN);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     return ArmPaths.DOUBLESUB_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.DOUBLE_SUBSTATION);
@@ -204,7 +204,7 @@ public class MoveArm extends CommandBase {
 
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    leds.setLEDPattern(LEDPattern.GREEN);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     return ArmPaths.GROUND_INTAKE_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE);
@@ -212,12 +212,12 @@ public class MoveArm extends CommandBase {
                 }
 
             case STING:
-                leds.setLEDPattern(LEDPattern.RED);
+                leds.setLEDPattern(LEDPattern.RAINBOW);
                 
                 arm.setCurrentSetpoint(ArmSetpoints.STING);
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    leds.setLEDPattern(LEDPattern.GREEN);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     return ArmPaths.STING_TO_STOW;
                 } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
                     return ArmPaths.TOP_TO_STING;

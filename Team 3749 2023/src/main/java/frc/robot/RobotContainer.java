@@ -69,12 +69,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // arm setpoints (buttons)
-        // pilot.a().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_TOP));
-        // pilot.b().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_MID));
-        // pilot.x().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.GROUND_INTAKE));
-        // pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
-
-        pilot.aWhileHeld(() -> leds.setLEDPattern(LEDPattern.BLINK));
+        pilot.a().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_TOP));
+        pilot.b().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.PLACE_MID));
+        pilot.x().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.GROUND_INTAKE));
+        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, leds, armIntake, ArmSetpoints.STING));
