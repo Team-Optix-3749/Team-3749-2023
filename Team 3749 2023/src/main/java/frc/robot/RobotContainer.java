@@ -32,7 +32,7 @@ public class RobotContainer {
     private final LEDs leds = new LEDs();
     private final Limelight limelight = new Limelight();
 
-    private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, armIntake, sideIntake, arm);
+    private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake, sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);

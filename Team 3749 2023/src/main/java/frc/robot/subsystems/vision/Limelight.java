@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.VisionConstants;
+import frc.robot.utils.Constants.VisionConstants.Node;
 
 /**
  * Encapsulated PhotonCamera object used in posed estimation and alignment
@@ -130,15 +131,15 @@ public class Limelight extends SubsystemBase {
         return target.getPoseAmbiguity();
     }
 
-    public double getDistance(PhotonTrackedTarget target, VisionConstants.Nodes node) {
+    public double getDistance(PhotonTrackedTarget target, Node node) {
         return PhotonUtils.calculateDistanceToTargetMeters(
                 Constants.VisionConstants.camera_height,
-                node.height,
+                node.height_meters,
                 Constants.VisionConstants.camera_pitch,
                 Units.degreesToRadians(getPitch(target)));
     }
 
-    public Translation2d getTranslation2d(PhotonTrackedTarget target, VisionConstants.Nodes node) {
+    public Translation2d getTranslation2d(PhotonTrackedTarget target, Node node) {
         return PhotonUtils.estimateCameraToTargetTranslation(
                 getDistance(target, node), getYaw(target));
     }
@@ -221,8 +222,8 @@ public class Limelight extends SubsystemBase {
             targetPitch.set(getPitch(target));
             targetYaw.set(getYaw(target).getDegrees());
 
-            targetTranslationX.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getX());
-            targetTranslationY.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getY());
+            targetTranslationX.set(getTranslation2d(target, Node.MID_CONE).getX());
+            targetTranslationY.set(getTranslation2d(target, Node.MID_CONE).getY());
         }
 
         pipeline.set(getPipeline());

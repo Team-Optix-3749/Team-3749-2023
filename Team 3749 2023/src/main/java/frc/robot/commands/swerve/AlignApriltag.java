@@ -3,6 +3,8 @@ package frc.robot.commands.swerve;
 import frc.robot.utils.Constants;
 import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants;
+import frc.robot.utils.Constants.VisionConstants.Node;
+
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -31,9 +33,7 @@ import frc.robot.subsystems.vision.Limelight;
  */
 public class AlignApriltag extends CommandBase {
 
-    private static final Transform3d tagToGoal = new Transform3d(
-            new Translation3d(0.75, 0.05, 0.0),
-            new Rotation3d(0.0, 0.0, Math.PI));
+    private Transform3d tagToGoal;
 
     private final Swerve swerve;
     private final Limelight limelight;
@@ -62,8 +62,18 @@ public class AlignApriltag extends CommandBase {
     public AlignApriltag(Swerve swerve, Limelight limelight, Node node) {
         this.swerve = swerve;
         this.limelight = limelight;
-        this.node = node;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
+
+        if (node == Node.CUBE) {
+            tagToGoal = new Transform3d(
+                new Translation3d(0.75, 0.05, 0.0),
+                new Rotation3d(0.0, 0.0, Math.PI));
+        } else {
+            tagToGoal = new Transform3d(
+                new Translation3d(0.75, 100000, 0.0), // change Y
+                new Rotation3d(0.0, 0.0, Math.PI));
+        }
+
         addRequirements(swerve);
     }
     

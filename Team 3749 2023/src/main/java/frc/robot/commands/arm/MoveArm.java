@@ -36,7 +36,7 @@ public class MoveArm extends CommandBase {
     private ArmPaths trajectoryInformation;
     private int trajectoryIndex = 0;
 
-    public MoveArm(Arm arm, LEDs leds, ArmIntake intake, LEDs, leds, ArmSetpoints setpoint) {
+    public MoveArm(Arm arm, ArmIntake intake, LEDs leds, ArmSetpoints setpoint) {
         this.arm = arm;
         this.intake = intake;
         this.desiredSetpoint = setpoint;
