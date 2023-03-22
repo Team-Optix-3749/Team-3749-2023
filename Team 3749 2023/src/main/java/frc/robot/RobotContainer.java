@@ -33,7 +33,7 @@ public class RobotContainer {
     private final Arm arm = new Arm();
     private final Limelight limelight = new Limelight();
 
-    JoystickIO joystickOI = new JoystickIO(pilot, operator, swerve, armIntake, sideIntake, arm);
+    JoystickIO joystickOI = new JoystickIO(pilot, operator, swerve, limelight, armIntake, sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -90,8 +90,9 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight,
-                TopBottom.TOP);
+        return AutoCommands.getTest(swerve, arm, armIntake, limelight, TopBottom.TOP);
+        // return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight,
+        //         TopBottom.TOP);
         // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
         // TopBottom.TOP);
         // return AutoCommands.getThreePiece(swerve, arm, armIntake,

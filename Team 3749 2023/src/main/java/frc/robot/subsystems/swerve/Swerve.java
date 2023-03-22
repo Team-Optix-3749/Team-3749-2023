@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -125,7 +126,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getAutoHeading() {
-        // return Math.IEEEremainder(gyro.getAngle(), 360);
+        
         return new Rotation2d(Math.toRadians(gyro.getYaw()))
                 .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees();
     }
@@ -135,6 +136,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d getAutoRotation2d() {
+        
         return Rotation2d.fromDegrees(-getAutoHeading());
 
     }
@@ -148,6 +150,7 @@ public class Swerve extends SubsystemBase {
                 ? getAutoRotation2d()
                 : getRotation2d();
         Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
+
 
         return new Pose2d(estimatedPose.getTranslation(), rotation);
     }
@@ -171,7 +174,8 @@ public class Swerve extends SubsystemBase {
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
 
-    }
+    } 
+    // init - | final - init (14)|
 
     public SwerveDrivePoseEstimator getPoseEstimator() {
         return swerveDrivePoseEstimator;

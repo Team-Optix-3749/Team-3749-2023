@@ -1,5 +1,8 @@
 package frc.robot.commands.swerve;
 
+import java.sql.Driver;
+import java.util.spi.ToolProvider;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -65,6 +68,33 @@ public final class AutoCommands {
                         swerveSubsystem // Requires this drive subsystem
                 ));
     }
+    public static Command getWait(){
+        System.out.println(DriverStation.getAlliance());
+        return new WaitCommand(1);
+    }
+    
+    public static Command getTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
+            Constants.AutoConstants.TopBottom topBottom) {
+        Alliance teamColor = DriverStation.getAlliance();
+
+        PathPlannerTrajectory first = PathPlanner.loadPath("pickup", new PathConstraints(1, 1));
+        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first,
+                teamColor);
+
+        
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first,
+                true,  swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+
+
+        return new SequentialCommandGroup(
+
+                path_1);
+        
+
+
+    }
+
 
     public static Command getAlexHouse(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             Constants.AutoConstants.TopBottom topBottom) {
@@ -209,20 +239,20 @@ public final class AutoCommands {
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, true, swerveSubsystem),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-            // Commands.waitSeconds(0.1),
-            // new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-            // Commands.waitSeconds(0.5),
-            // Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
-            // path_1,
+            Commands.waitSeconds(0.1),
+            new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+            Commands.waitSeconds(0.5),
+            Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+            path_1,
             
-            // new ParallelDeadlineGroup(new SequentialCommandGroup(
-            //         Commands.waitSeconds(0.5),
-            //         Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-            //                 .withTimeout(0.1)),
-            //         new ApriltagAlign(swerveSubsystem, limelight)),
+            new ParallelDeadlineGroup(new SequentialCommandGroup(
+                    Commands.waitSeconds(0.5),
+                    Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                            .withTimeout(0.1)),
+                    new ApriltagAlign(swerveSubsystem, limelight)),
             path_2,
             new AutoBalancingPID(swerveSubsystem));
     }

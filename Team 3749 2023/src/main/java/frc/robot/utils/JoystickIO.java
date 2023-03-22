@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.swerve.ApriltagAlign;
 import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.subsystems.intake.SideIntake;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 /**
@@ -32,12 +34,14 @@ public class JoystickIO {
     private Xbox operator;
 
     private Swerve swerve;
+    private Limelight limelight;
     private ArmIntake armIntake;
     private SideIntake sideIntake;
     private Arm arm;
 
-    public JoystickIO(Xbox pilot, Xbox operator, Swerve swerve, ArmIntake armIntake, SideIntake sideIntake, Arm arm) {
+    public JoystickIO(Xbox pilot, Xbox operator, Swerve swerve, Limelight limelight, ArmIntake armIntake, SideIntake sideIntake, Arm arm) {
         this.pilot = pilot;
+        this.limelight = limelight;
         this.operator = operator;
         this.swerve = swerve;
         this.armIntake = armIntake;
@@ -116,7 +120,7 @@ public class JoystickIO {
      */
     public void pilotBindings() {
         // arm setpoints (buttons)
-        pilot.aWhileHeld(new AutoBalancingPID(swerve));
+        pilot.aWhileHeld(new ApriltagAlign(swerve, limelight));
         // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
