@@ -28,7 +28,7 @@ import frc.robot.utils.Constants.ModuleConstants;
  *         motor, a turning motor, a drive encoder, and an Absolute CanCoder
  * 
  */
-public class SwerveModuleIOSparkMax implements SwerveModuleIO{
+public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
 
