@@ -5,7 +5,6 @@
 package frc.robot.subsystems.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -17,9 +16,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
 
 /***
@@ -32,7 +31,6 @@ import frc.robot.utils.Constants.DriveConstants;
  *         and set their states. Also includes a pose estimator, gyro, and
  *         logging information
  */
-
 public class Swerve extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -71,12 +69,17 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    // equivilant to a odometer, but also intakes vision
+
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
     private final PIDController turnController = new PIDController(0.045, 0.00, 0);
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
+
+    private ShuffleData<Double> robotHeading = new ShuffleData<Double>("Swerve", "Robot Heading", 0.0);
+    private ShuffleData<Double> pitch = new ShuffleData<Double>("Swerve", "Robot Pitch", 0.0);
+    private ShuffleData<Double> robotPoseX = new ShuffleData<Double>("Swerve", "Robot Pose X", 0.0);
+    private ShuffleData<Double> robotPoseY = new ShuffleData<Double>("Swerve", "Robot Pose Y", 0.0);
 
     public Swerve() {
         new Thread(() -> {
@@ -86,14 +89,31 @@ public class Swerve extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+
         swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
                 new Rotation2d(0),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() },
                 new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
+        // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
         gyro.calibrate();
-        turnController.enableContinuousInput(-180,180);
+        turnController.enableContinuousInput(-180, 180);
+    }
+
+    public void drive(double xSpeed, double ySpeed, double thetaSpeed) {
+
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, xSpeed, 0, getRotation2d());
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
+
+        setModuleStates(moduleStates);
+    }
+
+    public void stop() {
+
+        drive(0, 0, 0);
     }
 
     public void zeroHeading() {
@@ -101,7 +121,6 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getHeading() {
-        // return Math.IEEEremainder(gyro.getAngle(), 360);
         return gyro.getYaw();
     }
 
@@ -122,18 +141,15 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
+        // update pose estimation using encoders and gyro
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
+
     }
 
-    @Override
-    public void periodic() {
-        updateOdometry();
-        SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putNumber("pitch", getVerticalTilt());
-        SmartDashboard.putNumber("Robot Pose X", getPose().getX());
-        SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
+    public SwerveDrivePoseEstimator getPoseEstimator() {
+        return swerveDrivePoseEstimator;
     }
 
     public void stopModules() {
@@ -150,6 +166,7 @@ public class Swerve extends SubsystemBase {
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
     }
+
     /***
      * 
      * @param angle the angle to move at, in degrees, -180 to 180
@@ -172,42 +189,49 @@ public class Swerve extends SubsystemBase {
         // 6. Output each module states to wheels
         setModuleStates(moduleStates);
     }
-    /***
 
+    /***
+     * 
      * @param angle the rotational angle to move to, -180 to 180
      */
-    public void turnToRotation(double angle){
-            SmartDashboard.putNumber("ANGLE SETPOINT", angle);  
+    public void turnToRotation(double angle) {
+        // negative so that we move towards the target, not away
+        double turning_speed = -turnController.calculate(getHeading(), angle);
+        turning_speed = turningLimiter.calculate(turning_speed);
+        // signs the speed so we move in the correct direction
+        // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
 
-            // negative so that we move towards the target, not away
-            double turning_speed = -turnController.calculate(getHeading(), angle);
-            turning_speed = turningLimiter.calculate(turning_speed);
-            // signs the speed so we move in the correct direction
-            // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
-
-
-            SmartDashboard.putNumber("SPEEEEED", turning_speed);
-            // 4. Construct desired chassis speeds
-            ChassisSpeeds chassisSpeeds;
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turning_speed, getRotation2d());
-            // 5. Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-                    .toSwerveModuleStates(chassisSpeeds);
-            // 6. Output each module states to wheels
-            setModuleStates(moduleStates);
+        // 4. Construct desired chassis speeds
+        ChassisSpeeds chassisSpeeds;
+        // Relative to field
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, 0, turning_speed, getRotation2d());
+        // 5. Convert chassis speeds to individual module states
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
+        // 6. Output each module states to wheels
+        setModuleStates(moduleStates);
     }
 
     public double getVerticalTilt() {
         return gyro.getPitch();
     }
-    
-    public PIDController getTurnController(){
+
+    public PIDController getTurnController() {
         return turnController;
     }
 
-    public SlewRateLimiter getTurnLimiter(){
+    public SlewRateLimiter getTurnLimiter() {
         return turningLimiter;
+    }
+
+    @Override
+    public void periodic() {
+        updateOdometry();
+
+        robotHeading.set(getHeading());
+        pitch.set(getVerticalTilt());
+        robotPoseX.set(getPose().getX());
+        robotPoseY.set(getPose().getY());
     }
 }

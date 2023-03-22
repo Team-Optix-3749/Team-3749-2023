@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutoBalancingPID extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    Swerve swerve;
+    private final Swerve swerve;
 
     private final PIDController controller = new PIDController(0.003, 0, 0.00075);
 
@@ -32,9 +32,9 @@ public class AutoBalancingPID extends CommandBase {
     private double start_time_balanced = 0;
 
     // Initializes the BaseCommand
-    public AutoBalancingPID(Swerve swerve) {
-        this.swerve = swerve;
-        addRequirements(swerve);
+    public AutoBalancingPID(Swerve swerveSubsystem) {
+        this.swerve = swerveSubsystem;
+        addRequirements(swerveSubsystem);
     }
 
     // Run on command init
@@ -66,7 +66,7 @@ public class AutoBalancingPID extends CommandBase {
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
         if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, heading, 0) && !has_aligned) {
-            swerve.turnToRotation(0);            
+            swerve.turnToRotation(0);
         }
 
         // move forward if the angle hasn't started to move and it hasn't moved in the
