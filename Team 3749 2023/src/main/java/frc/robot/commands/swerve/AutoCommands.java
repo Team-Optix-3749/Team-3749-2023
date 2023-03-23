@@ -54,7 +54,7 @@ public final class AutoCommands {
                 }),
                 new PPSwerveControllerCommand(
                         traj,
-                        () -> swerveSubsystem.getAutoPose(traj.getInitialHolonomicPose()), // Pose supplier
+                        () -> swerveSubsystem.getPose(), // Pose supplier
                         Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
                         new PIDController(1.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0
                                                       // will only use feedforwards.
@@ -76,9 +76,8 @@ public final class AutoCommands {
     public static Command getTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight) {
         Alliance teamColor = DriverStation.getAlliance();
 
-        PathPlannerTrajectory first = PathPlanner.loadPath("pickup", new PathConstraints(1, 1));
-        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first,
-                teamColor);
+        PathPlannerTrajectory first = PathPlanner.loadPath("OOF", new PathConstraints(1, 1));
+
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first,
                 true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
@@ -111,14 +110,12 @@ public final class AutoCommands {
             }
         }
 
-
-        // first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
-
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
+                new MoveArm(arm, armIntake, ArmSetpoints.STING),
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
@@ -215,7 +212,7 @@ public final class AutoCommands {
                 ),  
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new ApriltagAlign(swerveSubsystem, limelight).withTimeout(0.8),
+                new ApriltagAlign(swerveSubsystem, limelight).withTimeout(3),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                 .withTimeout(0.1),
                 path_2,

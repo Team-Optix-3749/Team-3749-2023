@@ -147,36 +147,18 @@ public class Swerve extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        Rotation2d rotation = DriverStation.isAutonomous()
-                ? getAutoRotation2d()
+        Rotation2d rotation = DriverStation.getAlliance()==Alliance.Blue
+                ? (DriverStation.isAutonomous() ? getAutoRotation2d() : getRotation2d())
                 : getRotation2d();
         Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
 
         return new Pose2d(estimatedPose.getTranslation(), rotation);
     }
 
-    public Pose2d getAutoPose(Pose2d initialPose) {
-
-        Rotation2d rotation = DriverStation.isAutonomous()
-                ? getAutoRotation2d()
-                : getRotation2d();
-        Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
-
-        // init - | final - init (14)|
-        Pose2d newPose = DriverStation.getAlliance() == Alliance.Blue
-                ? new Pose2d(estimatedPose.getTranslation(), rotation)
-                : new Pose2d(
-                        new Translation2d(estimatedPose.getX(),
-                                initialPose.getY() - Math.abs(estimatedPose.getY() - initialPose.getY())),
-                        rotation);
-
-        return newPose;
-
-    }
 
     public void resetOdometry(Pose2d pose) {
-        Rotation2d rotation = DriverStation.isAutonomous()
-                ? getAutoRotation2d()
+        Rotation2d rotation = DriverStation.getAlliance()==Alliance.Blue
+                ? (DriverStation.isAutonomous() ? getAutoRotation2d() : getRotation2d())
                 : getRotation2d();
 
         swerveDrivePoseEstimator.resetPosition(rotation,
@@ -186,8 +168,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-        Rotation2d rotation = DriverStation.isAutonomous()
-                ? getAutoRotation2d()
+        Rotation2d rotation = DriverStation.getAlliance()==Alliance.Blue
+                ? (DriverStation.isAutonomous() ? getAutoRotation2d() : getRotation2d())
                 : getRotation2d();
         swerveDrivePoseEstimator.update(rotation,
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
@@ -279,7 +261,7 @@ public class Swerve extends SubsystemBase {
 
         robotHeading.set(getHeading());
         pitch.set(getVerticalTilt());
-        robotPoseX.set(getAutoPose(new Pose2d(new Translation2d(14.78,5), new Rotation2d(180))).getX());
-        robotPoseY.set(getAutoPose(new Pose2d(new Translation2d(14.78,5), new Rotation2d(180))).getY());
+        robotPoseX.set(getPose().getX());
+        robotPoseY.set(getPose().getY());
     }
 }

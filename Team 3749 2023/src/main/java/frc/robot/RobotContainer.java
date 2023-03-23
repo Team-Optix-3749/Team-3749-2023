@@ -90,10 +90,9 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        // return AutoCommands.getTest(swerve, arm, armIntake, limelight, TopBottom.TOP);
         return AutoCommands.getTwoPiece(swerve, arm, armIntake, limelight);
-        // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
-        // TopBottom.TOP);
+        // return AutoCommands.getTest(swerve, arm, armIntake, limelight);
+        // return AutoCommands.getTwoPiece(swerve, arm, armIntake, limelight);
         // return AutoCommands.getThreePiece(swerve, arm, armIntake,
         // TopBottom.TOP);
 
@@ -111,16 +110,37 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
                         new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CONE)));
-        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, ArmSetpoints.STING));
+        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake,
+                ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                         new MoveArm(arm, armIntake, ArmSetpoints.STOW)));
-        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
+        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake,
+                ArmSetpoints.PLACE_MID));
 
         Constants.AutoConstants.eventMap.put("AutoBalance", new AutoBalancingPID(swerve));
-        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
+        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake,
+                ArmSetpoints.PLACE_TOP));
         Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
 
+        // Constants.AutoConstants.eventMap.put("Pickup Cube",
+        // new SequentialCommandGroup(
+        // Commands.runOnce(() ->
+        // armIntake.setVoltage(Constants.ArmIntake.intakeVoltage))));
+        // Constants.AutoConstants.eventMap.put("Pickup Cone",
+        // new SequentialCommandGroup(
+        // Commands.runOnce(() ->
+        // armIntake.setVoltage(Constants.ArmIntake.intakeVoltage))));
+        // Constants.AutoConstants.eventMap.put("Sting",new WaitCommand(0));
+        // Constants.AutoConstants.eventMap.put("Stow",
+        // new SequentialCommandGroup(
+        // Commands.runOnce(() ->
+        // armIntake.setVoltage(Constants.ArmIntake.idleVoltage))));
+
+        // Constants.AutoConstants.eventMap.put("AutoBalance", new
+        // AutoBalancingPID(swerve));
+        // Constants.AutoConstants.eventMap.put("Place Top", new WaitCommand(0));
+        // Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
     }
 }

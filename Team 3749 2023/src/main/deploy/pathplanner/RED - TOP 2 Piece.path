@@ -25,15 +25,15 @@
     {
       "anchorPoint": {
         "x": 10.79,
-        "y": 4.2
+        "y": 5.2
       },
       "prevControl": {
         "x": 12.172418643839109,
-        "y": 4.2
+        "y": 5.2
       },
       "nextControl": {
         "x": 10.140275474350386,
-        "y": 4.2
+        "y": 5.2
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -49,16 +49,16 @@
     },
     {
       "anchorPoint": {
-        "x": 10.01,
-        "y": 4.3
+        "x": 9.65,
+        "y": 5.2
       },
       "prevControl": {
-        "x": 10.356285045037781,
-        "y": 4.3
+        "x": 9.996285045037782,
+        "y": 5.2
       },
       "nextControl": {
-        "x": 10.356285045037781,
-        "y": 4.3
+        "x": 9.996285045037782,
+        "y": 5.2
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -98,5 +98,30 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.01,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 0.6327272727272552,
+      "names": [
+        "Pickup Cube"
+      ]
+    },
+    {
+      "position": 2.2690909090909166,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 2.530909090908986,
+      "names": [
+        "Place Top"
+      ]
+    }
+  ]
 }
