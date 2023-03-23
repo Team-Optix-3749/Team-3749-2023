@@ -55,7 +55,7 @@ public class Constants {
         public static final double releaseConeVoltage = -6;
         public static final double releaseCubeVoltage = -4.5;
 
-        public static final double intakeVoltage = 7;
+        public static final double intakeVoltage = 5;
     }
 
     public static final class SideIntake {

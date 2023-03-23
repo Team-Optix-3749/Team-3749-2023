@@ -90,18 +90,29 @@ public final class AutoCommands {
     public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight) {
         Alliance teamColor = DriverStation.getAlliance();
 
-        PathPlannerTrajectory first;
-        if (DriverStation.getLocation() == 1) {
-            first = PathPlanner.loadPath("TOP 2 Piece", new PathConstraints(2.5, 2.5));
-
-        } else if (DriverStation.getLocation() == 3) {
-            first = PathPlanner.loadPath("BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-
-        } else {
-            first = null;
+        PathPlannerTrajectory first = null;
+    
+        if (DriverStation.getAlliance() == Alliance.Blue){
+            if (DriverStation.getLocation() == 1) {
+                first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
+    
+            } else if (DriverStation.getLocation() == 3) {
+                first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+    
+            } 
+        }
+        else if (DriverStation.getAlliance() == Alliance.Red){
+            if (DriverStation.getLocation() == 1) {
+                first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
+    
+            } else if (DriverStation.getLocation() == 3) {
+                first = PathPlanner.loadPath("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+    
+            }
         }
 
-        first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
+
+        // first = PathPlannerTrajectory.transformTrajectoryForAlliance(first, teamColor);
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
