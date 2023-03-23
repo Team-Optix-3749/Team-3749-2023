@@ -200,10 +200,11 @@ public final class AutoCommands {
 
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(0.6
+                ),  
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new ApriltagAlign(swerveSubsystem, limelight).withTimeout(0.5),
+                new ApriltagAlign(swerveSubsystem, limelight).withTimeout(0.8),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                 .withTimeout(0.1),
                 path_2,
