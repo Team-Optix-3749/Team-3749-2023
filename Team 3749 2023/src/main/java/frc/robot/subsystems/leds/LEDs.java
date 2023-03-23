@@ -177,7 +177,7 @@ public class LEDs extends SubsystemBase {
 
         SmartDashboard.putString("Current LED Pattern", currentLEDPattern.name());
     
-        LEDs.setData(LEDBuffer);
+        // LEDs.setData(LEDBuffer);
     }
     
 }

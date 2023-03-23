@@ -1,9 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -15,8 +13,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,13 +21,10 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
-import frc.robot.utils.Constants.VisionConstants;
+import frc.robot.utils.Constants.VisionConstants.Node;
 
 /**
  * Encapsulated PhotonCamera object used in posed estimation and alignment
@@ -43,22 +36,14 @@ public class Limelight extends SubsystemBase {
     private final PhotonCamera camera = new PhotonCamera("limelight");
     private AprilTagFieldLayout aprilTagFieldLayout;
     private PhotonPoseEstimator photonPoseEstimator;
-    private ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
 
     private final NetworkTable photonTable = NetworkTableInstance.getDefault().getTable("photonvision");
     private final NetworkTableEntry ledMode = photonTable.getEntry("ledMode");
     private final NetworkTableEntry ledModeState = photonTable.getEntry("ledModeState");
     private final NetworkTableEntry ledModeRequest = photonTable.getEntry("ledModeRequest");
 
-    private final HttpCamera raw;
-    private final HttpCamera processed;
-
     private final ShuffleData<Double> targetPitch = new ShuffleData<Double>("Limelight", "Target Pitch", 0.0);
     private final ShuffleData<Double> targetYaw = new ShuffleData<Double>("Limelight", "Target Yaw", 0.0);
-    private final ShuffleData<Double> targetTranslationX = new ShuffleData<Double>("Limelight",
-            "Target Translation2d X (MID)", 0.0);
-    private final ShuffleData<Double> targetTranslationY = new ShuffleData<Double>("Limelight",
-            "Target Translation2d Y (MID)", 0.0);
     private final ShuffleData<Integer> pipeline = new ShuffleData<Integer>("Limelight",
             "Pipeline", -1000);
 
@@ -70,18 +55,6 @@ public class Limelight extends SubsystemBase {
         } catch (Exception e) {
             System.out.println(e);
         }
-
-        raw = new HttpCamera("Raw", "http://photonvision.local:1181/stream.mjpg?1679365741443");
-        processed = new HttpCamera("Processed", "http://photonvision.local:1182/stream.mjpg?1679365741443stream");
-        
-        CameraServer.addCamera(raw);
-        CameraServer.addCamera(processed);
-
-        // add HttpCameras
-        limelightTab.add(raw).withWidget(BuiltInWidgets.kCameraStream).withPosition(0, 0)
-                .withSize(5, 4).withProperties(Map.of("Show controls", false));
-        limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
-                .withSize(5, 4).withProperties(Map.of("Show controls", false));
 
         setLED(VisionLEDMode.kOff);
     }
@@ -130,15 +103,15 @@ public class Limelight extends SubsystemBase {
         return target.getPoseAmbiguity();
     }
 
-    public double getDistance(PhotonTrackedTarget target, VisionConstants.Nodes node) {
+    public double getDistance(PhotonTrackedTarget target, Node node) {
         return PhotonUtils.calculateDistanceToTargetMeters(
                 Constants.VisionConstants.camera_height,
-                node.height,
+                node.height_meters,
                 Constants.VisionConstants.camera_pitch,
                 Units.degreesToRadians(getPitch(target)));
     }
 
-    public Translation2d getTranslation2d(PhotonTrackedTarget target, VisionConstants.Nodes node) {
+    public Translation2d getTranslation2d(PhotonTrackedTarget target, Node node) {
         return PhotonUtils.estimateCameraToTargetTranslation(
                 getDistance(target, node), getYaw(target));
     }
@@ -221,8 +194,6 @@ public class Limelight extends SubsystemBase {
             targetPitch.set(getPitch(target));
             targetYaw.set(getYaw(target).getDegrees());
 
-            targetTranslationX.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getX());
-            targetTranslationY.set(getTranslation2d(target, VisionConstants.Nodes.MID_CONE).getY());
         }
 
         pipeline.set(getPipeline());

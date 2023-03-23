@@ -109,7 +109,7 @@ public class Constants {
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
         public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X", 0.0);
         public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y", 0.0);
-        
+
         public static enum ArmSetpoints {
             ZERO,
             STOW,
@@ -257,21 +257,20 @@ public class Constants {
         public static final double retro_cam_offset = 0.56;
         public static final double apriltag_cam_offset = 3.1;
 
-        public static enum Nodes {
-            MID_CONE(Units.inchesToMeters(22.125)),
-            TOP_CONE(Units.inchesToMeters(41.5));
+        public static enum Node {
+            CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);
 
-            public double height;
+            public double height_meters;
 
-            Nodes(double height) {
-                this.height = height;
+            Node(double height_meters) {
+                this.height_meters = height_meters;
             }
-
-        }
+        };
 
         public static enum Pipelines {
-            REFLECTIVE_TAPE(0),
-            APRILTAG(1);
+            APRILTAG(0),
+            MID_CONE(3),
+            TOP_CONE(4);
 
             public int index;
 
@@ -284,6 +283,9 @@ public class Constants {
     public static class LEDs {
         public static final int pwm_port = 0;
         public static final int length = 92;
-        public static enum LEDPattern {RAINBOW, RED, BLUE, GREEN, WHITE, BOUNCE, BLINK, TWINKLE, NOTHING};
+
+        public static enum LEDPattern {
+            RAINBOW, RED, BLUE, GREEN, WHITE, BOUNCE, BLINK, TWINKLE, NOTHING
+        };
     }
 }
