@@ -130,8 +130,8 @@ public class JoystickIO {
 
         pilot.aWhileHeld(new AlignRetro(swerve, limelight, Node.TOP_CONE));
         pilot.bWhileHeld(new AlignRetro(swerve, limelight, Node.MID_CONE));
-        pilot.xWhileHeld(new AlignApriltag(swerve, limelight, Node.CUBE));
-        pilot.yWhileHeld(new AlignApriltag(swerve, limelight, Node.CONE));
+        pilot.xWhileHeld(new AlignApriltag(swerve, limelight));
+        pilot.yWhileHeld(new AlignApriltag(swerve, limelight, false));
 
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));

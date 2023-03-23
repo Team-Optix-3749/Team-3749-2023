@@ -59,23 +59,39 @@ public class AlignApriltag extends CommandBase {
 
     private Pose2d goalPose;
 
-    public AlignApriltag(Swerve swerve, Limelight limelight, Node node) {
+    /**
+     * @param swerve
+     * @param limelight
+     * @param node Set the goal pose for a cube/cone node
+     * @param left True if to set the goal pose to the cone node left of the AprilTag
+     */
+    public AlignApriltag(Swerve swerve, Limelight limelight, boolean left) {
         this.swerve = swerve;
         this.limelight = limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
 
-        if (node == Node.CUBE) {
-            tagToGoal = new Transform3d(
-                new Translation3d(0.75, 0.05, 0.0),
-                new Rotation3d(0.0, 0.0, Math.PI));
-        } else {
+        /** TODO: Add left/right parameter */
+        tagToGoal = new Transform3d(
+            new Translation3d(0.6, left == true ? (4.42-3.75) : -(4.42-3.75), 0.0), // change Y
+            new Rotation3d(0.0, 0.0, Math.PI));
 
-            /** TODO: Add left/right parameter */
-            tagToGoal = new Transform3d(
-                new Translation3d(0.6, -(4.42-3.75), 0.0), // change Y
-                new Rotation3d(0.0, 0.0, Math.PI));
-        }
+        addRequirements(swerve);
+    }
 
+    /**
+     * Will set the goal pose to the cube node by default
+     * 
+     * @param swerve 
+     * @param limelight
+     */
+    public AlignApriltag(Swerve swerve, Limelight limelight) {
+        this.swerve = swerve;
+        this.limelight = limelight;
+        this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
+
+        tagToGoal = new Transform3d(
+            new Translation3d(0.75, 0.05, 0.0),
+            new Rotation3d(0.0, 0.0, Math.PI));
         addRequirements(swerve);
     }
     
