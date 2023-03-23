@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.LEDs.LEDPattern;
@@ -175,9 +174,7 @@ public class LEDs extends SubsystemBase {
                 break;   
         }
 
-        SmartDashboard.putString("Current LED Pattern", currentLEDPattern.name());
-    
-        // LEDs.setData(LEDBuffer);
+        LEDs.setData(LEDBuffer);
     }
     
 }
