@@ -11,14 +11,10 @@ import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.leds.LEDs;
-import frc.robot.commands.arm.MoveArm;
-import frc.robot.commands.swerve.AutoCommands;
+import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
-import frc.robot.commands.vision.VisionDefaultCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.LEDs.LEDPattern;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -32,7 +28,8 @@ public class RobotContainer {
     private final LEDs leds = new LEDs();
     private final Limelight limelight = new Limelight();
 
-    private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake, sideIntake, arm);
+    private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
+            sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -40,7 +37,7 @@ public class RobotContainer {
 
         configureDefaultCommands();
         configureButtonBindings();
-        configureAuto(); 
+        configureAuto();
 
         try {
             FileWriter writer = new FileWriter("data.csv", false);
@@ -53,7 +50,6 @@ public class RobotContainer {
 
     /**
      * Set default commands
-     * 
      */
     public void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveTeleopCommand(
@@ -66,9 +62,15 @@ public class RobotContainer {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake));
 
         sideIntake.setDefaultCommand(
-                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
-                
-        limelight.setDefaultCommand(new VisionDefaultCommand(limelight, swerve.getPoseEstimator()));
+                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
+                        .beforeStarting(new InitSideIntake(sideIntake)));
+
+        limelight.setDefaultCommand(
+                Commands.run(
+                        () -> {
+                            limelight.setPipeline(0);
+                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
+                        }, limelight));
     }
 
     /**

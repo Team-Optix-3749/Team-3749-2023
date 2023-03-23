@@ -1,5 +1,4 @@
-package frc.robot.commands.swerve;
-
+package frc.robot.commands.vision;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.photonvision.common.hardware.VisionLEDMode;
@@ -18,6 +17,7 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants.Node;
 import frc.robot.utils.Constants.VisionConstants.Pipelines;
+
 /**
  * Using the target Translation2d, drive to the predetermined setpoint using
  * PIDControllers
@@ -95,13 +95,13 @@ public class AlignRetro extends CommandBase {
 
             var targetTranslation = limelight.getTranslation2d(target, node);
             
-            SmartDashboard.putNumber("Target 2d X", targetTranslation.getX());
-            SmartDashboard.putNumber("Target 2d Y", targetTranslation.getY());
             
-            // getX() is vertical, getY() is horizontal
             double xSpeed = xController.calculate(targetTranslation.getX());
             double ySpeed = yController.calculate(targetTranslation.getY());
             double thetaSpeed = turnController.calculate(swerve.getHeading());
+
+            SmartDashboard.putNumber("Target 2d X", targetTranslation.getX());
+            SmartDashboard.putNumber("Target 2d Y", targetTranslation.getY());
 
             SmartDashboard.putNumber("X Speed", xSpeed);
             SmartDashboard.putNumber("Y Speed", ySpeed);
