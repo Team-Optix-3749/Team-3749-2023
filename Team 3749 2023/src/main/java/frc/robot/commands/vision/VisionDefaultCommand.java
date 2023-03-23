@@ -30,11 +30,9 @@ public class VisionDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // limelight.setPipeline(0);
+        limelight.setPipeline(0);
         limelight.updatePoseAprilTags(swervePoseEstimator);
-
-        limelight.setLED(VisionLEDMode.kOn);
-
+        // limelight.setLED(VisionLEDMode.kOn);
     }
 
     @Override

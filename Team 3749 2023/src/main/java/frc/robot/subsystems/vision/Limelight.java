@@ -84,7 +84,7 @@ public class Limelight extends SubsystemBase {
         limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
                 .withSize(5, 4).withProperties(Map.of("Show controls", false));
 
-        setLED(VisionLEDMode.kOn);
+        setLED(VisionLEDMode.kOff);
     }
 
     public PhotonPipelineResult getLatestResult() {
