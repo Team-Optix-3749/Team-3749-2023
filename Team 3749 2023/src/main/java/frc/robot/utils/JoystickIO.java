@@ -119,7 +119,7 @@ public class JoystickIO {
     }
 
     /**
-     * If only one controller is plugged in (pi)
+     * If only one controller is plugged in (pilot)
      */
     public void pilotBindings() {
         // arm setpoints (buttons)
@@ -131,7 +131,7 @@ public class JoystickIO {
         pilot.aWhileHeld(new AlignRetro(swerve, limelight, Node.TOP_CONE));
         pilot.bWhileHeld(new AlignRetro(swerve, limelight, Node.MID_CONE));
         pilot.xWhileHeld(new AlignApriltag(swerve, limelight, Node.CUBE));
-        pilot.xWhileHeld(new AlignApriltag(swerve, limelight, Node.CONE));
+        pilot.yWhileHeld(new AlignApriltag(swerve, limelight, Node.CONE));
 
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
@@ -145,10 +145,10 @@ public class JoystickIO {
         pilot.backWhileHeld(() -> swerve.zeroHeading(), swerve);
 
         // swerve rotation cardinals
-        pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
-        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
-        pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
-        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+        pilot.povUp().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP));
+        pilot.povLeft().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
+        // pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
+        // pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
 
     /**

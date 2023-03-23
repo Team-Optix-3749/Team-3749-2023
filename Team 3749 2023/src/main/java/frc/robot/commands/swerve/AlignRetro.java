@@ -29,7 +29,7 @@ public class AlignRetro extends CommandBase {
     private final Limelight limelight;
     private final Node node;
 
-    private final Translation2d setpoint = new Translation2d(1.3, 0.1);
+    private final Translation2d setpoint;
 
     private PhotonTrackedTarget lastTarget;
 
@@ -45,6 +45,8 @@ public class AlignRetro extends CommandBase {
         this.limelight = limelight;
         this.node = node;
         this.setName("Vision Align");
+        setpoint = node == Node.TOP_CONE ? new Translation2d(1.3, 0.1) : new Translation2d(1.3, 0.1);
+
         turnController.enableContinuousInput(-Math.PI, Math.PI);
         addRequirements(swerve, limelight);
     }
@@ -92,7 +94,10 @@ public class AlignRetro extends CommandBase {
             lastTarget = target;
 
             var targetTranslation = limelight.getTranslation2d(target, node);
-
+            
+            SmartDashboard.putNumber("Target 2d X", targetTranslation.getX());
+            SmartDashboard.putNumber("Target 2d Y", targetTranslation.getY());
+            
             // getX() is vertical, getY() is horizontal
             double xSpeed = xController.calculate(targetTranslation.getX());
             double ySpeed = yController.calculate(targetTranslation.getY());
@@ -107,7 +112,8 @@ public class AlignRetro extends CommandBase {
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 
-            swerve.setModuleStates(moduleStates);
+
+            // swerve.setModuleStates(moduleStates);
         } else {
             System.out.println("Reflective tape not found");
         }

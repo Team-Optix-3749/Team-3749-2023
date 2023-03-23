@@ -269,8 +269,8 @@ public class Constants {
 
         public static enum Pipelines {
             APRILTAG(0),
-            TOP_CONE(1),
-            MID_CONE(2);
+            MID_CONE(3),
+            TOP_CONE(4);
 
             public int index;
 

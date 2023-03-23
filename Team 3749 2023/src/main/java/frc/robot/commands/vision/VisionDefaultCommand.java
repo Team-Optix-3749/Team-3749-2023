@@ -1,5 +1,7 @@
 package frc.robot.commands.vision;
 
+import org.photonvision.common.hardware.VisionLEDMode;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.vision.Limelight;
@@ -28,8 +30,10 @@ public class VisionDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        limelight.setPipeline(0);
+        // limelight.setPipeline(0);
         limelight.updatePoseAprilTags(swervePoseEstimator);
+
+        limelight.setLED(VisionLEDMode.kOn);
 
     }
 

@@ -84,7 +84,7 @@ public class Limelight extends SubsystemBase {
         limelightTab.add(processed).withWidget(BuiltInWidgets.kCameraStream).withPosition(6, 0)
                 .withSize(5, 4).withProperties(Map.of("Show controls", false));
 
-        setLED(VisionLEDMode.kOff);
+        setLED(VisionLEDMode.kOn);
     }
 
     public PhotonPipelineResult getLatestResult() {
@@ -222,8 +222,8 @@ public class Limelight extends SubsystemBase {
             targetPitch.set(getPitch(target));
             targetYaw.set(getYaw(target).getDegrees());
 
-            targetTranslationX.set(getTranslation2d(target, Node.MID_CONE).getX());
-            targetTranslationY.set(getTranslation2d(target, Node.MID_CONE).getY());
+            // targetTranslationX.set(getTranslation2d(target, Node.MID_CONE).getX());
+            // targetTranslationY.set(getTranslation2d(target, Node.MID_CONE).getY());
         }
 
         pipeline.set(getPipeline());

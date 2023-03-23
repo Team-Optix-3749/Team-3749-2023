@@ -72,7 +72,7 @@ public class AlignApriltag extends CommandBase {
 
             /** TODO: Add left/right parameter */
             tagToGoal = new Transform3d(
-                new Translation3d(0.6, 4.42-3.75, 0.0), // change Y
+                new Translation3d(0.6, -4.42-3.75, 0.0), // change Y
                 new Rotation3d(0.0, 0.0, Math.PI));
         }
 
