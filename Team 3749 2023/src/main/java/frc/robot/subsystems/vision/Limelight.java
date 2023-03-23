@@ -22,6 +22,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -153,6 +155,8 @@ public class Limelight extends SubsystemBase {
             // if it recieved a pose update
             if (poseEstimate.isPresent()) {
                 Pose2d newPose = poseEstimate.get().estimatedPose.toPose2d();
+
+                if (DriverStation.getAlliance() == Alliance.Red && DriverStation.isAutonomous()) ;
                 // if the update is sufficiantly different to the current one, done to not cause pid oscilation
                 if (!Constants.withinMargin(0.04, newPose.getTranslation(), swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())){
                     swerveDrivePoseEstimator.addVisionMeasurement(

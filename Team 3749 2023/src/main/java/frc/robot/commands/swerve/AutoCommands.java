@@ -55,7 +55,7 @@ public final class AutoCommands {
                 }),
                 new PPSwerveControllerCommand(
                         traj,
-                        swerveSubsystem::getPose, // Pose supplier
+                        () -> swerveSubsystem.getAutoPose(traj.getInitialHolonomicPose()), // Pose supplier
                         Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
                         new PIDController(1.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0
                                                       // will only use feedforwards.
@@ -80,12 +80,13 @@ public final class AutoCommands {
         PathPlannerTrajectory first = PathPlanner.loadPath("pickup", new PathConstraints(1, 1));
         first = PathPlannerTrajectory.transformTrajectoryForAlliance(first,
                 teamColor);
-
+            
         
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first,
                 true,  swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
-
+        
+        
 
         return new SequentialCommandGroup(
 
@@ -242,6 +243,7 @@ public final class AutoCommands {
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
+            
             Commands.waitSeconds(0.1),
             new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
             Commands.waitSeconds(0.5),
