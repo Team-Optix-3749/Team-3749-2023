@@ -276,6 +276,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         updateOdometry();
 
+
         robotHeading.set(getHeading());
         pitch.set(getVerticalTilt());
         robotPoseX.set(getAutoPose(new Pose2d(new Translation2d(14.78,5), new Rotation2d(180))).getX());

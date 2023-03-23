@@ -118,7 +118,8 @@ public class JoystickIO {
     /**
      * If only one controller is plugged in (pi)
      */
-    public void pilotBindings() {
+    public void 
+    pilotBindings() {
         // arm setpoints (buttons)
         pilot.aWhileHeld(new ApriltagAlign(swerve, limelight));
         // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));

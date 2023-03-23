@@ -91,8 +91,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // return AutoCommands.getTest(swerve, arm, armIntake, limelight, TopBottom.TOP);
-        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight,
-                TopBottom.TOP);
+        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight);
         // return AutoCommands.getTwoPiece(swerve, arm, armIntake,
         // TopBottom.TOP);
         // return AutoCommands.getThreePiece(swerve, arm, armIntake,
@@ -117,7 +116,7 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                         new MoveArm(arm, armIntake, ArmSetpoints.STOW)));
-        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
+        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
 
         Constants.AutoConstants.eventMap.put("AutoBalance", new AutoBalancingPID(swerve));
         Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));

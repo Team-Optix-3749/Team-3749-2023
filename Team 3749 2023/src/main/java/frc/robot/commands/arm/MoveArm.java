@@ -44,7 +44,7 @@ public class MoveArm extends CommandBase {
 
     @Override
     public void initialize() {
-
+        System.out.println(desiredSetpoint.name());
         trajectoryInformation = findTrajectory(desiredSetpoint, arm);
         trajectoryIndex = 0;
         timer.reset();
@@ -239,6 +239,7 @@ public class MoveArm extends CommandBase {
                 else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE)
                     return ArmPaths.GROUND_INTAKE_CONE_TO_STOW;
             default:
+                System.out.println(desiredSetpoint.name());
                 return null;
         }
     }

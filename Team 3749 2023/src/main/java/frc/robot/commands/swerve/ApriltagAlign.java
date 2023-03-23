@@ -70,12 +70,12 @@ public class ApriltagAlign extends CommandBase {
 
     @Override
     public void initialize() {
+        updateGoalPose();
 
     }
 
     @Override
     public void execute() {
-
         if (goalPose == null) {
             updateGoalPose();
             System.out.println("Goal Pose Is Null");
