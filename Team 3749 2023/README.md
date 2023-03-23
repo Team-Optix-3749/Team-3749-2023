@@ -1,6 +1,6 @@
 # Button Bindings 🎮
 
-### Pilot ✈️
+## Pilot ✈️
  - **JOYSTICKS 🕹️**
    - **Left:** XY relative to the field
    - **Right:** Turn robot Heading
@@ -20,8 +20,11 @@
    - **Down:** Rotate to 180 degrees (Facing away from driver)
    - **Left:** Rotate to 90 degrees (Turn right)
    - **Right:** Rotate to 270 degrees (Turn left)
+ - **MISC ⁉️**
+   - **Back:** Reset heading
+   - **Front:** NONE
 
-### Operator 🙉
+## Operator 🙉
  - **JOYSTICKS 🕹️**
    - **Left:** NONE
    - **Right:** NONE
