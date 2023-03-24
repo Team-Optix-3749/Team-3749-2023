@@ -49,10 +49,6 @@ public class AlignApriltag extends CommandBase {
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
     private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
 
-    private ShuffleData<Double> goalPoseX = new ShuffleData<Double>("Limelight", "Goal Pose X", -1000.0);
-    private ShuffleData<Double> goalPoseY = new ShuffleData<Double>("Limelight", "Goal Pose Y", -1000.0);
-    private ShuffleData<Double> goalPoseHeading = new ShuffleData<Double>("Limelight", "Goal Pose Heading", -1000.0);
-
     private PhotonTrackedTarget lastTarget;
 
     private double driveErrorAbs;
@@ -211,9 +207,9 @@ public class AlignApriltag extends CommandBase {
 
                 goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
 
-                goalPoseX.set(goalPose.getX());
-                goalPoseY.set(goalPose.getY());
-                goalPoseHeading.set(goalPose.getRotation().getDegrees());
+                VisionConstants.goalPoseX.set(goalPose.getX());
+                VisionConstants.goalPoseY.set(goalPose.getY());
+                VisionConstants.goalPoseHeading.set(goalPose.getRotation().getDegrees());
             }
         }
     }

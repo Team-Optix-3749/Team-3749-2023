@@ -251,6 +251,10 @@ public class Constants {
         public static final double retro_cam_offset = 0.56;
         public static final double apriltag_cam_offset = 3.1;
 
+        public static final ShuffleData<Double> goalPoseX = new ShuffleData<Double>("Limelight", "Goal Pose X", -1000.0);
+        public static final ShuffleData<Double> goalPoseY = new ShuffleData<Double>("Limelight", "Goal Pose Y", -1000.0);
+        public static final ShuffleData<Double> goalPoseHeading = new ShuffleData<Double>("Limelight", "Goal Pose Heading", -1000.0);
+
         public static enum Node {
             CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);
 

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.vision.AlignApriltag;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
@@ -112,8 +113,8 @@ public class JoystickIO {
         operator.povRight().whileTrue(new AlignApriltag(swerve, limelight, false));
 
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
-        pilot.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
-        pilot.aWhileHeld(new AlignApriltag(swerve, limelight, true));
+        pilot.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
+        pilot.xWhileHeld(new AlignApriltag(swerve, limelight, true));
         pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
 
         pilot.rightBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage),
@@ -121,6 +122,7 @@ public class JoystickIO {
         pilot.leftBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage),
                 sideIntake);
 
+        pilot.leftTriggerWhileHeld(new AutoBalancingPID(swerve,0));  
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
         pilot.startWhileHeld(new AlignApriltag(swerve, limelight));
@@ -148,18 +150,23 @@ public class JoystickIO {
         pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
-        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
+                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
-        pilot.startWhileHeld(()-> swerve.resetOdometry(new Pose2d(new Translation2d(0,0), new Rotation2d(swerve.getHeading()))), swerve);
+        pilot.startWhileHeld(
+                () -> swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(swerve.getHeading()))),
+                swerve);
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
         pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
         pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
         pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
+
     /**
      * If NO joysticks are plugged in (Buttons for commands are runnable in the
      * "Controls" tab in ShuffleBoard)
