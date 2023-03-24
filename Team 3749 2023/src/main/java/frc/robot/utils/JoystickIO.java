@@ -122,7 +122,8 @@ public class JoystickIO {
         pilot.leftBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage),
                 sideIntake);
 
-        pilot.leftTriggerWhileHeld(new AutoBalancingPID(swerve,0));  
+        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
+        pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve,0));  
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
         pilot.startWhileHeld(new AlignApriltag(swerve, limelight));
