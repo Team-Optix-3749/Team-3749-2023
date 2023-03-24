@@ -20,12 +20,12 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
     private final Xbox operator = new Xbox(1);
 
-    // Subsystems
     private final Swerve swerve = new Swerve();
     private final ArmIntake armIntake = new ArmIntake();
     private final SideIntake sideIntake = new SideIntake();
@@ -48,7 +48,6 @@ public class RobotContainer {
             FileWriter writer = new FileWriter("data.csv", false);
             writer.close();
         } catch (IOException e) {
-            System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }
@@ -70,7 +69,7 @@ public class RobotContainer {
         limelight.setDefaultCommand(
                 Commands.run(
                         () -> {
-                            limelight.setPipeline(0);
+                            limelight.setPipeline(Pipelines.APRILTAG.index);
                             limelight.updatePoseAprilTags(swerve.getPoseEstimator());
                         }, limelight));
     }

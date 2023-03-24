@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.swerve;
 
-import java.sql.Driver;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;

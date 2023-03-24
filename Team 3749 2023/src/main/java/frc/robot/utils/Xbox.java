@@ -202,11 +202,11 @@ trueCommand).whileFalse(falseCommand);
     }
 
     public void leftStickWhileHeld(CommandBase trueCommand) {
-        super.rightBumper().whileTrue(trueCommand);
+        super.leftStick().whileTrue(trueCommand);
     }
 
     public void leftStickWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
-        super.rightBumper().whileTrue(trueCommand).whileFalse(falseCommand);
+        super.leftStick().whileTrue(trueCommand).whileFalse(falseCommand);
     }
 
     public void leftStickWhileHeld(Runnable whileTrue) {
@@ -287,6 +287,36 @@ trueCommand).whileFalse(falseCommand);
 
     public void rightTriggerWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
         super.rightTrigger().whileTrue(
+                Commands.run(whileTrue, subsystem))
+                .whileFalse(Commands.run(whileFalse, subsystem));
+    }
+
+    public void rightStickWhileHeld(CommandBase trueCommand) {
+        super.rightStick().whileTrue(trueCommand);
+    }
+
+    public void rightStickWhileHeld(CommandBase trueCommand, CommandBase falseCommand) {
+        super.rightStick().whileTrue(trueCommand).whileFalse(falseCommand);
+    }
+
+    public void rightStickWhileHeld(Runnable whileTrue) {
+        super.rightStick().whileTrue(
+                Commands.run(whileTrue));
+    }
+
+    public void rightStickWhileHeld(Runnable whileTrue, Runnable whileFalse) {
+        super.rightStick().whileTrue(
+                Commands.run(whileTrue))
+                .whileFalse(Commands.run(whileFalse));
+    }
+
+    public void rightStickWhileHeld(Runnable whileTrue, SubsystemBase subsystem) {
+        super.rightStick().whileTrue(
+                Commands.run(whileTrue, subsystem));
+    }
+
+    public void rightStickWhileHeld(Runnable whileTrue, Runnable whileFalse, SubsystemBase subsystem) {
+        super.rightStick().whileTrue(
                 Commands.run(whileTrue, subsystem))
                 .whileFalse(Commands.run(whileFalse, subsystem));
     }

@@ -3,7 +3,6 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -109,8 +108,8 @@ public class Constants {
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
-        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X", 0.0);
-        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y", 0.0);
+        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X (Move arm)", 0.0);
+        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y (Move arm)", 0.0);
 
         public static enum ArmSetpoints {
             ZERO,
@@ -280,7 +279,7 @@ public class Constants {
         public static final int length = 92;
 
         public static enum LEDPattern {
-            RAINBOW, RED, BLUE, GREEN, WHITE, BOUNCE, BLINK, TWINKLE, NOTHING
+            RAINBOW, RED, BLUE, GREEN, PURPLE, YELLOW, WHITE, BOUNCE, BLINK, TWINKLE, NOTHING
         };
     }
 }

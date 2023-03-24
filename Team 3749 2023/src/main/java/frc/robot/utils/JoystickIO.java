@@ -14,10 +14,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.vision.AlignApriltag;
-import frc.robot.commands.swerve.AutoBalancingPID;
-import frc.robot.commands.swerve.AlignHeading;
-import frc.robot.commands.vision.AlignApriltag;
-import frc.robot.commands.vision.AlignRetro;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.subsystems.intake.SideIntake;
@@ -25,6 +21,7 @@ import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.LEDs.LEDPattern;
 
 /**
  * Util class for button bindings
@@ -105,6 +102,9 @@ public class JoystickIO {
 
         operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage));
         operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
+
+        operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
+        operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
 
         // alignment (vision)
         operator.povUp().whileTrue(new AlignApriltag(swerve, limelight));
