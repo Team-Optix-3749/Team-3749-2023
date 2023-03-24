@@ -1,7 +1,6 @@
 package frc.robot.commands.vision;
 
 import frc.robot.utils.Constants;
-import frc.robot.utils.ShuffleData;
 import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants;
 import org.photonvision.targeting.PhotonTrackedTarget;

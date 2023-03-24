@@ -109,8 +109,10 @@ public class Constants {
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
-        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X (Move arm)", 0.0);
-        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y (Move arm)", 0.0);
+        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X (Move arm)",
+                0.0);
+        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y (Move arm)",
+                0.0);
 
         public static enum ArmSetpoints {
             ZERO,
@@ -184,11 +186,10 @@ public class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond;
-        public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
-                kPhysicalMaxAngularSpeedRadiansPerSecond;
-        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 5;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 5;
+        public static double kTeleDriveMaxSpeedMetersPerSecond = 5;
+        public static double kTeleDriveMaxAngularSpeedRadiansPerSecond = 5;
+        public static double kTeleDriveMaxAccelerationUnitsPerSecond = 3.5;
+        public static double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3.5;
 
         public static final double kAutoDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2;
         public static final double kAutoDriveMaxAngularSpeedRadiansPerSecond = //
@@ -252,9 +253,12 @@ public class Constants {
         public static final double retro_cam_offset = 0.56;
         public static final double apriltag_cam_offset = 3.1;
 
-        public static final ShuffleData<Double> goalPoseX = new ShuffleData<Double>("Limelight", "Goal Pose X", -1000.0);
-        public static final ShuffleData<Double> goalPoseY = new ShuffleData<Double>("Limelight", "Goal Pose Y", -1000.0);
-        public static final ShuffleData<Double> goalPoseHeading = new ShuffleData<Double>("Limelight", "Goal Pose Heading", -1000.0);
+        public static final ShuffleData<Double> goalPoseX = new ShuffleData<Double>("Limelight", "Goal Pose X",
+                -1000.0);
+        public static final ShuffleData<Double> goalPoseY = new ShuffleData<Double>("Limelight", "Goal Pose Y",
+                -1000.0);
+        public static final ShuffleData<Double> goalPoseHeading = new ShuffleData<Double>("Limelight",
+                "Goal Pose Heading", -1000.0);
 
         public static enum Node {
             CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);

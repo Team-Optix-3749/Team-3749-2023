@@ -252,6 +252,19 @@ public class Swerve extends SubsystemBase {
         return turningLimiter;
     }
 
+    public void toggleSpeed(){
+
+        if ( Constants.DriveConstants.kTeleDriveMaxSpeedMetersPerSecond == 5){
+            Constants.DriveConstants.kTeleDriveMaxSpeedMetersPerSecond = 3;
+            Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond = 3;
+        }
+        else {
+            Constants.DriveConstants.kTeleDriveMaxSpeedMetersPerSecond = 5;
+            Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond = 5;
+        }
+
+    }
+
     @Override
     public void periodic() {
         updateOdometry();
