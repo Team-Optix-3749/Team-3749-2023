@@ -54,23 +54,24 @@ public class Constants {
         public static final double releaseConeVoltage = -6;
         public static final double releaseCubeVoltage = -4.5;
 
-        public static final double intakeVoltage = 3.5;
+        public static final double intakeVoltage = 4.5;
     }
 
     public static final class SideIntake {
         public static final int lift_motor_id = 23;
         public static final int side_intake_id = 24;
-        public static final double idleVoltage = 1;
-        public static final double releaseObjectVoltage = -3;
-        public static final double intakeVoltage = 6;
+        public static final double idleVoltage = 1.5;
+        public static final double releaseObjectVoltage = -2;
+        public static final double intakeVoltage = 4;
 
         public static final double liftKG = 0.2;
         public static final double liftKP = 7.0;
 
-        public static final double liftOutSetpoint = 1.3;
+        public static final double liftOutSetpoint = 1.18;
     }
 
     public static final class Arm {
+
         // public static final double elbow_kP = 0.3;
         public static final double elbow_kP = 0.2;
         // public static final double shoulder_kP = 0.2;
