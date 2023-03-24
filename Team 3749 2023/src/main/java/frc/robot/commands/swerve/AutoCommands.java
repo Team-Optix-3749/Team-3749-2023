@@ -20,6 +20,7 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.AutoConstants.TopBottom;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /***
@@ -64,22 +65,23 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
+            LEDs leds, TopBottom topBottom) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            if (DriverStation.getLocation() == 1) {
+            if (topBottom == TopBottom.TOP) {
                 first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
 
-            } else if (DriverStation.getLocation() == 3) {
+            } else if (topBottom == TopBottom.BOTTOM) {
                 first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
 
             }
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            if (DriverStation.getLocation() == 1) {
+            if (topBottom == TopBottom.TOP) {
                 first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
 
-            } else if (DriverStation.getLocation() == 3) {
+            } else if (topBottom == TopBottom.BOTTOM) {
                 first = PathPlanner.loadPath("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
 
             }
@@ -89,21 +91,22 @@ public final class AutoCommands {
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
+
                 Commands.waitSeconds(0.1),
-                new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.1),
 
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.15),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
     }
 
-    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
+            LEDs leds) {
         PathPlannerTrajectory first = null;
         PathPlannerTrajectory second = null;
 
@@ -112,7 +115,7 @@ public final class AutoCommands {
                 first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
                 second = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
 
-            } 
+            }
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             if (DriverStation.getLocation() == 3) {
                 first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
@@ -137,15 +140,15 @@ public final class AutoCommands {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.1),
                 path_2,
-                new AutoBalancingPID(swerveSubsystem,goalHeading));
+                new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
-
-    public static Command getMiddleCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+    public static Command getMiddleCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
+            LEDs leds) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-                first = PathPlanner.loadPath("BLUE - MIDDLE Charge", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("BLUE - MIDDLE Charge", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             first = PathPlanner.loadPath("RED - MIDDLE Charge", new PathConstraints(2.5, 2.5));
@@ -163,13 +166,15 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new AutoBalancingPID(swerveSubsystem,goalHeading));
+                new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
-    public static Command getBottomCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+
+    public static Command getBottomCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
+            LEDs leds) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-                first = PathPlanner.loadPath("BLUE - Bottom 1 Piece Charge", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("BLUE - Bottom 1 Piece Charge", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             first = PathPlanner.loadPath("RED - Bottom 1 Piece Charge", new PathConstraints(2.5, 2.5));
@@ -187,14 +192,15 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new AutoBalancingPID(swerveSubsystem,goalHeading));
+                new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
-    public static Command getBottomPickup(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+    public static Command getBottomPickup(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
+            LEDs leds) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-                first = PathPlanner.loadPath("BLUE - Bottom 1 Piece", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("BLUE - Bottom 1 Piece", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             first = PathPlanner.loadPath("RED - Bottom 1 Piece", new PathConstraints(2.5, 2.5));
@@ -212,11 +218,11 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new AutoBalancingPID(swerveSubsystem,goalHeading));
+                new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
-    public static Command get1Piece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
-
+    public static Command get1Piece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
+            LEDs leds) {
 
         return new SequentialCommandGroup(
 
@@ -226,4 +232,3 @@ public final class AutoCommands {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1));
     }
 }
-
