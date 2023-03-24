@@ -114,12 +114,12 @@ public class JoystickIO {
         pilot.aWhileHeld(new AlignApriltag(swerve, limelight));
         pilot.xWhileHeld(new AlignApriltag(swerve, limelight, true));
         pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
-
+        pilot.yWhileHeld(() -> swerve.toggleSpeed());
+        
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
         pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
         // swerve button bindings
-        pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
-        pilot.startWhileHeld(() -> swerve.toggleSpeed());
+        pilot.startWhileHeld(() -> swerve.resetGyro(), swerve);
 
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
