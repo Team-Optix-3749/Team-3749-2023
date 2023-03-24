@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.VisionConstants.Node;
+import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 /**
  * Encapsulated PhotonCamera object used in posed estimation and alignment
@@ -44,10 +45,19 @@ public class Limelight extends SubsystemBase {
     private final NetworkTableEntry ledModeState = photonTable.getEntry("ledModeState");
     private final NetworkTableEntry ledModeRequest = photonTable.getEntry("ledModeRequest");
 
+    private final ShuffleData<Boolean> targetFound = new ShuffleData<Boolean>("Limelight", "Target Found", false);
+    
     private final ShuffleData<Double> targetPitch = new ShuffleData<Double>("Limelight", "Target Pitch", 0.0);
     private final ShuffleData<Double> targetYaw = new ShuffleData<Double>("Limelight", "Target Yaw", 0.0);
     private final ShuffleData<Integer> pipeline = new ShuffleData<Integer>("Limelight",
             "Pipeline", -1000);
+
+    private final ShuffleData<Integer> aprilTagID = new ShuffleData<Integer>("Limelight", "Fiducial ID", -1000);
+    private final ShuffleData<Double> aprilTagX = new ShuffleData<Double>("Limelight", "AprilTag Y", -1000.0);
+    private final ShuffleData<Double> aprilTagY = new ShuffleData<Double>("Limelight", "AprilTag X", -1000.0);
+
+    private final ShuffleData<Double> targetTransX = new ShuffleData<Double>("Limelight", "Target Trans X", -1000.0);
+    private final ShuffleData<Double> targetTransY = new ShuffleData<Double>("Limelight", "Target Trans Y", -1000.0);
 
     public Limelight() {
         try {
@@ -117,8 +127,8 @@ public class Limelight extends SubsystemBase {
         return PhotonUtils.estimateCameraToTargetTranslation(
                 getDistance(target, node), getYaw(target));
     }
-    
-    public AprilTagFieldLayout getAprilTagFieldLayout(){
+
+    public AprilTagFieldLayout getAprilTagFieldLayout() {
         return aprilTagFieldLayout;
     }
 
@@ -170,34 +180,59 @@ public class Limelight extends SubsystemBase {
             if (poseEstimate.isPresent()) {
                 Pose2d newPose = poseEstimate.get().estimatedPose.toPose2d();
 
-                if (DriverStation.getAlliance() == Alliance.Red && DriverStation.isAutonomous()) ;
-                // if the update is sufficiantly different to the current one, done to not cause pid oscilation
-                if (!Constants.withinMargin(0.04, newPose.getTranslation(), swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())){
+                if (DriverStation.getAlliance() == Alliance.Red && DriverStation.isAutonomous())
+                    ;
+                // if the update is sufficiantly different to the current one, done to not cause
+                // pid oscilation
+                if (!Constants.withinMargin(0.04, newPose.getTranslation(),
+                        swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())) {
                     swerveDrivePoseEstimator.addVisionMeasurement(
-                        newPose, imageCaptureTime);
+                            newPose, imageCaptureTime);
                 }
                 // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
             }
         }
     }
-
+    
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
         photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
         return photonPoseEstimator.update();
     }
-
+    
     public void logging() {
+        
+        pipeline.set(getPipeline());
 
         var result = getLatestResult();
-        if (result.hasTargets()) {
-            var target = getBestTarget(getLatestResult());
+        if (!result.hasTargets()) {
 
-            targetPitch.set(getPitch(target));
-            targetYaw.set(getYaw(target).getDegrees());
+            targetFound.set(false);
 
+            return;
         }
 
-        pipeline.set(getPipeline());
+        targetFound.set(true);
+
+        var target = getBestTarget(getLatestResult());
+
+        targetPitch.set(getPitch(target));
+        targetYaw.set(getYaw(target).getDegrees());
+
+        if (getPipeline() == Pipelines.APRILTAG.index) {
+            var targetId = target.getFiducialId();
+            var aprilTagPose = aprilTagFieldLayout.getTagPose(targetId).get();
+
+            aprilTagID.set(targetId);
+            aprilTagX.set(aprilTagPose.getX());
+            aprilTagY.set(aprilTagPose.getY());
+        } else {
+            var target2d = getTranslation2d(target, getPipeline() == Pipelines.TOP_CONE.index ? Node.TOP_CONE : Node.MID_CONE);
+
+            targetTransX.set(target2d.getX());
+            targetTransY.set(target2d.getY());
+        }
+
+
 
     }
 

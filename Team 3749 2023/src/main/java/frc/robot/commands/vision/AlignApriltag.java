@@ -1,6 +1,7 @@
 package frc.robot.commands.vision;
 
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -48,6 +49,10 @@ public class AlignApriltag extends CommandBase {
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
     private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
 
+    private ShuffleData<Double> goalPoseX = new ShuffleData<Double>("Limelight", "Goal Pose X", -1000.0);
+    private ShuffleData<Double> goalPoseY = new ShuffleData<Double>("Limelight", "Goal Pose Y", -1000.0);
+    private ShuffleData<Double> goalPoseHeading = new ShuffleData<Double>("Limelight", "Goal Pose Heading", -1000.0);
+
     private PhotonTrackedTarget lastTarget;
 
     private double driveErrorAbs;
@@ -60,7 +65,6 @@ public class AlignApriltag extends CommandBase {
     /**
      * @param swerve
      * @param limelight
-     * @param node Set the goal pose for a cube/cone node
      * @param left True if to set the goal pose to the cone node left of the AprilTag
      */
     public AlignApriltag(Swerve swerve, Limelight limelight, boolean left) {
@@ -68,9 +72,8 @@ public class AlignApriltag extends CommandBase {
         this.limelight = limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
 
-        /** TODO: Add left/right parameter */
         tagToGoal = new Transform3d(
-            new Translation3d(0.6, left == true ? (4.42-3.75) : -(4.42-3.75), 0.0), // change Y
+            new Translation3d(0.6, left == true ? (4.42-3.75) : -(4.42-3.75), 0.0),
             new Rotation3d(0.0, 0.0, Math.PI));
 
         addRequirements(swerve);
@@ -135,13 +138,6 @@ public class AlignApriltag extends CommandBase {
                 .toSwerveModuleStates(chassisSpeeds);
 
         swerve.setModuleStates(moduleStates);
-
-        SmartDashboard.putNumber("Drive X Velo", driveVelocity.getX());
-        SmartDashboard.putNumber("Drive Y Velo", driveVelocity.getY());
-        SmartDashboard.putNumber("Turn velo", turnVelocity);
-        SmartDashboard.putNumber("Drive error", driveErrorAbs);
-        SmartDashboard.putNumber("Turn error", turnErrorAbs);
-        SmartDashboard.putNumber("DRIVE SCALAR", driveVelocityScalar);
     }
 
     @Override
@@ -207,23 +203,17 @@ public class AlignApriltag extends CommandBase {
                 SmartDashboard.putNumberArray("Camera Pose",
                         new double[] { cameraPose.getX(), cameraPose.getY(), cameraPose.getZ() });
 
-                // // Trasnform the camera's pose to the target's pose
-                // var camToTarget = target.getBestCameraToTarget();
-                // var targetPose = cameraPose.transformBy(camToTarget);
-
-                // // Transform the tag's pose to set our goal
-                // this.goalPose = targetPose.transformBy(tagToGoal).toPose2d();
-
                 var targetId = target.getFiducialId();
                 Pose3d aprilTagPose = aprilTagFieldLayout.getTagPose(targetId).get();
                 SmartDashboard.putNumber("April Tag X", aprilTagPose.getX());
                 SmartDashboard.putNumber("April Tag Y", aprilTagPose.getY());
                 SmartDashboard.putNumber("April Tag Heading", aprilTagPose.getRotation().getAngle());
-                this.goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
 
-                SmartDashboard.putNumber("Goal Pose X", goalPose.getX());
-                SmartDashboard.putNumber("Goal Pose Y", goalPose.getY());
-                SmartDashboard.putNumber("Goal Pose HEADING", goalPose.getRotation().getDegrees());
+                goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
+
+                goalPoseX.set(goalPose.getX());
+                goalPoseY.set(goalPose.getY());
+                goalPoseHeading.set(goalPose.getRotation().getDegrees());
             }
         }
     }

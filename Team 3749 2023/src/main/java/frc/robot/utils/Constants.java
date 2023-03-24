@@ -108,8 +108,8 @@ public class Constants {
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
-        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X", 0.0);
-        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y", 0.0);
+        public static ShuffleData<Double> armCoordinateX = new ShuffleData<Double>("Arm", "Arm Coordinate X (Move arm)", 0.0);
+        public static ShuffleData<Double> armCoordinateY = new ShuffleData<Double>("Arm", "Arm Coordinate Y (Move arm)", 0.0);
 
         public static enum ArmSetpoints {
             ZERO,
