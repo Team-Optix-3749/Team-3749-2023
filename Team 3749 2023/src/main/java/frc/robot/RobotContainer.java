@@ -63,10 +63,6 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        sideIntake.setDefaultCommand(
-                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
-                        .beforeStarting(new InitSideIntake(sideIntake)));
-
         limelight.setDefaultCommand(
                 Commands.run(
                         () -> {

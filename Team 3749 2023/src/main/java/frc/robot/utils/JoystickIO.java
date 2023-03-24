@@ -117,9 +117,9 @@ public class JoystickIO {
         pilot.xWhileHeld(new AlignApriltag(swerve, limelight, true));
         pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
 
-        pilot.rightBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage),
+        pilot.rightBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage),() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.idleVoltage),
                 sideIntake);
-        pilot.leftBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage),
+        pilot.leftBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage),() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.idleVoltage),
                 sideIntake);
 
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
