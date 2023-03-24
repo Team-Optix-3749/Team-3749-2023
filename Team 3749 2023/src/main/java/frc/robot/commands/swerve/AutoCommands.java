@@ -220,5 +220,16 @@ public final class AutoCommands {
                 path_1,
                 new AutoBalancingPID(swerveSubsystem,goalHeading));
     }
+
+    public static Command get1Piece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+
+
+        return new SequentialCommandGroup(
+
+                Commands.waitSeconds(0.1),
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
+                Commands.waitSeconds(0.6),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1));
+    }
 }
 
