@@ -13,14 +13,12 @@ import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
-import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.commands.vision.VisionDefaultCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.AutoConstants.TopBottom;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -63,10 +61,6 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        // armIntake.setDefaultCommand(
-        // Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage),
-        // armIntake));
-
         sideIntake.setDefaultCommand(
                 Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
 
@@ -90,11 +84,8 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTwoPiece(swerve, arm, armIntake, limelight);
-        // return AutoCommands.getTest(swerve, arm, armIntake, limelight);
-        // return AutoCommands.getTwoPiece(swerve, arm, armIntake, limelight);
-        // return AutoCommands.getThreePiece(swerve, arm, armIntake,
-        // TopBottom.TOP);
+        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight);
+
 
     }
 
@@ -118,29 +109,10 @@ public class RobotContainer {
                         new MoveArm(arm, armIntake, ArmSetpoints.STOW)));
         Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake,
                 ArmSetpoints.PLACE_MID));
-
-        Constants.AutoConstants.eventMap.put("AutoBalance", new AutoBalancingPID(swerve));
         Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake,
                 ArmSetpoints.PLACE_TOP));
         Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
 
-        // Constants.AutoConstants.eventMap.put("Pickup Cube",
-        // new SequentialCommandGroup(
-        // Commands.runOnce(() ->
-        // armIntake.setVoltage(Constants.ArmIntake.intakeVoltage))));
-        // Constants.AutoConstants.eventMap.put("Pickup Cone",
-        // new SequentialCommandGroup(
-        // Commands.runOnce(() ->
-        // armIntake.setVoltage(Constants.ArmIntake.intakeVoltage))));
-        // Constants.AutoConstants.eventMap.put("Sting",new WaitCommand(0));
-        // Constants.AutoConstants.eventMap.put("Stow",
-        // new SequentialCommandGroup(
-        // Commands.runOnce(() ->
-        // armIntake.setVoltage(Constants.ArmIntake.idleVoltage))));
 
-        // Constants.AutoConstants.eventMap.put("AutoBalance", new
-        // AutoBalancingPID(swerve));
-        // Constants.AutoConstants.eventMap.put("Place Top", new WaitCommand(0));
-        // Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
     }
 }

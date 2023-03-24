@@ -30,11 +30,14 @@ public class AutoBalancingPID extends CommandBase {
     private boolean past_center;
     private double max_angle = 0;
     private double start_time_balanced = 0;
+    private double goalHeading = 0;
 
     // Initializes the BaseCommand
-    public AutoBalancingPID(Swerve swerveSubsystem) {
+    public AutoBalancingPID(Swerve swerveSubsystem, double goalHeading) {
         this.swerve = swerveSubsystem;
+        this.goalHeading = goalHeading;
         addRequirements(swerveSubsystem);
+
     }
 
     // Run on command init
@@ -54,28 +57,27 @@ public class AutoBalancingPID extends CommandBase {
     @Override
     public void execute() {
 
-        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), 180)) {
-            swerve.turnToRotation(0);
+        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), goalHeading)) {
+            swerve.turnToRotation(goalHeading);
         }
 
-
-        // heading = swerve.getHeading();
-        // angle = swerve.getVerticalTilt();
-        // if (Math.abs(angle) > Math.abs(max_angle)) {
-        //     max_angle = angle;
-        // }
+        heading = swerve.getHeading();
+        angle = swerve.getVerticalTilt();
+        if (Math.abs(angle) > Math.abs(max_angle)) {
+            max_angle = angle;
+        }
         // if (Math.abs(max_angle) - 7 > Math.abs(angle)) {
         //     past_center = true;
         // }
 
-        // // How inaccurate we are willing to be in reference to looking straight forward
-        // // Should change this so it adjusts on the go and doesn't need to stop
-        // if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), 180) && !has_aligned) {
-        //     swerve.turnToRotation(180);
-        // }
+        // How inaccurate we are willing to be in reference to looking straight forward
+        // Should change this so it adjusts on the go and doesn't need to stop
+        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), 180) && !has_aligned) {
+            swerve.turnToRotation(180);
+        }
 
-        // // move forward if the angle hasn't started to move and it hasn't moved in the
-        // // past
+        // move forward if the angle hasn't started to move and it hasn't moved in the
+        // past
         // else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0) && !past_center) {
         //     has_aligned = true;
         //     start_time_balanced = 0;
@@ -90,35 +92,35 @@ public class AutoBalancingPID extends CommandBase {
         //     // Output each module states to wheels
         //     swerve.setModuleStates(moduleStates);
         // }
-        // // the robot must've moved slightly past the center now, so we will start using
-        // // PID to reach the middle
-        // else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
-        //     has_aligned = true;
-        //     start_time_balanced = 0;
+        // the robot must've moved slightly past the center now, so we will start using
+        // PID to reach the middle
+        else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
+            has_aligned = true;
+            start_time_balanced = 0;
 
-        //     double speed = -controller.calculate(angle, 0)
-        //             * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        //     // 4. Construct desired chassis speeds
-        //     ChassisSpeeds chassisSpeeds;
-        //     // Relative to field
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        //             speed, 0, 0, swerve.getRotation2d());
-        //     // 5. Convert chassis speeds to individual module states
-        //     SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-        //             .toSwerveModuleStates(chassisSpeeds);
-        //     // 6. Output each module states to wheels
-        //     swerve.setModuleStates(moduleStates);
-        // }
-        // // we level? Stop with wheels facing different directions to prevent sliding
-        // else {
-        //     SwerveModuleState[] states = new SwerveModuleState[4];
-        //     for (int i = 0; i < 4; i++) {
-        //         states[i] = new SwerveModuleState(0, new Rotation2d(45 + 90 * i));
-        //     }
-        //     swerve.setModuleStates(states);
+            double speed = -controller.calculate(angle, 0)
+                    * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+            // 4. Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    speed, 0, 0, swerve.getRotation2d());
+            // 5. Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                    .toSwerveModuleStates(chassisSpeeds);
+            // 6. Output each module states to wheels
+            swerve.setModuleStates(moduleStates);
+        }
+        // we level? Stop with wheels facing different directions to prevent sliding
+        else {
+            SwerveModuleState[] states = new SwerveModuleState[4];
+            for (int i = 0; i < 4; i++) {
+                states[i] = new SwerveModuleState(0, new Rotation2d(45 + 90 * i));
+            }
+            swerve.setModuleStates(states);
 
-        //     start_time_balanced = Timer.getFPGATimestamp();
-        // }
+            start_time_balanced = Timer.getFPGATimestamp();
+        }
 
     }
 
