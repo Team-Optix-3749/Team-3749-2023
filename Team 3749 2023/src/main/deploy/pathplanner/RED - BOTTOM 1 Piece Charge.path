@@ -95,5 +95,24 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.01,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 0.7,
+      "names": [
+        "Pickup"
+      ]
+    },
+    {
+      "position": 2.2909090909090866,
+      "names": [
+        "Stow"
+      ]
+    }
+  ]
 }
