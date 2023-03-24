@@ -42,8 +42,7 @@ public class AlignApriltag extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3
-    );
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3);
     private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
 
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
@@ -61,7 +60,8 @@ public class AlignApriltag extends CommandBase {
     /**
      * @param swerve
      * @param limelight
-     * @param left True if to set the goal pose to the cone node left of the AprilTag
+     * @param left      True if to set the goal pose to the cone node left of the
+     *                  AprilTag
      */
     public AlignApriltag(Swerve swerve, Limelight limelight, boolean left) {
         this.swerve = swerve;
@@ -69,8 +69,8 @@ public class AlignApriltag extends CommandBase {
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
 
         tagToGoal = new Transform3d(
-            new Translation3d(0.6, left == true ? (4.42-3.75) : -(4.42-3.75), 0.0),
-            new Rotation3d(0.0, 0.0, Math.PI));
+                new Translation3d(0.6, left == true ? (4.42 - 3.75) : -(4.42 - 4), 0.0),
+                new Rotation3d(0.0, 0.0, Math.PI));
 
         addRequirements(swerve);
     }
@@ -78,7 +78,7 @@ public class AlignApriltag extends CommandBase {
     /**
      * Will set the goal pose to the cube node by default
      * 
-     * @param swerve 
+     * @param swerve
      * @param limelight
      */
     public AlignApriltag(Swerve swerve, Limelight limelight) {
@@ -87,11 +87,11 @@ public class AlignApriltag extends CommandBase {
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
 
         tagToGoal = new Transform3d(
-            new Translation3d(0.75, 0.05, 0.0),
-            new Rotation3d(0.0, 0.0, Math.PI));
+                new Translation3d(0.75, 0.05, 0.0),
+                new Rotation3d(0.0, 0.0, Math.PI));
         addRequirements(swerve);
     }
-    
+
     @Override
     public void initialize() {
         updateGoalPose();
@@ -184,7 +184,8 @@ public class AlignApriltag extends CommandBase {
         if (res.hasTargets()) {
             // Find the tag we want to chase
             var targetOpt = res.getTargets().stream()
-                    .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
+                    .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1
+                            && (t.getFiducialId() != 8 || t.getFiducialId() != 5))
                     .findFirst();
 
             if (targetOpt.isPresent()) {

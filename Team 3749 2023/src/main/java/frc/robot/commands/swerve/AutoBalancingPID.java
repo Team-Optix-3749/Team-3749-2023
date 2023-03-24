@@ -22,7 +22,7 @@ public class AutoBalancingPID extends CommandBase {
 
     private final Swerve swerve;
 
-    private final PIDController controller = new PIDController(0.003, 0, 0.00075);
+    private final PIDController controller = new PIDController(0.00375, 0, 0.00075);
 
     private double angle;
     private double heading;
@@ -66,32 +66,16 @@ public class AutoBalancingPID extends CommandBase {
         if (Math.abs(angle) > Math.abs(max_angle)) {
             max_angle = angle;
         }
-        // if (Math.abs(max_angle) - 7 > Math.abs(angle)) {
-        //     past_center = true;
-        // }
+        if (Math.abs(max_angle) - 7 > Math.abs(angle)) {
+            past_center = true;
+        }
 
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
-        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), 180) && !has_aligned) {
-            swerve.turnToRotation(180);
+        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), goalHeading) && !has_aligned) {
+            swerve.turnToRotation(goalHeading);
         }
 
-        // move forward if the angle hasn't started to move and it hasn't moved in the
-        // past
-        // else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0) && !past_center) {
-        //     has_aligned = true;
-        //     start_time_balanced = 0;
-        //     // Construct desired chassis speeds
-        //     ChassisSpeeds chassisSpeeds;
-        //     // Relative to field
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        //             Constants.AutoBalancing.base_speed_mps, 0, 0, swerve.getRotation2d());
-        //     // Convert chassis speeds to individual module states
-        //     SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-        //             .toSwerveModuleStates(chassisSpeeds);
-        //     // Output each module states to wheels
-        //     swerve.setModuleStates(moduleStates);
-        // }
         // the robot must've moved slightly past the center now, so we will start using
         // PID to reach the middle
         else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {

@@ -239,7 +239,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
 
-        logging();
+        // logging();
     }
 
 }

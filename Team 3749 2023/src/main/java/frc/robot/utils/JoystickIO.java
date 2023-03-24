@@ -139,9 +139,10 @@ public class JoystickIO {
      */
     public void pilotBindings() {
         // arm setpoints (buttons)
-        pilot.aWhileHeld(new AlignApriltag(swerve, limelight));
-        // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
+        pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
+        // pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
+        // pilot.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP));
+        // pilot.b().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
@@ -150,10 +151,10 @@ public class JoystickIO {
         pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
-        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
-                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
-                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        // pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
+        //         () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        // pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+        //         () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
