@@ -20,6 +20,7 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -68,7 +69,7 @@ public class RobotContainer {
         limelight.setDefaultCommand(
                 Commands.run(
                         () -> {
-                            limelight.setPipeline(0);
+                            limelight.setPipeline(Pipelines.APRILTAG.index);
                             limelight.updatePoseAprilTags(swerve.getPoseEstimator());
                         }, limelight));
     }
