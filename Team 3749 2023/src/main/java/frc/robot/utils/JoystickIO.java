@@ -17,7 +17,6 @@ import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.vision.AlignApriltag;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
-import frc.robot.subsystems.intake.SideIntake;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
@@ -39,11 +38,10 @@ public class JoystickIO {
     private Limelight limelight;
     private LEDs leds;
     private ArmIntake armIntake;
-    private SideIntake sideIntake;
     private Arm arm;
 
     public JoystickIO(Xbox pilot, Xbox operator, Swerve swerve, Limelight limelight, LEDs leds, ArmIntake armIntake,
-            SideIntake sideIntake, Arm arm) {
+            Arm arm) {
         this.pilot = pilot;
         this.limelight = limelight;
         this.operator = operator;
@@ -51,7 +49,6 @@ public class JoystickIO {
         this.limelight = limelight;
         this.leds = leds;
         this.armIntake = armIntake;
-        this.sideIntake = sideIntake;
         this.arm = arm;
     }
 
@@ -101,8 +98,10 @@ public class JoystickIO {
         operator.rightBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
         operator.leftBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
-        operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage * 0.55), () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-        operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage), () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage * 0.55),
+                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
         operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
         operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
@@ -112,18 +111,12 @@ public class JoystickIO {
         operator.povLeft().whileTrue(new AlignApriltag(swerve, limelight, true));
         operator.povRight().whileTrue(new AlignApriltag(swerve, limelight, false));
 
-        pilot.yWhileHeld(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
         pilot.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
         pilot.xWhileHeld(new AlignApriltag(swerve, limelight, true));
         pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
 
-        pilot.rightBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage),() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.idleVoltage),
-                sideIntake);
-        pilot.leftBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage),() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.idleVoltage),
-                sideIntake);
-
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
-        pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve,0));  
+        pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
         pilot.startWhileHeld(new AlignApriltag(swerve, limelight));
@@ -144,7 +137,6 @@ public class JoystickIO {
         pilot.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
-        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
@@ -153,14 +145,12 @@ public class JoystickIO {
         // intake button bindings
         pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
                 () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-        // pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
-        //         () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-
+        // pilot.leftTriggerWhileHeld(() ->
+        // armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+        // () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
         pilot.leftTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
 
-
-        
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
         pilot.startWhileHeld(
@@ -196,29 +186,16 @@ public class JoystickIO {
                 .withSize(2, 2)
                 .withProperties(Map.of("Label position", "HIDDEN"));
 
-        CommandBase liftSideIntake = Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake);
-        liftSideIntake.setName("Toggle Lift");
-        CommandBase outakeSideIntake = Commands
-                .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage), sideIntake);
-        outakeSideIntake.setName("Side Outake");
-        CommandBase intakeSideIntake = Commands
-                .run(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage), sideIntake);
-        intakeSideIntake.setName("Side Intake");
-
-        sideIntakeCommands.add(liftSideIntake);
-        sideIntakeCommands.add(outakeSideIntake);
-        sideIntakeCommands.add(intakeSideIntake);
-
         ShuffleboardLayout armIntakeCommands = controlsTab
                 .getLayout("Arm Intake", BuiltInLayouts.kList)
                 .withSize(2, 2)
                 .withProperties(Map.of("Label position", "HIDDEN"));
 
         CommandBase outakeArmIntake = Commands
-                .run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage), sideIntake);
+                .run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage), armIntake);
         outakeArmIntake.setName("Arm Outake");
         CommandBase intakeArmIntake = Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
-                sideIntake);
+                armIntake);
         intakeArmIntake.setName("Arm Intake");
 
         armIntakeCommands.add(outakeArmIntake);

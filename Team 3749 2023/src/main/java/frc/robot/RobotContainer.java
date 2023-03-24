@@ -15,12 +15,10 @@ import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.subsystems.leds.LEDs;
-import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.AutoConstants.TopBottom;
 import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
@@ -29,13 +27,12 @@ public class RobotContainer {
 
     private final Swerve swerve = new Swerve();
     private final ArmIntake armIntake = new ArmIntake();
-    private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
     private final LEDs leds = new LEDs();
     private final Limelight limelight = new Limelight();
 
     private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
-            sideIntake, arm);
+            arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -88,7 +85,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, sideIntake, limelight, leds);
+        return AutoCommands.get1Piece(swerve, arm, armIntake, limelight, leds);
 
     }
 

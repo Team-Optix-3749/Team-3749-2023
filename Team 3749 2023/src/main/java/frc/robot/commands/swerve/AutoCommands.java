@@ -12,11 +12,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.arm.MoveArm;
-import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.vision.AlignApriltag;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
-import frc.robot.subsystems.intake.SideIntake;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
@@ -67,7 +65,7 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, SideIntake sideIntake,
+    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Limelight limelight,
             LEDs leds, TopBottom topBottom) {
         PathPlannerTrajectory first = null;
@@ -94,7 +92,6 @@ public final class AutoCommands {
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
-                new InitSideIntake(sideIntake),
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
@@ -108,8 +105,7 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
     }
 
-    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, SideIntake sideIntake,
-            Limelight limelight,
+    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight,
             LEDs leds) {
         PathPlannerTrajectory first = null;
         PathPlannerTrajectory second = null;
@@ -130,8 +126,6 @@ public final class AutoCommands {
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                new InitSideIntake(sideIntake),
-
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
@@ -144,7 +138,7 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
-    public static Command getMiddleCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, SideIntake sideIntake,
+    public static Command getMiddleCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
         PathPlannerTrajectory first = null;
@@ -162,8 +156,6 @@ public final class AutoCommands {
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
         return new SequentialCommandGroup(
-                new InitSideIntake(sideIntake),
-
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
@@ -172,7 +164,7 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
-    public static Command getBottomCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, SideIntake sideIntake,
+    public static Command getBottomCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
         PathPlannerTrajectory first = null;
@@ -190,8 +182,6 @@ public final class AutoCommands {
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
         return new SequentialCommandGroup(
-                new InitSideIntake(sideIntake),
-
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
@@ -200,7 +190,7 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
-    public static Command getBottomPickup(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, SideIntake sideIntake,
+    public static Command getBottomPickup(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
         PathPlannerTrajectory first = null;
@@ -218,8 +208,6 @@ public final class AutoCommands {
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
         return new SequentialCommandGroup(
-                new InitSideIntake(sideIntake),
-
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
@@ -228,17 +216,15 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
-    public static Command get1Piece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, SideIntake sideIntake,
+    public static Command get1Piece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
 
         return new SequentialCommandGroup(
-                new InitSideIntake(sideIntake),
-
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
-              new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
-            }
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
+    }
 }

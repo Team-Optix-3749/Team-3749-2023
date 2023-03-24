@@ -185,7 +185,7 @@ public class AlignApriltag extends CommandBase {
             // Find the tag we want to chase
             var targetOpt = res.getTargets().stream()
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1
-                            && (t.getFiducialId() != 8 || t.getFiducialId() != 5))
+                            && (t.getFiducialId() != 4 || t.getFiducialId() != 5))
                     .findFirst();
 
             if (targetOpt.isPresent()) {
