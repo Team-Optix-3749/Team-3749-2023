@@ -113,6 +113,8 @@ public class JoystickIO {
 
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
         pilot.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
+        pilot.aWhileHeld(new AlignApriltag(swerve, limelight, true));
+        pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
 
         pilot.rightBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage),
                 sideIntake);
@@ -121,6 +123,7 @@ public class JoystickIO {
 
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
+        pilot.startWhileHeld(new AlignApriltag(swerve, limelight));
 
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
@@ -132,8 +135,7 @@ public class JoystickIO {
     /**
      * If only one controller is plugged in (pi)
      */
-    public void 
-    pilotBindings() {
+    public void pilotBindings() {
         // arm setpoints (buttons)
         pilot.aWhileHeld(new AlignApriltag(swerve, limelight));
         // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));

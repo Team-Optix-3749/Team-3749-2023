@@ -5,8 +5,8 @@
    - **Left:** XY relative to the field
    - **Right:** Turn robot Heading
  - **BUTTONS 👇**
-   - **A:** NONE
-   - **B:** TODO: Lock wheels on engage
+   - **A:** Align to the cone node LEFT of the AprilTag
+   - **B:** Align to the cone node RIGHT of the AprilTag
    - **X:** Move arm to TOP INTAKE (Twice to go to STOW)
    - **Y:**  Lift the side intake (Toggle)
  - **Bumpers ✊**
@@ -33,8 +33,8 @@
  - **BUTTONS 👇**
    - **A:** Move arm to PLACE_TOP (Twice to go to STING)
    - **B:** Move arm to PLACE_MID (Twice to go to STING)
-   - **X:** Move arm to TOP INTAKE (Twice to go to STOW)
-   - **Y:** NONE
+   - **X:** Move arm to GROUND_INTAKE_CUBE (Twice to go to STOW)
+   - **Y:** Move arm to GROUND_INTAKE_CONE (Twice to go to STOW)
  - **Bumpers ✊**
    - **Right:** Move arm to STING (Twice to go to STOW)
    - **Left:** Move arm to DOUBLE_SUBSTATION (Twice to go to STOW)
