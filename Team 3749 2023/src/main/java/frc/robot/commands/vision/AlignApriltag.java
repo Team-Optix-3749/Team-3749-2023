@@ -41,7 +41,8 @@ public class AlignApriltag extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.0);
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3
+    );
     private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
 
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
@@ -94,13 +95,14 @@ public class AlignApriltag extends CommandBase {
     
     @Override
     public void initialize() {
+        updateGoalPose();
+
         limelight.setPipeline(0);
         turnController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override
     public void execute() {
-
         if (goalPose == null) {
             updateGoalPose();
             System.out.println("Goal Pose Is Null");

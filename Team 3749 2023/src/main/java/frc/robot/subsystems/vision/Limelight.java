@@ -21,6 +21,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.VisionConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -115,8 +121,8 @@ public class Limelight extends SubsystemBase {
         return PhotonUtils.estimateCameraToTargetTranslation(
                 getDistance(target, node), getYaw(target));
     }
-
-    public AprilTagFieldLayout getAprilTagFieldLayout() {
+    
+    public AprilTagFieldLayout getAprilTagFieldLayout(){
         return aprilTagFieldLayout;
     }
 
@@ -167,12 +173,12 @@ public class Limelight extends SubsystemBase {
             // if it recieved a pose update
             if (poseEstimate.isPresent()) {
                 Pose2d newPose = poseEstimate.get().estimatedPose.toPose2d();
-                // if the update is sufficiantly different to the current one, done to not cause
-                // pid oscilation
-                if (!Constants.withinMargin(0.05, newPose.getTranslation(),
-                        swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())) {
+
+                if (DriverStation.getAlliance() == Alliance.Red && DriverStation.isAutonomous()) ;
+                // if the update is sufficiantly different to the current one, done to not cause pid oscilation
+                if (!Constants.withinMargin(0.04, newPose.getTranslation(), swerveDrivePoseEstimator.getEstimatedPosition().getTranslation())){
                     swerveDrivePoseEstimator.addVisionMeasurement(
-                            newPose, imageCaptureTime);
+                        newPose, imageCaptureTime);
                 }
                 // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
             }
@@ -187,7 +193,6 @@ public class Limelight extends SubsystemBase {
     public void logging() {
 
         var result = getLatestResult();
-
         if (result.hasTargets()) {
             var target = getBestTarget(getLatestResult());
 
@@ -202,6 +207,7 @@ public class Limelight extends SubsystemBase {
 
     @Override
     public void periodic() {
+
         logging();
     }
 

@@ -24,6 +24,7 @@ public class AlignHeading extends CommandBase {
 
     public AlignHeading(Swerve swerve) {
         this.swerve = swerve;
+        this.turnController.enableContinuousInput(-180,180);
         addRequirements(swerve);
     }
 

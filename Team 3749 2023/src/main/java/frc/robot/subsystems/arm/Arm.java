@@ -101,7 +101,7 @@ public class Arm extends SubsystemBase {
         setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
     }
 
-    /**
+    /**f
      * Get current arm pose as Translation2d
      * 
      * @return arm coordianates as Translation2d

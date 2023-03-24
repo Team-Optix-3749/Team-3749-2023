@@ -12,14 +12,14 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 
 /***
+ * @author Rohin Sood
+ * @author Noah Simon
+ * @author Raadwan Masum
  * @author Anusha Khobare
  * @author Aashray Reddy
  * @author Ryan R McWeeny
  * @author Hanlun Li
  * @author Harkirat Hattar
- * @author Noah Simon
- * @author Rohin Sood
- * @author Raadwan Masum
  * 
  *         ArmIntake.java creates objects, dependencies, and motor controller groups
  *         to allow us to set the speed of each motor for intake and outtake
@@ -35,6 +35,8 @@ public class ArmIntake extends SubsystemBase {
     private final ShuffleData<Double> intakeVoltage = new ShuffleData<Double>("Arm Intake", "Intake Voltage", 0.0);
     private final ShuffleData<Double> intakeCurrent = new ShuffleData<Double>("Arm Intake", "Intake Current", 0.0);
     private final ShuffleData<Double> intakeTemp = new ShuffleData<Double>("Arm Intake", "Intake Temperature", 0.0);
+
+    private double voltage = Constants.ArmIntake.idleVoltage;
 
     public ArmIntake() {
         intakeMotor.restoreFactoryDefaults();
@@ -74,17 +76,10 @@ public class ArmIntake extends SubsystemBase {
      * @param voltage
      */
     public void setVoltage(double voltage) {
-        intakeMotor.setVoltage(voltage);
+
+        this.voltage = voltage;
     }
 
-    /**
-     * set % speed of the motor
-     * 
-     * @param speed -1.0 to 1.0
-     */
-    public void set(double speed) {
-        intakeMotor.set(speed);
-    }
 
     /**
      * set claw motor using feed forward control loop
@@ -105,6 +100,8 @@ public class ArmIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        intakeMotor.setVoltage(voltage);
+
         intakeTemp.set(getTemperature());
         intakeCurrent.set(intakeMotor.getOutputCurrent());
         intakeVoltage.set(intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage());

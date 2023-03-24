@@ -17,6 +17,9 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import frc.robot.utils.Constants;
 
 /**
+ * @author Raadwan Masum
+ * @author Rohin Sood
+ * @author Noah Simon
  * Converts between the system state and motor voltages for a double jointed
  * arm.
  *

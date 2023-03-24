@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems.swerve;
 
+import java.sql.Driver;
+
 import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -15,7 +18,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -24,8 +29,8 @@ import frc.robot.utils.Constants.DriveConstants;
 /***
  * @author Noah Simon
  * @author Rohin Sood
- * @author Raadwan ____
- * @author Harkirat ____
+ * @author Raadwan Masum
+ * @author Harkirat
  * 
  *         Subsystem class for swerve drive, used to manage four swerve modules
  *         and set their states. Also includes a pose estimator, gyro, and
@@ -69,10 +74,10 @@ public class Swerve extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    // equivilant to a odometer, but also intakes vision
+    private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
-    private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
-
-    private final PIDController turnController = new PIDController(0.045, 0.00, 0);
+    private final PIDController turnController = new PIDController(0.0335, 0.00, 0);
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
@@ -85,7 +90,8 @@ public class Swerve extends SubsystemBase {
         new Thread(() -> {
             try {
                 Thread.sleep(3000);
-                zeroHeading();
+                gyro.reset();
+
             } catch (Exception e) {
             }
         }).start();
@@ -116,12 +122,24 @@ public class Swerve extends SubsystemBase {
         drive(0, 0, 0);
     }
 
-    public void zeroHeading() {
+    public void resetGyro() {
         gyro.reset();
+    }
+
+    public double getAutoHeading() {
+
+        return new Rotation2d(Math.toRadians(gyro.getYaw()))
+                .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees();
     }
 
     public double getHeading() {
         return gyro.getYaw();
+    }
+
+    public Rotation2d getAutoRotation2d() {
+
+        return Rotation2d.fromDegrees(-getAutoHeading());
+
     }
 
     public Rotation2d getRotation2d() {
@@ -129,20 +147,31 @@ public class Swerve extends SubsystemBase {
     }
 
     public Pose2d getPose() {
+        Rotation2d rotation = DriverStation.getAlliance()==Alliance.Blue
+                ? (DriverStation.isAutonomous() ? getAutoRotation2d() : getRotation2d())
+                : getRotation2d();
         Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
-        return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
+
+        return new Pose2d(estimatedPose.getTranslation(), rotation);
     }
 
+
     public void resetOdometry(Pose2d pose) {
-        swerveDrivePoseEstimator.resetPosition(getRotation2d(),
+        Rotation2d rotation = DriverStation.getAlliance()==Alliance.Blue
+                ? (DriverStation.isAutonomous() ? getAutoRotation2d() : getRotation2d())
+                : getRotation2d();
+
+        swerveDrivePoseEstimator.resetPosition(rotation,
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() },
                 pose);
     }
 
     public void updateOdometry() {
-        // update pose estimation using encoders and gyro
-        swerveDrivePoseEstimator.update(getRotation2d(),
+        Rotation2d rotation = DriverStation.getAlliance()==Alliance.Blue
+                ? (DriverStation.isAutonomous() ? getAutoRotation2d() : getRotation2d())
+                : getRotation2d();
+        swerveDrivePoseEstimator.update(rotation,
                 new SwerveModulePosition[] { frontRight.getPosition(), frontLeft.getPosition(), backRight.getPosition(),
                         backLeft.getPosition() });
 
@@ -228,6 +257,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+
 
         robotHeading.set(getHeading());
         pitch.set(getVerticalTilt());

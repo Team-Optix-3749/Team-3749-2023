@@ -21,9 +21,9 @@ import frc.robot.utils.Constants.ModuleConstants;
 
 /***
  * @author Noah Simon
- * @author Raadwan ___
+ * @author Raadwan Masum
  * @author Rohin Sood
- * @author Harkirat ____
+ * @author Harkirat 
  * 
  *         Object to manage each individual swerve module, including a drive
  *         motor, a turning motor, a drive encoder, and an Absolute CanCoder

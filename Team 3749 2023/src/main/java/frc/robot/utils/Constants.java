@@ -52,8 +52,10 @@ public class Constants {
     public static final class ArmIntake {
         public static final int arm_intake_id = 22;
         public static final double idleVoltage = 1;
-        public static final double releaseObjectVoltage = -6;
-        public static final double intakeVoltage = 6;
+        public static final double releaseConeVoltage = -6;
+        public static final double releaseCubeVoltage = -4.5;
+
+        public static final double intakeVoltage = 5;
     }
 
     public static final class SideIntake {
@@ -115,14 +117,15 @@ public class Constants {
             STOW,
             STING,
             DOUBLE_SUBSTATION,
-            GROUND_INTAKE,
+            GROUND_INTAKE_CONE,
+            GROUND_INTAKE_CUBE,
             PLACE_TOP,
             PLACE_MID;
         }
     }
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
+        public static final double kWheelDiameterMeters = Units.inchesToMeters(3.5);
         public static final double kDriveMotorGearRatio = 1.0 / 6.75;
         public static final double kTurningMotorGearRatio = 1.0 / 12.8;
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
@@ -216,10 +219,14 @@ public class Constants {
 
     public static final class AutoConstants {
         public static final Map<String, Command> eventMap = new HashMap<>();
+
+        public static enum TopBottom {
+            TOP,
+            BOTTOM;
+        }
     }
 
     public static class VisionConstants {
-
         // See
         // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
         // page 208
@@ -229,18 +236,6 @@ public class Constants {
         // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
         // page 197
         public static final double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
-
-        // See
-        // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
-        // pages 4 and 5
-        public static final double kFarTgtXPos = Units.feetToMeters(54);
-        public static final double kFarTgtYPos = Units.feetToMeters(27 / 2) - Units.inchesToMeters(43.75)
-                - Units.inchesToMeters(48.0 / 2.0);
-        public static final double kFarTgtZPos = (Units.inchesToMeters(98.19) - targetHeight) / 2 + targetHeight;
-
-        public static final Pose3d kFarTargetPose = new Pose3d(
-                new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
-                new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
 
         public static final Transform3d cam_to_robot = new Transform3d(
                 new Translation3d(0.0, -Units.inchesToMeters(7), -Units.inchesToMeters(18)), new Rotation3d());
