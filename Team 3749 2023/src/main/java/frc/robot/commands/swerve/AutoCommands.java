@@ -118,22 +118,15 @@ public final class AutoCommands {
                 first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
                 second = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
 
-            } else if (DriverStation.getLocation() == 3) {
-                first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-                second = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece - Charge", new PathConstraints(2.5, 2.5));
-
-            }
+            } 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            if (DriverStation.getLocation() == 1) {
+            if (DriverStation.getLocation() == 3) {
                 first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
                 second = PathPlanner.loadPath("RED - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
 
-            } else if (DriverStation.getLocation() == 3) {
-                first = PathPlanner.loadPath("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-                second = PathPlanner.loadPath("RED - BOTTOM 2 Piece - Charge", new PathConstraints(2.5, 2.5));
-
             }
         }
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
@@ -150,7 +143,7 @@ public final class AutoCommands {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.1),
                 path_2,
-                new AutoBalancingPID(swerveSubsystem,0));
+                new AutoBalancingPID(swerveSubsystem,goalHeading));
     }
 
 
@@ -167,6 +160,8 @@ public final class AutoCommands {
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+
         return new SequentialCommandGroup(
 
                 Commands.waitSeconds(0.1),
@@ -174,6 +169,56 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new AutoBalancingPID(swerveSubsystem,0));
+                new AutoBalancingPID(swerveSubsystem,goalHeading));
+    }
+    public static Command getBottomCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+        PathPlannerTrajectory first = null;
+
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+                first = PathPlanner.loadPath("BLUE - Bottom 1 Piece Charge", new PathConstraints(2.5, 2.5));
+
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            first = PathPlanner.loadPath("RED - Bottom 1 Piece Charge", new PathConstraints(2.5, 2.5));
+        }
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+
+        return new SequentialCommandGroup(
+
+                Commands.waitSeconds(0.1),
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
+                Commands.waitSeconds(0.6),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                path_1,
+                new AutoBalancingPID(swerveSubsystem,goalHeading));
+    }
+
+    public static Command getBottomPickup(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
+        PathPlannerTrajectory first = null;
+
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+                first = PathPlanner.loadPath("BLUE - Bottom 1 Piece", new PathConstraints(2.5, 2.5));
+
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            first = PathPlanner.loadPath("RED - Bottom 1 Piece", new PathConstraints(2.5, 2.5));
+        }
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+
+        return new SequentialCommandGroup(
+
+                Commands.waitSeconds(0.1),
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
+                Commands.waitSeconds(0.6),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                path_1,
+                new AutoBalancingPID(swerveSubsystem,goalHeading));
     }
 }
+
