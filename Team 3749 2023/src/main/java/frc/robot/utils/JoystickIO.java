@@ -112,7 +112,7 @@ public class JoystickIO {
         operator.povLeft().whileTrue(new AlignApriltag(swerve, limelight, true));
         operator.povRight().whileTrue(new AlignApriltag(swerve, limelight, false));
 
-        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+        pilot.yWhileHeld(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
         pilot.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
         pilot.xWhileHeld(new AlignApriltag(swerve, limelight, true));
         pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
@@ -139,10 +139,9 @@ public class JoystickIO {
      */
     public void pilotBindings() {
         // arm setpoints (buttons)
-        pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
         // pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
-        // pilot.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP));
-        // pilot.b().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
+        pilot.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP));
+        pilot.b().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
@@ -151,10 +150,10 @@ public class JoystickIO {
         pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
-        // pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
-        //         () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-        // pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
-        //         () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
+                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
         // swerve button bindings
         pilot.backWhileHeld(() -> swerve.resetGyro(), swerve);
