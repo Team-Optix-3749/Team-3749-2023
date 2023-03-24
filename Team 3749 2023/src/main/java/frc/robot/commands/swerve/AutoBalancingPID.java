@@ -22,7 +22,7 @@ public class AutoBalancingPID extends CommandBase {
 
     private final Swerve swerve;
 
-    private final PIDController controller = new PIDController(0.00375, 0, 0.00075);
+    private final PIDController controller = new PIDController(0.00325, 0, 0.00075);
 
     private double angle;
     private double heading;
@@ -73,12 +73,14 @@ public class AutoBalancingPID extends CommandBase {
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
         if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), goalHeading) && !has_aligned) {
+            System.out.println("TURNING");
             swerve.turnToRotation(goalHeading);
         }
 
         // the robot must've moved slightly past the center now, so we will start using
         // PID to reach the middle
         else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
+            System.out.println("BALANCING");
             has_aligned = true;
             start_time_balanced = 0;
 

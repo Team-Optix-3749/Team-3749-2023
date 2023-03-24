@@ -84,7 +84,7 @@ public class RobotContainer {
             return;
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickIO.getButtonBindings();
+        joystickIO.pilotBindings();
 
     }
 
