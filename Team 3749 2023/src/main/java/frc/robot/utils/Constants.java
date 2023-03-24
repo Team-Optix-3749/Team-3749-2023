@@ -280,7 +280,7 @@ public class Constants {
         public static final int length = 92;
 
         public static enum LEDPattern {
-            RAINBOW, RED, BLUE, GREEN, WHITE, BOUNCE, BLINK, TWINKLE, NOTHING
+            RAINBOW, RED, BLUE, GREEN, PURPLE, YELLOW, WHITE, BOUNCE, BLINK, TWINKLE, NOTHING
         };
     }
 }

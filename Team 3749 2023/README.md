@@ -27,7 +27,9 @@
 ## Operator 🙉
  - **JOYSTICKS 🕹️**
    - **Left:** NONE
+   - **Left Button:** Purple LEDs (Signal cubes)
    - **Right:** NONE
+   - **Right Button:** Yellow LEDs (Signal cones)
  - **BUTTONS 👇**
    - **A:** Move arm to PLACE_TOP (Twice to go to STING)
    - **B:** Move arm to PLACE_MID (Twice to go to STING)
