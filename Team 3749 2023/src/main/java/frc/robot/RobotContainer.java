@@ -84,7 +84,7 @@ public class RobotContainer {
             return;
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickIO.pilotBindings();
+        joystickIO.getButtonBindings();
 
     }
 
@@ -92,7 +92,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTwoPiece(swerve, arm, armIntake, limelight, leds, TopBottom.BOTTOM);
+        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight, leds);
 
     }
 

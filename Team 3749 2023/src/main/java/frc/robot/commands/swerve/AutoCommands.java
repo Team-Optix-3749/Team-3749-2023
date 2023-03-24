@@ -111,17 +111,15 @@ public final class AutoCommands {
         PathPlannerTrajectory second = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            if (DriverStation.getLocation() == 1) {
                 first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
                 second = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
 
-            }
+            
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            if (DriverStation.getLocation() == 3) {
                 first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
                 second = PathPlanner.loadPath("RED - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
 
-            }
+            
         }
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
