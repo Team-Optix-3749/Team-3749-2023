@@ -101,8 +101,8 @@ public class JoystickIO {
         operator.rightBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
         operator.leftBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
-        operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage));
-        operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
+        operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage), () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage), () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
         operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
         operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);

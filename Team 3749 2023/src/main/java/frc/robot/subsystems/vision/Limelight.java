@@ -137,7 +137,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public void setPipeline(int index) {
-        camera.setPipelineIndex(index);
+        // camera.setPipelineIndex(index);
     }
 
     public void setLED(VisionLEDMode ledMode) {

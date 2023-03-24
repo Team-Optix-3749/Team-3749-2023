@@ -74,7 +74,7 @@ public final class AutoCommands {
                 first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
 
             } else if (topBottom == TopBottom.BOTTOM) {
-                first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+                first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2, 2));
 
             }
         } else if (DriverStation.getAlliance() == Alliance.Red) {
