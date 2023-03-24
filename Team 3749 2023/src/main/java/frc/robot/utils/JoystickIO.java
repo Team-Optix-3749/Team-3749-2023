@@ -13,11 +13,15 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.arm.MoveArm;
-import frc.robot.commands.swerve.ApriltagAlign;
+import frc.robot.commands.vision.AlignApriltag;
 import frc.robot.commands.swerve.AutoBalancingPID;
+import frc.robot.commands.swerve.AlignHeading;
+import frc.robot.commands.vision.AlignApriltag;
+import frc.robot.commands.vision.AlignRetro;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.subsystems.intake.SideIntake;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
@@ -35,15 +39,19 @@ public class JoystickIO {
 
     private Swerve swerve;
     private Limelight limelight;
+    private LEDs leds;
     private ArmIntake armIntake;
     private SideIntake sideIntake;
     private Arm arm;
 
-    public JoystickIO(Xbox pilot, Xbox operator, Swerve swerve, Limelight limelight, ArmIntake armIntake, SideIntake sideIntake, Arm arm) {
+    public JoystickIO(Xbox pilot, Xbox operator, Swerve swerve, Limelight limelight, LEDs leds, ArmIntake armIntake,
+            SideIntake sideIntake, Arm arm) {
         this.pilot = pilot;
         this.limelight = limelight;
         this.operator = operator;
         this.swerve = swerve;
+        this.limelight = limelight;
+        this.leds = leds;
         this.armIntake = armIntake;
         this.sideIntake = sideIntake;
         this.arm = arm;
@@ -86,23 +94,29 @@ public class JoystickIO {
      */
     public void pilotAndOperatorBindings() {
         // arm setpoints (buttons)
-        operator.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        operator.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
-        operator.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
-        operator.y().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CONE));
+        operator.a().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP));
+        operator.b().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
+        operator.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
+        operator.y().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE));
 
         // arm setpoints (bumpers)
-        operator.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
-        operator.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
+        operator.rightBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
+        operator.leftBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
         operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage));
         operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
 
-        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+        // alignment (vision)
+        operator.povUp().whileTrue(new AlignApriltag(swerve, limelight));
+        operator.povLeft().whileTrue(new AlignApriltag(swerve, limelight, true));
+        operator.povRight().whileTrue(new AlignApriltag(swerve, limelight, false));
 
-        pilot.rightTriggerWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage),
+        pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
+        pilot.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
+
+        pilot.rightBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.releaseConeVoltage),
                 sideIntake);
-        pilot.leftTriggerWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage),
+        pilot.leftBumperWhileHeld(() -> sideIntake.setIntakeVoltage(Constants.ArmIntake.intakeVoltage),
                 sideIntake);
 
         // swerve button bindings
@@ -121,15 +135,15 @@ public class JoystickIO {
     public void 
     pilotBindings() {
         // arm setpoints (buttons)
-        pilot.aWhileHeld(new ApriltagAlign(swerve, limelight));
+        pilot.aWhileHeld(new AlignApriltag(swerve, limelight));
         // pilot.a().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        pilot.b().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
-        pilot.x().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
+        pilot.b().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
+        pilot.x().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
         pilot.y().onTrue(Commands.runOnce(() -> sideIntake.toggleLiftSetpoint(), sideIntake));
 
         // arm setpoints (bumpers)
-        pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.STING));
-        pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
+        pilot.rightBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
+        pilot.leftBumper().onTrue(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
         pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
@@ -144,9 +158,9 @@ public class JoystickIO {
         pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
         pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
-
     /**
-     * If NO joysticks are plugged in (Buttons for commands are runnable in the "Controls" tab in ShuffleBoard)
+     * If NO joysticks are plugged in (Buttons for commands are runnable in the
+     * "Controls" tab in ShuffleBoard)
      */
     public void noJoystickBindings() {
         ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
@@ -156,11 +170,11 @@ public class JoystickIO {
                 .withSize(2, 2)
                 .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
-        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP));
-        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.PLACE_MID));
-        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE));
-        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.STING));
-        armCommands.add(new MoveArm(arm, armIntake, ArmSetpoints.DOUBLE_SUBSTATION));
+        armCommands.add(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP));
+        armCommands.add(new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_MID));
+        armCommands.add(new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
+        armCommands.add(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
+        armCommands.add(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
         ShuffleboardLayout sideIntakeCommands = controlsTab
                 .getLayout("Side Intake", BuiltInLayouts.kList)

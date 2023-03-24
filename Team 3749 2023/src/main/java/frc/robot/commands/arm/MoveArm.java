@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories.ArmPaths;
 import frc.robot.subsystems.intake.ArmIntake;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.Arm.ArmSetpoints;;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.LEDs.LEDPattern;;
 
 /***
  * @author Noah Simon
@@ -29,15 +31,17 @@ public class MoveArm extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     private final Arm arm;
+    private final LEDs leds;
     private final ArmSetpoints desiredSetpoint;
     private State desiredState;
     private Timer timer = new Timer();
     private ArmPaths trajectoryInformation;
     private int trajectoryIndex = 0;
 
-    public MoveArm(Arm arm, ArmIntake intake, ArmSetpoints setpoint) {
+    public MoveArm(Arm arm, ArmIntake intake, LEDs leds, ArmSetpoints setpoint) {
         this.arm = arm;
         this.desiredSetpoint = setpoint;
+        this.leds = leds;
         setName(setpoint.toString() + " Trajectory");
         addRequirements(arm);
     }
@@ -97,7 +101,7 @@ public class MoveArm extends CommandBase {
                 timer.reset();
                 timer.start();
             } else {
-                
+
                 return true;
             }
         }
@@ -127,6 +131,7 @@ public class MoveArm extends CommandBase {
         // intake
         if (currentSetpoint == ArmSetpoints.DOUBLE_SUBSTATION && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
+            leds.setLEDPattern(leds.getDefaultColor());
             return ArmPaths.DOUBLESUB_TO_STOW;
         }
         if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE && desiredSetpoint != ArmSetpoints.STOW) {
@@ -135,12 +140,16 @@ public class MoveArm extends CommandBase {
         }
         if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE && desiredSetpoint != ArmSetpoints.STOW) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
+            leds.setLEDPattern(leds.getDefaultColor());
             return ArmPaths.GROUND_INTAKE_CONE_TO_STOW;
         }
         switch (desiredSetpoint) {
             case PLACE_TOP:
+                leds.setLEDPattern(LEDPattern.BOUNCE);
+
                 // if already there, place and return
                 if (desiredSetpoint == currentSetpoint) {
+                    leds.setLEDPattern(leds.getDefaultColor());
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.TOP_TO_STOW;
                 }
@@ -161,7 +170,10 @@ public class MoveArm extends CommandBase {
                 }
 
             case PLACE_MID:
+                leds.setLEDPattern(LEDPattern.BOUNCE);
+
                 if (desiredSetpoint == currentSetpoint) {
+                    leds.setLEDPattern(leds.getDefaultColor());
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.MID_TO_STOW;
                 }
@@ -178,8 +190,10 @@ public class MoveArm extends CommandBase {
 
             case DOUBLE_SUBSTATION:
                 arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                leds.setLEDPattern(LEDPattern.TWINKLE);
 
                 if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return ArmPaths.DOUBLESUB_TO_STOW;
                 } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
                     return ArmPaths.TOP_TO_STOW;
@@ -197,25 +211,33 @@ public class MoveArm extends CommandBase {
                 }
 
             case GROUND_INTAKE_CUBE:
+                leds.setLEDPattern(LEDPattern.WHITE);
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     return ArmPaths.GROUND_INTAKE_CUBE_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CUBE);
                     return ArmPaths.STOW_TO_GROUND_INTAKE_CUBE;
                 }
             case GROUND_INTAKE_CONE:
+                leds.setLEDPattern(LEDPattern.WHITE);
+
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     return ArmPaths.GROUND_INTAKE_CONE_TO_STOW;
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CONE);
                     return ArmPaths.STOW_TO_GROUND_INTAKE_CONE;
                 }
             case STING:
+                leds.setLEDPattern(LEDPattern.RAINBOW);
+
                 arm.setCurrentSetpoint(ArmSetpoints.STING);
                 if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    leds.setLEDPattern(leds.getDefaultColor());
                     return ArmPaths.STING_TO_STOW;
                 } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
                     return ArmPaths.TOP_TO_STING;

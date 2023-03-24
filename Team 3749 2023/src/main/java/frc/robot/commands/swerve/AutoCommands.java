@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.arm.MoveArm;
+import frc.robot.commands.vision.AlignApriltag;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
@@ -68,7 +70,7 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight) {
+    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -94,20 +96,20 @@ public final class AutoCommands {
 
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
-                new MoveArm(arm, armIntake, ArmSetpoints.STING),
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.5),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new ApriltagAlign(swerveSubsystem, limelight).withTimeout(1),
+                new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.1),
 
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.15),
-                new MoveArm(arm, armIntake, ArmSetpoints.STOW));
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
     }
 
-    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight) {
+    public static Command getTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
         PathPlannerTrajectory first = null;
         PathPlannerTrajectory second = null;
 
@@ -140,11 +142,11 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
 
                 Commands.waitSeconds(0.1),
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,
-                new ApriltagAlign(swerveSubsystem, limelight).withTimeout(1),
+                new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.1),
                 path_2,
@@ -152,7 +154,7 @@ public final class AutoCommands {
     }
 
 
-    public static Command getMiddleCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight) {
+    public static Command getMiddleCharge(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake, Limelight limelight, LEDs leds) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -168,7 +170,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
 
                 Commands.waitSeconds(0.1),
-                new MoveArm(arm, armIntake, ArmSetpoints.PLACE_TOP),
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 path_1,

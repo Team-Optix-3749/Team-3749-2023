@@ -14,8 +14,9 @@ import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoCommands;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.commands.sideIntake.InitSideIntake;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
-import frc.robot.commands.vision.VisionDefaultCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
@@ -29,9 +30,11 @@ public class RobotContainer {
     private final ArmIntake armIntake = new ArmIntake();
     private final SideIntake sideIntake = new SideIntake();
     private final Arm arm = new Arm();
+    private final LEDs leds = new LEDs();
     private final Limelight limelight = new Limelight();
 
-    JoystickIO joystickOI = new JoystickIO(pilot, operator, swerve, limelight, armIntake, sideIntake, arm);
+    private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
+            sideIntake, arm);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -52,7 +55,6 @@ public class RobotContainer {
 
     /**
      * Set default commands
-     * 
      */
     public void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveTeleopCommand(
@@ -62,9 +64,15 @@ public class RobotContainer {
                 () -> pilot.getRightX()));
 
         sideIntake.setDefaultCommand(
-                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake));
+                Commands.run(() -> sideIntake.setIntakeVoltage(Constants.SideIntake.idleVoltage), sideIntake)
+                        .beforeStarting(new InitSideIntake(sideIntake)));
 
-        limelight.setDefaultCommand(new VisionDefaultCommand(limelight, swerve.getPoseEstimator()));
+        limelight.setDefaultCommand(
+                Commands.run(
+                        () -> {
+                            limelight.setPipeline(0);
+                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
+                        }, limelight));
     }
 
     /**
@@ -76,7 +84,7 @@ public class RobotContainer {
             return;
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickOI.getButtonBindings();
+        joystickIO.getButtonBindings();
 
     }
 
@@ -84,8 +92,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight);
-
+        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight, leds);
 
     }
 
@@ -96,23 +103,22 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Pickup Cube",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CUBE)));
+                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
         Constants.AutoConstants.eventMap.put("Pickup Cone",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, ArmSetpoints.GROUND_INTAKE_CONE)));
-        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake,
+                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE)));
+        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, leds,
                 ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
-                        new MoveArm(arm, armIntake, ArmSetpoints.STOW)));
-        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake,
+                        new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW)));
+        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake, leds,
                 ArmSetpoints.PLACE_MID));
-        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake,
+        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, leds,
                 ArmSetpoints.PLACE_TOP));
         Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
-
 
     }
 }
