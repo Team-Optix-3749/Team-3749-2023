@@ -19,6 +19,7 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.AutoConstants.TopBottom;
 import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
@@ -85,7 +86,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTwoPieceCharge(swerve, arm, armIntake, limelight, leds);
+        return AutoCommands.getTwoPiece(swerve, arm, armIntake, limelight, leds, TopBottom.TOP);
 
     }
 
