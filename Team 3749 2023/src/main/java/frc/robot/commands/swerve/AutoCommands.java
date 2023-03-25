@@ -20,7 +20,6 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.AutoConstants.TopBottom;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -66,27 +65,46 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command getTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+    public static Command getBottomTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
             Limelight limelight,
-            LEDs leds, TopBottom topBottom) {
+            LEDs leds) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            if (topBottom == TopBottom.TOP) {
-                first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
 
-            } else if (topBottom == TopBottom.BOTTOM) {
-                first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2, 2));
-
-            }
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            if (topBottom == TopBottom.TOP) {
-                first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+        }
+            Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                    first.getMarkers(), Constants.AutoConstants.eventMap);
 
-            } else if (topBottom == TopBottom.BOTTOM) {
-                first = PathPlanner.loadPath("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+            return new SequentialCommandGroup(
+                    Commands.waitSeconds(0.1),
+                    new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
+                    Commands.waitSeconds(0.6),
+                    Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                    path_1,
+                    new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
+                    Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                            .withTimeout(0.1),
 
-            }
+                    Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                    new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
+
+    }
+
+    public static Command getTopTwoPiece(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+            Limelight limelight,
+            LEDs leds) {
+        PathPlannerTrajectory first = null;
+
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
+
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
+
         }
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
@@ -262,6 +280,24 @@ public final class AutoCommands {
                 // new WaitCommand(3),
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
+
+    }
+
+    public static Command getTaxi(Swerve swerveSubsystem) {
+
+        PathPlannerTrajectory first = null;
+
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            first = PathPlanner.loadPath("TAXI top", new PathConstraints(2.5, 2.5));
+        }
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+
+        return new SequentialCommandGroup(
+                // new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
+                // new WaitCommand(3),
+                path_1);
 
     }
 }
