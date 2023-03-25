@@ -191,6 +191,11 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
+        if (flipGyro){
+            for (int i = 0; i < 4; i++){
+                desiredStates[i].speedMetersPerSecond = -desiredStates[i].speedMetersPerSecond;
+            }
+        }
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         frontRight.setDesiredState(desiredStates[0]);
         frontLeft.setDesiredState(desiredStates[1]);
