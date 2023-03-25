@@ -191,9 +191,11 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        if (flipGyro){
+        if (flipGyro && ! DriverStation.isAutonomous()){
             for (int i = 0; i < 4; i++){
                 desiredStates[i].speedMetersPerSecond = -desiredStates[i].speedMetersPerSecond;
+                desiredStates[i].angle = desiredStates[i].angle.plus(new Rotation2d(180));
+
             }
         }
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
