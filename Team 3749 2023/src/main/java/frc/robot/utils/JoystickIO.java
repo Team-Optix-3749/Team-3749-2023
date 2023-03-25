@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.vision.AlignApriltag;
@@ -119,7 +120,7 @@ public class JoystickIO {
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
         pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
         // swerve button bindings
-        pilot.startWhileHeld(() -> swerve.resetGyro(), swerve);
+        pilot.startWhileHeld(new SequentialCommandGroup(Commands.run(() -> swerve.unflipGyro(), swerve), Commands.run(() -> swerve.resetGyro(), swerve)));
 
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
