@@ -233,9 +233,33 @@ public final class AutoCommands {
             LEDs leds) {
 
         return new SequentialCommandGroup(
-            new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW),
-            new AlignApriltag(swerveSubsystem, limelight).withTimeout(1));
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW),
+                new AlignApriltag(swerveSubsystem, limelight).withTimeout(1));
+
+    }
+
+    public static Command getAutoBalanceTest(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+            Limelight limelight,
+            LEDs leds) {
+
+        PathPlannerTrajectory first = null;
+
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            first = PathPlanner.loadPath("BLUE - Top 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            first = PathPlanner.loadPath("RED - Top 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+        }
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+
+        return new SequentialCommandGroup(
+                new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
+                path_1,
+                new AutoBalancingPID(swerveSubsystem, goalHeading));
 
     }
 }
-
