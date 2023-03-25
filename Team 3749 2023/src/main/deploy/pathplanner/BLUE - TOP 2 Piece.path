@@ -25,15 +25,15 @@
     {
       "anchorPoint": {
         "x": 5.674407582766664,
-        "y": 4.5
+        "y": 4.43
       },
       "prevControl": {
         "x": 4.291988938927553,
-        "y": 4.5
+        "y": 4.43
       },
       "nextControl": {
         "x": 6.3241321084162765,
-        "y": 4.5
+        "y": 4.43
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -50,15 +50,15 @@
     {
       "anchorPoint": {
         "x": 6.45,
-        "y": 4.5
+        "y": 4.43
       },
       "prevControl": {
         "x": 6.103714954962219,
-        "y": 4.5
+        "y": 4.43
       },
       "nextControl": {
         "x": 6.103714954962219,
-        "y": 4.5
+        "y": 4.43
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -100,7 +100,7 @@
   ],
   "markers": [
     {
-      "position": 0.41454545454545577,
+      "position": 0.31,
       "names": [
         "Pickup Cube"
       ]

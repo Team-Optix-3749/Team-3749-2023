@@ -127,8 +127,8 @@ public class AlignApriltag extends CommandBase {
                 .transformBy(translationToTransform(driveVelocityScalar, 0.0))
                 .getTranslation();
 
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveVelocity.getX(),
-                driveVelocity.getY(), turnVelocity, robotPose2d.getRotation());
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-driveVelocity.getX(),
+                -driveVelocity.getY(), turnVelocity, robotPose2d.getRotation());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
@@ -182,9 +182,13 @@ public class AlignApriltag extends CommandBase {
         var res = limelight.getLatestResult();
         if (res.hasTargets()) {
             // Find the tag we want to chase
+            // var targetOpt = res.getTargets().stream()
+            // .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 &&
+            // t.getPoseAmbiguity() != -1
+            // && (t.getFiducialId() != 4 || t.getFiducialId() != 5))
+            // .findFirst();
             var targetOpt = res.getTargets().stream()
-                    .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1
-                            && (t.getFiducialId() != 4 || t.getFiducialId() != 5))
+                    .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
                     .findFirst();
 
             if (targetOpt.isPresent()) {
@@ -206,6 +210,8 @@ public class AlignApriltag extends CommandBase {
                 SmartDashboard.putNumber("April Tag Heading", aprilTagPose.getRotation().getAngle());
 
                 goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
+
+                goalPose = new Pose2d(new Translation2d(goalPose.getX(), goalPose.getY()), new Rotation2d(Math.toRadians(180.0)));
 
                 VisionConstants.goalPoseX.set(goalPose.getX());
                 VisionConstants.goalPoseY.set(goalPose.getY());

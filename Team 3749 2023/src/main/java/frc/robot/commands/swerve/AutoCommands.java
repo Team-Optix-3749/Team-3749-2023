@@ -119,7 +119,7 @@ public final class AutoCommands {
             second = PathPlanner.loadPath("RED - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
 
         }
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
@@ -153,7 +153,7 @@ public final class AutoCommands {
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
@@ -179,7 +179,7 @@ public final class AutoCommands {
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
@@ -205,7 +205,7 @@ public final class AutoCommands {
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
@@ -227,4 +227,15 @@ public final class AutoCommands {
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
     }
+
+    public static Command getAprilTagAlign(Swerve swerveSubsystem, Arm arm, ArmIntake armIntake,
+            Limelight limelight,
+            LEDs leds) {
+
+        return new SequentialCommandGroup(
+            new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW),
+            new AlignApriltag(swerveSubsystem, limelight).withTimeout(1));
+
+    }
 }
+

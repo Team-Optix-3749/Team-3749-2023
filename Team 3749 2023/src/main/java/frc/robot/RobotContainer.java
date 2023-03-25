@@ -85,7 +85,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.get1Piece(swerve, arm, armIntake, limelight, leds);
+        return AutoCommands.getAprilTagAlign(swerve, arm, armIntake, limelight, leds);
 
     }
 
