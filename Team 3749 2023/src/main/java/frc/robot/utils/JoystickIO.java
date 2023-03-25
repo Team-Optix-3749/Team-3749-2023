@@ -120,7 +120,10 @@ public class JoystickIO {
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage));
         pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
         // swerve button bindings
-        pilot.startWhileHeld(new SequentialCommandGroup(Commands.run(() -> swerve.unflipGyro(), swerve), Commands.run(() -> swerve.resetGyro(), swerve)));
+        pilot.startWhileHeld(Commands.runOnce(() -> {
+            swerve.unflipGyro();
+            swerve.resetGyro();
+        }, swerve));
 
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));

@@ -22,6 +22,7 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 import frc.robot.utils.Constants.AutoConstants.TopBottom;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /***
  * @author Noah Simon
@@ -119,7 +120,7 @@ public final class AutoCommands {
             second = PathPlanner.loadPath("RED - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
 
         }
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
@@ -245,10 +246,10 @@ public final class AutoCommands {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("BLUE - Top 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - Top 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
         }
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
@@ -257,7 +258,8 @@ public final class AutoCommands {
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         return new SequentialCommandGroup(
-                new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
+                // new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
+                // new WaitCommand(3),
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
 

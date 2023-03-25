@@ -33,7 +33,8 @@ public class AutoBalancingPID extends CommandBase {
     private double goalHeading = 0;
 
     // Initializes the BaseCommand
-    public AutoBalancingPID(Swerve swerveSubsystem, double goalHeading) {
+    public 
+    AutoBalancingPID(Swerve swerveSubsystem, double goalHeading) {
         this.swerve = swerveSubsystem;
         this.goalHeading = goalHeading;
         addRequirements(swerveSubsystem);
@@ -63,12 +64,7 @@ public class AutoBalancingPID extends CommandBase {
 
         heading = swerve.getHeading();
         angle = swerve.getVerticalTilt();
-        if (Math.abs(angle) > Math.abs(max_angle)) {
-            max_angle = angle;
-        }
-        if (Math.abs(max_angle) - 7 > Math.abs(angle)) {
-            past_center = true;
-        }
+
 
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
@@ -84,7 +80,7 @@ public class AutoBalancingPID extends CommandBase {
             has_aligned = true;
             start_time_balanced = 0;
 
-            double speed = -controller.calculate(angle, 0)
+            double speed = controller.calculate(angle, 0)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
