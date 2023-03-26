@@ -17,6 +17,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.Swerve;
@@ -211,7 +213,9 @@ public class AlignApriltag extends CommandBase {
 
                 goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
 
-                goalPose = new Pose2d(new Translation2d(goalPose.getX(), goalPose.getY()), new Rotation2d(Math.toRadians(180.0)));
+                double rotationAngle = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+
+                goalPose = new Pose2d(new Translation2d(goalPose.getX(), goalPose.getY()), new Rotation2d(Math.toRadians(rotationAngle)));
 
                 VisionConstants.goalPoseX.set(goalPose.getX());
                 VisionConstants.goalPoseY.set(goalPose.getY());
