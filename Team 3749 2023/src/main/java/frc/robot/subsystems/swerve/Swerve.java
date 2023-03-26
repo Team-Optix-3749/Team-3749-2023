@@ -158,6 +158,10 @@ public class Swerve extends SubsystemBase {
         return new Pose2d(estimatedPose.getTranslation(), rotation);
     }
 
+    public boolean getFlipGyro(){
+        return flipGyro;
+    }
+
     public void resetOdometry(Pose2d pose) {
         Rotation2d rotation = DriverStation.getAlliance() == Alliance.Blue
                 ? (flipGyro ? getAutoRotation2d() : getRotation2d())
