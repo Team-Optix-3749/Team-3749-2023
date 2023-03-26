@@ -194,7 +194,6 @@ public class Swerve extends SubsystemBase {
         if (flipGyro && ! DriverStation.isAutonomous()){
             for (int i = 0; i < 4; i++){
                 desiredStates[i].speedMetersPerSecond = -desiredStates[i].speedMetersPerSecond;
-                desiredStates[i].angle = desiredStates[i].angle.plus(new Rotation2d(180));
 
             }
         }
