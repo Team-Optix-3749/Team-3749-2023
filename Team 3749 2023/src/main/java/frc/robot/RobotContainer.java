@@ -6,35 +6,17 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.swerve.*;
-import frc.robot.subsystems.vision.Limelight;
-import frc.robot.subsystems.arm.*;
-import frc.robot.subsystems.intake.*;
-import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoCommands;
-import frc.robot.subsystems.leds.LEDs;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.AutoConstants.TopBottom;
-import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
-    private final Xbox operator = new Xbox(1);
 
     private final Swerve swerve = new Swerve();
-    private final ArmIntake armIntake = new ArmIntake();
-    private final Arm arm = new Arm();
-    private final LEDs leds = new LEDs();
-    private final Limelight limelight = new Limelight();
 
-    private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
-            arm);
+    private final JoystickIO joystickIO = new JoystickIO(pilot, swerve);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -64,12 +46,6 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        limelight.setDefaultCommand(
-                Commands.run(
-                        () -> {
-                            limelight.setPipeline(Pipelines.APRILTAG.index);
-                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
-                        }, limelight));
     }
 
     /**
@@ -81,7 +57,7 @@ public class RobotContainer {
             return;
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickIO.getButtonBindings();
+        joystickIO.pilotBindings();
 
     }
 
@@ -89,7 +65,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPiece(swerve, arm, armIntake, limelight, leds);
+        return AutoCommands.getTopTaxi(swerve);
 
 
     }
@@ -98,23 +74,7 @@ public class RobotContainer {
      * Set event maps for autonomous
      */
     public void configureAuto() {
-        Constants.AutoConstants.eventMap.put("Pickup Cube",
-                new SequentialCommandGroup(
-                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
-        Constants.AutoConstants.eventMap.put("Pickup Cone",
-                new SequentialCommandGroup(
-                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE)));
-        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, leds,
-                ArmSetpoints.STING));
-        Constants.AutoConstants.eventMap.put("Stow",
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
-        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake, leds,
-                ArmSetpoints.PLACE_MID));
-        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, leds,
-                ArmSetpoints.PLACE_TOP));
-        Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
 
     }
+
 }
