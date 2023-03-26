@@ -65,7 +65,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTaxi(swerve);
+        return AutoCommands.getBottomTaxi(swerve);
     }
 
     /**
