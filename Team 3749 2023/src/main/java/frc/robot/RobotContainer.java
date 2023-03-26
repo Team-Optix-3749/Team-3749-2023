@@ -108,9 +108,7 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, leds,
                 ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
-                new SequentialCommandGroup(
-                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW)));
+                        new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
         Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake, leds,
                 ArmSetpoints.PLACE_MID));
         Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, leds,

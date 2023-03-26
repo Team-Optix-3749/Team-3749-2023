@@ -84,6 +84,7 @@ public final class AutoCommands {
                     new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                     Commands.waitSeconds(0.6),
                     Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                    Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                     path_1,
                     new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                     Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
@@ -115,6 +116,7 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
@@ -153,6 +155,7 @@ public final class AutoCommands {
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_2,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
@@ -179,6 +182,7 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
@@ -205,6 +209,7 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
@@ -231,6 +236,8 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
@@ -244,6 +251,7 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
     }
 
@@ -267,7 +275,7 @@ public final class AutoCommands {
             first = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
         }
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
@@ -276,19 +284,20 @@ public final class AutoCommands {
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         return new SequentialCommandGroup(
-                // new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
-                // new WaitCommand(3),
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
-
     }
 
-    public static Command getTaxi(Swerve swerveSubsystem) {
+    public static Command getTest(Swerve swerveSubsystem) {
 
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("TAXI top", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("Test Blue", new PathConstraints(2.5, 2.5));
+        }
+        else {
+            first = PathPlanner.loadPath("Test Red", new PathConstraints(2.5, 2.5));
+
         }
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
