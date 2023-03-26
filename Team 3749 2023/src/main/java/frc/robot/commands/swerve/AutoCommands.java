@@ -94,9 +94,9 @@ public final class AutoCommands {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("BLUE - BOTTOM Taxi", new PathConstraints(2, 2));
+            first = PathPlanner.loadPath("BLUE - BOTTOM Taxi", new PathConstraints(3, 4));
         } else {
-            first = PathPlanner.loadPath("RED - BOTTOM Taxi", new PathConstraints(2, 2));
+            first = PathPlanner.loadPath("RED - BOTTOM Taxi", new PathConstraints(3, 4));
 
         }
 
