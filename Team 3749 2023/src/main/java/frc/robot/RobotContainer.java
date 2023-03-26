@@ -66,8 +66,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return AutoCommands.getTopTaxi(swerve);
-
-
     }
 
     /**

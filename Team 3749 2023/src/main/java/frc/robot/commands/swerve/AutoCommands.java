@@ -56,38 +56,12 @@ public final class AutoCommands {
                 ));
     }
 
-
-
-    public static Command getTest(Swerve swerveSubsystem) {
-
-        PathPlannerTrajectory first = null;
-
-        if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("Test Blue", new PathConstraints(2.5, 2.5));
-        }
-        else {
-            first = PathPlanner.loadPath("Test Red", new PathConstraints(2.5, 2.5));
-
-        }
-
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
-
-        return new SequentialCommandGroup(
-                // new MoveArm(arm, armIntake, leds, ArmSetpoints.STING),
-                // new WaitCommand(3),
-                path_1);
-
-    }
-
-
-    public static Command getTopTaxi(Swerve swerveSubsystem){
+    public static Command getTopTaxi(Swerve swerveSubsystem) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
             first = PathPlanner.loadPath("BLUE - TOP Taxi", new PathConstraints(1.5, 1.5));
-        }
-        else {
+        } else {
             first = PathPlanner.loadPath("RED - TOP Taxi", new PathConstraints(1.5, 1.5));
 
         }
@@ -98,13 +72,13 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 path_1);
     }
-    public static Command getMiddleTaxi(Swerve swerveSubsystem){
+
+    public static Command getMiddleTaxi(Swerve swerveSubsystem) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
             first = PathPlanner.loadPath("BLUE - MIDDLE Taxi", new PathConstraints(1.5, 1.5));
-        }
-        else {
+        } else {
             first = PathPlanner.loadPath("RED - MIDDLE Taxi", new PathConstraints(1.5, 1.5));
 
         }
@@ -116,13 +90,12 @@ public final class AutoCommands {
                 path_1);
     }
 
-    public static Command getBottomTaxi(Swerve swerveSubsystem){
+    public static Command getBottomTaxi(Swerve swerveSubsystem) {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
             first = PathPlanner.loadPath("BLUE - BOTTOM Taxi", new PathConstraints(1.5, 1.5));
-        }
-        else {
+        } else {
             first = PathPlanner.loadPath("RED - BOTTOM Taxi", new PathConstraints(1.5, 1.5));
 
         }
@@ -133,6 +106,5 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 path_1);
     }
-
 
 }
