@@ -175,7 +175,7 @@ public final class AutoCommands {
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
