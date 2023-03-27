@@ -37,11 +37,21 @@ public class MoveArm extends CommandBase {
     private Timer timer = new Timer();
     private ArmPaths trajectoryInformation;
     private int trajectoryIndex = 0;
+    private boolean fromAlign = false;
 
     public MoveArm(Arm arm, ArmIntake intake, LEDs leds, ArmSetpoints setpoint) {
         this.arm = arm;
         this.desiredSetpoint = setpoint;
         this.leds = leds;
+        setName(setpoint.toString() + " Trajectory");
+        addRequirements(arm);
+    }
+
+    public MoveArm(Arm arm, ArmIntake intake, LEDs leds, ArmSetpoints setpoint, boolean fromAlign) {
+        this.arm = arm;
+        this.desiredSetpoint = setpoint;
+        this.leds = leds;
+        this.fromAlign = fromAlign;
         setName(setpoint.toString() + " Trajectory");
         addRequirements(arm);
     }
@@ -57,6 +67,12 @@ public class MoveArm extends CommandBase {
 
     @Override
     public void execute() {
+
+        if (trajectoryInformation == null) {
+            System.out.println("NO SETPOINT");
+            return;
+        }
+
         if (timer.get() < trajectoryInformation.pauseLengths[trajectoryIndex]) {
             return;
         }
@@ -235,7 +251,11 @@ public class MoveArm extends CommandBase {
                 leds.setLEDPattern(LEDPattern.RAINBOW);
 
                 arm.setCurrentSetpoint(ArmSetpoints.STING);
-                if (desiredSetpoint == currentSetpoint) {
+                if (desiredSetpoint == currentSetpoint && fromAlign) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    leds.setLEDPattern(leds.getDefaultColor());
+                    return ArmPaths.STING_TO_STOW;
+                } else if (desiredSetpoint == currentSetpoint) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     leds.setLEDPattern(leds.getDefaultColor());
                     return ArmPaths.STING_TO_STOW;
@@ -248,7 +268,6 @@ public class MoveArm extends CommandBase {
             case STOW:
                 arm.setCurrentSetpoint(ArmSetpoints.STOW);
                 if (desiredSetpoint == currentSetpoint) {
-                    arm.setCurrentSetpoint(ArmSetpoints.STING);
                     return ArmPaths.STOW_TO_STING;
                 } else if (currentSetpoint == ArmSetpoints.PLACE_TOP)
                     return ArmPaths.TOP_TO_STOW;

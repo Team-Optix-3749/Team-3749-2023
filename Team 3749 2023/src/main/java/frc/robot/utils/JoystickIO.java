@@ -2,6 +2,7 @@ package frc.robot.utils;
 
 import java.util.Map;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -107,7 +108,12 @@ public class JoystickIO {
         operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
         operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
 
-        // alignment (vision)
+        // alignment (vision)\
+
+        // new SequentialCommandGroup(
+        //     new moveArm(Sting),
+        //     new AprilTag(0, null).timout(2)
+        // );
         operator.povUp().whileTrue(new AlignApriltag(swerve, limelight));
         operator.povLeft().whileTrue(new AlignApriltag(swerve, limelight, true));
         operator.povRight().whileTrue(new AlignApriltag(swerve, limelight, false));
