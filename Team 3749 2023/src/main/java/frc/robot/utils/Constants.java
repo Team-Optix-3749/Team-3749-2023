@@ -3,6 +3,8 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -116,14 +118,23 @@ public class Constants {
                 0.0);
 
         public static enum ArmSetpoints {
-            ZERO,
-            STOW,
-            STING,
-            DOUBLE_SUBSTATION,
-            GROUND_INTAKE_CONE,
-            GROUND_INTAKE_CUBE,
-            PLACE_TOP,
-            PLACE_MID;
+            STOW(new Translation2d(0.3, -0.2)),
+            STING(new Translation2d(0.5, 0.7)),
+            DOUBLE_SUBSTATION(new Translation2d(0.5, 0.75)),
+            GROUND_INTAKE_CONE(new Translation2d(0.9, 0.0)),
+            GROUND_INTAKE_CUBE(new Translation2d(0.9, -0.12)),
+            PLACE_TOP(new Translation2d(1.2, 0.95)),
+            PLACE_MID(new Translation2d(0.85, 0.73));
+
+            public Translation2d translation;
+
+
+            ArmSetpoints(Translation2d translation) {
+                this.translation = translation;
+            }
+            public Pose2d toPose2d(double rotation) {
+                return new Pose2d(this.translation, new Rotation2d(rotation));
+            }
         }
     }
 

@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 /**
  * Generate arm trajectories
@@ -20,6 +21,7 @@ import frc.robot.utils.Constants;
  * @author Raadwan Masum
  **/
 public class ArmTrajectories {
+
 
     /**
      * Create trajectory
@@ -56,8 +58,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getStingTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
-                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 2)),
+                ArmSetpoints.STOW.toPose2d(Math.PI / 4),
+                ArmSetpoints.STING.toPose2d(Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -71,8 +73,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.5, 0.7, new Rotation2d(Math.PI / 2.5)),
-                new Pose2d(1.2, 0.95, new Rotation2d(0)),
+            ArmSetpoints.STING.toPose2d(Math.PI / 2.5),
+            ArmSetpoints.PLACE_TOP.toPose2d(0)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -86,8 +88,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getMidNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.5, 0.7, new Rotation2d(0)),
-                new Pose2d(0.85, 0.73, new Rotation2d(5 * Math.PI / 3)),
+            ArmSetpoints.STING.toPose2d(0),
+            ArmSetpoints.PLACE_MID.toPose2d(Math.PI * 5 / 3)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -101,8 +103,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getDoubleSubstationTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.3, -0.2, new Rotation2d(Math.PI / 4)),
-                new Pose2d(0.5, 0.75, new Rotation2d(Math.PI / 2)),
+            ArmSetpoints.STOW.toPose2d(Math.PI / 4),
+            ArmSetpoints.DOUBLE_SUBSTATION.toPose2d(Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -116,8 +118,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getCubeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.3, -0.2, new Rotation2d(0)),
-                new Pose2d(0.9, -0.12, new Rotation2d(5 * Math.PI / 3)),
+            ArmSetpoints.STOW.toPose2d(0),
+            ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(Math.PI * 5 / 3)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -130,22 +132,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getConeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.3, -0.2, new Rotation2d(0)),
-                new Pose2d(0.9, 0.0, new Rotation2d(5 * Math.PI / 3)),
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-    /**
-     * Move arm to and from sting position and ground intake position
-     * 
-     * @param isReversed
-     * @return Trajectory
-     */
-    public static Trajectory getGroundIntakeSweepTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.3, -0.2, new Rotation2d(0)),
-                new Pose2d(1.4, -0.3, new Rotation2d(0)),
+            ArmSetpoints.STOW.toPose2d(0),
+            ArmSetpoints.GROUND_INTAKE_CONE.toPose2d(Math.PI *5 / 3)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -159,8 +147,8 @@ public class ArmTrajectories {
      */
     public static Trajectory getMidNodeToTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                new Pose2d(0.8, 0.7, new Rotation2d(Math.PI / 3)),
-                new Pose2d(1.1, 0.99, new Rotation2d(Math.PI / 8)),
+            ArmSetpoints.PLACE_MID.toPose2d(Math.PI / 3),
+            ArmSetpoints.PLACE_TOP.toPose2d(Math.PI / 8),
 
         };
 
@@ -229,12 +217,6 @@ public class ArmTrajectories {
                 new double[] { 0 }),
         GROUND_INTAKE_CONE_TO_STOW(
                 new Trajectory[] { getConeGroundIntakeTrajectory(true) },
-                new double[] { 0 }),
-        STOW_TO_SWEEP(
-                new Trajectory[] { getGroundIntakeSweepTrajectory(false) },
-                new double[] { 0 }),
-        SWEEP_TO_STOW(
-                new Trajectory[] { getGroundIntakeSweepTrajectory(true) },
                 new double[] { 0 }),
         STOW_TO_STING(
                 new Trajectory[] { getStingTrajectory(false) },
