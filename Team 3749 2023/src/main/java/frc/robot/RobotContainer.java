@@ -64,12 +64,12 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        limelight.setDefaultCommand(
-                Commands.run(
-                        () -> {
-                            limelight.setPipeline(Pipelines.APRILTAG.index);
-                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
-                        }, limelight));
+        // limelight.setDefaultCommand(
+        //         Commands.run(
+        //                 () -> {
+        //                     limelight.setPipeline(Pipelines.APRILTAG.index);
+        //                     limelight.updatePoseAprilTags(swerve.getPoseEstimator());
+        //                 }, limelight));
     }
 
     /**

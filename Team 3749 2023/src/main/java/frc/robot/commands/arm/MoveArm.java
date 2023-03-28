@@ -98,7 +98,7 @@ public class MoveArm extends CommandBase {
         }
         System.out.println(
                 String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
-        logging();
+        logging(); 
     }
 
     @Override
@@ -117,7 +117,7 @@ public class MoveArm extends CommandBase {
                 timer.reset();
                 timer.start();
             } else {
-
+                System.out.println("DDDDDOOOONNNNNNEEEEEE");
                 return true;
             }
         }

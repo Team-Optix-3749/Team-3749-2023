@@ -2,8 +2,11 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Controls/Arm Intake/Arm Intake": "Command",
+      "/Shuffleboard/Controls/Arm Intake/Arm Outake": "Command",
       "/Shuffleboard/Controls/Arm/DOUBLE_SUBSTATION Trajectory": "Command",
       "/Shuffleboard/Controls/Arm/GROUND_INTAKE Trajectory": "Command",
+      "/Shuffleboard/Controls/Arm/GROUND_INTAKE_CUBE Trajectory": "Command",
       "/Shuffleboard/Controls/Arm/PLACE_MID Trajectory": "Command",
       "/Shuffleboard/Controls/Arm/PLACE_TOP Trajectory": "Command",
       "/Shuffleboard/Controls/Arm/STING Trajectory": "Command",
@@ -27,7 +30,7 @@
     "Plot <0>": {
       "plots": [
         {
-          "height": 369,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -45,7 +48,7 @@
     "Plot <1>": {
       "plots": [
         {
-          "height": 547,
+          "height": 0,
           "series": [
             {
               "color": [

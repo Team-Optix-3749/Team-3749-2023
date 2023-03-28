@@ -74,6 +74,7 @@ public class ArmTrajectories {
     public static Trajectory getTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
             ArmSetpoints.STING.toPose2d(Math.PI / 2.5),
+            new Pose2d(new Translation2d(0.7,1), new Rotation2d(Math.PI/8)),
             ArmSetpoints.PLACE_TOP.toPose2d(0)
         };
 

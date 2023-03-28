@@ -77,8 +77,8 @@ public class Constants {
         // public static final double elbow_kP = 0.3;
         public static final double elbow_kP = 0.2;
         // public static final double shoulder_kP = 0.2;
-        public static final double shoulder_kP = 0.1;
-        // public static final double shoulder_kP = 0.15;
+        // public static final double shoulder_kP = 0.1;
+        public static final double shoulder_kP = 0.15;
 
         public static final double elbow_length = 1.016;
         public static final double elbow_cg_radius = 0.71;
@@ -123,7 +123,7 @@ public class Constants {
             DOUBLE_SUBSTATION(new Translation2d(0.5, 0.75)),
             GROUND_INTAKE_CONE(new Translation2d(0.9, 0.0)),
             GROUND_INTAKE_CUBE(new Translation2d(0.9, -0.12)),
-            PLACE_TOP(new Translation2d(1.2, 0.95)),
+            PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));
 
             public Translation2d translation;
