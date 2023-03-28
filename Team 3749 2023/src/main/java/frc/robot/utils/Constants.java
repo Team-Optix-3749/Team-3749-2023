@@ -75,7 +75,8 @@ public class Constants {
         // public static final double elbow_kP = 0.3;
         public static final double elbow_kP = 0.2;
         // public static final double shoulder_kP = 0.2;
-        public static final double shoulder_kP = 0.15;
+        public static final double shoulder_kP = 0.1;
+        // public static final double shoulder_kP = 0.15;
 
         public static final double elbow_length = 1.016;
         public static final double elbow_cg_radius = 0.71;
@@ -104,8 +105,8 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 7;
-        public static final double maxAccelerationMPS = 10;
+        public static final double maxSpeedMPS = 3;
+        public static final double maxAccelerationMPS = 3;
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
