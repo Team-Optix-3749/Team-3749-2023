@@ -2,7 +2,6 @@ package frc.robot.utils;
 
 import java.util.Map;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,7 +12,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.vision.AlignApriltag;
@@ -191,10 +189,6 @@ public class JoystickIO {
         armCommands.add(new MoveArm(arm, armIntake, leds, ArmSetpoints.STING));
         armCommands.add(new MoveArm(arm, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
-        ShuffleboardLayout sideIntakeCommands = controlsTab
-                .getLayout("Side Intake", BuiltInLayouts.kList)
-                .withSize(2, 2)
-                .withProperties(Map.of("Label position", "HIDDEN"));
 
         ShuffleboardLayout armIntakeCommands = controlsTab
                 .getLayout("Arm Intake", BuiltInLayouts.kList)

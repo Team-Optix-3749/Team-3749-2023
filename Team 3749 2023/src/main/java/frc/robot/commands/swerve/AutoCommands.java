@@ -21,7 +21,6 @@ import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /***
  * @author Noah Simon
@@ -205,18 +204,21 @@ public final class AutoCommands {
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
+                second.getMarkers(), Constants.AutoConstants.eventMap);
 
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
-
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
+                new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                path_2,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 

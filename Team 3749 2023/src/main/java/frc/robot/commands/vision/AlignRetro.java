@@ -113,7 +113,7 @@ public class AlignRetro extends CommandBase {
                     .toSwerveModuleStates(chassisSpeeds);
 
 
-            // swerve.setModuleStates(moduleStates);
+            swerve.setModuleStates(moduleStates);
         } else {
             System.out.println("Reflective tape not found");
         }

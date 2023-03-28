@@ -27,8 +27,6 @@ public class AutoBalancingPID extends CommandBase {
     private double angle;
     private double heading;
     private boolean has_aligned;
-    private boolean past_center;
-    private double max_angle = 0;
     private double start_time_balanced = 0;
     private double goalHeading = 0;
 
@@ -48,8 +46,6 @@ public class AutoBalancingPID extends CommandBase {
         // update start position when we are getting started
         angle = swerve.getVerticalTilt();
         has_aligned = false;
-        past_center = false;
-        max_angle = 0;
         start_time_balanced = 0;
 
     }
