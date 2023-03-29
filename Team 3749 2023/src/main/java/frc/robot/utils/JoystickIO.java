@@ -124,16 +124,19 @@ public class JoystickIO {
         operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
         operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
 
-        // alignment (vision)\
+        pilot.a()
+                .onTrue(new SequentialCommandGroup(
+                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+                        new AlignApriltag(swerve, limelight)));
+        pilot.x()
+                .onTrue(new SequentialCommandGroup(
+                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+                        new AlignApriltag(swerve, limelight, true)));
+        pilot.b()
+                .onTrue(new SequentialCommandGroup(
+                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+                        new AlignApriltag(swerve, limelight, false)));
 
-        // new SequentialCommandGroup(
-        // new moveArm(Sting),
-        // new AprilTag(0, null).timout(2)
-        // );
-
-        pilot.aWhileHeld(new AlignApriltag(swerve, limelight));
-        pilot.xWhileHeld(new AlignApriltag(swerve, limelight, true));
-        pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
         pilot.yWhileHeld(() -> swerve.toggleSpeed());
 
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
