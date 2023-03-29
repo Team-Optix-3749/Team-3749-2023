@@ -84,7 +84,8 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
@@ -117,7 +118,8 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
@@ -153,7 +155,10 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.175),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
@@ -185,7 +190,8 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
@@ -217,7 +223,10 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.175),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
@@ -236,7 +245,8 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.6),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
     }
@@ -247,9 +257,12 @@ public final class AutoCommands {
             LEDs leds) {
 
         return new SequentialCommandGroup(
-                new InstantCommand(() -> {swerveSubsystem.resetGyro(); swerveSubsystem.setGyro(true);}, swerveSubsystem),
+                new InstantCommand(() -> {
+                    swerveSubsystem.resetGyro();
+                    swerveSubsystem.setGyro(false);
+                }, swerveSubsystem),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING),
-                new AlignApriltag(swerveSubsystem, limelight));
+                new AlignApriltag(swerveSubsystem, limelight).withTimeout(2));
 
     }
 
