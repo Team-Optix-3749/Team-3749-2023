@@ -20,8 +20,6 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.AutoConstants.TopBottom;
-import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -103,10 +101,6 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
                         new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
-        Constants.AutoConstants.eventMap.put("Pickup Cone",
-                new SequentialCommandGroup(
-                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE)));
         Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",

@@ -147,8 +147,9 @@ public class ArmTrajectories {
      */
     private Trajectory makeStowToCubeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                ArmSetpoints.STOW.toPose2d(0),
-                ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(Math.PI * 5 / 3)
+            ArmSetpoints.STOW.toPose2d(0),
+            new Pose2d(0.7, 0.1, new Rotation2d(0)),
+            ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -162,24 +163,9 @@ public class ArmTrajectories {
      */
     private Trajectory makeCubeStowToCubeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                ArmSetpoints.CUBE_STOW.toPose2d(0),
-                ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(Math.PI * 5 / 3)
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
-
-    /**
-     * Move arm to and from stow position and ground intake position, raised
-     * slightly for cones
-     * 
-     * @param isReversed
-     * @return Trajectory
-     */
-    private Trajectory makeStowToConeGroundIntakeTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                ArmSetpoints.STOW.toPose2d(0),
-                ArmSetpoints.GROUND_INTAKE_CONE.toPose2d(Math.PI * 5 / 3)
+            ArmSetpoints.STOW.toPose2d(0),
+            new Pose2d(0.7, 0.1, new Rotation2d(0)),
+            ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -250,10 +236,6 @@ public class ArmTrajectories {
     private Trajectory cubeStowToGroundIntakeCube = makeCubeStowToCubeGroundIntakeTrajectory(false);
     private Trajectory groundIntakeCubeToStow = makeStowToCubeGroundIntakeTrajectory(true);
     private Trajectory groundIntakeCubeToCubeStow = makeCubeStowToCubeGroundIntakeTrajectory(true);
-
-    // ground intake cone
-    private Trajectory stowToGroundIntakeCone = makeStowToConeGroundIntakeTrajectory(false);
-    private Trajectory groundIntakeConeToStow = makeStowToConeGroundIntakeTrajectory(true);
 
     // Stow / Cube Stow / Sting
     private Trajectory stowToSting = makeStowToStingTrajectory(false);
@@ -348,14 +330,6 @@ public class ArmTrajectories {
 
     public Trajectory getGroundIntakeCubeToCubeStow() {
         return groundIntakeCubeToCubeStow;
-    }
-
-    public Trajectory getStowToGroundIntakeCone() {
-        return stowToGroundIntakeCone;
-    }
-
-    public Trajectory getGroundIntakeConeToStow() {
-        return groundIntakeConeToStow;
     }
 
     public Trajectory getStowToSting() {

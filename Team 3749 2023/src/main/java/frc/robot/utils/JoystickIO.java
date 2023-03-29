@@ -121,7 +121,6 @@ public class JoystickIO {
         operator.povUp().whileTrue(new AlignApriltag(swerve, limelight));
         operator.povLeft().whileTrue(new AlignApriltag(swerve, limelight, true));
         operator.povRight().whileTrue(new AlignApriltag(swerve, limelight, false));
-        operator.povDown().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE));
 
         pilot.aWhileHeld(new AlignApriltag(swerve, limelight));
         pilot.xWhileHeld(new AlignApriltag(swerve, limelight, true));

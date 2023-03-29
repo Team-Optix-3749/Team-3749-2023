@@ -166,11 +166,7 @@ public class MoveArm extends CommandBase {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
             return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };
         }
-        if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE && desiredSetpoint != ArmSetpoints.STOW) {
-            arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            leds.setLEDPattern(leds.getDefaultColor());
-            return new Trajectory[] { armTrajectories.getGroundIntakeConeToStow() };
-        }
+
         switch (desiredSetpoint) {
             case PLACE_TOP:
                 leds.setLEDPattern(LEDPattern.BOUNCE);
@@ -246,10 +242,7 @@ public class MoveArm extends CommandBase {
                 } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getGroundIntakeCubeToCubeStow() };
-                } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE) {
-                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    return new Trajectory[] { armTrajectories.getGroundIntakeConeToStow() };
-                } else if (currentSetpoint == ArmSetpoints.STING) {
+                }  else if (currentSetpoint == ArmSetpoints.STING) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getStingToStow() };
                 } else if (currentSetpoint == ArmSetpoints.CUBE_STOW) {
@@ -272,17 +265,6 @@ public class MoveArm extends CommandBase {
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CUBE);
                     return new Trajectory[] { armTrajectories.getStowToGroundIntakeCube() };
-                }
-            case GROUND_INTAKE_CONE:
-                leds.setLEDPattern(LEDPattern.WHITE);
-
-                if (desiredSetpoint == currentSetpoint) {
-                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    leds.setLEDPattern(leds.getDefaultColor());
-                    return new Trajectory[] { armTrajectories.getGroundIntakeConeToStow() };
-                } else {
-                    arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CONE);
-                    return new Trajectory[] { armTrajectories.getStowToGroundIntakeCone() };
                 }
             case STING:
                 leds.setLEDPattern(LEDPattern.RAINBOW);
@@ -324,9 +306,6 @@ public class MoveArm extends CommandBase {
                 } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };
-                } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE) {
-                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    return new Trajectory[] { armTrajectories.getGroundIntakeConeToStow() };
                 } else if (currentSetpoint == ArmSetpoints.STING) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getStingToStow() };
@@ -351,10 +330,8 @@ public class MoveArm extends CommandBase {
                     System.out.println("GROUND TO STOW");
                     arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
                     return new Trajectory[] { armTrajectories.getGroundIntakeCubeToCubeStow() };
-                } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CONE) {
-                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    return new Trajectory[] { armTrajectories.getGroundIntakeConeToStow() };
-                } else if (currentSetpoint == ArmSetpoints.STING) {
+                } 
+                 else if (currentSetpoint == ArmSetpoints.STING) {
                     arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
                     return new Trajectory[] { armTrajectories.getStingToCubeStow() };
                 } else if (currentSetpoint == ArmSetpoints.STOW){
