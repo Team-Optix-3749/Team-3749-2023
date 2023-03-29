@@ -249,7 +249,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {swerveSubsystem.resetGyro(); swerveSubsystem.setGyro(true);}, swerveSubsystem),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING),
-                new AlignApriltag(swerveSubsystem, limelight).withTimeout(2));
+                new AlignApriltag(swerveSubsystem, limelight));
 
     }
 
