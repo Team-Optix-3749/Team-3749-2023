@@ -115,10 +115,10 @@ public class ArmTrajectories {
      * @param isReversed
      * @return Trajectory
      */
-    private Trajectory makeStowToDoubleSubstationTrajectory(boolean isReversed) {
+    private Trajectory makeStowToDoubleSubstationCubeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 ArmSetpoints.STOW.toPose2d(Math.PI / 4),
-                ArmSetpoints.DOUBLE_SUBSTATION.toPose2d(Math.PI / 2)
+                ArmSetpoints.DOUBLE_SUBSTATION_CUBE.toPose2d(Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -130,10 +130,39 @@ public class ArmTrajectories {
      * @param isReversed
      * @return Trajectory
      */
-    private Trajectory makeCubeStowToDoubleSubstationTrajectory(boolean isReversed) {
+    private Trajectory makeCubeStowToDoubleSubstationCubeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 ArmSetpoints.CUBE_STOW.toPose2d(Math.PI / 4),
-                ArmSetpoints.DOUBLE_SUBSTATION.toPose2d(Math.PI / 2)
+                ArmSetpoints.DOUBLE_SUBSTATION_CUBE.toPose2d(Math.PI / 2)
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+    /**
+     * Move arm to and from stow position and double substiation loading position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    private Trajectory makeStowToDoubleSubstationConeTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                ArmSetpoints.STOW.toPose2d(Math.PI / 4),
+                ArmSetpoints.DOUBLE_SUBSTATION_CONE.toPose2d(Math.PI / 2)
+        };
+
+        return createTrajectory(waypoints, isReversed);
+    }
+
+    /**
+     * Move arm to and from stow position and double substiation loading position
+     * 
+     * @param isReversed
+     * @return Trajectory
+     */
+    private Trajectory makeCubeStowToDoubleSubstationConeTrajectory(boolean isReversed) {
+        Pose2d[] waypoints = new Pose2d[] {
+                ArmSetpoints.CUBE_STOW.toPose2d(Math.PI / 4),
+                ArmSetpoints.DOUBLE_SUBSTATION_CONE.toPose2d(Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -226,10 +255,15 @@ public class ArmTrajectories {
     private Trajectory midToTop = makeMidNodeToTopNodeTrajectory(false);
 
     // double sub
-    private Trajectory stowToDoubleSub = makeStowToDoubleSubstationTrajectory(false);
-    private Trajectory cubeStowToDoubleSub = makeCubeStowToDoubleSubstationTrajectory(false);
-    private Trajectory doubleSubToStow = makeStowToDoubleSubstationTrajectory(true);
-    private Trajectory doubleSubToCubeStow = makeCubeStowToDoubleSubstationTrajectory(true);
+    private Trajectory stowToDoubleSubCone = makeStowToDoubleSubstationConeTrajectory(false);
+    private Trajectory cubeStowToDoubleSubCone = makeCubeStowToDoubleSubstationConeTrajectory(false);
+    private Trajectory doubleSubConeToStow = makeStowToDoubleSubstationConeTrajectory(true);
+    private Trajectory doubleSubConeToCubeStow = makeCubeStowToDoubleSubstationConeTrajectory(true);
+
+    private Trajectory stowToDoubleSubCube = makeStowToDoubleSubstationCubeTrajectory(false);
+    private Trajectory cubeStowToDoubleSubCube = makeCubeStowToDoubleSubstationCubeTrajectory(false);
+    private Trajectory doubleSubCubeToStow = makeStowToDoubleSubstationCubeTrajectory(true);
+    private Trajectory doubleSubCubeToCubeStow = makeCubeStowToDoubleSubstationCubeTrajectory(true);
 
     // ground intake cube
     private Trajectory stowToGroundIntakeCube = makeStowToCubeGroundIntakeTrajectory(false);
@@ -300,20 +334,36 @@ public class ArmTrajectories {
         return midToTop;
     }
 
-    public Trajectory getStowToDoubleSub() {
-        return stowToDoubleSub;
+    public Trajectory getStowToDoubleSubCone() {
+        return stowToDoubleSubCone;
     }
 
-    public Trajectory getCubeStowToDoubleSub() {
-        return cubeStowToDoubleSub;
+    public Trajectory getCubeStowToDoubleSubCone() {
+        return cubeStowToDoubleSubCone;
     }
 
-    public Trajectory getDoubleSubToStow() {
-        return doubleSubToStow;
+    public Trajectory getDoubleSubConeToStow() {
+        return doubleSubConeToStow;
     }
 
-    public Trajectory getDoubleSubToCubeStow() {
-        return doubleSubToCubeStow;
+    public Trajectory getDoubleSubConeToCubeStow() {
+        return doubleSubConeToCubeStow;
+    }
+
+    public Trajectory getStowToDoubleSubCube() {
+        return stowToDoubleSubCube;
+    }
+
+    public Trajectory getCubeStowToDoubleSubCube() {
+        return cubeStowToDoubleSubCube;
+    }
+
+    public Trajectory getDoubleSubCubeToStow() {
+        return doubleSubCubeToStow;
+    }
+
+    public Trajectory getDoubleSubCubeToCubeStow() {
+        return doubleSubCubeToCubeStow;
     }
 
     public Trajectory getStowToGroundIntakeCube() {

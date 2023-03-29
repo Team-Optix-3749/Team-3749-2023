@@ -121,7 +121,9 @@ public class Constants {
             STOW(new Translation2d(0.38, -0.2)),
             CUBE_STOW(new Translation2d(0.45, 0.1)),
             STING(new Translation2d(0.5, 0.7)),
-            DOUBLE_SUBSTATION(new Translation2d(0.5, 0.9)),
+            DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
+            DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.85)),
+
             GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.12)),
             PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));

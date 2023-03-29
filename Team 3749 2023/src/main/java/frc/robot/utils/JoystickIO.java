@@ -102,7 +102,8 @@ public class JoystickIO {
 
         // arm setpoints (bumpers)
         operator.rightBumper().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.STING));
-        operator.leftBumper().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
+        operator.povUp().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION_CUBE));
+        operator.povDown().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION_CONE));
 
         operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage * 0.55),
                 () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
@@ -154,7 +155,7 @@ public class JoystickIO {
 
         // arm setpoints (bumpers)
         pilot.rightBumper().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.STING));
-        pilot.leftBumper().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
+        // pilot.leftBumper().onTrue(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
         // intake button bindings
         pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
@@ -193,7 +194,7 @@ public class JoystickIO {
         armCommands.add(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.PLACE_MID));
         armCommands.add(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
         armCommands.add(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.STING));
-        armCommands.add(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
+        // armCommands.add(new MoveArm(arm, armTrajectories,  armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION));
 
 
         ShuffleboardLayout armIntakeCommands = controlsTab
