@@ -45,11 +45,11 @@ public class AlignApriltag extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 1.5); // 2.3
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 1.2); // 2.6
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3); // 2.3
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6); // 2.6
 
-    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
-    private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
+    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.075); // 0.1
+    private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.075); // 0.1
 
     private PhotonTrackedTarget lastTarget;
 
@@ -144,8 +144,8 @@ public class AlignApriltag extends CommandBase {
             y = -y;
         }
 
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(x,
-                0, turnVelocity, robotPose2d.getRotation());
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0,
+                y, 0, robotPose2d.getRotation());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
