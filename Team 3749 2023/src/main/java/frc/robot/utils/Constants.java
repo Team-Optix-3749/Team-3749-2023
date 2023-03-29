@@ -107,8 +107,8 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 3;
-        public static final double maxAccelerationMPS = 3;
+        public static final double maxSpeedMPS = 5;
+        public static final double maxAccelerationMPS = 5;
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
@@ -118,7 +118,8 @@ public class Constants {
                 0.0);
 
         public static enum ArmSetpoints {
-            STOW(new Translation2d(0.3, -0.2)),
+            STOW(new Translation2d(0.38, -0.2)),
+            CUBE_STOW(new Translation2d(0.45, 0.1)),
             STING(new Translation2d(0.5, 0.7)),
             DOUBLE_SUBSTATION(new Translation2d(0.5, 0.75)),
             GROUND_INTAKE_CONE(new Translation2d(0.9, 0.0)),
@@ -127,6 +128,7 @@ public class Constants {
             PLACE_MID(new Translation2d(0.85, 0.73));
 
             public Translation2d translation;
+
 
 
             ArmSetpoints(Translation2d translation) {

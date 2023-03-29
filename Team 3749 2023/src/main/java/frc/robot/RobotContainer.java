@@ -30,11 +30,12 @@ public class RobotContainer {
     private final Swerve swerve = new Swerve();
     private final ArmIntake armIntake = new ArmIntake();
     private final Arm arm = new Arm();
+    private final ArmTrajectories armTrajectories = new ArmTrajectories();
     private final LEDs leds = new LEDs();
     private final Limelight limelight = new Limelight();
 
     private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
-            arm);
+            arm, armTrajectories);
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -81,7 +82,7 @@ public class RobotContainer {
             return;
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickIO.getButtonBindings();
+        joystickIO.pilotAndOperatorBindings();
 
     }
 
@@ -89,7 +90,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPiece(swerve, arm, armIntake, limelight, leds);
+        return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
 
 
     }
@@ -101,18 +102,18 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Pickup Cube",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
+                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
         Constants.AutoConstants.eventMap.put("Pickup Cone",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE)));
-        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, leds,
+                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE)));
+        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
-        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake, leds,
+                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
+        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.PLACE_MID));
-        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, leds,
+        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.PLACE_TOP));
         Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
 

@@ -190,6 +190,7 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         try {
             moveArm();
+            
         } catch (Exception e) {
             System.out.println(e);
         }
