@@ -20,6 +20,7 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -63,12 +64,12 @@ public class RobotContainer {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        // limelight.setDefaultCommand(
-        //         Commands.run(
-        //                 () -> {
-        //                     limelight.setPipeline(Pipelines.APRILTAG.index);
-        //                     limelight.updatePoseAprilTags(swerve.getPoseEstimator());
-        //                 }, limelight));
+        limelight.setDefaultCommand(
+                Commands.run(
+                        () -> {
+                            limelight.setPipeline(Pipelines.APRILTAG.index);
+                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
+                        }, limelight));
     }
 
     /**
@@ -76,9 +77,9 @@ public class RobotContainer {
      */
     public void configureButtonBindings() {
 
-        if (!JoystickIO.didJoysticksChange())
-            return;
-        CommandScheduler.getInstance().getActiveButtonLoop().clear();
+        // if (!JoystickIO.didJoysticksChange())
+        //     return;
+        // CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
         joystickIO.pilotAndOperatorBindings();
 
@@ -88,7 +89,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
+        return AutoCommands.getAprilTagAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
 
 
     }

@@ -128,7 +128,8 @@ public final class AutoCommands {
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
     }
 
-    public static Command getTopTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmTrajectories armTrajectories, ArmIntake armIntake, Limelight limelight,
+    public static Command getTopTwoPieceCharge(Swerve swerveSubsystem, Arm arm, ArmTrajectories armTrajectories,
+            ArmIntake armIntake, Limelight limelight,
             LEDs leds) {
         PathPlannerTrajectory first = null;
         PathPlannerTrajectory second = null;
@@ -246,8 +247,9 @@ public final class AutoCommands {
             LEDs leds) {
 
         return new SequentialCommandGroup(
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW),
-                new AlignApriltag(swerveSubsystem, limelight).withTimeout(1));
+                new InstantCommand(() -> {swerveSubsystem.resetGyro(); swerveSubsystem.setGyro(true);}, swerveSubsystem),
+                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING),
+                new AlignApriltag(swerveSubsystem, limelight).withTimeout(2));
 
     }
 
