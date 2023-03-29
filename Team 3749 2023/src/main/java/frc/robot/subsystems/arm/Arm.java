@@ -1,7 +1,5 @@
 package frc.robot.subsystems.arm;
 
-import java.sql.Driver;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -10,7 +8,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -49,7 +46,12 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> armX = new ShuffleData<Double>("Arm", "Arm X", 0.0);
     private ShuffleData<Double> armY = new ShuffleData<Double>("Arm", "Arm Y", 0.0);
     private ShuffleData<Double> shoulderVoltage = new ShuffleData<Double>("Arm", "Shoulder Voltage", 0.0);
+    private ShuffleData<Double> shoulderFF = new ShuffleData<Double>("Arm", "Shoulder FF Output", 0.0);
+    private ShuffleData<Double> shoulderPID = new ShuffleData<Double>("Arm", "Shoulder PID Output", 0.0);
     private ShuffleData<Double> elbowVoltage = new ShuffleData<Double>("Arm", "Elbow Voltage", 0.0);
+    private ShuffleData<Double> elbowFF = new ShuffleData<Double>("Arm", "Elbow PID Output", 0.0);
+    private ShuffleData<Double> elbowPID = new ShuffleData<Double>("Arm", "Elbow FF Output", 0.0);
+
 
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();
@@ -68,9 +70,8 @@ public class Arm extends SubsystemBase {
         shoulderMotor.setIdleMode(IdleMode.kCoast);
         elbowMotor.setIdleMode(IdleMode.kCoast);
 
-        shoulderMotor.setSmartCurrentLimit(60);
-        elbowMotor.setSmartCurrentLimit(60);
-
+        shoulderMotor.setSmartCurrentLimit(35, 60);
+        elbowMotor.setSmartCurrentLimit(35, 60);
     }
 
     /**
@@ -93,7 +94,7 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Move arm to set position
+     * Move arm to set position using PID and DJ FF
      * 
      * @throws Exception
      */
@@ -105,9 +106,15 @@ public class Arm extends SubsystemBase {
 
         setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
         setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
+
+        shoulderPID.set(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle));
+        shoulderFF.set(feedForwardOutput[0]);
+
+        elbowPID.set(elbowPIDController.calculate(getElbowAngle(), elbowAngle));
+        elbowFF.set(feedForwardOutput[1]);
     }
 
-    /**f
+    /**
      * Get current arm pose as Translation2d
      * 
      * @return arm coordianates as Translation2d
@@ -184,15 +191,9 @@ public class Arm extends SubsystemBase {
 
 
     public void periodic() {
-        if (DriverStation.isEnabled()){
-            shoulderMotor.setIdleMode(IdleMode.kBrake);
-            elbowMotor.setIdleMode(IdleMode.kBrake);
-        } else{
-            shoulderMotor.setIdleMode(IdleMode.kCoast);
-            elbowMotor.setIdleMode(IdleMode.kCoast);
-        }
         try {
             moveArm();
+            
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -3,6 +3,8 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -75,6 +77,7 @@ public class Constants {
         // public static final double elbow_kP = 0.3;
         public static final double elbow_kP = 0.2;
         // public static final double shoulder_kP = 0.2;
+        // public static final double shoulder_kP = 0.1;
         public static final double shoulder_kP = 0.15;
 
         public static final double elbow_length = 1.016;
@@ -104,8 +107,8 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 7;
-        public static final double maxAccelerationMPS = 10;
+        public static final double maxSpeedMPS = 5;
+        public static final double maxAccelerationMPS = 5;
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
@@ -115,14 +118,25 @@ public class Constants {
                 0.0);
 
         public static enum ArmSetpoints {
-            ZERO,
-            STOW,
-            STING,
-            DOUBLE_SUBSTATION,
-            GROUND_INTAKE_CONE,
-            GROUND_INTAKE_CUBE,
-            PLACE_TOP,
-            PLACE_MID;
+            STOW(new Translation2d(0.38, -0.2)),
+            CUBE_STOW(new Translation2d(0.45, 0.1)),
+            STING(new Translation2d(0.5, 0.7)),
+            DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
+            DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
+
+            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.12)),
+            PLACE_TOP(new Translation2d(1.215, 1.05)),
+            PLACE_MID(new Translation2d(0.85, 0.73));
+
+            public Translation2d translation;
+
+            ArmSetpoints(Translation2d translation) {
+                this.translation = translation;
+            }
+
+            public Pose2d toPose2d(double rotation) {
+                return new Pose2d(this.translation, new Rotation2d(rotation));
+            }
         }
     }
 
