@@ -120,7 +120,8 @@ public class ArmTrajectories {
     public static Trajectory getCubeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
             ArmSetpoints.STOW.toPose2d(0),
-            ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(Math.PI * 5 / 3)
+            new Pose2d(0.7, 0.1, new Rotation2d(0)),
+            ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);
@@ -134,7 +135,8 @@ public class ArmTrajectories {
     public static Trajectory getConeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
             ArmSetpoints.STOW.toPose2d(0),
-            ArmSetpoints.GROUND_INTAKE_CONE.toPose2d(Math.PI *5 / 3)
+            new Pose2d(0.7, 0.1, new Rotation2d(0)),
+            ArmSetpoints.GROUND_INTAKE_CONE.toPose2d(3 * Math.PI / 2)
         };
 
         return createTrajectory(waypoints, isReversed);

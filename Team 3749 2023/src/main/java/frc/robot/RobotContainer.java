@@ -20,8 +20,6 @@ import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.AutoConstants.TopBottom;
-import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);

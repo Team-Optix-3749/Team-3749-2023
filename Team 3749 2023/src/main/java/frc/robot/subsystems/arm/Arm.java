@@ -69,6 +69,9 @@ public class Arm extends SubsystemBase {
 
         shoulderMotor.setIdleMode(IdleMode.kCoast);
         elbowMotor.setIdleMode(IdleMode.kCoast);
+
+        shoulderMotor.setSmartCurrentLimit(35, 60);
+        elbowMotor.setSmartCurrentLimit(35, 60);
     }
 
     /**

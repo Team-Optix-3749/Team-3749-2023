@@ -120,18 +120,19 @@ public class Constants {
         public static enum ArmSetpoints {
             STOW(new Translation2d(0.3, -0.2)),
             STING(new Translation2d(0.5, 0.7)),
-            DOUBLE_SUBSTATION(new Translation2d(0.5, 0.75)),
-            GROUND_INTAKE_CONE(new Translation2d(0.9, 0.0)),
-            GROUND_INTAKE_CUBE(new Translation2d(0.9, -0.12)),
+            DOUBLE_SUBSTATION(new Translation2d(0.5, 0.9)),
+            GROUND_INTAKE_CONE(new Translation2d(0.76, -0.12)),
+            // GROUND_INTAKE_CUBE(new Translation2d(0.76, -0.2)),
+            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.12)),
             PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));
 
             public Translation2d translation;
 
-
             ArmSetpoints(Translation2d translation) {
                 this.translation = translation;
             }
+
             public Pose2d toPose2d(double rotation) {
                 return new Pose2d(this.translation, new Rotation2d(rotation));
             }
