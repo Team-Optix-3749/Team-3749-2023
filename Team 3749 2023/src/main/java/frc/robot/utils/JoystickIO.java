@@ -141,7 +141,7 @@ public class JoystickIO {
         pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
         // swerve button bindings
         pilot.startWhileHeld(Commands.runOnce(() -> {
-            swerve.setGyro(false);
+            swerve.setFlipGyro(false);
             swerve.resetGyro();
         }, swerve));
 

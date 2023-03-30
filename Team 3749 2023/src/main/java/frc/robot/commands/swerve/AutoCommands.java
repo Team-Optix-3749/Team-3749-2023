@@ -45,6 +45,7 @@ public final class AutoCommands {
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {
+                        swerveSubsystem.setFlipGyro(false);
                         swerveSubsystem.resetGyro();
                         swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
                     }
@@ -259,7 +260,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     swerveSubsystem.resetGyro();
-                    swerveSubsystem.setGyro(false);
+                    swerveSubsystem.setFlipGyro(false);
                 }, swerveSubsystem),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING),
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(2));

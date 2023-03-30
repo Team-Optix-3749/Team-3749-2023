@@ -122,7 +122,7 @@ public class Swerve extends SubsystemBase {
 
         drive(0, 0, 0);
     }
-    public void setGyro(boolean bool){
+    public void setFlipGyro(boolean bool){
         flipGyro = bool;
     }
 
