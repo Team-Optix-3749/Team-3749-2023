@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        m_robotContainer.configureButtonBindings();
+        // m_robotContainer.configureButtonBindings();
 
         CommandScheduler.getInstance().run();
     }

@@ -45,11 +45,11 @@ public class AlignApriltag extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.0); // 2.3
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6); // 2.6
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3); // 2.3
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.7); // 2.6
 
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.075); // 0.1
-    private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.075); // 0.1
+    private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
 
     private PhotonTrackedTarget lastTarget;
 
@@ -71,10 +71,21 @@ public class AlignApriltag extends CommandBase {
         this.limelight = limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
 
-        double x = 0.6;
+        double x = 0.75;
+        double leftDiff;
+        double rightDiff;
+        if (isBlueAlliance()){
+            leftDiff = 3.86;
+            rightDiff = 4.94;
+            
+        }
+        else{
+            leftDiff = 3.815;
+            rightDiff = 4.98;
+        }
 
         tagToGoal = new Transform3d(
-                new Translation3d(x, left == true ? (4.42 - 3.75) : -(4.42 - 4), 0.0),
+                new Translation3d(x, left == true ? (4.42 - leftDiff) : (4.42 - rightDiff), 0.0),
                 new Rotation3d(0.0, 0.0, Math.PI));
 
         addRequirements(swerve);                            
@@ -229,7 +240,7 @@ public class AlignApriltag extends CommandBase {
                 goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
 
                 double rotationAngle = 180;
-                if (DriverStation.isAutonomous() && !isBlueAlliance()){
+                if (DriverStation.isAutonomous()){
                     rotationAngle = 0;
                 }
 
@@ -238,7 +249,8 @@ public class AlignApriltag extends CommandBase {
 
                 VisionConstants.goalPoseX.set(goalPose.getX());
                 VisionConstants.goalPoseY.set(goalPose.getY());
-                VisionConstants.goalPoseHeading.set(goalPose.getRotation().getDegrees());
+                VisionConstants.goalPoseHeading.
+                set(goalPose.getRotation().getDegrees());
             }
         }
     }

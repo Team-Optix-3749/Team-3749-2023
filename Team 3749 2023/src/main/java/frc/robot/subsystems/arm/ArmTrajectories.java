@@ -302,10 +302,10 @@ public class ArmTrajectories {
     private final Trajectory doubleSubCubeToCubeStow = makeCubeStowToDoubleSubstationCubeTrajectory(true);
 
     // single sub
-    private final Trajectory stowToSingleSub = makeStowToSingleSubstationTrajectory(false);
-    private final Trajectory cubeStowToSingleSub = makeCubeStowToSingleSubstationTrajectory(false);
-    private final Trajectory singleSubToStow = makeStowToSingleSubstationTrajectory(true);
-    private final Trajectory singleSubToCubeStow = makeCubeStowToSingleSubstationTrajectory(true);
+    // private final Trajectory stowToSingleSub = makeStowToSingleSubstationTrajectory(false);
+    // private final Trajectory cubeStowToSingleSub = makeCubeStowToSingleSubstationTrajectory(false);
+    // private final Trajectory singleSubToStow = makeStowToSingleSubstationTrajectory(true);
+    // private final Trajectory singleSubToCubeStow = makeCubeStowToSingleSubstationTrajectory(true);
 
     // ground intake cube
     private final Trajectory stowToGroundIntakeCube = makeStowToCubeGroundIntakeTrajectory(false);
@@ -409,21 +409,21 @@ public class ArmTrajectories {
         return doubleSubCubeToCubeStow;
     }
 
-    public Trajectory getSingleSubToCubeStow() {
-        return singleSubToCubeStow;
-    }
+    // public Trajectory getSingleSubToCubeStow() {
+    //     return singleSubToCubeStow;
+    // }
 
-    public Trajectory getSingleSubToStow() {
-        return singleSubToStow;
-    }
+    // public Trajectory getSingleSubToStow() {
+    //     return singleSubToStow;
+    // }
 
-    public Trajectory getCubeStowToSingleSub() {
-        return cubeStowToSingleSub;
-    }
+    // public Trajectory getCubeStowToSingleSub() {
+    //     return cubeStowToSingleSub;
+    // }
 
-    public Trajectory getStowToSingleSub() {
-        return stowToSingleSub;
-    }
+    // public Trajectory getStowToSingleSub() {
+    //     return stowToSingleSub;
+    // }
 
     public Trajectory getStowToGroundIntakeCube() {
         return stowToGroundIntakeCube;
