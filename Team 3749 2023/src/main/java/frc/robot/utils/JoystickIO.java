@@ -94,8 +94,6 @@ public class JoystickIO {
      */
     public void pilotAndOperatorBindings() {
         // arm setpoints (buttons)
-        // operator.a().onTrue(new PrintCommand("YYYYYYYYYYYYYYYYYYYY"));
-
         operator.a().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP));
         operator.b().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_MID));
         operator.x().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
@@ -127,15 +125,15 @@ public class JoystickIO {
         pilot.a()
                 .onTrue(new SequentialCommandGroup(
                         new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight)));
+                        new AlignApriltag(swerve, limelight).withTimeout(1)));
         pilot.x()
                 .onTrue(new SequentialCommandGroup(
                         new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight, true)));
+                        new AlignApriltag(swerve, limelight, true).withTimeout(2)));
         pilot.b()
                 .onTrue(new SequentialCommandGroup(
                         new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight, false)));
+                        new AlignApriltag(swerve, limelight, false).withTimeout(2)));
 
         pilot.yWhileHeld(() -> swerve.toggleSpeed());
 
