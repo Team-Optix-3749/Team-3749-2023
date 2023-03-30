@@ -64,19 +64,16 @@ public class MoveArm extends CommandBase {
 
     @Override
     public void initialize() {
-        double init_start = Timer.getFPGATimestamp();
         System.out.println(desiredSetpoint.name());
         trajectories = findTrajectory(desiredSetpoint, arm);
         trajectoryIndex = 0;
         timer.reset();
         timer.start();
-        System.out.println(
-                String.valueOf("INITIALIZE TIME: " + String.valueOf(Timer.getFPGATimestamp() - init_start)));
+
     }
 
     @Override
     public void execute() {
-        double exec_start = Timer.getFPGATimestamp();
         if (trajectories == null) {
             System.out.println("NO SETPOINT");
             return;
@@ -90,8 +87,6 @@ public class MoveArm extends CommandBase {
         } catch (Exception e) {
             System.out.println(e);
         }
-        double write_start = Timer.getFPGATimestamp();
-
         try {
             FileWriter myWriter = new FileWriter("data.csv", true);
             myWriter.write(String.valueOf(desiredState.poseMeters.getX()) + ','
@@ -101,20 +96,15 @@ public class MoveArm extends CommandBase {
             // System.out.println("An error occurred.");
             // e.printStackTrace();
         }
-
-        System.out.println(
-                String.valueOf(desiredState.poseMeters.getX()) + ',' + String.valueOf(desiredState.poseMeters.getY()));
         logging();
     }
 
     @Override
     public void end(boolean interrupted) {
-        // intake.setVoltage(Constants.ArmIntake.idleVoltage);
     }
 
     @Override
     public boolean isFinished() {
-        double finishStart = Timer.getFPGATimestamp();
         if (trajectories == null) {
             System.out.println("NO SETPOINT");
             return false;
@@ -172,6 +162,12 @@ public class MoveArm extends CommandBase {
                 && (desiredSetpoint != ArmSetpoints.STOW && desiredSetpoint != ArmSetpoints.CUBE_STOW)) {
             arm.setCurrentSetpoint(ArmSetpoints.STOW);
             return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };
+        }
+        if (currentSetpoint == ArmSetpoints.SINGLE_SUBSTATION
+                && (desiredSetpoint != ArmSetpoints.STOW && desiredSetpoint != ArmSetpoints.CUBE_STOW)) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return new Trajectory[] { armTrajectories.getSingleSubToStow()};
+                    
         }
 
         switch (desiredSetpoint) {
@@ -287,6 +283,35 @@ public class MoveArm extends CommandBase {
                     return new Trajectory[] { armTrajectories.getStowToDoubleSubCube() };
                 }
 
+            case SINGLE_SUBSTATION:
+                leds.setLEDPattern(LEDPattern.TWINKLE);
+
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return new Trajectory[] { armTrajectories.getSingleSubToStow() };
+                } else if (desiredSetpoint == ArmSetpoints.CUBE_STOW) {
+                    arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
+                    return new Trajectory[] { armTrajectories.getSingleSubToCubeStow() };
+                } else if (currentSetpoint == ArmSetpoints.PLACE_TOP) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return new Trajectory[] { armTrajectories.getTopToStow() };
+                } else if (currentSetpoint == ArmSetpoints.PLACE_MID) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return new Trajectory[] { armTrajectories.getMidToStow() };
+                } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return new Trajectory[] { armTrajectories.getGroundIntakeCubeToCubeStow() };
+                } else if (currentSetpoint == ArmSetpoints.STING) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return new Trajectory[] { armTrajectories.getStingToStow() };
+                } else if (currentSetpoint == ArmSetpoints.CUBE_STOW) {
+                    arm.setCurrentSetpoint(ArmSetpoints.SINGLE_SUBSTATION);
+                    return new Trajectory[] { armTrajectories.getCubeStowToSingleSub() };
+                } else {
+                    arm.setCurrentSetpoint(ArmSetpoints.SINGLE_SUBSTATION);
+                    return new Trajectory[] { armTrajectories.getStowToSingleSub() };
+                }
+
             case GROUND_INTAKE_CUBE:
                 leds.setLEDPattern(LEDPattern.WHITE);
                 if (desiredSetpoint == currentSetpoint) {
@@ -309,9 +334,9 @@ public class MoveArm extends CommandBase {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     leds.setLEDPattern(leds.getDefaultColor());
                     return new Trajectory[] { armTrajectories.getStingToStow() };
-                } else if (desiredSetpoint == ArmSetpoints.CUBE_STOW) {
-                    arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
-                    return new Trajectory[] { armTrajectories.getStingToCubeStow() };
+                } else if (currentSetpoint == ArmSetpoints.CUBE_STOW) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STING);
+                    return new Trajectory[] { armTrajectories.getCubeStowToSting() };
                 } else if (currentSetpoint == ArmSetpoints.PLACE_TOP) {
                     arm.setCurrentSetpoint(ArmSetpoints.STING);
                     return new Trajectory[] { armTrajectories.getTopToSting() };

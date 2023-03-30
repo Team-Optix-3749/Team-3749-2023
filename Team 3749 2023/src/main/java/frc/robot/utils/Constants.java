@@ -123,7 +123,7 @@ public class Constants {
             STING(new Translation2d(0.5, 0.7)),
             DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
             DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
-
+            SINGLE_SUBSTATION(new Translation2d(10000000, 10000000)),
             GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.12)),
             PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));
