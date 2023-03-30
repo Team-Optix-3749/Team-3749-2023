@@ -12,7 +12,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.vision.AlignApriltag;
@@ -100,6 +103,8 @@ public class JoystickIO {
 
         // arm setpoints (bumpers)
         operator.rightBumper().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING));
+        operator.leftBumper()
+                .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION_CONE));
         operator.povUp()
                 .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION_CUBE));
         operator.povDown()
@@ -122,17 +127,23 @@ public class JoystickIO {
         operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
 
         pilot.a()
-                .onTrue(new SequentialCommandGroup(
+                .onTrue(new ParallelCommandGroup(
                         new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight).withTimeout(1)));
+                        new SequentialCommandGroup(
+                                new WaitCommand(1),
+                                new AlignApriltag(swerve, limelight).withTimeout(1))));
         pilot.x()
-                .onTrue(new SequentialCommandGroup(
-                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight, true).withTimeout(2)));
+                .onTrue(new ParallelCommandGroup(
+                    new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+                    new SequentialCommandGroup(
+                            new WaitCommand(1),
+                            new AlignApriltag(swerve, limelight, true).withTimeout(1))));
         pilot.b()
-                .onTrue(new SequentialCommandGroup(
-                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight, false).withTimeout(2)));
+                .onTrue(new ParallelCommandGroup(
+                    new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+                    new SequentialCommandGroup(
+                            new WaitCommand(1),
+                            new AlignApriltag(swerve, limelight, false).withTimeout(1))));
 
         pilot.yWhileHeld(() -> swerve.toggleSpeed());
 
@@ -174,9 +185,10 @@ public class JoystickIO {
         // armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
         // () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
-        // swerve button bindings//     pilot.startWhileHeld(
-                // () -> swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(swerve.getHeading()))),
-                // swerve);
+        // swerve button bindings// pilot.startWhileHeld(
+        // () -> swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new
+        // Rotation2d(swerve.getHeading()))),
+        // swerve);
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
         pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
