@@ -46,7 +46,7 @@ public final class AutoCommands {
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {
-                        swerveSubsystem.setFlipGyro(false);
+                        swerveSubsystem.setFlipGyro(true);
                         swerveSubsystem.resetGyro();
                         swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
                     }
@@ -93,16 +93,11 @@ public final class AutoCommands {
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
-                Commands.waitSeconds(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.75),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.175),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.1),
+                        .withTimeout(0.275),
 
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
@@ -127,12 +122,7 @@ public final class AutoCommands {
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
-                Commands.waitSeconds(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.75),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.175),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
@@ -164,17 +154,11 @@ public final class AutoCommands {
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
         return new SequentialCommandGroup(
-                Commands.waitSeconds(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.75),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.175),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.1),
+                        .withTimeout(0.25),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_2,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
@@ -199,11 +183,7 @@ public final class AutoCommands {
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
         return new SequentialCommandGroup(
-                Commands.waitSeconds(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.75),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.175),
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
@@ -232,11 +212,7 @@ public final class AutoCommands {
 
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
         return new SequentialCommandGroup(
-                Commands.waitSeconds(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.75),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.175),
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
 
                 path_1,
@@ -254,11 +230,7 @@ public final class AutoCommands {
             LEDs leds) {
 
         return new SequentialCommandGroup(
-                Commands.waitSeconds(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.75),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.175),
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
     }
@@ -272,7 +244,7 @@ public final class AutoCommands {
                 new InstantCommand(() -> {
                     swerveSubsystem.resetOdometry(new Pose2d());
                     swerveSubsystem.resetGyro();
-                    swerveSubsystem.setFlipGyro(false);
+                    swerveSubsystem.setFlipGyro(true);
                 }, swerveSubsystem),
                 new SequentialCommandGroup(
                         new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),

@@ -51,7 +51,7 @@ public class ArmIntake extends SubsystemBase {
         // 1 minute / 60 seconds * 1 wheel rotation / 5 motor rotations
         intakeEncoder.setVelocityConversionFactor(1.0 / (60.0 * 5.0));
 
-        intakeMotor.setSmartCurrentLimit(35, 60);
+        intakeMotor.setSmartCurrentLimit(50, 80);
     }
 
     /**

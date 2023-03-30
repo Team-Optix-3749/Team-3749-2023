@@ -69,7 +69,6 @@ public class AutoBalancingPID extends CommandBase {
         // How inaccurate we are willing to be in reference to looking straight forward
         // Should change this so it adjusts on the go and doesn't need to stop
         if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), goalHeading) && !has_aligned) {
-            System.out.println("TURNING");
             swerve.turnToRotation(goalHeading);
         }
 
