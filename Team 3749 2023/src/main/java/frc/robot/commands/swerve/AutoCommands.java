@@ -40,7 +40,7 @@ public final class AutoCommands {
      * @return a SwerveControllerCommand based on the trajectory
      * @summary takes a trajectory and moves on it
      */
-    public static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath,
+    private static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath,
             Swerve swerveSubsystem) {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {

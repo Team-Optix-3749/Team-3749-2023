@@ -107,8 +107,8 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 5;
-        public static final double maxAccelerationMPS = 5;
+        public static final double maxSpeedMPS = 6.5;
+        public static final double maxAccelerationMPS = 6.5;
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
@@ -200,9 +200,9 @@ public class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static double kTeleDriveMaxSpeedMetersPerSecond = 6;
+        public static double kTeleDriveMaxSpeedMetersPerSecond = 7.5;
         public static double kTeleDriveMaxAngularSpeedRadiansPerSecond = 4.5;
-        public static double kTeleDriveMaxAccelerationUnitsPerSecond = 6;
+        public static double kTeleDriveMaxAccelerationUnitsPerSecond = 7.5;
         public static double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 4.5;
 
         public static final double kAutoDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2;

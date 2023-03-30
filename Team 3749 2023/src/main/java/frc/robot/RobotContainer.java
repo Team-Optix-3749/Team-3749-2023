@@ -2,8 +2,13 @@ package frc.robot;
 
 import java.io.FileWriter;
 import java.io.IOException;
+
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -36,6 +41,16 @@ public class RobotContainer {
     private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
             arm, armTrajectories);
 
+    Command bottomTwoPiece = AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command topTwoPiece = AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command bottomTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command topTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command middleCharge = AutoCommands.getMiddleCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command apriltagAlign = AutoCommands.getAprilTagAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command autoBalance = AutoCommands.getAutoBalanceTest(swerve, arm, armTrajectories, armIntake, limelight, leds);
+
+    SendableChooser<Command> autoChooser = new SendableChooser<>();
+
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
         DriverStation.removeRefreshedDataEventHandle(44000);
@@ -52,6 +67,16 @@ public class RobotContainer {
         }
 
         RobotController.setBrownoutVoltage(6.75);
+
+        autoChooser.setDefaultOption("Top two piece charge", topTwoPieceCharge);
+        autoChooser.addOption("Top Two PIece", topTwoPiece);
+        autoChooser.addOption("Middle Charge", middleCharge);
+        autoChooser.addOption("Bottom Two Piece", bottomTwoPiece);
+        autoChooser.addOption("Bottom Two Piece Charge", bottomTwoPieceCharge);
+        autoChooser.addOption("Apriltag Align", apriltagAlign);
+        autoChooser.addOption("Auto Balance", autoBalance);
+
+        SmartDashboard.putData(autoChooser);
     }
 
     /**
@@ -89,10 +114,10 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
-
-
+        return this.autoChooser.getSelected();
     }
+
+
 
     /**
      * Set event maps for autonomous
