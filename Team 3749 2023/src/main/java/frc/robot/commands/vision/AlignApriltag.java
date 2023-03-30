@@ -132,12 +132,19 @@ public class AlignApriltag extends CommandBase {
         double currentDistance = robotPose2d.getTranslation().getDistance(this.goalPose.getTranslation());
         driveErrorAbs = currentDistance;
         driveVelocityScalar = driveController.calculate(driveErrorAbs, 0.0);
+
+        if (currentDistance < 2.5) {
+            System.out.println("Too far away");
+            return;
+        }
+
         if (driveController.atGoal())
             driveVelocityScalar = 0.0;
 
         double turnVelocity = turnController.calculate(
                 robotPose2d.getRotation().getRadians(), this.goalPose.getRotation().getRadians());
         turnErrorAbs = Math.abs(robotPose2d.getRotation().minus(this.goalPose.getRotation()).getRadians());
+
         if (turnController.atGoal())
             turnVelocity = 0.0;
 
