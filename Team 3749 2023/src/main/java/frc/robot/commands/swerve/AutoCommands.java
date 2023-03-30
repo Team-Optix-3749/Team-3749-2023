@@ -6,6 +6,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -65,6 +66,16 @@ public final class AutoCommands {
                 ));
     }
 
+    public static Command getPlaceTop(Arm arm, ArmTrajectories armTrajectories, ArmIntake armIntake, LEDs leds) {
+        return new SequentialCommandGroup(
+                Commands.waitSeconds(0.1),
+                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
+                Commands.waitSeconds(0.75),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.175),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1));
+    }
+
     public static Command getBottomTwoPiece(Swerve swerveSubsystem, Arm arm, ArmTrajectories armTrajectories,
             ArmIntake armIntake,
             Limelight limelight,
@@ -83,7 +94,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                           Commands.waitSeconds(0.75),
+                Commands.waitSeconds(0.75),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
@@ -117,7 +128,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                           Commands.waitSeconds(0.75),
+                Commands.waitSeconds(0.75),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
@@ -154,7 +165,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                           Commands.waitSeconds(0.75),
+                Commands.waitSeconds(0.75),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
@@ -189,7 +200,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                           Commands.waitSeconds(0.75),
+                Commands.waitSeconds(0.75),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
@@ -222,7 +233,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                           Commands.waitSeconds(0.75),
+                Commands.waitSeconds(0.75),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
@@ -244,7 +255,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                           Commands.waitSeconds(0.75),
+                Commands.waitSeconds(0.75),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.175),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
@@ -258,11 +269,14 @@ public final class AutoCommands {
 
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
+                    swerveSubsystem.resetOdometry(new Pose2d());
                     swerveSubsystem.resetGyro();
                     swerveSubsystem.setGyro(false);
                 }, swerveSubsystem),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING),
-                new AlignApriltag(swerveSubsystem, limelight).withTimeout(2));
+                new SequentialCommandGroup(
+                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+                        new AlignApriltag(swerveSubsystem, limelight).withTimeout(2)),
+                        getPlaceTop(arm, armTrajectories, armIntake, leds));
 
     }
 
