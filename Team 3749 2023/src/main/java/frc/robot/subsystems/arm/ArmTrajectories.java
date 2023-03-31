@@ -224,7 +224,7 @@ public class ArmTrajectories {
      */
     private Trajectory makeCubeStowToCubeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                ArmSetpoints.STOW.toPose2d(0),
+                ArmSetpoints.CUBE_STOW.toPose2d(0),
                 new Pose2d(0.7, 0.1, new Rotation2d(0)),
                 ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
         };

@@ -392,7 +392,6 @@ public class MoveArm extends CommandBase {
                     arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
                     return new Trajectory[] { armTrajectories.getDoubleSubConeToCubeStow() };
                 } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
-                    System.out.println("GROUND TO STOW");
                     arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
                     return new Trajectory[] { armTrajectories.getGroundIntakeCubeToCubeStow() };
                 } else if (currentSetpoint == ArmSetpoints.STING) {
