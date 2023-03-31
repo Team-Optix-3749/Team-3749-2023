@@ -164,10 +164,11 @@ public class MoveArm extends CommandBase {
             return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };
         }
         // if (currentSetpoint == ArmSetpoints.SINGLE_SUBSTATION
-        //         && (desiredSetpoint != ArmSetpoints.STOW && desiredSetpoint != ArmSetpoints.CUBE_STOW)) {
-        //             arm.setCurrentSetpoint(ArmSetpoints.STOW);
-        //             return new Trajectory[] { armTrajectories.getSingleSubToStow()};
-                    
+        // && (desiredSetpoint != ArmSetpoints.STOW && desiredSetpoint !=
+        // ArmSetpoints.CUBE_STOW)) {
+        // arm.setCurrentSetpoint(ArmSetpoints.STOW);
+        // return new Trajectory[] { armTrajectories.getSingleSubToStow()};
+
         // }
 
         switch (desiredSetpoint) {
@@ -283,34 +284,34 @@ public class MoveArm extends CommandBase {
                     return new Trajectory[] { armTrajectories.getStowToDoubleSubCube() };
                 }
 
-            // case SINGLE_SUBSTATION:
-            //     leds.setLEDPattern(LEDPattern.TWINKLE);
+                // case SINGLE_SUBSTATION:
+                // leds.setLEDPattern(LEDPattern.TWINKLE);
 
-            //     if (desiredSetpoint == currentSetpoint) {
-            //         arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            //         return new Trajectory[] { armTrajectories.getSingleSubToStow() };
-            //     } else if (desiredSetpoint == ArmSetpoints.CUBE_STOW) {
-            //         arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
-            //         return new Trajectory[] { armTrajectories.getSingleSubToCubeStow() };
-            //     } else if (currentSetpoint == ArmSetpoints.PLACE_TOP) {
-            //         arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            //         return new Trajectory[] { armTrajectories.getTopToStow() };
-            //     } else if (currentSetpoint == ArmSetpoints.PLACE_MID) {
-            //         arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            //         return new Trajectory[] { armTrajectories.getMidToStow() };
-            //     } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
-            //         arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            //         return new Trajectory[] { armTrajectories.getGroundIntakeCubeToCubeStow() };
-            //     } else if (currentSetpoint == ArmSetpoints.STING) {
-            //         arm.setCurrentSetpoint(ArmSetpoints.STOW);
-            //         return new Trajectory[] { armTrajectories.getStingToStow() };
-            //     } else if (currentSetpoint == ArmSetpoints.CUBE_STOW) {
-            //         arm.setCurrentSetpoint(ArmSetpoints.SINGLE_SUBSTATION);
-            //         return new Trajectory[] { armTrajectories.getCubeStowToSingleSub() };
-            //     } else {
-            //         arm.setCurrentSetpoint(ArmSetpoints.SINGLE_SUBSTATION);
-            //         return new Trajectory[] { armTrajectories.getStowToSingleSub() };
-            //     }
+                // if (desiredSetpoint == currentSetpoint) {
+                // arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                // return new Trajectory[] { armTrajectories.getSingleSubToStow() };
+                // } else if (desiredSetpoint == ArmSetpoints.CUBE_STOW) {
+                // arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
+                // return new Trajectory[] { armTrajectories.getSingleSubToCubeStow() };
+                // } else if (currentSetpoint == ArmSetpoints.PLACE_TOP) {
+                // arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                // return new Trajectory[] { armTrajectories.getTopToStow() };
+                // } else if (currentSetpoint == ArmSetpoints.PLACE_MID) {
+                // arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                // return new Trajectory[] { armTrajectories.getMidToStow() };
+                // } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
+                // arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                // return new Trajectory[] { armTrajectories.getGroundIntakeCubeToCubeStow() };
+                // } else if (currentSetpoint == ArmSetpoints.STING) {
+                // arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                // return new Trajectory[] { armTrajectories.getStingToStow() };
+                // } else if (currentSetpoint == ArmSetpoints.CUBE_STOW) {
+                // arm.setCurrentSetpoint(ArmSetpoints.SINGLE_SUBSTATION);
+                // return new Trajectory[] { armTrajectories.getCubeStowToSingleSub() };
+                // } else {
+                // arm.setCurrentSetpoint(ArmSetpoints.SINGLE_SUBSTATION);
+                // return new Trajectory[] { armTrajectories.getStowToSingleSub() };
+                // }
 
             case GROUND_INTAKE_CUBE:
                 leds.setLEDPattern(LEDPattern.WHITE);
@@ -324,6 +325,16 @@ public class MoveArm extends CommandBase {
                 } else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CUBE);
                     return new Trajectory[] { armTrajectories.getStowToGroundIntakeCube() };
+                }
+            case AUTO_GROUND_INTAKE_CUBE:
+                leds.setLEDPattern(LEDPattern.WHITE);
+                if (desiredSetpoint == currentSetpoint) {
+                    arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
+                    leds.setLEDPattern(leds.getDefaultColor());
+                    return new Trajectory[] { armTrajectories.getAutoGroundIntakeCubeToCubeStow() };
+                } else {
+                    arm.setCurrentSetpoint(ArmSetpoints.AUTO_GROUND_INTAKE_CUBE);
+                    return new Trajectory[] { armTrajectories.getStowToAutoGroundIntakeCube() };
                 }
             case STING:
                 leds.setLEDPattern(LEDPattern.RAINBOW);
@@ -394,6 +405,9 @@ public class MoveArm extends CommandBase {
                 } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
                     arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
                     return new Trajectory[] { armTrajectories.getGroundIntakeCubeToCubeStow() };
+                } else if (currentSetpoint == ArmSetpoints.AUTO_GROUND_INTAKE_CUBE) {
+                    arm.setCurrentSetpoint(ArmSetpoints.AUTO_GROUND_INTAKE_CUBE);
+                    return new Trajectory[] { armTrajectories.getAutoGroundIntakeCubeToCubeStow() };
                 } else if (currentSetpoint == ArmSetpoints.STING) {
                     arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
                     return new Trajectory[] { armTrajectories.getStingToCubeStow() };
