@@ -164,7 +164,7 @@ public class Arm extends SubsystemBase {
      * @return shoulder angle as double
      */
     public double getShoulderAngle() {
-        return shoulderAbsoluteEncoder.getDistance();
+        return (shoulderAbsoluteEncoder.getAbsolutePosition()-Constants.Arm.shoulder_offset) * 360 ;
     }
 
     /**

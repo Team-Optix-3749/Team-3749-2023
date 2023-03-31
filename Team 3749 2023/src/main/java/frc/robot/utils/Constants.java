@@ -96,7 +96,7 @@ public class Constants {
         public static final int right_elbow_id = 18;
 
         // (angle without offset - desired angle) / 360
-        public static final double shoulder_offset = (183-90) / 360.0;
+        public static final double shoulder_offset = (64-90) / 360.0;
 
         // just the angle offset in degrees
         public static final double elbow_offset = 38.0;
