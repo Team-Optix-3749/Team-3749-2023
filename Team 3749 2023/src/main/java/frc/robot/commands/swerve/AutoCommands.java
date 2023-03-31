@@ -97,7 +97,7 @@ public final class AutoCommands {
                 path_1,
                 new AlignApriltag(swerveSubsystem, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.275),
+                        .withTimeout(0.15),
 
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));

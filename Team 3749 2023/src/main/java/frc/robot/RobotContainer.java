@@ -68,7 +68,7 @@ public class RobotContainer {
             e.printStackTrace();
         }
 
-        RobotController.setBrownoutVoltage(6.75);
+        RobotController.setBrownoutVoltage(7.0);
 
         autoChooser.setDefaultOption("Top two piece charge", topTwoPieceCharge);
         autoChooser.addOption("Top Two PIece", topTwoPiece);

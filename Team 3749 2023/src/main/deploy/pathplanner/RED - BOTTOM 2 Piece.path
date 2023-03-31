@@ -145,5 +145,30 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.01,
+      "names": [
+        "Stow"
+      ]
+    },
+    {
+      "position": 1.0,
+      "names": [
+        "Pickup Cube"
+      ]
+    },
+    {
+      "position": 3.4545454545454497,
+      "names": [
+        "Cube Stow"
+      ]
+    },
+    {
+      "position": 4.454545454545454,
+      "names": [
+        "Place Top"
+      ]
+    }
+  ]
 }
