@@ -52,6 +52,7 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> elbowFF = new ShuffleData<Double>("Arm", "Elbow PID Output", 0.0);
     private ShuffleData<Double> elbowPID = new ShuffleData<Double>("Arm", "Elbow FF Output", 0.0);
 
+    private boolean kill = false;
 
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();
@@ -129,7 +130,14 @@ public class Arm extends SubsystemBase {
      * @param voltage
      */
     public void setShoulderVoltage(double voltage) {
-        shoulderMotor.setVoltage(voltage);
+
+        if (kill) {
+            shoulderMotor.setVoltage(0);
+            shoulderMotor.setIdleMode(IdleMode.kBrake);
+        } else {
+            shoulderMotor.setVoltage(voltage);
+        }
+
     }
 
     /**
@@ -138,7 +146,12 @@ public class Arm extends SubsystemBase {
      * @param voltage
      */
     public void setElbowVoltage(double voltage) {
-        elbowMotor.setVoltage(voltage);
+        if (kill) {
+            elbowMotor.setVoltage(0);
+            elbowMotor.setIdleMode(IdleMode.kBrake);
+        } else {
+            elbowMotor.setVoltage(voltage);
+        }
     }
 
     /**
@@ -187,6 +200,11 @@ public class Arm extends SubsystemBase {
      */
     public void stopElbow() {
         elbowMotor.stopMotor();
+    }
+
+    public void toggleKillArm() {
+        System.out.println("KILL ARM");
+        kill = !kill;
     }
 
 

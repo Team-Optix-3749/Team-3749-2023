@@ -123,8 +123,10 @@ public class JoystickIO {
         operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
                 () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
-        operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
-        operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
+        operator.rightStickWhileHeld(Commands.runOnce(() -> arm.toggleKillArm(), arm));
+
+        // operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
+        // operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
 
         pilot.a()
                 .onTrue(new ParallelCommandGroup(
