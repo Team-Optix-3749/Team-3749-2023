@@ -43,8 +43,10 @@ public class RobotContainer {
 
     Command bottomTwoPiece = AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
     Command topTwoPiece = AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
-    Command bottomTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
-    Command topTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command bottomTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight,
+            leds);
+    Command topTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight,
+            leds);
     Command middleCharge = AutoCommands.getMiddleCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
     Command apriltagAlign = AutoCommands.getAprilTagAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
     Command autoBalance = AutoCommands.getAutoBalanceTest(swerve, arm, armTrajectories, armIntake, limelight, leds);
@@ -103,7 +105,7 @@ public class RobotContainer {
     public void configureButtonBindings() {
 
         // if (!JoystickIO.didJoysticksChange())
-        //     return;
+        // return;
         // CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
         joystickIO.pilotAndOperatorBindings();
@@ -118,8 +120,6 @@ public class RobotContainer {
         // return this.autoChooser.getSelected();
     }
 
-
-
     /**
      * Set event maps for autonomous
      */
@@ -131,7 +131,9 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
-                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
+                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
+        Constants.AutoConstants.eventMap.put("Cube Stow",
+                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.CUBE_STOW));
         Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.PLACE_MID));
         Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armTrajectories, armIntake, leds,
