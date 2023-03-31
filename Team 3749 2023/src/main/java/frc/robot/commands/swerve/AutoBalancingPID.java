@@ -22,7 +22,7 @@ public class AutoBalancingPID extends CommandBase {
 
     private final Swerve swerve;
 
-    private final PIDController controller = new PIDController(0.00325, 0, 0.00075);
+    private final PIDController controller = new PIDController(0.004, 0.001, 0.00075);
 
     private double angle;
     private double heading;
@@ -58,28 +58,21 @@ public class AutoBalancingPID extends CommandBase {
     @Override
     public void execute() {
 
-        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), goalHeading)) {
-            swerve.turnToRotation(goalHeading);
-        }
+        // if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), goalHeading)) {
+        //     swerve.turnToRotation(goalHeading);
+        // }
 
         heading = swerve.getHeading();
         angle = swerve.getVerticalTilt();
 
 
-        // How inaccurate we are willing to be in reference to looking straight forward
-        // Should change this so it adjusts on the go and doesn't need to stop
-        if (!Constants.withinMargin(Constants.AutoBalancing.max_yaw_offset, Math.abs(heading), goalHeading) && !has_aligned) {
-            swerve.turnToRotation(goalHeading);
-        }
-
         // the robot must've moved slightly past the center now, so we will start using
         // PID to reach the middle
-        else if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
+        if (!Constants.withinMargin(Constants.AutoBalancing.max_pitch_offset, angle, 0)) {
             System.out.println("BALANCING");
             has_aligned = true;
             start_time_balanced = 0;
-
-            double speed = controller.calculate(angle, 0)
+            double speed = -controller.calculate(angle, 0)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;

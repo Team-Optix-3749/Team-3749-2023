@@ -96,7 +96,7 @@ public class Constants {
         public static final int right_elbow_id = 18;
 
         // (angle without offset - desired angle) / 360
-        public static final double shoulder_offset = (31.0) / 360.0;
+        public static final double shoulder_offset = (183-90) / 360.0;
 
         // just the angle offset in degrees
         public static final double elbow_offset = 38.0;
@@ -220,7 +220,7 @@ public class Constants {
     }
 
     public static final class AutoBalancing {
-        public static final double max_yaw_offset = 10;
+        public static final double max_yaw_offset = 13;
         public static final double max_pitch_offset = 2;
         public static final double max_pitch_margin = 3;
         public static final double max_movement_offset = 0.025; // around 1 inch

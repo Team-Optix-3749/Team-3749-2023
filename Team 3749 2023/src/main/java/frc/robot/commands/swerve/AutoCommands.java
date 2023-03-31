@@ -72,8 +72,8 @@ public final class AutoCommands {
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.75),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.175),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.15),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1));
     }
 
@@ -180,7 +180,7 @@ public final class AutoCommands {
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
@@ -210,7 +210,7 @@ public final class AutoCommands {
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerveSubsystem),
                 second.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
@@ -239,17 +239,18 @@ public final class AutoCommands {
             ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
+        PathPlannerTrajectory first = PathPlanner.loadPath("BLUE - TEST", new PathConstraints(1, 1));
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    swerveSubsystem.resetOdometry(new Pose2d());
-                    swerveSubsystem.resetGyro();
-                    swerveSubsystem.setFlipGyro(true);
-                }, swerveSubsystem),
-                new SequentialCommandGroup(
-                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        new AlignApriltag(swerveSubsystem, limelight).withTimeout(2)),
-                        getPlaceTop(arm, armTrajectories, armIntake, leds));
+                // path_1,
+                // new SequentialCommandGroup(
+                        // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+                        // new AlignApriltag(swerveSubsystem, limelight).withTimeout(2)),
+                getPlaceTop(arm, armTrajectories, armIntake, leds));
+                // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STOW, true));
+
 
     }
 
@@ -264,13 +265,13 @@ public final class AutoCommands {
             first = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
+            first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge Copy", new PathConstraints(3.25, 3.25));
         }
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
         return new SequentialCommandGroup(
                 path_1,

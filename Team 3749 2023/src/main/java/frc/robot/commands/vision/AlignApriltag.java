@@ -133,10 +133,10 @@ public class AlignApriltag extends CommandBase {
         driveErrorAbs = currentDistance;
         driveVelocityScalar = driveController.calculate(driveErrorAbs, 0.0);
 
-        if (currentDistance < 2.5) {
-            System.out.println("Too far away");
-            return;
-        }
+        // if (currentDistance < 2.5) {
+        //     System.out.println("Too far away");
+        //     return;
+        // }
 
         if (driveController.atGoal())
             driveVelocityScalar = 0.0;
@@ -247,7 +247,7 @@ public class AlignApriltag extends CommandBase {
                 goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
 
                 double rotationAngle = 180;
-                if (DriverStation.isAutonomous()){
+                if (DriverStation.isAutonomous() && !isBlueAlliance()){
                     rotationAngle = 0;
                 }
 
