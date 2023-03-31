@@ -135,8 +135,14 @@ public class Arm extends SubsystemBase {
             shoulderMotor.setVoltage(0);
             shoulderMotor.setIdleMode(IdleMode.kBrake);
         } else {
+
             shoulderMotor.setVoltage(voltage);
         }
+
+    }
+    public void setIdleMode(IdleMode mode){
+        shoulderMotor.setIdleMode(mode);
+        elbowMotor.setIdleMode(mode);
 
     }
 
@@ -203,8 +209,15 @@ public class Arm extends SubsystemBase {
     }
 
     public void toggleKillArm() {
-        System.out.println("KILL ARM");
         kill = !kill;
+
+        if (kill) {
+            setIdleMode(IdleMode.kBrake);
+            System.out.println("KILLED ARM");
+        } else {
+            setIdleMode(IdleMode.kCoast);
+            System.out.println("UNKILLED ARM");
+        }
     }
 
 
