@@ -133,7 +133,6 @@ public class Arm extends SubsystemBase {
 
         if (kill) {
             shoulderMotor.setVoltage(0);
-            shoulderMotor.setIdleMode(IdleMode.kBrake);
         } else {
 
             shoulderMotor.setVoltage(voltage);
@@ -154,7 +153,6 @@ public class Arm extends SubsystemBase {
     public void setElbowVoltage(double voltage) {
         if (kill) {
             elbowMotor.setVoltage(0);
-            elbowMotor.setIdleMode(IdleMode.kBrake);
         } else {
             elbowMotor.setVoltage(voltage);
         }
