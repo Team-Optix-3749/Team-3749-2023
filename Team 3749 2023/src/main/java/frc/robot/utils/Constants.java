@@ -81,7 +81,8 @@ public class Constants {
         public static final double shoulder_kP = 0.15;
 
         public static final double elbow_length = 1.016;
-        public static final double elbow_cg_radius = 0.71;
+        // public static final double elbow_cg_radius = 0.71;
+        public static final double elbow_cg_radius = 0.714;
         public static final double elbow_mass = 4.4;
         public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
 
@@ -124,7 +125,7 @@ public class Constants {
             DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
             DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
             SINGLE_SUBSTATION(new Translation2d(10000000, 10000000)),
-            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.13)),
+            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.125)),
             AUTO_GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
             PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));
