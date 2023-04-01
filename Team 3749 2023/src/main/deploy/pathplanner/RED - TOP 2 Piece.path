@@ -53,15 +53,40 @@
         "y": 4.928682382329101
       },
       "prevControl": {
-        "x": 10.457650317697,
-        "y": 4.928682382329101
+        "x": 10.282897142113828,
+        "y": 4.91724692436546
       },
       "nextControl": {
-        "x": 10.457650317697,
-        "y": 4.928682382329101
+        "x": 10.282897142113828,
+        "y": 4.91724692436546
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 10.694573628804891,
+        "y": 4.93
+      },
+      "prevControl": {
+        "x": 10.525018624036557,
+        "y": 4.93
+      },
+      "nextControl": {
+        "x": 10.864128633573225,
+        "y": 4.93
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -112,13 +137,13 @@
       ]
     },
     {
-      "position": 2.2690909090909166,
+      "position": 2.4,
       "names": [
         "Cube Stow"
       ]
     },
     {
-      "position": 2.73,
+      "position": 3.67,
       "names": [
         "Place Top"
       ]

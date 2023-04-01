@@ -117,7 +117,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
-        // return this.autoChooser.getSelected();
     }
 
     /**
@@ -139,6 +138,5 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.PLACE_TOP));
         Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
-
     }
 }

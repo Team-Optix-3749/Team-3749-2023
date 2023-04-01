@@ -280,4 +280,21 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerveSubsystem, goalHeading));
     }
 
+    public static Command getGroundIntakeTest(Swerve swerveSubsystem, Arm arm, ArmTrajectories armTrajectories,
+            ArmIntake armIntake,
+            Limelight limelight,
+            LEDs leds) {
+
+        PathPlannerTrajectory first = null;
+
+            first = PathPlanner.loadPath("New Path", new PathConstraints(2.5, 2.5));
+
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
+                first.getMarkers(), Constants.AutoConstants.eventMap);
+
+        return new SequentialCommandGroup(
+                
+                path_1);
+    }
+
 }
