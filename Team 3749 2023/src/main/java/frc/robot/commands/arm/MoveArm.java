@@ -333,6 +333,7 @@ public class MoveArm extends CommandBase {
                     leds.setLEDPattern(leds.getDefaultColor());
                     return new Trajectory[] { armTrajectories.getAutoGroundIntakeCubeToCubeStow() };
                 } else {
+                    System.out.println("STOW TO AUTO GROUND");
                     arm.setCurrentSetpoint(ArmSetpoints.AUTO_GROUND_INTAKE_CUBE);
                     return new Trajectory[] { armTrajectories.getStowToAutoGroundIntakeCube() };
                 }
@@ -379,7 +380,9 @@ public class MoveArm extends CommandBase {
                 } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };
-                } else if (currentSetpoint == ArmSetpoints.STING) {
+                } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
+                    arm.setCurrentSetpoint(ArmSetpoints.STOW);
+                    return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };}else if (currentSetpoint == ArmSetpoints.STING) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getStingToStow() };
                 }

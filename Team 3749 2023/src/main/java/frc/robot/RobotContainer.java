@@ -116,7 +116,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+        return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
         // return this.autoChooser.getSelected();
     }
 
@@ -127,7 +127,7 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Pickup Cube",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.AUTO_GROUND_INTAKE_CUBE)));
+                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
         Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
