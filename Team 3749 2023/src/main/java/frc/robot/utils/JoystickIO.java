@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoBalancingPID;
+import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.commands.vision.AlignApriltag;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.ArmIntake;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 import frc.robot.utils.Constants.LEDs.LEDPattern;
+import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 /**
  * Util class for button bindings
@@ -82,8 +84,9 @@ public class JoystickIO {
         } else {
             // if no joysticks are connected (ShuffleBoard buttons)
             noJoystickBindings();
-
         }
+
+        setDefaultCommands();
     }
 
     /**
@@ -210,5 +213,23 @@ public class JoystickIO {
 
         armIntakeCommands.add(outakeArmIntake);
         armIntakeCommands.add(intakeArmIntake);
+    }
+
+    /**
+     * Sets the default commands
+     */
+    public void setDefaultCommands() {
+        swerve.setDefaultCommand(new SwerveTeleopCommand(
+                swerve,
+                () -> -pilot.getLeftY(),
+                () -> pilot.getLeftX(),
+                () -> pilot.getRightX()));
+
+        limelight.setDefaultCommand(
+                Commands.run(
+                        () -> {
+                            limelight.setPipeline(Pipelines.APRILTAG.index);
+                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
+                        }, limelight));
     }
 }

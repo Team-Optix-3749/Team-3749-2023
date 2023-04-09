@@ -16,12 +16,9 @@ import frc.robot.subsystems.intake.*;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.subsystems.leds.LEDs;
-import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
-import frc.robot.utils.Constants.AutoConstants.TopBottom;
-import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 public class RobotContainer {
     private final Xbox pilot = new Xbox(0);
@@ -40,7 +37,6 @@ public class RobotContainer {
         DriverStation.silenceJoystickConnectionWarning(true);
         DriverStation.removeRefreshedDataEventHandle(44000);
 
-        configureDefaultCommands();
         configureButtonBindings();
         configureAuto();
 
@@ -52,24 +48,6 @@ public class RobotContainer {
         }
 
         RobotController.setBrownoutVoltage(6.75);
-    }
-
-    /**
-     * Set default commands
-     */
-    public void configureDefaultCommands() {
-        swerve.setDefaultCommand(new SwerveTeleopCommand(
-                swerve,
-                () -> -pilot.getLeftY(),
-                () -> pilot.getLeftX(),
-                () -> pilot.getRightX()));
-
-        limelight.setDefaultCommand(
-                Commands.run(
-                        () -> {
-                            limelight.setPipeline(Pipelines.APRILTAG.index);
-                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
-                        }, limelight));
     }
 
     /**
