@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -48,15 +47,18 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> shoulderVoltage = new ShuffleData<Double>("Arm", "Shoulder Voltage", 0.0);
     private ShuffleData<Double> shoulderFF = new ShuffleData<Double>("Arm", "Shoulder FF Output", 0.0);
     private ShuffleData<Double> shoulderPID = new ShuffleData<Double>("Arm", "Shoulder PID Output", 0.0);
+    private ShuffleData<Double> shoulderAngle = new ShuffleData<Double>("Arm", "Shoulder Angle", 0.0);
     private ShuffleData<Double> elbowVoltage = new ShuffleData<Double>("Arm", "Elbow Voltage", 0.0);
     private ShuffleData<Double> elbowFF = new ShuffleData<Double>("Arm", "Elbow PID Output", 0.0);
     private ShuffleData<Double> elbowPID = new ShuffleData<Double>("Arm", "Elbow FF Output", 0.0);
+    private ShuffleData<Double> elbowAngle = new ShuffleData<Double>("Arm", "Elbow Angle", 0.0);
 
     private boolean kill = false;
 
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();
         elbowMotor.restoreFactoryDefaults();
+        
         // elbow offset is done in the get angle method
         shoulderAbsoluteEncoder.setPositionOffset(Constants.Arm.shoulder_offset);
         shoulderAbsoluteEncoder.setDistancePerRotation(360);
@@ -68,11 +70,77 @@ public class Arm extends SubsystemBase {
         shoulderPIDController.setTolerance(0);
         elbowPIDController.setTolerance(0);
 
-        shoulderMotor.setIdleMode(IdleMode.kCoast);
-        elbowMotor.setIdleMode(IdleMode.kCoast);
-
         shoulderMotor.setSmartCurrentLimit(35, 60);
         elbowMotor.setSmartCurrentLimit(35, 60);
+
+        setIdleMode(IdleMode.kCoast);
+    }
+
+    /**
+     * Set shoulder motor voltage. The voltage will not be set if kill is true
+     * 
+     * @param voltage
+     */
+    public void setShoulderVoltage(double voltage) {
+        if (kill) {
+            shoulderMotor.setVoltage(0);
+        } else {
+            shoulderMotor.setVoltage(voltage);
+        }
+    }
+    
+    /**
+     * Set elbow motor voltage. The voltage will not be set if kill is true
+     * 
+     * @param voltage
+     */
+    public void setElbowVoltage(double voltage) {
+        if (kill) {
+            elbowMotor.setVoltage(0);
+        } else {
+            elbowMotor.setVoltage(voltage);
+        }
+    }
+
+    /**
+     * Stop both arm motors
+     */
+    public void stop() {
+        elbowMotor.stopMotor();
+        shoulderMotor.stopMotor();
+    }
+
+    /**
+     * Stop shoulder motor
+     */
+    public void stopShoulder() {
+        shoulderMotor.stopMotor();
+    }
+
+    /**
+     * Stop elbow motor
+     */
+    public void stopElbow() {
+        elbowMotor.stopMotor();
+    }
+
+    /**
+     * Get current shoulder angle
+     * 
+     * @return shoulder angle as double
+     */
+    public double getShoulderAngle() {
+        return (shoulderAbsoluteEncoder.getAbsolutePosition()-Constants.Arm.shoulder_offset) * 360 ;
+    }
+
+    /**
+     * Get current elbow angle
+     * 
+     * @return elbow angle as double
+     */
+    public double getElbowAngle() {
+        return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
+                .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - Constants.Arm.elbow_offset;
     }
 
     /**
@@ -82,16 +150,6 @@ public class Arm extends SubsystemBase {
      */
     public void setArmPosition(Translation2d pos) {
         position = pos;
-    }
-
-    public void feedForwardTesting(double x, double y) throws Exception {
-        double shoulderAngle = ArmKinematics.inverse(x, y).getFirst();
-        double elbowAngle = ArmKinematics.inverse(x, y).getSecond();
-
-        double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData();
-
-        setShoulderVoltage(feedForwardOutput[0]);
-        setElbowVoltage(feedForwardOutput[1]);
     }
 
     /**
@@ -124,58 +182,6 @@ public class Arm extends SubsystemBase {
         return ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle()));
     }
 
-    /**
-     * Set shoulder motor voltage
-     * 
-     * @param voltage
-     */
-    public void setShoulderVoltage(double voltage) {
-
-        if (kill) {
-            shoulderMotor.setVoltage(0);
-        } else {
-
-            shoulderMotor.setVoltage(voltage);
-        }
-
-    }
-    public void setIdleMode(IdleMode mode){
-        shoulderMotor.setIdleMode(mode);
-        elbowMotor.setIdleMode(mode);
-
-    }
-
-    /**
-     * Set elbow motor voltage
-     * 
-     * @param voltage
-     */
-    public void setElbowVoltage(double voltage) {
-        if (kill) {
-            elbowMotor.setVoltage(0);
-        } else {
-            elbowMotor.setVoltage(voltage);
-        }
-    }
-
-    /**
-     * Get current shoulder angle
-     * 
-     * @return shoulder angle as double
-     */
-    public double getShoulderAngle() {
-        return (shoulderAbsoluteEncoder.getAbsolutePosition()-Constants.Arm.shoulder_offset) * 360 ;
-    }
-
-    /**
-     * Get current elbow angle
-     * 
-     * @return elbow angle as double
-     */
-    public double getElbowAngle() {
-        return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
-                .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - Constants.Arm.elbow_offset;
-    }
     public void setCurrentSetpoint(ArmSetpoints setpoint){
         currentSetpoint = setpoint;
     }
@@ -183,29 +189,11 @@ public class Arm extends SubsystemBase {
     public ArmSetpoints getCurrentSetpoint(){
         return currentSetpoint;
     }
-    
-    /**
-     * Stop both arm motors
-     */
-    public void stop() {
-        elbowMotor.stopMotor();
-        shoulderMotor.stopMotor();
-    }
 
     /**
-     * Stop shoulder motor
+     * Toggles the kill boolean and sets teh idle mode to brake if killed, and back
+     * to coast if unkilled
      */
-    public void stopShoulder() {
-        shoulderMotor.stopMotor();
-    }
-
-    /**
-     * Stop elbow motor
-     */
-    public void stopElbow() {
-        elbowMotor.stopMotor();
-    }
-
     public void toggleKillArm() {
         kill = !kill;
 
@@ -218,18 +206,41 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    /**
+     * Use this method to test & log the FF output for a given XY
+     * 
+     * @param x
+     * @param y
+     * @throws Exception Terminates the process in the event the XY exceeds the arm radius
+     */
+    public void ffTesting(double x, double y) throws Exception {
+        double shoulderAngle = ArmKinematics.inverse(x, y).getFirst();
+        double elbowAngle = ArmKinematics.inverse(x, y).getSecond();
 
+        double[] feedForwardOutput = dynamics.feedforward(VecBuilder.fill(shoulderAngle, elbowAngle)).getData();
+
+        shoulderFF.set(feedForwardOutput[0]);
+        elbowFF.set(feedForwardOutput[1]);
+    }
+
+    /**
+     * @param mode IdleMode of the arm
+     */
+    public void setIdleMode(IdleMode mode){
+        shoulderMotor.setIdleMode(mode);
+        elbowMotor.setIdleMode(mode);
+    }
+
+    @Override
     public void periodic() {
         try {
             moveArm();
-            
         } catch (Exception e) {
             System.out.println(e);
         }
         
-        SmartDashboard.putNumber("SHOULDER ANGLE", getShoulderAngle());
-        SmartDashboard.putNumber("ELBOW ANGLE", getElbowAngle());
-
+        shoulderAngle.set(getShoulderAngle());
+        elbowAngle.set(getElbowAngle());
 
         armCacheX.set(position.getX());
         armCacheY.set(position.getY());

@@ -6,7 +6,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -76,8 +75,6 @@ public final class AutoCommands {
                         .withTimeout(0.15),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1));
     }
-
-
 
     public static Command getBottomTwoPiece(Swerve swerveSubsystem, Arm arm, ArmTrajectories armTrajectories,
             ArmIntake armIntake,
@@ -241,19 +238,8 @@ public final class AutoCommands {
             ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
-        PathPlannerTrajectory first = PathPlanner.loadPath("BLUE - TEST", new PathConstraints(1, 1));
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
-
         return new SequentialCommandGroup(
-                // path_1,
-                // new SequentialCommandGroup(
-                        // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                        // new AlignApriltag(swerveSubsystem, limelight).withTimeout(2)),
                 getPlaceTop(arm, armTrajectories, armIntake, leds));
-                // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STOW, true));
-
-
     }
 
     public static Command getAutoBalanceTest(Swerve swerveSubsystem, Arm arm, ArmTrajectories armTrajectories,
@@ -287,14 +273,12 @@ public final class AutoCommands {
 
         PathPlannerTrajectory first = null;
 
-            first = PathPlanner.loadPath("New Path", new PathConstraints(2.5, 2.5));
+        first = PathPlanner.loadPath("New Path", new PathConstraints(2.5, 2.5));
 
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerveSubsystem),
                 first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        return new SequentialCommandGroup(
-                
-                path_1);
+        return new SequentialCommandGroup(path_1);
     }
 
 }
