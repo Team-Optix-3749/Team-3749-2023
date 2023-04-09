@@ -2,8 +2,13 @@ package frc.robot;
 
 import java.io.FileWriter;
 import java.io.IOException;
+
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -27,11 +32,24 @@ public class RobotContainer {
     private final Swerve swerve = new Swerve();
     private final ArmIntake armIntake = new ArmIntake();
     private final Arm arm = new Arm();
+    private final ArmTrajectories armTrajectories = new ArmTrajectories();
     private final LEDs leds = new LEDs();
     private final Limelight limelight = new Limelight();
 
     private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
-            arm);
+            arm, armTrajectories);
+
+    Command bottomTwoPiece = AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command topTwoPiece = AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command bottomTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight,
+            leds);
+    Command topTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight,
+            leds);
+    Command middleCharge = AutoCommands.getMiddleCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command apriltagAlign = AutoCommands.getAprilTagAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
+    Command autoBalance = AutoCommands.getAutoBalanceTest(swerve, arm, armTrajectories, armIntake, limelight, leds);
+
+    SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -47,7 +65,17 @@ public class RobotContainer {
             e.printStackTrace();
         }
 
-        RobotController.setBrownoutVoltage(6.75);
+        RobotController.setBrownoutVoltage(7.0);
+
+        autoChooser.setDefaultOption("Top two piece charge", topTwoPieceCharge);
+        autoChooser.addOption("Top Two PIece", topTwoPiece);
+        autoChooser.addOption("Middle Charge", middleCharge);
+        autoChooser.addOption("Bottom Two Piece", bottomTwoPiece);
+        autoChooser.addOption("Bottom Two Piece Charge", bottomTwoPieceCharge);
+        autoChooser.addOption("Apriltag Align", apriltagAlign);
+        autoChooser.addOption("Auto Balance", autoBalance);
+
+        SmartDashboard.putData(autoChooser);
     }
 
     /**
@@ -55,11 +83,11 @@ public class RobotContainer {
      */
     public void configureButtonBindings() {
 
-        if (!JoystickIO.didJoysticksChange())
-            return;
-        CommandScheduler.getInstance().getActiveButtonLoop().clear();
+        // if (!JoystickIO.didJoysticksChange())
+        // return;
+        // CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickIO.getButtonBindings();
+        joystickIO.pilotAndOperatorBindings();
 
     }
 
@@ -67,9 +95,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPiece(swerve, arm, armIntake, limelight, leds);
-
-
+        return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
     }
 
     /**
@@ -79,20 +105,17 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Pickup Cube",
                 new SequentialCommandGroup(
                         Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
-        Constants.AutoConstants.eventMap.put("Pickup Cone",
-                new SequentialCommandGroup(
-                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage)),
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CONE)));
-        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armIntake, leds,
+                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE)));
+        Constants.AutoConstants.eventMap.put("Sting", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.STING));
         Constants.AutoConstants.eventMap.put("Stow",
-                        new MoveArm(arm, armIntake, leds, ArmSetpoints.STOW));
-        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armIntake, leds,
+                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
+        Constants.AutoConstants.eventMap.put("Cube Stow",
+                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.CUBE_STOW));
+        Constants.AutoConstants.eventMap.put("Place Mid", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.PLACE_MID));
-        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armIntake, leds,
+        Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.PLACE_TOP));
         Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
-
     }
 }

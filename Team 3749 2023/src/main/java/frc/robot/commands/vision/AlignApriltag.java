@@ -3,6 +3,8 @@ package frc.robot.commands.vision;
 import frc.robot.utils.Constants;
 import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.VisionConstants;
+import frc.robot.utils.Constants.VisionConstants.Pipelines;
+
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -43,10 +45,10 @@ public class AlignApriltag extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3);
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.6);
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3); // 2.3
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.7); // 2.6
 
-    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.1
+    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.075); // 0.1
     private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
 
     private PhotonTrackedTarget lastTarget;
@@ -69,11 +71,25 @@ public class AlignApriltag extends CommandBase {
         this.limelight = limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
 
+        double x = 0.75;
+        double leftDiff;
+        double rightDiff;
+        if (isBlueAlliance()){
+            leftDiff = 3.86;
+            rightDiff = 4.94;
+            
+        }
+        else{
+            leftDiff = 3.815;
+            rightDiff = 4.98;
+        }
+
         tagToGoal = new Transform3d(
-                new Translation3d(0.6, left == true ? (4.42 - 3.75) : -(4.42 - 4), 0.0),
+                new Translation3d(x, left == true ? (4.42 - leftDiff) : (4.42 - rightDiff), 0.0),
                 new Rotation3d(0.0, 0.0, Math.PI));
 
-        addRequirements(swerve);
+        addRequirements(swerve);                            
+        limelight.setPipeline(Pipelines.APRILTAG.index);
     }
 
     /**
@@ -86,9 +102,10 @@ public class AlignApriltag extends CommandBase {
         this.swerve = swerve;
         this.limelight = limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
+        double x = 0.75;
 
         tagToGoal = new Transform3d(
-                new Translation3d(0.75, 0.05, 0.0),
+                new Translation3d(x, 0.05, 0.0),
                 new Rotation3d(0.0, 0.0, Math.PI));
         addRequirements(swerve);
     }
@@ -103,6 +120,7 @@ public class AlignApriltag extends CommandBase {
 
     @Override
     public void execute() {
+        limelight.updatePoseAprilTags(swerve.getPoseEstimator());
         if (goalPose == null) {
             updateGoalPose();
             System.out.println("Goal Pose Is Null");
@@ -114,12 +132,19 @@ public class AlignApriltag extends CommandBase {
         double currentDistance = robotPose2d.getTranslation().getDistance(this.goalPose.getTranslation());
         driveErrorAbs = currentDistance;
         driveVelocityScalar = driveController.calculate(driveErrorAbs, 0.0);
+
+        // if (currentDistance < 2.5) {
+        //     System.out.println("Too far away");
+        //     return;
+        // }
+
         if (driveController.atGoal())
             driveVelocityScalar = 0.0;
 
         double turnVelocity = turnController.calculate(
                 robotPose2d.getRotation().getRadians(), this.goalPose.getRotation().getRadians());
         turnErrorAbs = Math.abs(robotPose2d.getRotation().minus(this.goalPose.getRotation()).getRadians());
+
         if (turnController.atGoal())
             turnVelocity = 0.0;
 
@@ -129,8 +154,16 @@ public class AlignApriltag extends CommandBase {
                 .transformBy(translationToTransform(driveVelocityScalar, 0.0))
                 .getTranslation();
 
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-driveVelocity.getX(),
-                -driveVelocity.getY(), turnVelocity, robotPose2d.getRotation());
+        double x = isBlueAlliance() ? driveVelocity.getX() : -driveVelocity.getX();
+        double y = isBlueAlliance() ? driveVelocity.getY() : -driveVelocity.getY();
+        // // flip back if in auto
+        if (DriverStation.isAutonomous() && !isBlueAlliance()) {
+            x = -x;
+            y = -y;
+        }
+
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(x,
+                y, turnVelocity, robotPose2d.getRotation());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
@@ -213,14 +246,24 @@ public class AlignApriltag extends CommandBase {
 
                 goalPose = aprilTagPose.transformBy(tagToGoal).toPose2d();
 
-                double rotationAngle = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+                double rotationAngle = 180;
+                if (DriverStation.isAutonomous() && !isBlueAlliance()){
+                    rotationAngle = 0;
+                }
 
-                goalPose = new Pose2d(new Translation2d(goalPose.getX(), goalPose.getY()), new Rotation2d(Math.toRadians(rotationAngle)));
+                goalPose = new Pose2d(new Translation2d(goalPose.getX(), goalPose.getY()),
+                        new Rotation2d(Math.toRadians(rotationAngle)));
 
                 VisionConstants.goalPoseX.set(goalPose.getX());
                 VisionConstants.goalPoseY.set(goalPose.getY());
-                VisionConstants.goalPoseHeading.set(goalPose.getRotation().getDegrees());
+                VisionConstants.goalPoseHeading.
+                set(goalPose.getRotation().getDegrees());
             }
         }
     }
+
+    private boolean isBlueAlliance() {
+        return DriverStation.getAlliance() == Alliance.Blue;
+    }
+
 }

@@ -105,6 +105,7 @@ public class Swerve extends SubsystemBase {
         // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
         gyro.calibrate();
         turnController.enableContinuousInput(-180, 180);
+
     }
 
     public void drive(double xSpeed, double ySpeed, double thetaSpeed) {
@@ -121,12 +122,13 @@ public class Swerve extends SubsystemBase {
 
         drive(0, 0, 0);
     }
-    public void unflipGyro(){
-        flipGyro = false;
+    public void setFlipGyro(boolean bool){
+        flipGyro = bool;
     }
 
     public void resetGyro() {
         gyro.reset();
+        System.out.println("RESET");
     }
 
     public double getAutoHeading() {
@@ -187,7 +189,7 @@ public class Swerve extends SubsystemBase {
         return swerveDrivePoseEstimator;
     }
 
-    public void stopModules() {
+    public void stopModules() { 
         frontLeft.stop();
         frontRight.stop();
         backLeft.stop();

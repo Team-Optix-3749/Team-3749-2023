@@ -3,6 +3,8 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -75,10 +77,12 @@ public class Constants {
         // public static final double elbow_kP = 0.3;
         public static final double elbow_kP = 0.2;
         // public static final double shoulder_kP = 0.2;
+        // public static final double shoulder_kP = 0.1;
         public static final double shoulder_kP = 0.15;
 
         public static final double elbow_length = 1.016;
-        public static final double elbow_cg_radius = 0.71;
+        // public static final double elbow_cg_radius = 0.71;
+        public static final double elbow_cg_radius = 0.714;
         public static final double elbow_mass = 4.4;
         public static final double elbow_moi = SingleJointedArmSim.estimateMOI(elbow_length, elbow_mass);
 
@@ -93,7 +97,7 @@ public class Constants {
         public static final int right_elbow_id = 18;
 
         // (angle without offset - desired angle) / 360
-        public static final double shoulder_offset = (31.0) / 360.0;
+        public static final double shoulder_offset = (64-90) / 360.0;
 
         // just the angle offset in degrees
         public static final double elbow_offset = 38.0;
@@ -104,8 +108,8 @@ public class Constants {
         public static final double elbow_min_angle = -75;
         public static final double elbow_max_angle = 260;
 
-        public static final double maxSpeedMPS = 7;
-        public static final double maxAccelerationMPS = 10;
+        public static final double maxSpeedMPS = 6.5;
+        public static final double maxAccelerationMPS = 6.5;
 
         public static ShuffleData<Double> currWaypointX = new ShuffleData<Double>("Arm", "Current Waypoint X", 0.0);
         public static ShuffleData<Double> currWaypointY = new ShuffleData<Double>("Arm", "Current Waypoint Y", 0.0);
@@ -115,14 +119,26 @@ public class Constants {
                 0.0);
 
         public static enum ArmSetpoints {
-            ZERO,
-            STOW,
-            STING,
-            DOUBLE_SUBSTATION,
-            GROUND_INTAKE_CONE,
-            GROUND_INTAKE_CUBE,
-            PLACE_TOP,
-            PLACE_MID;
+            STOW(new Translation2d(0.38, -0.2)),
+            CUBE_STOW(new Translation2d(0.45, 0.1)),
+            STING(new Translation2d(0.5, 0.7)),
+            DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
+            DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
+            SINGLE_SUBSTATION(new Translation2d(10000000, 10000000)),
+            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.125)),
+            AUTO_GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
+            PLACE_TOP(new Translation2d(1.215, 1.05)),
+            PLACE_MID(new Translation2d(0.85, 0.73));
+
+            public Translation2d translation;
+
+            ArmSetpoints(Translation2d translation) {
+                this.translation = translation;
+            }
+
+            public Pose2d toPose2d(double rotation) {
+                return new Pose2d(this.translation, new Rotation2d(rotation));
+            }
         }
     }
 
@@ -186,10 +202,10 @@ public class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static double kTeleDriveMaxSpeedMetersPerSecond = 5;
-        public static double kTeleDriveMaxAngularSpeedRadiansPerSecond = 5;
-        public static double kTeleDriveMaxAccelerationUnitsPerSecond = 3.5;
-        public static double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3.5;
+        public static double kTeleDriveMaxSpeedMetersPerSecond = 6;
+        public static double kTeleDriveMaxAngularSpeedRadiansPerSecond = 7;
+        public static double kTeleDriveMaxAccelerationUnitsPerSecond = 6;
+        public static double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 7;
 
         public static final double kAutoDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2;
         public static final double kAutoDriveMaxAngularSpeedRadiansPerSecond = //
@@ -206,7 +222,7 @@ public class Constants {
     }
 
     public static final class AutoBalancing {
-        public static final double max_yaw_offset = 10;
+        public static final double max_yaw_offset = 13;
         public static final double max_pitch_offset = 2;
         public static final double max_pitch_margin = 3;
         public static final double max_movement_offset = 0.025; // around 1 inch

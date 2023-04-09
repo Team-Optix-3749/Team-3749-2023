@@ -34,7 +34,7 @@ public class Arm extends SubsystemBase {
 
     // Elbow motor
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-    private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(2);
+    private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(4);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP, 0, 0);
 
     // safety stow
@@ -46,7 +46,13 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> armX = new ShuffleData<Double>("Arm", "Arm X", 0.0);
     private ShuffleData<Double> armY = new ShuffleData<Double>("Arm", "Arm Y", 0.0);
     private ShuffleData<Double> shoulderVoltage = new ShuffleData<Double>("Arm", "Shoulder Voltage", 0.0);
+    private ShuffleData<Double> shoulderFF = new ShuffleData<Double>("Arm", "Shoulder FF Output", 0.0);
+    private ShuffleData<Double> shoulderPID = new ShuffleData<Double>("Arm", "Shoulder PID Output", 0.0);
     private ShuffleData<Double> elbowVoltage = new ShuffleData<Double>("Arm", "Elbow Voltage", 0.0);
+    private ShuffleData<Double> elbowFF = new ShuffleData<Double>("Arm", "Elbow PID Output", 0.0);
+    private ShuffleData<Double> elbowPID = new ShuffleData<Double>("Arm", "Elbow FF Output", 0.0);
+
+    private boolean kill = false;
 
     public Arm() {
         shoulderMotor.restoreFactoryDefaults();
@@ -64,6 +70,9 @@ public class Arm extends SubsystemBase {
 
         shoulderMotor.setIdleMode(IdleMode.kCoast);
         elbowMotor.setIdleMode(IdleMode.kCoast);
+
+        shoulderMotor.setSmartCurrentLimit(35, 60);
+        elbowMotor.setSmartCurrentLimit(35, 60);
     }
 
     /**
@@ -86,7 +95,7 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Move arm to set position
+     * Move arm to set position using PID and DJ FF
      * 
      * @throws Exception
      */
@@ -98,9 +107,15 @@ public class Arm extends SubsystemBase {
 
         setShoulderVoltage(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle) + feedForwardOutput[0]);
         setElbowVoltage(elbowPIDController.calculate(getElbowAngle(), elbowAngle) + feedForwardOutput[1]);
+
+        shoulderPID.set(shoulderPIDController.calculate(getShoulderAngle(), shoulderAngle));
+        shoulderFF.set(feedForwardOutput[0]);
+
+        elbowPID.set(elbowPIDController.calculate(getElbowAngle(), elbowAngle));
+        elbowFF.set(feedForwardOutput[1]);
     }
 
-    /**f
+    /**
      * Get current arm pose as Translation2d
      * 
      * @return arm coordianates as Translation2d
@@ -115,7 +130,19 @@ public class Arm extends SubsystemBase {
      * @param voltage
      */
     public void setShoulderVoltage(double voltage) {
-        shoulderMotor.setVoltage(voltage);
+
+        if (kill) {
+            shoulderMotor.setVoltage(0);
+        } else {
+
+            shoulderMotor.setVoltage(voltage);
+        }
+
+    }
+    public void setIdleMode(IdleMode mode){
+        shoulderMotor.setIdleMode(mode);
+        elbowMotor.setIdleMode(mode);
+
     }
 
     /**
@@ -124,7 +151,11 @@ public class Arm extends SubsystemBase {
      * @param voltage
      */
     public void setElbowVoltage(double voltage) {
-        elbowMotor.setVoltage(voltage);
+        if (kill) {
+            elbowMotor.setVoltage(0);
+        } else {
+            elbowMotor.setVoltage(voltage);
+        }
     }
 
     /**
@@ -133,7 +164,7 @@ public class Arm extends SubsystemBase {
      * @return shoulder angle as double
      */
     public double getShoulderAngle() {
-        return shoulderAbsoluteEncoder.getDistance();
+        return (shoulderAbsoluteEncoder.getAbsolutePosition()-Constants.Arm.shoulder_offset) * 360 ;
     }
 
     /**
@@ -175,10 +206,23 @@ public class Arm extends SubsystemBase {
         elbowMotor.stopMotor();
     }
 
+    public void toggleKillArm() {
+        kill = !kill;
+
+        if (kill) {
+            setIdleMode(IdleMode.kBrake);
+            System.out.println("KILLED ARM");
+        } else {
+            setIdleMode(IdleMode.kCoast);
+            System.out.println("UNKILLED ARM");
+        }
+    }
+
 
     public void periodic() {
         try {
             moveArm();
+            
         } catch (Exception e) {
             System.out.println(e);
         }

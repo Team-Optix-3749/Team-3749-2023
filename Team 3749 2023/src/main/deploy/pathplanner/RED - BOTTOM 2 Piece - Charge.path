@@ -2,38 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 14.696983916079102,
-        "y": 0.4688537765092641
+        "x": 14.78,
+        "y": 1.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.696983916079102,
-        "y": 0.4688537765092641
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 10.67170271287761,
-        "y": 0.9377075530185282
-      },
-      "prevControl": {
-        "x": 11.671390359285724,
-        "y": 0.9626997441787294
-      },
-      "nextControl": {
-        "x": 10.214284394331985,
-        "y": 0.9262720950548883
+        "x": 14.78,
+        "y": 1.5274606942630204
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -49,12 +24,37 @@
     },
     {
       "anchorPoint": {
-        "x": 9.836914281531845,
-        "y": 0.9148366370912484
+        "x": 14.49114567273357,
+        "y": 2.321397966619043
       },
       "prevControl": {
-        "x": 10.025599337931915,
-        "y": 0.9205543660730684
+        "x": 14.937866708015921,
+        "y": 1.9535100552100482
+      },
+      "nextControl": {
+        "x": 13.519131745824117,
+        "y": 3.1218800240738855
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 11.963909462768997,
+        "y": 2.813122659055589
+      },
+      "prevControl": {
+        "x": 11.728012829725701,
+        "y": 2.813122659055589
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -70,12 +70,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 0.01,
-      "names": [
-        "Stow"
-      ]
-    }
-  ]
+  "markers": []
 }
