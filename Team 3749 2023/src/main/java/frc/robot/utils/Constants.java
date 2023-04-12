@@ -286,11 +286,15 @@ public class Constants {
             }
         };
 
+        public static enum Piece {
+            CONE, CUBE;
+        }
+
         public static enum Pipelines {
             APRILTAG(0),
-            MID_CONE(3),
-            TOP_CONE(4);
-
+            CUBE(1),
+            CONE(2);
+            
             public int index;
 
             Pipelines(int index) {

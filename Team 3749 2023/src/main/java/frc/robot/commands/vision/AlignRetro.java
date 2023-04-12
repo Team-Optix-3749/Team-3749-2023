@@ -57,9 +57,9 @@ public class AlignRetro extends CommandBase {
         /**
          * TODO: set the target grouping in PhotonVision to lower in MID_CONE and higher in TOP_CONE
          */
-        limelight.setPipeline(
-            node == Node.TOP_CONE ? Pipelines.TOP_CONE.index : Pipelines.MID_CONE.index
-        );
+        // limelight.setPipeline(
+        //     node == Node.TOP_CONE ? Pipelines.TOP_CONE.index : Pipelines.MID_CONE.index
+        // );
 
         xController.setSetpoint(setpoint.getX());
         xController.setTolerance(0.1);
