@@ -226,10 +226,10 @@ public class Limelight extends SubsystemBase {
             aprilTagX.set(aprilTagPose.getX());
             aprilTagY.set(aprilTagPose.getY());
         } else {
-            var target2d = getTranslation2d(target, getPipeline() == Pipelines.TOP_CONE.index ? Node.TOP_CONE : Node.MID_CONE);
+            // var target2d = getTranslation2d(target, getPipeline() == Pipelines.TOP_CONE.index ? Node.TOP_CONE : Node.MID_CONE);
 
-            targetTransX.set(target2d.getX());
-            targetTransY.set(target2d.getY());
+            // targetTransX.set(target2d.getX());
+            // targetTransY.set(target2d.getY());
         }
 
 
