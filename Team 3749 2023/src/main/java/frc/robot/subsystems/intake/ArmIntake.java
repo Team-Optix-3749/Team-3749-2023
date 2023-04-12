@@ -102,6 +102,7 @@ public class ArmIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        voltage = 0;
         intakeMotor.setVoltage(voltage);
 
         intakeTemp.set(getTemperature());

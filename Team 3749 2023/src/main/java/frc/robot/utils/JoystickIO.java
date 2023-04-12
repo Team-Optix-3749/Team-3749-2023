@@ -22,6 +22,7 @@ import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.swerve.AutoBalancingPID;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.commands.vision.AlignApriltag;
+import frc.robot.commands.vision.AlignPiece;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories;
 import frc.robot.subsystems.intake.ArmIntake;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 import frc.robot.utils.Constants.LEDs.LEDPattern;
+import frc.robot.utils.Constants.VisionConstants.Piece;
 import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 /**
@@ -156,6 +158,8 @@ public class JoystickIO {
             swerve.setFlipGyro(false);
             swerve.resetGyro();
         }, swerve));
+
+        pilot.backWhileHeld(new AlignPiece(swerve, limelight, Piece.CUBE));
 
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));

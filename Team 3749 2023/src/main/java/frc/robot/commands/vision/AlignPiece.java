@@ -55,6 +55,7 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public void execute() {
+        System.out.println("ALIGN EXECUTE");
         yController.setP(yKP.get());
 
         var res = limelight.getLatestResult();
@@ -73,7 +74,6 @@ public class AlignPiece extends CommandBase {
                     ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
-
             // swerve.setModuleStates(moduleStates); 
         
         } else {
