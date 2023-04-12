@@ -26,7 +26,7 @@ public class AlignPiece extends CommandBase {
     private final Limelight limelight;
     private final Piece piece;
 
-    private final double setpoint = 1000;
+    private final double setpoint = 0;
 
     private PhotonTrackedTarget lastTarget;
 
@@ -69,13 +69,13 @@ public class AlignPiece extends CommandBase {
             double ySpeed = yController.calculate(target.getYaw());
 
             SmartDashboard.putNumber("Y Speed", ySpeed);
-
-            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0,
+            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.4,
                     ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 
-            // swerve.setModuleStates(moduleStates);
+            // swerve.setModuleStates(moduleStates); 
+        
         } else {
             System.out.println("Target not found");
         }
