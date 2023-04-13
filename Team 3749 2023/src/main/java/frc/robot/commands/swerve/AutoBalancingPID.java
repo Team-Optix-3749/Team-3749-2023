@@ -34,10 +34,10 @@ public class AutoBalancingPID extends CommandBase {
 
     // Initializes the BaseCommand
     public 
-    AutoBalancingPID(Swerve swerveSubsystem, double goalHeading) {
-        this.swerve = swerveSubsystem;
+    AutoBalancingPID(Swerve swerve, double goalHeading) {
+        this.swerve = swerve;
         this.goalHeading = goalHeading;
-        addRequirements(swerveSubsystem);
+        addRequirements(swerve);
 
     }
 

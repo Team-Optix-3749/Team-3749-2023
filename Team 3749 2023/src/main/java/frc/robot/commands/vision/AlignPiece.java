@@ -28,6 +28,8 @@ public class AlignPiece extends CommandBase {
 
     private final double setpoint = 0;
 
+    private double error;
+
     private PhotonTrackedTarget lastTarget;
 
     private SmartData<Double> yKP = new SmartData<Double>("Y KP", 1.0);
@@ -44,10 +46,12 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public void initialize() {
-        limelight.setLED(VisionLEDMode.kOff);
+        limelight.setLED(VisionLEDMode.kOn);
         limelight.setPipeline(
             piece == Piece.CONE ? Pipelines.CONE.index : Pipelines.CUBE.index
         );
+
+        getError();
 
         yController.setSetpoint(setpoint);
         yController.setTolerance(0.04);
@@ -58,27 +62,15 @@ public class AlignPiece extends CommandBase {
         System.out.println("ALIGN EXECUTE");
         yController.setP(yKP.get());
 
-        var res = limelight.getLatestResult();
-        if (res.hasTargets()) {
+        double ySpeed = yController.calculate(error);
 
-            PhotonTrackedTarget target = res.getTargets().stream()
-                    .filter(t -> t != lastTarget)
-                    .findFirst().get();
+        SmartDashboard.putNumber("Y Speed", ySpeed);
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.4,
+                ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
+                .toSwerveModuleStates(chassisSpeeds);
 
-            lastTarget = target;
-
-            double ySpeed = yController.calculate(target.getYaw());
-
-            SmartDashboard.putNumber("Y Speed", ySpeed);
-            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.4,
-                    ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
-            SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
-                    .toSwerveModuleStates(chassisSpeeds);
-            // swerve.setModuleStates(moduleStates); 
-        
-        } else {
-            System.out.println("Target not found");
-        }
+        // swerve.setModuleStates(moduleStates);
     }
 
     @Override
@@ -88,11 +80,26 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return atGoal();
+        return yController.atSetpoint();
     }
 
-    public boolean atGoal() {
-        return yController.atSetpoint();
+
+    public void getError() {
+        var res = limelight.getLatestResult();
+        if (res.hasTargets()) {
+
+            PhotonTrackedTarget target = res.getTargets().stream()
+                    .filter(t -> t != lastTarget)
+                    .findFirst().get();
+
+            lastTarget = target;
+            
+            error = target.getYaw();
+
+        } else {
+            System.out.println("Target not found");
+
+        }
     }
 
 }

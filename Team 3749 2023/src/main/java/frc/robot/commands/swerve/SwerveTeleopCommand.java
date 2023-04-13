@@ -19,20 +19,20 @@ import frc.robot.utils.Constants.OIConstants;
 
 public class SwerveTeleopCommand extends CommandBase {
 
-    private final Swerve swerveSubsystem;
+    private final Swerve swerve;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-    public SwerveTeleopCommand(Swerve swerveSubsystem,
+    public SwerveTeleopCommand(Swerve swerve,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction) {
-        this.swerveSubsystem = swerveSubsystem;
+        this.swerve = swerve;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
-        addRequirements(swerveSubsystem);
+        addRequirements(swerve);
     }
 
     @Override
@@ -63,10 +63,10 @@ public class SwerveTeleopCommand extends CommandBase {
         ChassisSpeeds chassisSpeeds;
     
         // Relative to field
-        turningSpeed = swerveSubsystem.getFlipGyro() == false ? turningSpeed : -turningSpeed;
+        turningSpeed = swerve.getFlipGyro() == false ? turningSpeed : -turningSpeed;
 
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+                xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
 
         // Relative to robot
         // chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
@@ -75,12 +75,12 @@ public class SwerveTeleopCommand extends CommandBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // 6. Output each module states to wheels
-        swerveSubsystem.setModuleStates(moduleStates);
+        swerve.setModuleStates(moduleStates);
     }
 
     @Override
     public void end(boolean interrupted) {
-        swerveSubsystem.stopModules();
+        swerve.stopModules();
     }
 
     @Override

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class MoveDistance extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-    Swerve swerveSubsystem;
+    Swerve swerve;
 
     double setpoint;
     double dist_traveled = 0;
@@ -31,22 +31,22 @@ public class MoveDistance extends CommandBase {
 
     /***
      * 
-     * @param swerveSubsystem the subsystem
+     * @param swerve the subsystem
      * @param dist            how far to to move in meters
      */
-    public MoveDistance(Swerve swerveSubsystem, double dist) {
-        this.swerveSubsystem = swerveSubsystem;
+    public MoveDistance(Swerve swerve, double dist) {
+        this.swerve = swerve;
         this.setpoint = dist;
         // start_point
-        addRequirements(swerveSubsystem);
+        addRequirements(swerve);
     }
 
     // Run on command init
     @Override
     public void initialize() {
         System.out.println("Initalize BABBYYYYYYYYYYYYYY hlleo");
-        swerveSubsystem.stopModules();
-        start_point = swerveSubsystem.getPose().getX();
+        swerve.stopModules();
+        start_point = swerve.getPose().getX();
     }
 
     // Run every 20 ms
@@ -54,41 +54,41 @@ public class MoveDistance extends CommandBase {
     public void execute() {
 
         // How inaccurate we are willing to be in reference to looking straight forward
-        if (Math.abs(swerveSubsystem.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
+        if (Math.abs(swerve.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
             // negative so that we move towards the target, not away
-            double turning_speed = turnController.calculate(Math.abs(swerveSubsystem.getHeading()), 0);
+            double turning_speed = turnController.calculate(Math.abs(swerve.getHeading()), 0);
             turning_speed = turningLimiter.calculate(turning_speed)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
             // remove the negative if it turns the wrong direction around
-            turning_speed = Math.abs(turning_speed) * Math.signum(swerveSubsystem.getHeading());
+            turning_speed = Math.abs(turning_speed) * Math.signum(swerve.getHeading());
 
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
 
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    0, 0, turning_speed, swerveSubsystem.getRotation2d());
+                    0, 0, turning_speed, swerve.getRotation2d());
             // 5. Convert chassis speeds to individual module states
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 
             // 6. Output each module states to wheels
-            swerveSubsystem.setModuleStates(moduleStates);
+            swerve.setModuleStates(moduleStates);
         } else {
             // X is vertical!
             // where we are
-            double current_position = swerveSubsystem.getPose().getX();
+            double current_position = swerve.getPose().getX();
             // where we want to be
             // how fast to move
             double speed = driveController.calculate(current_position, start_point + setpoint);
             // and we move
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    speed, 0, 0, swerveSubsystem.getRotation2d());
+                    speed, 0, 0, swerve.getRotation2d());
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 
-            swerveSubsystem.setModuleStates(moduleStates);
+            swerve.setModuleStates(moduleStates);
         }
 
     }
@@ -96,7 +96,7 @@ public class MoveDistance extends CommandBase {
     // Run on command finish
     @Override
     public void end(boolean interrupted) {
-        swerveSubsystem.stopModules();
+        swerve.stopModules();
 
     }
 

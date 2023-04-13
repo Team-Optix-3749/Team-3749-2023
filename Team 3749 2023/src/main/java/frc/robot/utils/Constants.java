@@ -304,7 +304,7 @@ public class Constants {
     }
 
     public static class LEDs {
-        public static final int pwm_port = 0;
+        public static final int pwm_port = 9;
         public static final int length = 92;
 
         public static enum LEDPattern {

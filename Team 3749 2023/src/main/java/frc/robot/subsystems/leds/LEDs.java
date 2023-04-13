@@ -1,6 +1,8 @@
 package frc.robot.subsystems.leds;
 
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,7 +18,7 @@ import frc.robot.utils.Constants.LEDs.LEDPattern;
  */
 public class LEDs extends SubsystemBase {
     private LEDPattern currentLEDPattern = getDefaultColor();
-    private AddressableLED LEDs = new AddressableLED(Constants.LEDs.pwm_port);
+    private AddressableLED LEDs = new AddressableLED(0);
     private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDs.length);
     private int hue = 0;
     private int i = 0;
