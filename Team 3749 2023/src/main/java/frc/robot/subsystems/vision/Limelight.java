@@ -137,7 +137,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public void setPipeline(int index) {
-        camera.setPipelineIndex(0);
+        camera.setPipelineIndex(index);
     }
 
     public void setLED(VisionLEDMode ledMode) {
@@ -239,7 +239,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // logging();
+        logging();
     }
 
 }
