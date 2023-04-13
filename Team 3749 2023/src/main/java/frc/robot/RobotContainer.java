@@ -44,7 +44,6 @@ public class RobotContainer {
             leds);
     Command middleCharge = AutoCommands.getMiddleCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
     Command apriltagAlign = AutoCommands.getAprilTagAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
-    Command autoBalance = AutoCommands.getAutoBalanceTest(swerve, arm, armTrajectories, armIntake, limelight, leds);
 
     SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -70,7 +69,6 @@ public class RobotContainer {
         autoChooser.addOption("Bottom Two Piece", bottomTwoPiece);
         autoChooser.addOption("Bottom Two Piece Charge", bottomTwoPieceCharge);
         autoChooser.addOption("Apriltag Align", apriltagAlign);
-        autoChooser.addOption("Auto Balance", autoBalance);
 
         SmartDashboard.putData(autoChooser);
     }

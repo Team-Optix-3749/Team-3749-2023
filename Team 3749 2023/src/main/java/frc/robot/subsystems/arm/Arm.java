@@ -1,9 +1,7 @@
 package frc.robot.subsystems.arm;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,6 +20,7 @@ import frc.robot.utils.Constants.Arm.ArmSetpoints;
  * @author Rohin Sood
  * @author Raadwan Masum
  */
+
 public class Arm extends SubsystemBase {
 
     private final ArmDynamics dynamics = new ArmDynamics();
@@ -152,11 +151,13 @@ public class Arm extends SubsystemBase {
         position = pos;
     }
 
+
     /**
      * Move arm to set position using PID and DJ FF
      * 
      * @throws Exception
      */
+    
     private void moveArm() throws Exception {
         double shoulderAngle = ArmKinematics.inverse(position.getX(), position.getY()).getFirst();
         double elbowAngle = ArmKinematics.inverse(position.getX(), position.getY()).getSecond();
@@ -173,11 +174,13 @@ public class Arm extends SubsystemBase {
         elbowFF.set(feedForwardOutput[1]);
     }
 
+
     /**
      * Get current arm pose as Translation2d
      * 
      * @return arm coordianates as Translation2d
      */
+
     public Translation2d getArmCoordinate() {
         return ArmKinematics.forward(Math.toRadians(getShoulderAngle()), Math.toRadians(getElbowAngle()));
     }

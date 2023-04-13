@@ -242,29 +242,29 @@ public final class AutoCommands {
                 getPlaceTop(arm, armTrajectories, armIntake, leds));
     }
 
-    public static Command getAutoBalanceTest(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
+    // public static Command getAutoBalanceTest(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
+    //         ArmIntake armIntake,
+    //         Limelight limelight,
+    //         LEDs leds) {
 
-        PathPlannerTrajectory first = null;
+    //     PathPlannerTrajectory first = null;
 
-        if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
+    //     if (DriverStation.getAlliance() == Alliance.Blue) {
+    //         first = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
 
-        } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge Copy", new PathConstraints(3.25, 3.25));
-        }
+    //     } else if (DriverStation.getAlliance() == Alliance.Red) {
+    //         first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge Copy", new PathConstraints(3.25, 3.25));
+    //     }
 
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
+    //     Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
+    //             first.getMarkers(), Constants.AutoConstants.eventMap);
 
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
+    //     double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
 
-        return new SequentialCommandGroup(
-                path_1,
-                new AutoBalancingPID(swerve, goalHeading));
-    }
+    //     return new SequentialCommandGroup(
+    //             path_1,
+    //             new AutoBalancingPID(swerve, goalHeading));
+    // }
 
     public static Command getGroundIntakeTest(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
             ArmIntake armIntake,
