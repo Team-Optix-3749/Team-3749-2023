@@ -1,5 +1,4 @@
 package frc.robot.commands.vision;
-import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -62,11 +61,9 @@ public class AlignPiece extends CommandBase {
     public void execute() {
         yController.setP(yKP.get());
 
-        if (!hasTarget){
-            getError();
-        }
+        getError();
 
-        System.out.println("ALIGN EXECUTE");
+        if (!hasTarget) return;
 
         double ySpeed = yController.calculate(error);
 
@@ -104,6 +101,7 @@ public class AlignPiece extends CommandBase {
             lastTarget = target;
             
             error = target.getYaw();
+
             hasTarget = true;
         } else {
             System.out.println("Target not found");
