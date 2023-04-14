@@ -1,5 +1,7 @@
 package frc.robot.commands.swerve;
 
+import java.util.List;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -31,11 +33,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  */
 public final class AutoCommands {
     /***
-     * @param swerve the subsystem object. Do not make a new instance
-     * @param trajectory      a viable trajectory object containing information
-     *                        about where the robot should go
-     * @param isFirstPath     if it is, it will reset odometry at its current
-     *                        position
+     * @param swerve      the subsystem object. Do not make a new instance
+     * @param trajectory  a viable trajectory object containing information
+     *                    about where the robot should go
+     * @param isFirstPath if it is, it will reset odometry at its current
+     *                    position
      * @return a SwerveControllerCommand based on the trajectory
      * @summary takes a trajectory and moves on it
      */
@@ -80,16 +82,16 @@ public final class AutoCommands {
             ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
-        PathPlannerTrajectory first = null;
+        List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+            pathGroup = PathPlanner.loadPathGroup("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
+            pathGroup = PathPlanner.loadPathGroup("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
         }
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+                pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
@@ -107,18 +109,16 @@ public final class AutoCommands {
             ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
-        PathPlannerTrajectory first = null;
+        List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2, 2));
+            pathGroup = PathPlanner.loadPathGroup("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2, 2));
-
+            pathGroup = PathPlanner.loadPathGroup("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
         }
-
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+                pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
 
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
@@ -134,24 +134,20 @@ public final class AutoCommands {
     public static Command getTopTwoPieceCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
             ArmIntake armIntake, Limelight limelight,
             LEDs leds) {
-        PathPlannerTrajectory first = null;
-        PathPlannerTrajectory second = null;
+        List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
-            second = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+            pathGroup = PathPlanner.loadPathGroup("BLUE - TOP 2 Piece", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
-            second = PathPlanner.loadPath("RED - TOP 2 Piece - Charge", new PathConstraints(2.5, 2.5));
-
+            pathGroup = PathPlanner.loadPathGroup("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
         }
-        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+                pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), true, swerve),
+                pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
 
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerve),
-                second.getMarkers(), Constants.AutoConstants.eventMap);
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
@@ -192,22 +188,18 @@ public final class AutoCommands {
             ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {
-        PathPlannerTrajectory first = null;
-        PathPlannerTrajectory second = null;
+        List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            first = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
-            second = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+            pathGroup = PathPlanner.loadPathGroup("BLUE - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            first = PathPlanner.loadPath("RED - BOTTOM 1 Piece Charge", new PathConstraints(2.5, 2.5));
-            second = PathPlanner.loadPath("BLUE - BOTTOM 2 Piece - Charge", new PathConstraints(2.5, 2.5));
+            pathGroup = PathPlanner.loadPathGroup("RED - BOTTOM 2 Piece", new PathConstraints(2.5, 2.5));
         }
-
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(second, false, swerve),
-                second.getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+                pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), true, swerve),
+                pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
 
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
         return new SequentialCommandGroup(
@@ -242,43 +234,5 @@ public final class AutoCommands {
                 getPlaceTop(arm, armTrajectories, armIntake, leds));
     }
 
-    // public static Command getAutoBalanceTest(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-    //         ArmIntake armIntake,
-    //         Limelight limelight,
-    //         LEDs leds) {
-
-    //     PathPlannerTrajectory first = null;
-
-    //     if (DriverStation.getAlliance() == Alliance.Blue) {
-    //         first = PathPlanner.loadPath("BLUE - TOP 2 Piece - Charge Copy", new PathConstraints(2.5, 2.5));
-
-    //     } else if (DriverStation.getAlliance() == Alliance.Red) {
-    //         first = PathPlanner.loadPath("RED - TOP 2 Piece - Charge Copy", new PathConstraints(3.25, 3.25));
-    //     }
-
-    //     Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
-    //             first.getMarkers(), Constants.AutoConstants.eventMap);
-
-    //     double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
-
-    //     return new SequentialCommandGroup(
-    //             path_1,
-    //             new AutoBalancingPID(swerve, goalHeading));
-    // }
-
-    public static Command getGroundIntakeTest(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
-
-        PathPlannerTrajectory first = null;
-
-        first = PathPlanner.loadPath("New Path", new PathConstraints(2.5, 2.5));
-
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(first, true, swerve),
-                first.getMarkers(), Constants.AutoConstants.eventMap);
-
-        return new SequentialCommandGroup(path_1);
-    }
 
 }

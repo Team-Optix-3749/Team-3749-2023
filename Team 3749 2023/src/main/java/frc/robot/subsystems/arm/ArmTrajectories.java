@@ -87,9 +87,12 @@ public class ArmTrajectories {
      */
     private Trajectory makeStingToTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
-                ArmSetpoints.STING.toPose2d(Math.PI / 2.5),
+                // ArmSetpoints.STING.toPose2d(Math.PI / 2.5),
+                ArmSetpoints.STING.toPose2d(Math.PI / 4
+                ),
+
                 // new Pose2d(new Translation2d(0.7, 1), new Rotation2d(Math.PI / 8)),
-                ArmSetpoints.PLACE_TOP.toPose2d(0)
+                ArmSetpoints.PLACE_TOP.toPose2d(-7 * Math.PI / 4)
         };
 
         return createTrajectory(waypoints, isReversed);

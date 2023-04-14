@@ -122,7 +122,7 @@ public class Constants {
         public static enum ArmSetpoints {
             STOW(new Translation2d(0.43, -0.2)),
             CUBE_STOW(new Translation2d(0.45, 0.1)),
-            STING(new Translation2d(0.5, 0.7)),
+            STING(new Translation2d(0.65, 0.7)),
             DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
             DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
             SINGLE_SUBSTATION(new Translation2d(10000000, 10000000)),
