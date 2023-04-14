@@ -84,6 +84,8 @@ public class RobotContainer {
 
         joystickIO.pilotAndOperatorBindings();
 
+        joystickIO.setDefaultCommands();
+
     }
 
     /**

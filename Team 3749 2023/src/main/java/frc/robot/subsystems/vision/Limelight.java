@@ -15,6 +15,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -45,19 +46,19 @@ public class Limelight extends SubsystemBase {
     private final NetworkTableEntry ledModeState = photonTable.getEntry("ledModeState");
     private final NetworkTableEntry ledModeRequest = photonTable.getEntry("ledModeRequest");
 
-    private final ShuffleData<Boolean> targetFound = new ShuffleData<Boolean>("Limelight", "Target Found", false);
+    // private final ShuffleData<Boolean> targetFound = new ShuffleData<Boolean>("Limelight", "Target Found", false);
     
-    private final ShuffleData<Double> targetPitch = new ShuffleData<Double>("Limelight", "Target Pitch", 0.0);
-    private final ShuffleData<Double> targetYaw = new ShuffleData<Double>("Limelight", "Target Yaw", 0.0);
+    // private final ShuffleData<Double> targetPitch = new ShuffleData<Double>("Limelight", "Target Pitch", 0.0);
+    // private final ShuffleData<Double> targetYaw = new ShuffleData<Double>("Limelight", "Target Yaw", 0.0);
     private final ShuffleData<Integer> pipeline = new ShuffleData<Integer>("Limelight",
             "Pipeline", -1000);
 
-    private final ShuffleData<Integer> aprilTagID = new ShuffleData<Integer>("Limelight", "Fiducial ID", -1000);
-    private final ShuffleData<Double> aprilTagX = new ShuffleData<Double>("Limelight", "AprilTag Y", -1000.0);
-    private final ShuffleData<Double> aprilTagY = new ShuffleData<Double>("Limelight", "AprilTag X", -1000.0);
+    // private final ShuffleData<Integer> aprilTagID = new ShuffleData<Integer>("Limelight", "Fiducial ID", -1000);
+    // private final ShuffleData<Double> aprilTagX = new ShuffleData<Double>("Limelight", "AprilTag Y", -1000.0);
+    // private final ShuffleData<Double> aprilTagY = new ShuffleData<Double>("Limelight", "AprilTag X", -1000.0);
 
-    private final ShuffleData<Double> targetTransX = new ShuffleData<Double>("Limelight", "Target Trans X", -1000.0);
-    private final ShuffleData<Double> targetTransY = new ShuffleData<Double>("Limelight", "Target Trans Y", -1000.0);
+    // private final ShuffleData<Double> targetTransX = new ShuffleData<Double>("Limelight", "Target Trans X", -1000.0);
+    // private final ShuffleData<Double> targetTransY = new ShuffleData<Double>("Limelight", "Target Trans Y", -1000.0);
 
     public Limelight() {
         try {
@@ -202,37 +203,6 @@ public class Limelight extends SubsystemBase {
     public void logging() {
         
         pipeline.set(getPipeline());
-
-        var result = getLatestResult();
-        if (!result.hasTargets()) {
-
-            targetFound.set(false);
-
-            return;
-        }
-
-        targetFound.set(true);
-
-        var target = getBestTarget(getLatestResult());
-
-        targetPitch.set(getPitch(target));
-        targetYaw.set(getYaw(target).getDegrees());
-
-        if (getPipeline() == Pipelines.APRILTAG.index) {
-            var targetId = target.getFiducialId();
-            var aprilTagPose = aprilTagFieldLayout.getTagPose(targetId).get();
-
-            aprilTagID.set(targetId);
-            aprilTagX.set(aprilTagPose.getX());
-            aprilTagY.set(aprilTagPose.getY());
-        } else {
-            // var target2d = getTranslation2d(target, getPipeline() == Pipelines.TOP_CONE.index ? Node.TOP_CONE : Node.MID_CONE);
-
-            // targetTransX.set(target2d.getX());
-            // targetTransY.set(target2d.getY());
-        }
-
-
 
     }
 
