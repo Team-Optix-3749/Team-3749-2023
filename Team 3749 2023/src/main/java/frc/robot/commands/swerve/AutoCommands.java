@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.vision.AlignApriltag;
+import frc.robot.commands.vision.AlignPiece;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories;
 import frc.robot.subsystems.intake.ArmIntake;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.VisionConstants.Piece;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /***
@@ -234,5 +236,27 @@ public final class AutoCommands {
                 getPlaceTop(arm, armTrajectories, armIntake, leds));
     }
 
+    public static Command getPieceAlign(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
+            ArmIntake armIntake,
+            Limelight limelight,
+            LEDs leds) {
+        List<PathPlannerTrajectory> pathGroup = null;
 
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            pathGroup = PathPlanner.loadPathGroup("BLUE - Align Piece Test", new PathConstraints(2.5, 2.5));
+
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            pathGroup = PathPlanner.loadPathGroup("RED - ALign Piece Test", new PathConstraints(2.5, 2.5));
+        }
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+                pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), true, swerve),
+                pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
+
+        return new SequentialCommandGroup(
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                path_1,
+                new AlignPiece(swerve, limelight, Piece.CUBE),
+                path_2);
+    }
 }
