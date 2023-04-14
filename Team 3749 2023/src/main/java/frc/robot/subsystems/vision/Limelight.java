@@ -15,6 +15,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -220,19 +221,17 @@ public class Limelight extends SubsystemBase {
 
         if (getPipeline() == Pipelines.APRILTAG.index) {
             var targetId = target.getFiducialId();
-            var aprilTagPose = aprilTagFieldLayout.getTagPose(targetId).get();
 
-            aprilTagID.set(targetId);
-            aprilTagX.set(aprilTagPose.getX());
-            aprilTagY.set(aprilTagPose.getY());
-        } else {
-            // var target2d = getTranslation2d(target, getPipeline() == Pipelines.TOP_CONE.index ? Node.TOP_CONE : Node.MID_CONE);
+            Optional<Pose3d> aprilTagPose = aprilTagFieldLayout.getTagPose(targetId);
 
-            // targetTransX.set(target2d.getX());
-            // targetTransY.set(target2d.getY());
+            if (aprilTagPose.isPresent()){
+
+                aprilTagID.set(targetId);
+                aprilTagX.set(aprilTagPose.get().getX());
+                aprilTagY.set(aprilTagPose.get().getY());
+            }
+
         }
-
-
 
     }
 

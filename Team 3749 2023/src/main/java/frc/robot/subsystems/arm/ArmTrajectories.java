@@ -88,7 +88,7 @@ public class ArmTrajectories {
     private Trajectory makeStingToTopNodeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 ArmSetpoints.STING.toPose2d(Math.PI / 2.5),
-                new Pose2d(new Translation2d(0.7, 1), new Rotation2d(Math.PI / 8)),
+                // new Pose2d(new Translation2d(0.7, 1), new Rotation2d(Math.PI / 8)),
                 ArmSetpoints.PLACE_TOP.toPose2d(0)
         };
 
@@ -241,7 +241,7 @@ public class ArmTrajectories {
     private Trajectory makeCubeStowToAutoCubeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 ArmSetpoints.CUBE_STOW.toPose2d(0),
-                new Pose2d(0.7, 0.1, new Rotation2d(0)),
+                new Pose2d(0.7, 0.2, new Rotation2d(0)),
                 ArmSetpoints.AUTO_GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
         };
 
@@ -257,7 +257,7 @@ public class ArmTrajectories {
     private Trajectory makeCubeStowToCubeGroundIntakeTrajectory(boolean isReversed) {
         Pose2d[] waypoints = new Pose2d[] {
                 ArmSetpoints.CUBE_STOW.toPose2d(0),
-                new Pose2d(0.7, 0.1, new Rotation2d(0)),
+                new Pose2d(0.7, 0.2, new Rotation2d(0)),
                 ArmSetpoints.GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
         };
 

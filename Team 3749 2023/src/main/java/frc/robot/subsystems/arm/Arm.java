@@ -237,7 +237,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         try {
-            // moveArm();
+            moveArm();
         } catch (Exception e) {
             System.out.println(e);
         }

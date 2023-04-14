@@ -110,7 +110,6 @@ public final class AutoCommands {
         PathPlannerTrajectory first = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            somin = PathPlanner.loadPathGroup(null, null, null)
             first = PathPlanner.loadPath("BLUE - TOP 2 Piece", new PathConstraints(2, 2));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
