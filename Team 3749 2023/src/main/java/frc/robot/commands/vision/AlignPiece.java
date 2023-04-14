@@ -32,9 +32,11 @@ public class AlignPiece extends CommandBase {
 
     private PhotonTrackedTarget lastTarget;
 
-    private SmartData<Double> yKP = new SmartData<Double>("Y KP", 1.0);
+    private boolean hasTarget = false;
 
-    private final PIDController yController = new PIDController(0.0, 0, 0);
+    private SmartData<Double> yKP = new SmartData<Double>("Y KP", .025);
+
+    private final PIDController yController = new PIDController(yKP.get(), 0, 0);
 
     public AlignPiece(Swerve swerve, Limelight limelight, Piece piece) {
         this.swerve = swerve;
@@ -46,7 +48,6 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public void initialize() {
-        limelight.setLED(VisionLEDMode.kOn);
         limelight.setPipeline(
             piece == Piece.CONE ? Pipelines.CONE.index : Pipelines.CUBE.index
         );
@@ -59,28 +60,36 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public void execute() {
-        System.out.println("ALIGN EXECUTE");
         yController.setP(yKP.get());
+
+        if (!hasTarget){
+            getError();
+        }
+
+        System.out.println("ALIGN EXECUTE");
 
         double ySpeed = yController.calculate(error);
 
         SmartDashboard.putNumber("Y Speed", ySpeed);
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.4,
-                ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,
+                -ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
-        // swerve.setModuleStates(moduleStates);
+        swerve.setModuleStates(moduleStates);
+
+        System.out.println(yController.atSetpoint());
     }
 
     @Override
     public void end(boolean interrupted) {
-        limelight.setLED(VisionLEDMode.kOff);
+        System.out.println("hello");
     }
 
     @Override
     public boolean isFinished() {
-        return yController.atSetpoint();
+        // return yController.atSetpoint();
+        return false;
     }
 
 
@@ -95,7 +104,7 @@ public class AlignPiece extends CommandBase {
             lastTarget = target;
             
             error = target.getYaw();
-
+            hasTarget = true;
         } else {
             System.out.println("Target not found");
 
