@@ -1,6 +1,7 @@
 package frc.robot.commands.swerve;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -8,8 +9,11 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -34,6 +38,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  *         {@link} https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage
  */
 public final class AutoCommands {
+    public static Consumer<Pose2d> pathTargetPose = pose -> SmartDashboard.putNumberArray("Auto Path Pose Targets", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
+
+    
     /***
      * @param swerve      the subsystem object. Do not make a new instance
      * @param trajectory  a viable trajectory object containing information
@@ -45,6 +52,8 @@ public final class AutoCommands {
      */
     private static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath,
             Swerve swerve) {
+        PPSwerveControllerCommand.setLoggingCallbacks(null, pathTargetPose, null, null);
+
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
@@ -94,7 +103,6 @@ public final class AutoCommands {
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
@@ -121,7 +129,6 @@ public final class AutoCommands {
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,

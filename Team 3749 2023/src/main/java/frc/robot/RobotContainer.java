@@ -3,6 +3,7 @@ package frc.robot;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -54,6 +55,9 @@ public class RobotContainer {
         configureButtonBindings();
         configureAuto();
 
+        DataLogManager.logNetworkTables(true);
+        DriverStation.startDataLog(DataLogManager.getLog(), true);
+
         try {
             FileWriter writer = new FileWriter("data.csv", false);
             writer.close();
@@ -92,7 +96,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
+        return AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
     }
 
     /**

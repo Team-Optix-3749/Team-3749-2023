@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -122,7 +123,8 @@ public class Swerve extends SubsystemBase {
 
         drive(0, 0, 0);
     }
-    public void setFlipGyro(boolean bool){
+
+    public void setFlipGyro(boolean bool) {
         flipGyro = bool;
     }
 
@@ -160,7 +162,7 @@ public class Swerve extends SubsystemBase {
         return new Pose2d(estimatedPose.getTranslation(), rotation);
     }
 
-    public boolean getFlipGyro(){
+    public boolean getFlipGyro() {
         return flipGyro;
     }
 
@@ -189,7 +191,7 @@ public class Swerve extends SubsystemBase {
         return swerveDrivePoseEstimator;
     }
 
-    public void stopModules() { 
+    public void stopModules() {
         frontLeft.stop();
         frontRight.stop();
         backLeft.stop();
@@ -197,8 +199,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        if (flipGyro && ! DriverStation.isAutonomous()){
-            for (int i = 0; i < 4; i++){
+        if (flipGyro && !DriverStation.isAutonomous()) {
+            for (int i = 0; i < 4; i++) {
                 desiredStates[i].speedMetersPerSecond = -desiredStates[i].speedMetersPerSecond;
 
             }
@@ -208,6 +210,8 @@ public class Swerve extends SubsystemBase {
         frontLeft.setDesiredState(desiredStates[1]);
         backRight.setDesiredState(desiredStates[2]);
         backLeft.setDesiredState(desiredStates[3]);
+
+
     }
 
     /***
@@ -283,7 +287,29 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+        double[] realStates = { 
+            frontRight.getAbsoluteEncoderRad(),
+            frontRight.getDriveVelocity(),
+            frontLeft.getAbsoluteEncoderRad(),
+            frontLeft.getDriveVelocity(),
+            backRight.getAbsoluteEncoderRad(),
+            backRight.getDriveVelocity(),
+            backLeft.getAbsoluteEncoderRad(),
+            backLeft.getDriveVelocity()};
+        
+        double[] theoreticalStates = {
+                frontRight.getTheoreticalState().angle.getDegrees(),
+                frontRight.getTheoreticalState().speedMetersPerSecond,
+                frontLeft.getTheoreticalState().angle.getDegrees(),
+                frontLeft.getTheoreticalState().speedMetersPerSecond,
+                backRight.getTheoreticalState().angle.getDegrees(),
+                backRight.getTheoreticalState().speedMetersPerSecond,
+                backLeft.getTheoreticalState().angle.getDegrees(),
+                backLeft.getTheoreticalState().speedMetersPerSecond,
+            };
+            SmartDashboard.putNumberArray("Theoretical States", theoreticalStates);
 
+        SmartDashboard.putNumberArray("Real Staets", realStates);
         robotHeading.set(getHeading());
         pitch.set(getVerticalTilt());
         robotPoseX.set(getPose().getX());
