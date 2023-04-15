@@ -219,37 +219,8 @@ public class ArmTrajectories {
         return createTrajectory(waypoints, isReversed);
     }
 
-    /**
-     * Move arm to and from stow position and further ground intake position
-     * 
-     * @param isReversed
-     * @return Trajectory
-     */
-    private Trajectory makeStowToAutoCubeGroundIntakeTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                ArmSetpoints.STOW.toPose2d(0),
-                new Pose2d(0.7, 0.1, new Rotation2d(0)),
-                ArmSetpoints.AUTO_GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
-        };
 
-        return createTrajectory(waypoints, isReversed);
-    }
 
-    /**
-     * Move arm to and from stow position and further ground intake position
-     * 
-     * @param isReversed
-     * @return Trajectory
-     */
-    private Trajectory makeCubeStowToAutoCubeGroundIntakeTrajectory(boolean isReversed) {
-        Pose2d[] waypoints = new Pose2d[] {
-                ArmSetpoints.CUBE_STOW.toPose2d(0),
-                new Pose2d(0.7, 0.2, new Rotation2d(0)),
-                ArmSetpoints.AUTO_GROUND_INTAKE_CUBE.toPose2d(3 * Math.PI / 2)
-        };
-
-        return createTrajectory(waypoints, isReversed);
-    }
 
     /**
      * Move arm to and from stow position and further ground intake position
@@ -347,10 +318,6 @@ public class ArmTrajectories {
     private final Trajectory cubeStowToGroundIntakeCube = makeCubeStowToCubeGroundIntakeTrajectory(false);
     private final Trajectory groundIntakeCubeToStow = makeStowToCubeGroundIntakeTrajectory(true);
     private final Trajectory groundIntakeCubeToCubeStow = makeCubeStowToCubeGroundIntakeTrajectory(true);
-
-    // auto lowered setpoint
-    private final Trajectory stowToAutoGroundIntakeCube = makeStowToAutoCubeGroundIntakeTrajectory(true);
-    private final Trajectory autoGroundIntakeCubeToCubeStow = makeCubeStowToAutoCubeGroundIntakeTrajectory(false);
 
     // Stow / Cube Stow / Sting
     private final Trajectory stowToSting = makeStowToStingTrajectory(false);
@@ -503,10 +470,5 @@ public class ArmTrajectories {
     public Trajectory getCubeStowToStow() {
         return cubeStowToStow;
     }
-    public Trajectory getStowToAutoGroundIntakeCube() {
-        return stowToAutoGroundIntakeCube;
-    }
-    public Trajectory getAutoGroundIntakeCubeToCubeStow() {
-        return autoGroundIntakeCubeToCubeStow;
-    }
+
 }

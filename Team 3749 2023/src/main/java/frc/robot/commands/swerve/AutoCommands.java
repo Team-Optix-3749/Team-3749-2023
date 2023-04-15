@@ -103,13 +103,18 @@ public final class AutoCommands {
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+                pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
+                new AlignPiece(swerve, limelight, Piece.CUBE).withTimeout(1.3),
+                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                path_2,
                 new AlignApriltag(swerve, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.15),
-
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
 
@@ -207,20 +212,26 @@ public final class AutoCommands {
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), true, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
+
+        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
+                pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
+
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-
                 path_1,
+                new AlignPiece(swerve, limelight, Piece.CUBE).withTimeout(1.3),
+                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                path_2,
                 new AlignApriltag(swerve, limelight).withTimeout(1),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.1),
+                        .withTimeout(0.15),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-                path_2,
+                path_3,
                 new AutoBalancingPID(swerve, goalHeading));
     }
 

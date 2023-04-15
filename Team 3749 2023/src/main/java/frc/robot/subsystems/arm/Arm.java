@@ -27,12 +27,12 @@ public class Arm extends SubsystemBase {
 
     // Shoulder motor
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);
-    private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
+    private final DutyCycleEncoder shoulderAbsoluteEncoder = new DutyCycleEncoder(9);
     private final PIDController shoulderPIDController = new PIDController(Constants.Arm.shoulder_kP, 0, 0);
 
     // Elbow motor
     private final CANSparkMax elbowMotor = new CANSparkMax(Constants.Arm.left_elbow_id, MotorType.kBrushless);
-    private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(1);
+    private final DutyCycleEncoder elbowAbsoluteEncoder = new DutyCycleEncoder(8);
     private final PIDController elbowPIDController = new PIDController(Constants.Arm.elbow_kP, 0, 0);
 
     // safety stow
