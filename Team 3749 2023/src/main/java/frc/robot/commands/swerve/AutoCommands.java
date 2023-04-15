@@ -112,7 +112,7 @@ public final class AutoCommands {
                 new AlignPiece(swerve, limelight).withTimeout(1.75),
                 Commands.runOnce(() -> swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(swerve, limelight).withTimeout(0.8),
+                new AlignApriltag(swerve, limelight).withTimeout(0.9),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
@@ -137,10 +137,10 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
-                new AlignApriltag(swerve, limelight).withTimeout(1.2),
+                new AlignApriltag(swerve, limelight).withTimeout(0.9),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.15),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                        .withTimeout(0.1),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
     }
 
