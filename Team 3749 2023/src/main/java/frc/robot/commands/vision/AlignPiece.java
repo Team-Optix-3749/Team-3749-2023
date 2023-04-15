@@ -31,7 +31,6 @@ import frc.robot.utils.Constants.VisionConstants.Pipelines;
 public class AlignPiece extends CommandBase {
     private final Swerve swerve;
     private final Limelight limelight;
-    private final Piece piece;
 
     private final double setpoint = 0;
 
@@ -47,10 +46,9 @@ public class AlignPiece extends CommandBase {
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
             2.7, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    public AlignPiece(Swerve swerve, Limelight limelight, Piece piece) {
+    public AlignPiece(Swerve swerve, Limelight limelight) {
         this.swerve = swerve;
         this.limelight = limelight;
-        this.piece = piece;
         this.setName("Piece Align");
         addRequirements(swerve, limelight);
     }
@@ -58,8 +56,7 @@ public class AlignPiece extends CommandBase {
     @Override
     public void initialize() {
         limelight.setPipeline(
-                piece == Piece.CONE ? Pipelines.CONE.index
-                        : DriverStation.getAlliance() == Alliance.Blue ? Pipelines.BLUE_CUBE.index
+                DriverStation.getAlliance() == Alliance.Blue ? Pipelines.BLUE_CUBE.index
                                 : Pipelines.RED_CUBE.index);
 
         getError();
