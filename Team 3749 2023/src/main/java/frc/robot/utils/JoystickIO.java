@@ -138,15 +138,16 @@ public class JoystickIO {
         pilot.a()
                 .onTrue(new ParallelCommandGroup(
                         new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                                new AlignApriltag(swerve, limelight).withTimeout(1)));
+                            
+                                new AlignApriltag(swerve, limelight).withTimeout(2)));
         pilot.x()
                 .onTrue(new ParallelCommandGroup(
                     new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                            new AlignApriltag(swerve, limelight, true).withTimeout(1)));
+                            new AlignApriltag(swerve, limelight, true).withTimeout(2)));
         pilot.b()
                 .onTrue(new ParallelCommandGroup(
                     new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                            new AlignApriltag(swerve, limelight, false).withTimeout(1)));
+                            new AlignApriltag(swerve, limelight, false).withTimeout(2)));
 
         pilot.yWhileHeld(() -> swerve.toggleSpeed());
 

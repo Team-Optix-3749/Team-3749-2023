@@ -45,10 +45,10 @@ public class AlignApriltag extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.3); // 2.3
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.4); // 2.3
     private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.7); // 2.6
 
-    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.075); // 0.1
+    private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.075
     private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
 
     private PhotonTrackedTarget lastTarget;
@@ -72,17 +72,17 @@ public class AlignApriltag extends CommandBase {
         double x = 0.75;
         double leftDiff;
         double rightDiff;
-        if (isBlueAlliance()) {
-            leftDiff = 3.86;
+        // if (isBlueAlliance()) {
+            leftDiff = 4.975;
             rightDiff = 4.94;
 
-        } else {
-            leftDiff = 3.815;
-            rightDiff = 4.98;
-        }
+        // } else {
+        //     leftDiff = 3.815;
+        //     rightDiff = 4.98;
+        // }
 
         tagToGoal = new Transform3d(
-                new Translation3d(x, left == true ? (4.42 - leftDiff) : (4.42 - rightDiff), 0.0),
+                new Translation3d(x, left == true ? -(4.42 - leftDiff) : (4.42 - rightDiff), 0.0),
                 new Rotation3d(0.0, 0.0, Math.PI));
 
         addRequirements(swerve);
@@ -109,6 +109,7 @@ public class AlignApriltag extends CommandBase {
 
     @Override
     public void initialize() {
+        goalPose = null;
         updateGoalPose();
 
         limelight.setPipeline(0);

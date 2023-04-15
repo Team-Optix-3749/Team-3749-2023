@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -283,6 +284,10 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+        SmartDashboard.putNumber("FL turn", frontLeft.getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("FR turn", frontRight.getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("BR turn", backRight.getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("BL turn", backLeft.getAbsoluteEncoderRad());
 
         robotHeading.set(getHeading());
         pitch.set(getVerticalTilt());

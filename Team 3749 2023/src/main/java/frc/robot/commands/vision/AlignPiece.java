@@ -88,8 +88,8 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        // return yController.atSetpoint();
-        return false;
+        return yController.atSetpoint();
+        // return false;
     }
 
 

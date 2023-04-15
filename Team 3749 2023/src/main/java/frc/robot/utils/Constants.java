@@ -256,7 +256,7 @@ public class Constants {
         public static final double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
 
         public static final Transform3d cam_to_robot = new Transform3d(
-                new Translation3d(0.0, -Units.inchesToMeters(7), -Units.inchesToMeters(18)), new Rotation3d());
+                new Translation3d(0, 0, -Units.inchesToMeters(15.25)), new Rotation3d());
         public static final Transform3d robot_to_cam = cam_to_robot.inverse();
 
         public static final int reflective_tape_pipeline_index = 0;
