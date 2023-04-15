@@ -46,6 +46,7 @@ public class SwerveTeleopCommand extends CommandBase {
         // 1. Get real-time joystick inputs
         double xSpeed = xSpdFunction.get();
         double ySpeed = -ySpdFunction.get();
+        double yOpSpeed = -ySpdFunction.get();
         double turningSpeed = -turningSpdFunction.get();
 
         // 2. Apply deadband

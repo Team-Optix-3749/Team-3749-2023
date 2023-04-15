@@ -83,9 +83,9 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                Commands.waitSeconds(0.75),
+                Commands.waitSeconds(0.25),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.15),
+                        .withTimeout(0.125),
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1));
     }
 
@@ -109,13 +109,13 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
-                new AlignPiece(swerve, limelight, Piece.CUBE).withTimeout(1.3),
+                new AlignPiece(swerve, limelight, Piece.CUBE).withTimeout(1.75),
                 Commands.runOnce(() -> swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(swerve, limelight).withTimeout(1),
+                new AlignApriltag(swerve, limelight).withTimeout(0.8),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.15),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                        .withTimeout(0.12),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
 
     }
@@ -137,10 +137,9 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
-                new AlignApriltag(swerve, limelight).withTimeout(1),
+                new AlignApriltag(swerve, limelight).withTimeout(1.2),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.15),
-
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
     }

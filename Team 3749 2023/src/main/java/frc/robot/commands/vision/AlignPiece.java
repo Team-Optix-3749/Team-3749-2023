@@ -5,9 +5,11 @@ import java.sql.Driver;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -42,6 +44,8 @@ public class AlignPiece extends CommandBase {
     private SmartData<Double> yKP = new SmartData<Double>("Y KP", .05);
 
     private final PIDController yController = new PIDController(yKP.get(), 0, 0);
+    private final ProfiledPIDController thetaController = new ProfiledPIDController(
+            2.7, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
     public AlignPiece(Swerve swerve, Limelight limelight, Piece piece) {
         this.swerve = swerve;
@@ -70,9 +74,16 @@ public class AlignPiece extends CommandBase {
 
         getError();
 
+        var robotPose2d = swerve.getPose();
+
         if (!hasTarget) {
             return;
         }
+
+        double thetaSpeed = thetaController.calculate(
+                robotPose2d.getRotation().getRadians(), 0);
+        if (thetaController.atGoal())
+            thetaSpeed = 0.0;
 
         double ySpeed = yController.calculate(error);
 
@@ -82,7 +93,7 @@ public class AlignPiece extends CommandBase {
 
         SmartDashboard.putNumber("Y Speed", ySpeed);
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,
-                ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
+                ySpeed, thetaSpeed, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 

@@ -53,8 +53,7 @@ public class Constants {
     public static final class ArmIntake {
         public static final int arm_intake_id = 22;
         public static final double idleVoltage = 1;
-        public static final double releaseConeVoltage = -6;
-        public static final double releaseCubeVoltage = -4.5;
+        public static final double releaseConeVoltage = -8;
 
         public static final double intakeVoltage = 4.5;
     }
@@ -121,11 +120,12 @@ public class Constants {
 
         public static enum ArmSetpoints {
             STOW(new Translation2d(0.43, -0.2)),
+            // CUBE_STOW(new Translation2d(0.381, 0.0348)),  LEGAL
             CUBE_STOW(new Translation2d(0.45, 0.1)),
             STING(new Translation2d(0.65, 0.7)),
             DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
             DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
-            SINGLE_SUBSTATION(new Translation2d(10000000, 10000000)),
+            SINGLE_SUBSTATION(new Translation2d(0.5, 0.5)), // NOT REAL
             // GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
             GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.115)),
 
