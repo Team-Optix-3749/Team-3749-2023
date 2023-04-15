@@ -126,7 +126,7 @@ public class Constants {
             DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
             DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
             SINGLE_SUBSTATION(new Translation2d(10000000, 10000000)),
-            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.125)),
+            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
             AUTO_GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
             PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));
@@ -293,7 +293,8 @@ public class Constants {
 
         public static enum Pipelines {
             APRILTAG(0),
-            CUBE(1),
+            BLUE_CUBE(1),
+            RED_CUBE(2),
             CONE(2);
             
             public int index;

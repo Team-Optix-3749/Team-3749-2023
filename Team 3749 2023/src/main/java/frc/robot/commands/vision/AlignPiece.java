@@ -1,4 +1,7 @@
 package frc.robot.commands.vision;
+
+import java.sql.Driver;
+
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.PIDController;
@@ -6,6 +9,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.Swerve;
@@ -34,7 +39,7 @@ public class AlignPiece extends CommandBase {
 
     private boolean hasTarget = false;
 
-    private SmartData<Double> yKP = new SmartData<Double>("Y KP", .025);
+    private SmartData<Double> yKP = new SmartData<Double>("Y KP", .05);
 
     private final PIDController yController = new PIDController(yKP.get(), 0, 0);
 
@@ -49,30 +54,35 @@ public class AlignPiece extends CommandBase {
     @Override
     public void initialize() {
         limelight.setPipeline(
-            piece == Piece.CONE ? Pipelines.CONE.index : Pipelines.CUBE.index
-        );
+                piece == Piece.CONE ? Pipelines.CONE.index
+                        : DriverStation.getAlliance() == Alliance.Blue ? Pipelines.BLUE_CUBE.index
+                                : Pipelines.RED_CUBE.index);
 
         getError();
 
         yController.setSetpoint(setpoint);
-        yController.setTolerance(0.04);
+        yController.setTolerance(0.1);
     }
 
     @Override
     public void execute() {
         yController.setP(yKP.get());
 
-        if (!hasTarget){
-            getError();
-        }
+        getError();
 
-        System.out.println("ALIGN EXECUTE");
+        if (!hasTarget) {
+            return;
+        }
 
         double ySpeed = yController.calculate(error);
 
+        if (swerve.getFlipGyro()){
+            ySpeed = -ySpeed;
+        }
+
         SmartDashboard.putNumber("Y Speed", ySpeed);
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,
-                -ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
+                ySpeed, 0, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 
@@ -92,7 +102,6 @@ public class AlignPiece extends CommandBase {
         // return false;
     }
 
-
     public void getError() {
         var res = limelight.getLatestResult();
         if (res.hasTargets()) {
@@ -102,10 +111,12 @@ public class AlignPiece extends CommandBase {
                     .findFirst().get();
 
             lastTarget = target;
-            
+
             error = target.getYaw();
             hasTarget = true;
         } else {
+
+            hasTarget = false;
             System.out.println("Target not found");
 
         }

@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -243,20 +244,27 @@ public final class AutoCommands {
         List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            pathGroup = PathPlanner.loadPathGroup("BLUE - Align Piece Test", new PathConstraints(2.5, 2.5));
+            pathGroup = PathPlanner.loadPathGroup("BLUE - Align Piece Test", new PathConstraints(1, 1));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            pathGroup = PathPlanner.loadPathGroup("RED - ALign Piece Test", new PathConstraints(2.5, 2.5));
+            pathGroup = PathPlanner.loadPathGroup("RED - ALign Piece Test", new PathConstraints(1, 1));
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), true, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
 
+        // current x, path planner y, current rotation
+        // Pose2d midPose = new Pose2d(swerve.getPose().getX(), pathGroup.get(1).getInitialHolonomicPose().getY(),
+        //         swerve.getPose().getRotation());
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+        // System.out.println(midPose.getY());
         return new SequentialCommandGroup(
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
-                new AlignPiece(swerve, limelight, Piece.CUBE),
+                new AlignPiece(swerve, limelight, Piece.CUBE).withTimeout(1.3),
+                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+
                 path_2);
     }
 }
