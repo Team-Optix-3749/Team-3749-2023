@@ -1,8 +1,6 @@
 package frc.robot.subsystems.leds;
 
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
