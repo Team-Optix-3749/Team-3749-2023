@@ -111,8 +111,7 @@ public class AlignRetro extends CommandBase {
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 
-
-            // swerve.setModuleS    tates(moduleStates);
+            swerve.setModuleStates(moduleStates);
         } else {
             System.out.println("Reflective tape not found");
         }

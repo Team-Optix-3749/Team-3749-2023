@@ -10,7 +10,6 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,9 +37,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  *         {@link} https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage
  */
 public final class AutoCommands {
-    public static Consumer<Pose2d> pathTargetPose = pose -> SmartDashboard.putNumberArray("Auto Path Pose Targets",
-            new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
-
+    public static Consumer<Pose2d> pathTargetPose = pose -> SmartDashboard.putNumberArray("Auto Path Pose Targets", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
+    
     /***
      * @param swerve      the subsystem object. Do not make a new instance
      * @param trajectory  a viable trajectory object containing information
