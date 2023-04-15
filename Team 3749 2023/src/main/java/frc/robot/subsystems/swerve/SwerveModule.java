@@ -40,6 +40,8 @@ public class SwerveModule {
     private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
 
+    private SwerveModuleState theoreticalState = new SwerveModuleState();
+
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
@@ -108,12 +110,15 @@ public class SwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
     }
-
+    public SwerveModuleState getTheoreticalState() {
+        return new SwerveModuleState(theoreticalState.speedMetersPerSecond, theoreticalState.angle);
+    }
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
     public void setDesiredState(SwerveModuleState state) {
+        theoreticalState = state;
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
             return;

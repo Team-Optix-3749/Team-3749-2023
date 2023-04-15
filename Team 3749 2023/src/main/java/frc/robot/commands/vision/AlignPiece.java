@@ -113,6 +113,7 @@ public class AlignPiece extends CommandBase {
             lastTarget = target;
 
             error = target.getYaw();
+
             hasTarget = true;
         } else {
 
