@@ -10,6 +10,7 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,8 +38,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  *         {@link} https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage
  */
 public final class AutoCommands {
-    public static Consumer<Pose2d> pathTargetPose = pose -> SmartDashboard.putNumberArray("Auto Path Pose Targets", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
-    
+    public static Consumer<Pose2d> pathTargetPose = pose -> SmartDashboard.putNumberArray("Auto Path Pose Targets",
+            new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
+
     /***
      * @param swerve      the subsystem object. Do not make a new instance
      * @param trajectory  a viable trajectory object containing information
@@ -103,7 +105,9 @@ public final class AutoCommands {
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
@@ -132,13 +136,21 @@ public final class AutoCommands {
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+                pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
+        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
-                new AlignApriltag(swerve, limelight).withTimeout(0.9),
+                new AlignPiece(swerve, limelight).withTimeout(1.25),
+                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                path_2,
+                new AlignApriltag(swerve, limelight).withTimeout(1.2),
                 Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.1),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                        .withTimeout(0.12),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                 new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
     }
 
@@ -155,18 +167,27 @@ public final class AutoCommands {
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), true, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-
+        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
+                pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+
+        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+                        new Rotation2d(pathGroup.get(1).getInitialHolonomicPose().getRotation().getDegrees()+180));
+
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
-                new AlignApriltag(swerve, limelight).withTimeout(1),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                        .withTimeout(0.25),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                new AlignPiece(swerve, limelight).withTimeout(1.25),
+                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
                 path_2,
+                new AlignApriltag(swerve, limelight).withTimeout(1.2),
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.12),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                path_3,
                 new AutoBalancingPID(swerve, goalHeading));
     }
 
@@ -215,7 +236,9 @@ public final class AutoCommands {
         Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
                 pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
 
-        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
 
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
         return new SequentialCommandGroup(
@@ -272,7 +295,9 @@ public final class AutoCommands {
         // Pose2d midPose = new Pose2d(swerve.getPose().getX(),
         // pathGroup.get(1).getInitialHolonomicPose().getY(),
         // swerve.getPose().getRotation());
-        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
         // System.out.println(midPose.getY());
         return new SequentialCommandGroup(
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),

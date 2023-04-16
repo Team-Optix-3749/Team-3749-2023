@@ -54,12 +54,15 @@ public class AlignPiece extends CommandBase {
     public void initialize() {
         limelight.setPipeline(
                 DriverStation.getAlliance() == Alliance.Blue ? Pipelines.BLUE_CUBE.index
-                                : Pipelines.RED_CUBE.index);
+                                : Pipelines.BLUE_CUBE.index);
 
         getError();
 
         yController.setSetpoint(setpoint);
         yController.setTolerance(0.1);
+
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
     }
 
     @Override
@@ -73,11 +76,15 @@ public class AlignPiece extends CommandBase {
         if (!hasTarget) {
             return;
         }
+        double thetaGoal = DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI ;
 
         double thetaSpeed = thetaController.calculate(
-                robotPose2d.getRotation().getRadians(), 0);
+                robotPose2d.getRotation().getRadians(), thetaGoal);
+        // thetaSpeed =  DriverStation.getAlliance() == Alliance.Blue ? thetaSpeed : -thetaSpeed;
+        
         if (thetaController.atGoal())
             thetaSpeed = 0.0;
+        SmartDashboard.putNumber("Theta Speed", thetaSpeed);
 
         double ySpeed = yController.calculate(error);
 
@@ -120,6 +127,8 @@ public class AlignPiece extends CommandBase {
             error = target.getYaw();
 
             hasTarget = true;
+
+            System.out.println("target found");
         } else {
 
             hasTarget = false;

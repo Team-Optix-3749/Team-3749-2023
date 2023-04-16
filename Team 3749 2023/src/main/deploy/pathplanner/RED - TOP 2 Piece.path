@@ -39,7 +39,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
@@ -152,11 +152,11 @@
     },
     {
       "anchorPoint": {
-        "x": 11.23,
+        "x": 11.35,
         "y": 3.06
       },
       "prevControl": {
-        "x": 12.514533059167308,
+        "x": 12.634533059167307,
         "y": 3.06
       },
       "nextControl": null,
@@ -196,6 +196,12 @@
       "position": 3.67,
       "names": [
         "Place Top"
+      ]
+    },
+    {
+      "position": 4.418181818181813,
+      "names": [
+        "Stow"
       ]
     }
   ]
