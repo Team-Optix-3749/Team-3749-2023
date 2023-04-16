@@ -287,6 +287,8 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+        SmartDashboard.putNumberArray("Odometry",
+        new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
         double[] realStates = { 
             frontRight.getAbsoluteEncoderRad(),
             frontRight.getDriveVelocity(),

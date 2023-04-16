@@ -3,7 +3,9 @@ package frc.robot.commands.vision;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -52,9 +54,9 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public void initialize() {
-        limelight.setPipeline(
-                DriverStation.getAlliance() == Alliance.Blue ? Pipelines.BLUE_CUBE.index
-                                : Pipelines.BLUE_CUBE.index);
+        limelight.setPipeline(3);
+                // DriverStation.getAlliance() == Alliance.Blue ? Pipelines.BLUE_CUBE.index
+                //                 : Pipelines.BLUE_CUBE.index);
 
         getError();
 
@@ -72,6 +74,9 @@ public class AlignPiece extends CommandBase {
         getError();
 
         var robotPose2d = swerve.getPose();
+        // var robotPose2d = new Pose2d(
+        //     swerve.getPose().getTranslation(), new Rotation2d(swerve.getPose().getRotation().getRadians() + Math.PI)
+        // );
 
         if (!hasTarget) {
             return;

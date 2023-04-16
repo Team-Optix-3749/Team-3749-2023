@@ -173,10 +173,17 @@ public final class AutoCommands {
                 pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
-        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-                        new Rotation2d(pathGroup.get(1).getInitialHolonomicPose().getRotation().getDegrees()+180));
+        // Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+        //         : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+        //                 new Rotation2d(pathGroup.get(1).getInitialHolonomicPose().getRotation().getDegrees()+180));
 
+        // Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+        //         : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+        //                 swerve.getAutoRotation2d());
+
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+
+        
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
@@ -284,7 +291,7 @@ public final class AutoCommands {
             pathGroup = PathPlanner.loadPathGroup("BLUE - Align Piece Test", new PathConstraints(1, 1));
 
         } else if (DriverStation.getAlliance() == Alliance.Red) {
-            pathGroup = PathPlanner.loadPathGroup("RED - ALign Piece Test", new PathConstraints(1, 1));
+            pathGroup = PathPlanner.loadPathGroup("RED - Align Piece Test", new PathConstraints(1, 1));
         }
         Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
@@ -295,14 +302,17 @@ public final class AutoCommands {
         // Pose2d midPose = new Pose2d(swerve.getPose().getX(),
         // pathGroup.get(1).getInitialHolonomicPose().getY(),
         // swerve.getPose().getRotation());
-        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
+        // Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
+        //         : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
+        //                 pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
         // System.out.println(midPose.getY());
+
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+
         return new SequentialCommandGroup(
                 Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(1.3),
+                new AlignPiece(swerve, limelight).withTimeout(15),
                 Commands.runOnce(() -> swerve.resetOdometry(midPose)),
 
                 path_2);
