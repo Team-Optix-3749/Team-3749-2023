@@ -105,9 +105,8 @@ public final class AutoCommands {
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
@@ -138,9 +137,8 @@ public final class AutoCommands {
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
+
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
@@ -173,17 +171,8 @@ public final class AutoCommands {
                 pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
-        // Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-        //         : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-        //                 new Rotation2d(pathGroup.get(1).getInitialHolonomicPose().getRotation().getDegrees()+180));
-
-        // Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-        //         : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-        //                 swerve.getAutoRotation2d());
-
         Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
-        
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
@@ -243,9 +232,7 @@ public final class AutoCommands {
         Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
                 pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
 
-        Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-                : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-                        pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
+        Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
         return new SequentialCommandGroup(
@@ -297,15 +284,6 @@ public final class AutoCommands {
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
         Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-
-        // current x, path planner y, current rotation
-        // Pose2d midPose = new Pose2d(swerve.getPose().getX(),
-        // pathGroup.get(1).getInitialHolonomicPose().getY(),
-        // swerve.getPose().getRotation());
-        // Pose2d midPose = DriverStation.getAlliance() == Alliance.Blue ? pathGroup.get(1).getInitialHolonomicPose()
-        //         : new Pose2d(pathGroup.get(1).getInitialHolonomicPose().getTranslation(),
-        //                 pathGroup.get(1).getInitialHolonomicPose().getRotation().rotateBy(new Rotation2d(Math.PI)));
-        // System.out.println(midPose.getY());
 
         Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
