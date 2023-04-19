@@ -249,6 +249,43 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerve, goalHeading));
     }
 
+    public static Command getTopThreePiece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
+            ArmIntake armIntake, Limelight limelight,
+            LEDs leds) {
+        List<PathPlannerTrajectory> pathGroup = null;
+
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            pathGroup = PathPlanner.loadPathGroup("BLUE - TOP 3 Piece", new PathConstraints(3, 3));
+
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            pathGroup = PathPlanner.loadPathGroup("RED - TOP 3 Piece", new PathConstraints(3, 3));
+        }
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+                pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+                pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
+                pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
+
+        Pose2d midPose1 = pathGroup.get(1).getInitialHolonomicPose();
+        Pose2d midPose2 = pathGroup.get(2).getInitialHolonomicPose();
+
+        return new SequentialCommandGroup(
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
+                path_1,
+                new AlignPiece(swerve, limelight).withTimeout(1.25),
+                Commands.runOnce(() -> swerve.resetOdometry(midPose1)),
+                path_2,
+                new AlignPiece(swerve, limelight).withTimeout(1.25),
+                Commands.runOnce(() -> swerve.resetOdometry(midPose2)),
+                path_3,
+
+                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                        .withTimeout(0.12),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STOW, false));
+    }
+
     public static Command get1Piece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
             ArmIntake armIntake,
             Limelight limelight,

@@ -118,5 +118,11 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("Place Top", new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.PLACE_TOP));
         Constants.AutoConstants.eventMap.put("Wait", new WaitCommand(5));
+        Constants.AutoConstants.eventMap.put("Release Object",
+                new SequentialCommandGroup(
+                        Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage), armIntake)
+                                .withTimeout(2),
+                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage), armIntake)));
+
     }
 }
