@@ -18,7 +18,6 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.SmartData;
-import frc.robot.utils.Constants.VisionConstants.Piece;
 import frc.robot.utils.Constants.VisionConstants.Pipelines;
 
 /**
@@ -30,15 +29,10 @@ import frc.robot.utils.Constants.VisionConstants.Pipelines;
 public class AlignPiece extends CommandBase {
     private final Swerve swerve;
     private final Limelight limelight;
-
     private final double setpoint = 0;
-
     private double error;
-
     private PhotonTrackedTarget lastTarget;
-
     private boolean hasTarget = false;
-
     private SmartData<Double> yKP = new SmartData<Double>("Y KP", .05);
 
     private final PIDController yController = new PIDController(yKP.get(), 0, 0);
@@ -54,9 +48,7 @@ public class AlignPiece extends CommandBase {
 
     @Override
     public void initialize() {
-        limelight.setPipeline(3);
-                // DriverStation.getAlliance() == Alliance.Blue ? Pipelines.BLUE_CUBE.index
-                //                 : Pipelines.BLUE_CUBE.index);
+        limelight.setPipeline(Pipelines.CUBE.index);
 
         getError();
 
@@ -111,6 +103,7 @@ public class AlignPiece extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         System.out.println("hello");
+        limelight.setPipeline(Pipelines.APRILTAG.index);
     }
 
     @Override
