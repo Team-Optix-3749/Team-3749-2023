@@ -45,8 +45,8 @@ public class AlignApriltag extends CommandBase {
     private final ProfiledPIDController turnController = new ProfiledPIDController(
             0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.4); // 2.3
-    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 2.7); // 2.6
+    private SmartData<Double> driveKP = new SmartData<Double>("Driving KP", 2.0); // 2.3
+    private SmartData<Double> turnKP = new SmartData<Double>("Turning KP", 1.5); // 2.6
 
     private SmartData<Double> driveTolerance = new SmartData<Double>("Driving tolerance", 0.0); // 0.075
     private SmartData<Double> turnTolerance = new SmartData<Double>("Turning tolerance", 0.0); // 0.1
@@ -113,11 +113,14 @@ public class AlignApriltag extends CommandBase {
         updateGoalPose();
 
         limelight.setPipeline(0);
+        driveController.setTolerance(0.1);
         turnController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override
     public void execute() {
+        System.out.println(atGoal());
+
         limelight.updatePoseAprilTags(swerve.getPoseEstimator());
         if (goalPose == null) {
             updateGoalPose();
@@ -168,6 +171,7 @@ public class AlignApriltag extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("END END END");
         swerve.stop();
     }
 
