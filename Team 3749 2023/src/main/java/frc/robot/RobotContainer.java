@@ -6,8 +6,6 @@ import java.io.IOException;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -21,6 +19,7 @@ import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.AutoConstants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 public class RobotContainer {
@@ -37,23 +36,22 @@ public class RobotContainer {
     private final JoystickIO joystickIO = new JoystickIO(pilot, operator, swerve, limelight, leds, armIntake,
             arm, armTrajectories);
 
-    Command bottomTwoPiece = AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
-    Command topTwoPiece = AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
-    Command bottomTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight,
-            leds);
-    Command topTwoPieceCharge = AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight,
-            leds);
-    Command middleCharge = AutoCommands.getMiddleCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
-    Command apriltagAlign = AutoCommands.getAprilTagAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
-
-    SendableChooser<Command> autoChooser = new SendableChooser<>();
-
     public RobotContainer() {
         DriverStation.silenceJoystickConnectionWarning(true);
         DriverStation.removeRefreshedDataEventHandle(44000);
 
         configureButtonBindings();
         configureAuto();
+        
+        AutoConstants.autoChooser.addOption("Top Two Piece", AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        AutoConstants.autoChooser.addOption("Top Two Piece Charge", AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        AutoConstants.autoChooser.addOption("Bottom Two Piece", AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        AutoConstants.autoChooser.addOption("Bottom Two Piece Charge", AutoCommands.getBottomTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        AutoConstants.autoChooser.addOption("Bottom Two Piece", AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        AutoConstants.autoChooser.addOption("Middle Charge", AutoCommands.getMiddleCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        AutoConstants.autoChooser.addOption("One Piece", AutoCommands.get1Piece(swerve, arm, armTrajectories, armIntake, limelight, leds));
+
+        AutoConstants.autoChooser.setDefaultOption("Top Two Piece", AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds)   );
 
         DataLogManager.logNetworkTables(true);
         DriverStation.startDataLog(DataLogManager.getLog(), true);
@@ -67,14 +65,8 @@ public class RobotContainer {
 
         RobotController.setBrownoutVoltage(7.0);
 
-        autoChooser.setDefaultOption("Top two piece charge", topTwoPieceCharge);
-        autoChooser.addOption("Top Two PIece", topTwoPiece);
-        autoChooser.addOption("Middle Charge", middleCharge);
-        autoChooser.addOption("Bottom Two Piece", bottomTwoPiece);
-        autoChooser.addOption("Bottom Two Piece Charge", bottomTwoPieceCharge);
-        autoChooser.addOption("Apriltag Align", apriltagAlign);
+        ShuffleData.put("Swerve", AutoConstants.autoChooser);
 
-        SmartDashboard.putData(autoChooser);
     }
 
     /**
@@ -96,7 +88,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+        return AutoConstants.autoChooser.getSelected();
     }
 
     /**

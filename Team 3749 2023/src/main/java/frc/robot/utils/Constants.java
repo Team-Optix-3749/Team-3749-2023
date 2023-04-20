@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Constants {
@@ -238,6 +239,8 @@ public class Constants {
 
     public static final class AutoConstants {
         public static final Map<String, Command> eventMap = new HashMap<>();
+
+        public static final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
         public static enum TopBottom {
             TOP,

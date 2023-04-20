@@ -6,6 +6,7 @@ import java.util.Map;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
@@ -82,7 +83,13 @@ public class ShuffleData<T> {
         entry.setValue(val);
     }
 
-    public static void put() {
-        
+    public static void put(String tabName, Sendable sendableData) {
+        ShuffleboardTab tab = Shuffleboard.getTab(tabName);
+        tab.add(sendableData);
+    }
+
+    public static void put(String tabName, String key, Object data) {
+        ShuffleboardTab tab = Shuffleboard.getTab(tabName);
+        tab.add(key, data);
     }
 }
