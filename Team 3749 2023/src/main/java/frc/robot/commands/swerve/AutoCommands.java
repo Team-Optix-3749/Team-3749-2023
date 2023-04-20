@@ -287,7 +287,7 @@ public final class AutoCommands {
                 new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STOW, false));
     }
 
-    public static Command get1Piece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
+    public static Command getOnePiece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
             ArmIntake armIntake,
             Limelight limelight,
             LEDs leds) {

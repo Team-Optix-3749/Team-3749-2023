@@ -49,9 +49,10 @@ public class RobotContainer {
         AutoConstants.autoChooser.addOption("Bottom Two Piece Charge", AutoCommands.getBottomTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
         AutoConstants.autoChooser.addOption("Bottom Two Piece", AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
         AutoConstants.autoChooser.addOption("Middle Charge", AutoCommands.getMiddleCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
-        AutoConstants.autoChooser.addOption("One Piece", AutoCommands.get1Piece(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        AutoConstants.autoChooser.addOption("One Piece", AutoCommands.getOnePiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        // AutoConstants.autoChooser.addOption("PRINT", new PrintCommand("ALIHFALSDGFHASGDJFH"));
 
-        AutoConstants.autoChooser.setDefaultOption("Top Two Piece", AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds)   );
+        AutoConstants.autoChooser.setDefaultOption("One Piece", AutoCommands.getOnePiece(swerve, arm, armTrajectories, armIntake, limelight, leds)   );
 
         DataLogManager.logNetworkTables(true);
         DriverStation.startDataLog(DataLogManager.getLog(), true);
@@ -88,6 +89,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
+        // return AutoCommands.getTopTwoPieceCharge
         return AutoConstants.autoChooser.getSelected();
     }
 

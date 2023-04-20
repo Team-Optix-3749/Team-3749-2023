@@ -152,7 +152,6 @@ public class JoystickIO {
             swerve.resetGyro();
         }, swerve));
 
-        pilot.backWhileHeld(new AlignPiece(swerve, limelight));
 
         // swerve rotation cardinals
         pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
