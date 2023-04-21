@@ -146,7 +146,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(arm, armTrajectories, armIntake, leds),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(1.25),
+                new AlignPiece(swerve, limelight).withTimeout(2),
                 Commands.runOnce(() -> swerve.resetOdometry(midPose)),
                 path_2,
                 new AlignApriltag(swerve, limelight).withTimeout(1.2),
