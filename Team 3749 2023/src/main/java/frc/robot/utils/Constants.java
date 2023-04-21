@@ -128,7 +128,7 @@ public class Constants {
             DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
             SINGLE_SUBSTATION(new Translation2d(0.5, 0.5)), // NOT REAL
             // GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
-            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.115)),
+            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.135)), // 1.19, -0.115
 
             PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));
