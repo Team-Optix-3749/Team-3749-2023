@@ -96,12 +96,12 @@ public class Constants {
         public static final int right_shoulder_id = 16;
         public static final int left_elbow_id = 17;
         public static final int right_elbow_id = 18;
-
+        
         // (angle without offset - desired angle) / 360
-        public static final double shoulder_offset = (64-90) / 360.0;
+        public static final double shoulder_offset = (122-90) / 360.0;
 
         // just the angle offset in degrees
-        public static final double elbow_offset = 41.0;
+        public static final double elbow_offset = 47;
 
         public static final double shoulder_min_angle = 30;
         public static final double shoulder_max_angle = 140;
@@ -120,7 +120,7 @@ public class Constants {
                 0.0);
 
         public static enum ArmSetpoints {
-            STOW(new Translation2d(0.43, -0.2)),
+            STOW(new Translation2d(0.405, -0.2)),
             // CUBE_STOW(new Translation2d(0.381, 0.0348)),  LEGAL
             CUBE_STOW(new Translation2d(0.45, 0.1)),
             STING(new Translation2d(0.65, 0.7)),
@@ -128,7 +128,7 @@ public class Constants {
             DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
             SINGLE_SUBSTATION(new Translation2d(0.5, 0.5)), // NOT REAL
             // GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
-            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.135)), // 1.19, -0.115
+            GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.13)), // 1.19, -0.115
 
             PLACE_TOP(new Translation2d(1.215, 1.05)),
             PLACE_MID(new Translation2d(0.85, 0.73));

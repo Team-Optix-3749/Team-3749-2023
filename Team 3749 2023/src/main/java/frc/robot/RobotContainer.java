@@ -48,7 +48,7 @@ public class RobotContainer {
         AutoConstants.autoChooser.addOption("Bottom Two Piece", AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
         AutoConstants.autoChooser.addOption("Bottom Two Piece Charge", AutoCommands.getBottomTwoPieceCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
         AutoConstants.autoChooser.addOption("Bottom Two Piece", AutoCommands.getBottomTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
-        AutoConstants.autoChooser.addOption("Middle Right Charge", AutoCommands.getMiddleRightCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
+        // AutoConstants.autoChooser.addOption("Middle Right Charge", AutoCommands.getMiddleRightCharge(swerve, arm, armTrajectories, armIntake, limelight, leds));
         AutoConstants.autoChooser.addOption("One Piece", AutoCommands.getOnePiece(swerve, arm, armTrajectories, armIntake, limelight, leds));
         // AutoConstants.autoChooser.addOption("PRINT", new PrintCommand("ALIHFALSDGFHASGDJFH"));
 
@@ -80,7 +80,7 @@ public class RobotContainer {
         // CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
         joystickIO.pilotAndOperatorBindings();
-
+        //hi adrita was here
         joystickIO.setDefaultCommands();
 
     }
@@ -89,7 +89,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getMiddleRightCharge(swerve, arm, armTrajectories, armIntake, limelight, leds);
+        return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
         // return AutoCommands.getPieceAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
         // return AutoConstants.autoChooser.getSelected();
     }

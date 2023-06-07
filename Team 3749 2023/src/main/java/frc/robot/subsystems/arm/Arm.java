@@ -130,6 +130,7 @@ public class Arm extends SubsystemBase {
      */
     public double getShoulderAngle() {
         return (shoulderAbsoluteEncoder.getAbsolutePosition()-Constants.Arm.shoulder_offset) * 360 ;
+        // return (shoulderAbsoluteEncoder.getAbsolutePosition() * 360.0 );
     }
 
     /**
@@ -140,6 +141,8 @@ public class Arm extends SubsystemBase {
     public double getElbowAngle() {
         return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
                 .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees() - Constants.Arm.elbow_offset;
+        // return new Rotation2d(Math.toRadians(elbowAbsoluteEncoder.getAbsolutePosition() * 360 - 180))
+        //     .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees();
     }
 
     /**
