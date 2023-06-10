@@ -30,6 +30,7 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
+import frc.robot.utils.Constants.AutoConstants.TopBottom;
 import frc.robot.utils.Constants.VisionConstants.Piece;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -191,63 +192,64 @@ public final class AutoCommands {
                 new AutoBalancingPID(swerve, goalHeading));
     }
 
-    // public static Command getMiddleLeftCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-    //         ArmIntake armIntake,
-    //         Limelight limelight,
-    //         LEDs leds) {
-    //     List<PathPlannerTrajectory> pathGroup = null;
+    public static Command getMiddleCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
+            ArmIntake armIntake,
+            Limelight limelight,
+            LEDs leds) {
+        List<PathPlannerTrajectory> pathGroup = null;
 
-    //     if (DriverStation.getAlliance() == Alliance.Blue) {
-    //         pathGroup = PathPlanner.loadPathGroup("BLUE - MIDDLE LEFT Charge", new PathConstraints(2, 2));
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            pathGroup = PathPlanner.loadPathGroup("BLUE - MIDDLE CHARGE", new PathConstraints(2, 2));
 
-    //     } else if (DriverStation.getAlliance() == Alliance.Red) {
-    //         pathGroup = PathPlanner.loadPathGroup("RED - MIDDLE LEFT Charge", new PathConstraints(2, 2));
-    //     }
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            pathGroup = PathPlanner.loadPathGroup("RED - MIDDLE Charge", new PathConstraints(2, 2));
+        }
 
-    //     Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
-    //             pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-    //     Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
-    //             pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+                pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+                pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
 
-    //     double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
+        double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
-    //     return new SequentialCommandGroup(
-    //             getPlaceTop(arm, armTrajectories, armIntake, leds),
-    //             Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-    //             path_1,
-    //             new WaitCommand(1.5),
-    //             path_2,
-    //             new AutoBalancingPID(swerve, goalHeading));
-    // }
+        return new SequentialCommandGroup(
+                getPlaceTop(arm, armTrajectories, armIntake, leds),
+                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                path_1,
+                new WaitCommand(1.5),
+                path_2,
+                new AutoBalancingPID(swerve, goalHeading));
+    }
 
-    // public static Command getMiddleRightCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-    //         ArmIntake armIntake,
-    //         Limelight limelight,
-    //         LEDs leds) {
-    //     List<PathPlannerTrajectory> pathGroup = null;
+    public static Command getPlaceTaxi(TopBottom topBottom, Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
+        ArmIntake armIntake,
+        Limelight limelight,
+        LEDs leds) {
 
-    //     if (DriverStation.getAlliance() == Alliance.Blue) {
-    //         pathGroup = PathPlanner.loadPathGroup("BLUE - MIDDLE RIGHT Charge", new PathConstraints(2, 2));
+        PathPlannerTrajectory trajectory = null;
 
-    //     } else if (DriverStation.getAlliance() == Alliance.Red) {
-    //         pathGroup = PathPlanner.loadPathGroup("RED - MIDDLE RIGHT Charge", new PathConstraints(2, 2));
-    //     }
+        if (topBottom == TopBottom.BOTTOM) {
+            if (DriverStation.getAlliance() == Alliance.Blue) {
+                trajectory = PathPlanner.loadPath("BLUE - TAXI Bottom", new PathConstraints(3, 3));
+            } else {
+                trajectory = PathPlanner.loadPath("RED - TAXI Bottom", new PathConstraints(3, 3));
+            }
+        } else {
+            if (DriverStation.getAlliance() == Alliance.Blue) {
+                trajectory = PathPlanner.loadPath("BLUE - TAXI Top", new PathConstraints(3, 3));
+            } else {
+                trajectory = PathPlanner.loadPath("RED - TAXI Top", new PathConstraints(3, 3));
+            }
+        }
 
-    //     Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
-    //             pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-    //     Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
-    //             pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
+        Command path = followTrajectoryCommand(trajectory, true, swerve);
 
-    //     double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
-
-    //     return new SequentialCommandGroup(
-    //             getPlaceTop(arm, armTrajectories, armIntake, leds),
-    //             Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-    //             path_1,
-    //             new WaitCommand(1.5),
-    //             path_2,
-    //             new AutoBalancingPID(swerve, goalHeading));
-    // }
+        return new SequentialCommandGroup(
+            getPlaceTop(arm, armTrajectories, armIntake, leds),
+            new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STOW, false),
+            path
+        );
+    }
 
     public static Command getBottomTwoPieceCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
             ArmIntake armIntake,
