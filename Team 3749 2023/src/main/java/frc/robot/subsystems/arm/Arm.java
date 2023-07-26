@@ -23,7 +23,10 @@ import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
 public class Arm extends SubsystemBase {
 
+    public static final ArmTrajectories armTrajectories = new ArmTrajectories();
+
     private final ArmDynamics dynamics = new ArmDynamics();
+
 
     // Shoulder motor
     private final CANSparkMax shoulderMotor = new CANSparkMax(Constants.Arm.right_shoulder_id, MotorType.kBrushless);

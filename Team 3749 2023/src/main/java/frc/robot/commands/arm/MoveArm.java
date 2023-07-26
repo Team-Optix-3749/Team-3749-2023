@@ -8,6 +8,7 @@ import java.io.IOException;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmTrajectories;
 import frc.robot.subsystems.intake.ArmIntake;
@@ -41,22 +42,22 @@ public class MoveArm extends CommandBase {
     private ArmTrajectories armTrajectories;
     private Trajectory[] trajectories;
 
-    public MoveArm(Arm arm, ArmTrajectories armTrajectories, ArmIntake intake, LEDs leds, ArmSetpoints setpoint) {
-        this.arm = arm;
+    public MoveArm(ArmSetpoints setpoint) {
+        this.arm = Robot.arm;
         this.armTrajectories = armTrajectories;
         this.desiredSetpoint = setpoint;
-        this.leds = leds;
+        this.leds = Robot.leds;
         setName(setpoint.toString() + " Trajectory");
         addRequirements(arm);
     }
 
-    public MoveArm(Arm arm, ArmIntake intake, ArmTrajectories armTrajectories, LEDs leds, ArmSetpoints setpoint,
+    public MoveArm(ArmSetpoints setpoint,
             boolean fromAlign) {
-        this.arm = arm;
-        this.armTrajectories = armTrajectories;
+        this.arm = Robot.arm;
+        this.armTrajectories = Arm.armTrajectories;
 
         this.desiredSetpoint = setpoint;
-        this.leds = leds;
+        this.leds = Robot.leds;
         this.fromAlign = fromAlign;
         setName(setpoint.toString() + " Trajectory");
         addRequirements(arm);

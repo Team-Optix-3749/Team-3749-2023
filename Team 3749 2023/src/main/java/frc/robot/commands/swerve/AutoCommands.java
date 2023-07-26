@@ -2,7 +2,7 @@ package frc.robot.commands.swerve;
 
 import java.util.List;
 import java.util.function.Consumer;
-
+import frc.robot.Robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -35,7 +35,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /***
- * @author Noah Simon
+ * @author Noah Sin
  *         A class to return command sequences for auto
  *         Path Planner is used to create sequences, see docs below
  *         {@link} https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage
@@ -82,20 +82,17 @@ public final class AutoCommands {
                 ));
     }
 
-    public static Command getPlaceTop(Arm arm, ArmTrajectories armTrajectories, ArmIntake armIntake, LEDs leds) {
+    public static Command getPlaceTop() {
         return new SequentialCommandGroup(
                 Commands.waitSeconds(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
+                new MoveArm(ArmSetpoints.PLACE_TOP),
                 Commands.waitSeconds(0.35),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.125),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1));
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1));
     }
 
-    public static Command getBottomTwoPiece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
+    public static Command getBottomTwoPiece() {
         List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -104,31 +101,28 @@ public final class AutoCommands {
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             pathGroup = PathPlanner.loadPathGroup("RED - BOTTOM 2 Piece", new PathConstraints(3, 3));
         }
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, Robot.swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, Robot.swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
         Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
         return new SequentialCommandGroup(
                 new PrintCommand(DriverStation.getAlliance().toString() + " bottom two piece"),
-                getPlaceTop(arm, armTrajectories, armIntake, leds),
+                getPlaceTop(),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(1.75),
-                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.75),
+                Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(swerve, limelight).withTimeout(0.9),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(0.9),
+                Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                new MoveArm(ArmSetpoints.STOW));
 
     }
 
-    public static Command getTopTwoPiece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
+    public static Command getTopTwoPiece() {
         List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -137,28 +131,26 @@ public final class AutoCommands {
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             pathGroup = PathPlanner.loadPathGroup("RED - TOP 2 Piece", new PathConstraints(2.5, 2.5));
         }
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, Robot.swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, Robot.swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
         Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
         return new SequentialCommandGroup(
-                getPlaceTop(arm, armTrajectories, armIntake, leds),
+                getPlaceTop(),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(2),
-                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(2),
+                Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(swerve, limelight).withTimeout(1.2),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(1.2),
+                Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                new MoveArm(ArmSetpoints.STOW));
     }
 
-    public static Command getTopTwoPieceCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake, Limelight limelight,
-            LEDs leds) {
+    public static Command getTopTwoPieceCharge() {
         List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -167,92 +159,31 @@ public final class AutoCommands {
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             pathGroup = PathPlanner.loadPathGroup("RED - TOP 2 Piece", new PathConstraints(2, 2));
         }
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, Robot.swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, Robot.swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
+        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, Robot.swerve),
                 pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
 
         Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
         return new SequentialCommandGroup(
-                getPlaceTop(arm, armTrajectories, armIntake, leds),
+                getPlaceTop(),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(1.25),
-                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.25),
+                Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(swerve, limelight).withTimeout(1.2),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(1.2),
+                Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                 path_3,
-                new AutoBalancingPID(swerve, goalHeading));
+                new AutoBalancingPID(Robot.swerve, goalHeading));
     }
 
-    // public static Command getMiddleLeftCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-    //         ArmIntake armIntake,
-    //         Limelight limelight,
-    //         LEDs leds) {
-    //     List<PathPlannerTrajectory> pathGroup = null;
-
-    //     if (DriverStation.getAlliance() == Alliance.Blue) {
-    //         pathGroup = PathPlanner.loadPathGroup("BLUE - MIDDLE LEFT Charge", new PathConstraints(2, 2));
-
-    //     } else if (DriverStation.getAlliance() == Alliance.Red) {
-    //         pathGroup = PathPlanner.loadPathGroup("RED - MIDDLE LEFT Charge", new PathConstraints(2, 2));
-    //     }
-
-    //     Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
-    //             pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-    //     Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
-    //             pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-
-    //     double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
-
-    //     return new SequentialCommandGroup(
-    //             getPlaceTop(arm, armTrajectories, armIntake, leds),
-    //             Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-    //             path_1,
-    //             new WaitCommand(1.5),
-    //             path_2,
-    //             new AutoBalancingPID(swerve, goalHeading));
-    // }
-
-    // public static Command getMiddleRightCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-    //         ArmIntake armIntake,
-    //         Limelight limelight,
-    //         LEDs leds) {
-    //     List<PathPlannerTrajectory> pathGroup = null;
-
-    //     if (DriverStation.getAlliance() == Alliance.Blue) {
-    //         pathGroup = PathPlanner.loadPathGroup("BLUE - MIDDLE RIGHT Charge", new PathConstraints(2, 2));
-
-    //     } else if (DriverStation.getAlliance() == Alliance.Red) {
-    //         pathGroup = PathPlanner.loadPathGroup("RED - MIDDLE RIGHT Charge", new PathConstraints(2, 2));
-    //     }
-
-    //     Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
-    //             pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-    //     Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
-    //             pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-
-    //     double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 180 : 0;
-
-    //     return new SequentialCommandGroup(
-    //             getPlaceTop(arm, armTrajectories, armIntake, leds),
-    //             Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-    //             path_1,
-    //             new WaitCommand(1.5),
-    //             path_2,
-    //             new AutoBalancingPID(swerve, goalHeading));
-    // }
-
-    public static Command getBottomTwoPieceCharge(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
+    public static Command getBottomTwoPieceCharge() {
         List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -261,34 +192,32 @@ public final class AutoCommands {
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             pathGroup = PathPlanner.loadPathGroup("RED - BOTTOM 2 Piece", new PathConstraints(3, 3));
         }
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, Robot.swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, Robot.swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
 
-        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
+        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, Robot.swerve),
                 pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
 
         Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
         double goalHeading = DriverStation.getAlliance() == Alliance.Blue ? 0 : 180;
         return new SequentialCommandGroup(
-                getPlaceTop(arm, armTrajectories, armIntake, leds),
+                getPlaceTop(),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(2),
-                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(2),
+                Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(swerve, limelight).withTimeout(0.95),
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(0.95),
+                Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
                 path_3,
-                new AutoBalancingPID(swerve, goalHeading));
+                new AutoBalancingPID(Robot.swerve, goalHeading));
     }
 
-    public static Command getTopThreePiece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake, Limelight limelight,
-            LEDs leds) {
+    public static Command getTopThreePiece() {
         List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -297,55 +226,46 @@ public final class AutoCommands {
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             pathGroup = PathPlanner.loadPathGroup("RED - TOP 3 Piece", new PathConstraints(3, 3));
         }
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, Robot.swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, Robot.swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, swerve),
+        Command path_3 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(2), false, Robot.swerve),
                 pathGroup.get(2).getMarkers(), Constants.AutoConstants.eventMap);
 
         Pose2d midPose1 = pathGroup.get(1).getInitialHolonomicPose();
         Pose2d midPose2 = pathGroup.get(2).getInitialHolonomicPose();
 
         return new SequentialCommandGroup(
-                getPlaceTop(arm, armTrajectories, armIntake, leds),
+                getPlaceTop(),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(1.25),
-                Commands.runOnce(() -> swerve.resetOdometry(midPose1)),
+                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.25),
+                Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose1)),
                 path_2,
-                new AlignPiece(swerve, limelight).withTimeout(1.25),
-                Commands.runOnce(() -> swerve.resetOdometry(midPose2)),
+                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.25),
+                Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose2)),
                 path_3,
 
-                Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+                Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
-                new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STOW, false));
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
+                new MoveArm(ArmSetpoints.STOW, false));
     }
 
-    public static Command getOnePiece(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
+    public static Command getOnePiece() {
 
         return new SequentialCommandGroup(
-                getPlaceTop(arm, armTrajectories, armIntake, leds),
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
-                new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STOW));
+                getPlaceTop(),
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                new MoveArm(ArmSetpoints.STOW));
     }
 
-    public static Command getAprilTagAlign(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
+    public static Command getAprilTagAlign() {
         return new SequentialCommandGroup(
-                getPlaceTop(arm, armTrajectories, armIntake, leds));
+                getPlaceTop());
     }
 
-    public static Command getPieceAlign(Swerve swerve, Arm arm, ArmTrajectories armTrajectories,
-            ArmIntake armIntake,
-            Limelight limelight,
-            LEDs leds) {
+    public static Command getPieceAlign() {
         List<PathPlannerTrajectory> pathGroup = null;
 
         if (DriverStation.getAlliance() == Alliance.Blue) {
@@ -354,18 +274,18 @@ public final class AutoCommands {
         } else if (DriverStation.getAlliance() == Alliance.Red) {
             pathGroup = PathPlanner.loadPathGroup("RED - Align Piece Test", new PathConstraints(1, 1));
         }
-        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, swerve),
+        Command path_1 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(0), true, Robot.swerve),
                 pathGroup.get(0).getMarkers(), Constants.AutoConstants.eventMap);
-        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, swerve),
+        Command path_2 = new FollowPathWithEvents(followTrajectoryCommand(pathGroup.get(1), false, Robot.swerve),
                 pathGroup.get(1).getMarkers(), Constants.AutoConstants.eventMap);
 
         Pose2d midPose = pathGroup.get(1).getInitialHolonomicPose();
 
         return new SequentialCommandGroup(
-                Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
+                Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
-                new AlignPiece(swerve, limelight).withTimeout(15),
-                Commands.runOnce(() -> swerve.resetOdometry(midPose)),
+                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(15),
+                Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
 
                 path_2);
     }
