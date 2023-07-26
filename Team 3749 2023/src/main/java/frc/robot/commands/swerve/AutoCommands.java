@@ -111,10 +111,10 @@ public final class AutoCommands {
                 new PrintCommand(DriverStation.getAlliance().toString() + " bottom two piece"),
                 getPlaceTop(),
                 path_1,
-                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.75),
+                new AlignPiece().withTimeout(1.75),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(0.9),
+                new AlignApriltag().withTimeout(0.9),
                 Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
                 Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
@@ -140,10 +140,10 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(),
                 path_1,
-                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(2),
+                new AlignPiece().withTimeout(2),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(1.2),
+                new AlignApriltag().withTimeout(1.2),
                 Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
                 Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
@@ -172,10 +172,10 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(),
                 path_1,
-                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.25),
+                new AlignPiece().withTimeout(1.25),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(1.2),
+                new AlignApriltag().withTimeout(1.2),
                 Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
                 Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
@@ -206,10 +206,10 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(),
                 path_1,
-                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(2),
+                new AlignPiece().withTimeout(2),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag(Robot.swerve, Robot.limelight).withTimeout(0.95),
+                new AlignApriltag().withTimeout(0.95),
                 Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
                 Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
@@ -239,10 +239,10 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(),
                 path_1,
-                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.25),
+                new AlignPiece().withTimeout(1.25),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose1)),
                 path_2,
-                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(1.25),
+                new AlignPiece().withTimeout(1.25),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose2)),
                 path_3,
 
@@ -284,7 +284,7 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)).withTimeout(0.1),
                 path_1,
-                new AlignPiece(Robot.swerve, Robot.limelight).withTimeout(15),
+                new AlignPiece().withTimeout(15),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
 
                 path_2);

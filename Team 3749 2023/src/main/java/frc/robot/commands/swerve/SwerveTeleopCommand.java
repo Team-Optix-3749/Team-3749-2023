@@ -6,6 +6,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.OIConstants;
@@ -23,9 +24,9 @@ public class SwerveTeleopCommand extends CommandBase {
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-    public SwerveTeleopCommand(Swerve swerve,
+    public SwerveTeleopCommand(
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction) {
-        this.swerve = swerve;
+        this.swerve = Robot.swerve;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;

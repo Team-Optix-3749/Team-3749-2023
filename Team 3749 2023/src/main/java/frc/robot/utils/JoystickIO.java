@@ -133,15 +133,15 @@ public class JoystickIO {
                 .onTrue(new ParallelCommandGroup(
                         new MoveArm(ArmSetpoints.STING, true),
 
-                        new AlignApriltag(swerve, limelight).withTimeout(2)));
+                        new AlignApriltag().withTimeout(2)));
         pilot.x()
                 .onTrue(new ParallelCommandGroup(
                         new MoveArm(ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight, true).withTimeout(2)));
+                        new AlignApriltag(true).withTimeout(2)));
         pilot.b()
                 .onTrue(new ParallelCommandGroup(
                         new MoveArm(ArmSetpoints.STING, true),
-                        new AlignApriltag(swerve, limelight, false).withTimeout(2)));
+                        new AlignApriltag(false).withTimeout(2)));
 
         pilot.yWhileHeld(() -> swerve.toggleSpeed());
 
@@ -166,7 +166,7 @@ public class JoystickIO {
      */
     public void pilotBindings() {
         // arm setpoints (buttons)
-        // pilot.bWhileHeld(new AlignApriltag(swerve, limelight, false));
+        // pilot.bWhileHeld(new AlignApriltag(false));
         pilot.a().onTrue(new MoveArm(ArmSetpoints.PLACE_TOP));
         pilot.b().onTrue(new MoveArm(ArmSetpoints.PLACE_MID));
         pilot.x().onTrue(new MoveArm(ArmSetpoints.GROUND_INTAKE_CUBE));
@@ -221,7 +221,7 @@ public class JoystickIO {
         CommandBase outakeArmIntake = Commands
                 .run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage), armIntake);
         outakeArmIntake.setName("Arm Outake");
-        CommandBase intakeArmIntake = Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+        CommandBase intakeArmIntake = Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
                 armIntake);
         intakeArmIntake.setName("Arm Intake");
 
@@ -234,7 +234,7 @@ public class JoystickIO {
      */
     public void setDefaultCommands() {
         swerve.setDefaultCommand(new SwerveTeleopCommand(
-                swerve,
+
                 () -> -pilot.getLeftY(),
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
@@ -243,7 +243,7 @@ public class JoystickIO {
                 Commands.run(
                         () -> {
                             limelight.setPipeline(Pipelines.APRILTAG.index);
-                            limelight.updatePoseAprilTags(swerve.getPoseEstimator());
+                            limelight.updatePoseAprilTags(Robot.swerve.getPoseEstimator());
                         }, limelight));
     }
 }

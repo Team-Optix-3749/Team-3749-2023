@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 
@@ -64,9 +65,9 @@ public class AlignApriltag extends CommandBase {
      * @param left      True if to set the goal pose to the cone node left of the
      *                  AprilTag
      */
-    public AlignApriltag(Swerve swerve, Limelight limelight, boolean left) {
-        this.swerve = swerve;
-        this.limelight = limelight;
+    public AlignApriltag(boolean left) {
+        this.swerve = Robot.swerve;
+        this.limelight = Robot.limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
 
         double x = 0.75;
@@ -95,9 +96,9 @@ public class AlignApriltag extends CommandBase {
      * @param swerve
      * @param limelight
      */
-    public AlignApriltag(Swerve swerve, Limelight limelight) {
-        this.swerve = swerve;
-        this.limelight = limelight;
+    public AlignApriltag() {
+        this.swerve = Robot.swerve;
+        this.limelight = Robot.limelight;
         this.aprilTagFieldLayout = limelight.getAprilTagFieldLayout();
         double x = 0.75;
 

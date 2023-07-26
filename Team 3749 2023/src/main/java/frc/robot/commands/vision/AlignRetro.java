@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
@@ -39,9 +40,9 @@ public class AlignRetro extends CommandBase {
     private final PIDController yController = new PIDController(0.0, 0, 0);
     private final PIDController turnController = new PIDController(2.6, 0, 0);
 
-    public AlignRetro(Swerve swerve, Limelight limelight, Node node) {
-        this.swerve = swerve;
-        this.limelight = limelight;
+    public AlignRetro(Node node) {
+        this.swerve = Robot.swerve;
+        this.limelight = Robot.limelight;
         this.node = node;
         this.setName("Vision Align");
         setpoint = node == Node.TOP_CONE ? new Translation2d(1.3, 0.1) : new Translation2d(1.3, 0.1);

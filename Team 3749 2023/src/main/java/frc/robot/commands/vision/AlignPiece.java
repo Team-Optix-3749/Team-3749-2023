@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
@@ -39,9 +40,9 @@ public class AlignPiece extends CommandBase {
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
             2.7, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
 
-    public AlignPiece(Swerve swerve, Limelight limelight) {
-        this.swerve = swerve;
-        this.limelight = limelight;
+    public AlignPiece() {
+        this.swerve = Robot.swerve;
+        this.limelight = Robot.limelight;
         this.setName("Piece Align");
         addRequirements(swerve, limelight);
     }
