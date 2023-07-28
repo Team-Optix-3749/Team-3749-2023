@@ -51,6 +51,13 @@ public class Constants {
         return false;
     }
 
+    public static enum RobotType {
+        VIPER,
+        SIM
+      }
+    
+    public static final RobotType ROBOT_TYPE = RobotType.VIPER;
+
     public static final class ArmIntake {
         public static final int arm_intake_id = 22;
         public static final double idleVoltage = 1;

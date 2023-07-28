@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.swerve.SwerveModule.ModuleData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
@@ -39,6 +40,7 @@ import frc.robot.utils.Constants.DriveConstants;
  */
 public class Swerve extends SubsystemBase {
     private SwerveModule[] modules = new SwerveModule[4];
+    private ModuleData[] moduleData = new ModuleData[4];
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     // equivilant to a odometer, but also intakes vision
@@ -66,20 +68,15 @@ public class Swerve extends SubsystemBase {
         }).start();
 
         for (int i = 0; i < 4; i++){
-            modules[i] = new SwerveModule(DriveConstants.diveMotorPorts[i], 
-            DriveConstants.turningMotorPorts[i], 
-            DriveConstants.driveAbsoluteEncoderReversed[i], 
-            DriveConstants.turningEncoderReversed[i],
-            DriveConstants.absoluteEncoderPorts[i],
-            DriveConstants.driveAbsoluteEncoderOffsetDeg[i],
-            DriveConstants.driveAbsoluteEncoderReversed[i]);
-            
+            modules[i] = new SwerveModuleSparkMax(i);
+            moduleData[i] = new ModuleData();
         }
+    
 
         swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
                 new Rotation2d(0),
-                new SwerveModulePosition[] { modules[0].getPosition(),  modules[1].getPosition(),  modules[2].getPosition(),
-                    modules[3].getPosition() },
+                new SwerveModulePosition[] { moduleData[0].position,  moduleData[1].position,  moduleData[2].position,
+                    moduleData[3].position },
                 new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
         // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
@@ -151,8 +148,8 @@ public class Swerve extends SubsystemBase {
                 : getRotation2d();
 
         swerveDrivePoseEstimator.resetPosition(rotation,
-                new SwerveModulePosition[] {  modules[0].getPosition(),  modules[1].getPosition(),  modules[2].getPosition(),
-                    modules[3].getPosition() },
+                new SwerveModulePosition[] {  moduleData[0].position,  moduleData[1].position,  moduleData[2].position,
+                    moduleData[3].position },
                 pose);
     }
 
@@ -161,8 +158,8 @@ public class Swerve extends SubsystemBase {
                 ? (flipGyro ? getAutoRotation2d() : getRotation2d())
                 : getRotation2d();
         swerveDrivePoseEstimator.update(rotation,
-                new SwerveModulePosition[] {  modules[0].getPosition(),  modules[1].getPosition(),  modules[2].getPosition(),
-                    modules[3].getPosition() });
+                new SwerveModulePosition[] {  moduleData[0].position,  moduleData[1].position,  moduleData[2].position,
+                    moduleData[3].position });
 
     }
 
@@ -223,7 +220,6 @@ public class Swerve extends SubsystemBase {
         // negative so that we move towards the target, not away
         double turning_speed = -turnController.calculate(getHeading(), angle);
         turning_speed = turningLimiter.calculate(turning_speed);
-        // signs the speed so we move in the correct direction
         // turning_speed = Math.abs(turning_speed) * Math.signum(getHeading());
 
         // 4. Construct desired chassis speeds
@@ -268,24 +264,24 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumberArray("Odometry",
         new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
         double[] realStates = { 
-            modules[0].getAbsoluteEncoderRad(),
-            modules[0].getDriveVelocity(),
-            modules[1].getAbsoluteEncoderRad(),
-            modules[1].getDriveVelocity(),
-            modules[2].getAbsoluteEncoderRad(),
-            modules[2].getDriveVelocity(),
-            modules[3].getAbsoluteEncoderRad(),
-            modules[3].getDriveVelocity()};
+            moduleData[0].turnAbsolutePositionRad,
+            moduleData[0].driveVelocityMPerSec,
+            moduleData[1].turnAbsolutePositionRad,
+            moduleData[1].driveVelocityMPerSec,
+            moduleData[2].turnAbsolutePositionRad,
+            moduleData[2].driveVelocityMPerSec,
+            moduleData[3].turnAbsolutePositionRad,
+            moduleData[3].driveVelocityMPerSec};
         
         double[] theoreticalStates = {
-                modules[0].getTheoreticalState().angle.getDegrees(),
-                modules[0].getTheoreticalState().speedMetersPerSecond,
-                modules[1].getTheoreticalState().angle.getDegrees(),
-                modules[1].getTheoreticalState().speedMetersPerSecond,
-                modules[2].getTheoreticalState().angle.getDegrees(),
-                modules[2].getTheoreticalState().speedMetersPerSecond,
-                modules[3].getTheoreticalState().angle.getDegrees(),
-                modules[3].getTheoreticalState().speedMetersPerSecond,
+                moduleData[0].theoreticalState.angle.getDegrees(),
+                moduleData[0].theoreticalState.speedMetersPerSecond,
+                moduleData[1].theoreticalState.angle.getDegrees(),
+                moduleData[1].theoreticalState.speedMetersPerSecond,
+                moduleData[2].theoreticalState.angle.getDegrees(),
+                moduleData[2].theoreticalState.speedMetersPerSecond,
+                moduleData[3].theoreticalState.angle.getDegrees(),
+                moduleData[3].theoreticalState.speedMetersPerSecond,
             };
             SmartDashboard.putNumberArray("Theoretical States", theoreticalStates);
 

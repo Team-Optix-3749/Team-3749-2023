@@ -1,147 +1,44 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2023 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.ModuleConstants;
+public interface SwerveModule {
+  public static class ModuleData {
+    public SwerveModulePosition position = new SwerveModulePosition();
+    public SwerveModuleState theoreticalState = new SwerveModuleState();
+    public double drivePositionM = 0.0;
+    public double driveVelocityMPerSec = 0.0;
+    public double driveCurrentAmps = 0.0;
+    public double driveTempCelcius = 0.0;
 
-/***
- * @author Noah Simon
- * @author Raadwan Masum
- * @author Rohin Sood
- * @author Harkirat 
- * 
- *         Object to manage each individual swerve module, including a drive
- *         motor, a turning motor, a drive encoder, and an Absolute CanCoder
- * 
- */
-public class SwerveModule {
-    private final CANSparkMax driveMotor;
-    private final CANSparkMax turningMotor;
+    public double turnAbsolutePositionRad = 0.0;
+    public double turnPositionRad = 0.0;
+    public double turnVelocityRadPerSec = 0.0;
+    public double turnCurrentAmps = 0.0;
+    public double turnTempCelcius = 0.0;
+  }
 
-    private final RelativeEncoder driveEncoder;
-    private final RelativeEncoder turningEncoder;
+  /** Updates the set of loggable inputs. */
+  public default void updateData(ModuleData data) {}
 
-    private final PIDController turningPidController;
-    private final CANCoder absoluteEncoder;
-    private final boolean absoluteEncoderReversed;
-
-    private SwerveModuleState theoreticalState = new SwerveModuleState();
+  /** Run the drive motor at the specified voltage. */
+  public default void setDesiredState(SwerveModuleState state) {}
 
 
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+  /** Run the turn motor at the specified voltage. */
+  public default void stop() {}
 
-        this.absoluteEncoderReversed = absoluteEncoderReversed;
-        absoluteEncoder = new CANCoder(absoluteEncoderId);
-        absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-        absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
+  /** Enable or disable brake mode on the drive motor. */
+  public default void setDriveBrakeMode(boolean enable) {}
 
-        driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
-        turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
-
-        driveMotor.setInverted(driveMotorReversed);
-        turningMotor.setInverted(turningMotorReversed);
-
-        turningMotor.setIdleMode(IdleMode.kBrake);        
-        driveMotor.setIdleMode(IdleMode.kBrake);                
-
-        driveEncoder = driveMotor.getEncoder();
-        turningEncoder = turningMotor.getEncoder();
-
-        driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
-        driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
-        turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
-        driveMotor.setSmartCurrentLimit(35, 60);
-        turningMotor.setSmartCurrentLimit(35, 60);
-
-        turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
-        turningPidController.enableContinuousInput(-Math.PI, Math.PI);
-
-        resetEncoders();
-    }
-
-    public double getDrivePosition() {
-        return driveEncoder.getPosition();
-    }
-
-    public double getTurningPosition() {
-        return turningEncoder.getPosition();
-    }
-
-    public double getDriveVelocity() {
-        return driveEncoder.getVelocity();
-    }
-
-    public double getTurningVelocity() {
-        return turningEncoder.getVelocity();
-    }
-
-    public double getAbsoluteEncoderRad() {
-        // double angle = absoluteEncoder.getBusVoltage() /
-        // RobotController.getVoltage5V();
-        // angle *= 2.0 * Math.PI;
-        // angle -= absoluteEncoderOffsetRad;
-        // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
-
-        return ((absoluteEncoder.getAbsolutePosition() / 180 * Math.PI)) * (absoluteEncoderReversed ? -1.0 : 1.0);
-    }
-
-    public void resetEncoders() {
-        driveEncoder.setPosition(0);
-        turningEncoder.setPosition(getAbsoluteEncoderRad());
-    }
-
-    public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
-    }
-    public SwerveModuleState getTheoreticalState() {
-        return new SwerveModuleState(theoreticalState.speedMetersPerSecond, theoreticalState.angle);
-    }
-    public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
-    }
-
-    public void setDesiredState(SwerveModuleState state) {
-        theoreticalState = state;
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
-            return;
-        }
-        state = SwerveModuleState.optimize(state, getState().angle);
-        double drive_speed = state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
-
-        double turning_speed = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians());
-
-        driveMotor.set(drive_speed);
-        turningMotor.set(turning_speed);
-    }
-
-    public void stop() {
-        driveMotor.set(0);
-        turningMotor.set(0);
-    }
-
-    // Turn to the set degree amount, -180 to 180
-    public void turnToDegrees(double angleDegrees) {
-        double angleRad = Units.degreesToRadians(angleDegrees);
-        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), angleRad));
-
-    }
-
+  /** Enable or disable brake mode on the turn motor. */
+  public default void setTurnBrakeMode(boolean enable) {}
 }
