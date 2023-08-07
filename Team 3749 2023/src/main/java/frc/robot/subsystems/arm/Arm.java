@@ -7,6 +7,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -55,6 +58,12 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> elbowPID = new ShuffleData<Double>("Arm", "Elbow FF Output", 0.0);
     private ShuffleData<Double> elbowAngle = new ShuffleData<Double>("Arm", "Elbow Angle", 0.0);
 
+    private Mechanism2d armMechanism = new Mechanism2d((Constants.Arm.elbow_length + Constants.Arm.shoulder_length) * 2, (Constants.Arm.elbow_length + Constants.Arm.shoulder_length) * 2);
+    private MechanismRoot2d armMechanismRoot = armMechanism.getRoot("Shoulder Pivot", Constants.Arm.elbow_length + Constants.Arm.shoulder_length, Constants.Arm.elbow_length + Constants.Arm.shoulder_length);
+    private MechanismLigament2d shoulderLigament;
+    private MechanismLigament2d elbowLigament;
+
+
     private boolean kill = false;
 
     public Arm() {
@@ -76,6 +85,9 @@ public class Arm extends SubsystemBase {
         elbowMotor.setSmartCurrentLimit(35, 60);
 
         setIdleMode(IdleMode.kCoast);
+        shoulderLigament = armMechanismRoot.append(new MechanismLigament2d("Shoulder", Constants.Arm.shoulder_length, getShoulderAngle()));
+        elbowLigament = armMechanismRoot.append(new MechanismLigament2d("Elbow", Constants.Arm.shoulder_length, getElbowAngle()));
+
     }
 
     /**
@@ -250,6 +262,8 @@ public class Arm extends SubsystemBase {
         
         shoulderAngle.set(getShoulderAngle());
         elbowAngle.set(getElbowAngle());
+        shoulderLigament.setAngle(getShoulderAngle());
+        elbowLigament.setAngle(getElbowAngle());
 
         armCacheX.set(position.getX());
         armCacheY.set(position.getY());

@@ -172,7 +172,6 @@ public class Swerve extends SubsystemBase {
             module.stop();
         }
     }
-
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         if (flipGyro && !DriverStation.isAutonomous()) {
             for (int i = 0; i < 4; i++) {
@@ -184,11 +183,7 @@ public class Swerve extends SubsystemBase {
         for (int i = 0; i<4; i++){
             modules[i].setDesiredState(desiredStates[i]);
         }
-
-
-
     }
-
     /***
      * 
      * @param angle the angle to move at, in degrees, -180 to 180
@@ -261,6 +256,10 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+        for (int i = 0; i < 4; i++){
+            modules[i].updateData(moduleData[i]);
+        }
+
         SmartDashboard.putNumberArray("Odometry",
         new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
         double[] realStates = { 
