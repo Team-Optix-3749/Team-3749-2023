@@ -10,7 +10,7 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-public interface SwerveModuleInterface {
+public interface SwerveModuleIO {
   public static class ModuleData {
     public SwerveModulePosition position = new SwerveModulePosition();
     public SwerveModuleState theoreticalState = new SwerveModuleState();
