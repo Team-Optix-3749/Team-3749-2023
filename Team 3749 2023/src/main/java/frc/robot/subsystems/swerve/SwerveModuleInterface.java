@@ -10,7 +10,7 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-public interface SwerveModule {
+public interface SwerveModuleInterface {
   public static class ModuleData {
     public SwerveModulePosition position = new SwerveModulePosition();
     public SwerveModuleState theoreticalState = new SwerveModuleState();
@@ -40,5 +40,5 @@ public interface SwerveModule {
   public default void setDriveBrakeMode(boolean enable) {}
 
   /** Enable or disable brake mode on the turn motor. */
-  public default void setTurnBrakeMode(boolean enable) {}
+  public default void setTurningBrakeMode(boolean enable) {}
 }

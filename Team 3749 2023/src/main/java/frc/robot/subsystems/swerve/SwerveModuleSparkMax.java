@@ -29,7 +29,7 @@ import frc.robot.utils.Constants.ModuleConstants;
  *         motor, a turning motor, a drive encoder, and an Absolute CanCoder
  * 
  */
-public class SwerveModuleSparkMax implements SwerveModule {
+public class SwerveModuleSparkMax implements SwerveModuleInterface {
     private final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
 
@@ -108,8 +108,8 @@ public class SwerveModuleSparkMax implements SwerveModule {
     }
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
-    }
-
+    }   
+    @Override
     public void setDesiredState(SwerveModuleState state) {
         theoreticalState = state;
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
@@ -124,12 +124,13 @@ public class SwerveModuleSparkMax implements SwerveModule {
         driveMotor.set(drive_speed);
         turningMotor.set(turning_speed);
     }
-
+    
+    @Override
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
     }
-
+    @Override
     public void updateData(ModuleData data){
         data.driveCurrentAmps = driveMotor.getBusVoltage();
         data.drivePositionM = getDrivePosition();
@@ -146,5 +147,25 @@ public class SwerveModuleSparkMax implements SwerveModule {
 
     }
 
+    @Override
+    public void setDriveBrakeMode(boolean enable){
+        if (enable){
+            driveMotor.setIdleMode(IdleMode.kBrake);
+        }
+        else{
+            driveMotor.setIdleMode(IdleMode.kCoast);
+
+        }
+    }
+    @Override
+    public void setTurningBrakeMode(boolean enable){
+        if (enable){
+            turningMotor.setIdleMode(IdleMode.kBrake);
+        }
+        else{
+            turningMotor.setIdleMode(IdleMode.kCoast);
+
+        }
+    }
 
 }

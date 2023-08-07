@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.vision.AlignApriltag;
 import frc.robot.commands.vision.AlignPiece;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmSparkMax;
 import frc.robot.subsystems.arm.ArmTrajectories;
 import frc.robot.subsystems.intake.ArmIntake;
 import frc.robot.subsystems.leds.LEDs;

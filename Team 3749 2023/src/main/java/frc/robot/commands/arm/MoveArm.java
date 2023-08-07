@@ -181,7 +181,7 @@ public class MoveArm extends CommandBase {
                     leds.setLEDPattern(leds.getDefaultColor());
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getTopToStow() };
-                } 
+                }
                 // if at mid, run the node to node
                 else if (currentSetpoint == ArmSetpoints.PLACE_MID) {
                     arm.setCurrentSetpoint(ArmSetpoints.PLACE_TOP);
@@ -369,7 +369,8 @@ public class MoveArm extends CommandBase {
                     return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };
                 } else if (currentSetpoint == ArmSetpoints.GROUND_INTAKE_CUBE) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
-                    return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };}else if (currentSetpoint == ArmSetpoints.STING) {
+                    return new Trajectory[] { armTrajectories.getGroundIntakeCubeToStow() };
+                } else if (currentSetpoint == ArmSetpoints.STING) {
                     arm.setCurrentSetpoint(ArmSetpoints.STOW);
                     return new Trajectory[] { armTrajectories.getStingToStow() };
                 }

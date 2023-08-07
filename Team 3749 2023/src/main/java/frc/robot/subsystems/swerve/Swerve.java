@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.swerve.SwerveModule.ModuleData;
+import frc.robot.subsystems.swerve.SwerveModuleInterface.ModuleData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
@@ -39,7 +39,7 @@ import frc.robot.utils.Constants.DriveConstants;
  *         logging information
  */
 public class Swerve extends SubsystemBase {
-    private SwerveModule[] modules = new SwerveModule[4];
+    private SwerveModuleInterface[] modules = new SwerveModuleInterface[4];
     private ModuleData[] moduleData = new ModuleData[4];
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -168,7 +168,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void stopModules() {
-        for (SwerveModule module : modules){
+        for (SwerveModuleInterface module : modules){
             module.stop();
         }
     }
