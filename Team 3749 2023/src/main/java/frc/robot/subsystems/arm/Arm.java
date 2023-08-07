@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -264,6 +265,8 @@ public class Arm extends SubsystemBase {
         elbowAngle.set(getElbowAngle());
         shoulderLigament.setAngle(getShoulderAngle());
         elbowLigament.setAngle(getElbowAngle());
+
+        SmartDashboard.putData("Arm Mechanism", armMechanism);
 
         armCacheX.set(position.getX());
         armCacheY.set(position.getY());
