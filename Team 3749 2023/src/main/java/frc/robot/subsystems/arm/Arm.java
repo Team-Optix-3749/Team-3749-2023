@@ -121,12 +121,21 @@ public class Arm extends SubsystemBase {
         armIO.updateData(armData);
 
         SmartDashboard.putData("Arm Mechanism", armData.armMechanism);
+        SmartDashboard.putString("Current Setpoint ENUM", armData.currentSetpoint.name());
+        SmartDashboard.putString("Control Theory Setpoint Translation2D ", armData.setpoint.toString());
+        SmartDashboard.putString("Arm Position Translation2d", armData.position.toString());
 
-        SmartDashboard.putNumber("Shoulder angle", armData.shoulderAngle);
-        SmartDashboard.putNumber("elbow angle", armData.elbowAngle);
 
-        SmartDashboard.putNumber("Shoulder voltage", armData.shoulderVoltage);
-        SmartDashboard.putNumber("elbow voltage", armData.elbowVoltage);
+        SmartDashboard.putNumber("Shoulder Angle", armData.shoulderAngle);
+        SmartDashboard.putNumber("Elbow Angle", armData.elbowAngle);
+
+        SmartDashboard.putNumber("Shoulder Voltage", armData.shoulderVoltage);
+        SmartDashboard.putNumber("Elbow Voltage", armData.elbowVoltage);
+
+        SmartDashboard.putNumber("Shoulder Temp", armData.shoulderTemp);
+        SmartDashboard.putNumber("Elbow Temp", armData.elbowTemp);
+
+        SmartDashboard.putBoolean("Killed", armData.kill);
 
         // armCacheX.set(position.getX());
         // armCacheY.set(position.getY());
