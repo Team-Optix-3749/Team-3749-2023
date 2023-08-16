@@ -45,8 +45,6 @@ public interface ArmIO {
     public default void moveArm(Translation2d setpoint, ArmDynamics dynamics) throws Exception {
     }
 
-    public default void setCurrentSetpoint(ArmSetpoints setpoint) {
-    }
 
     public default void setArmBrakeMode(boolean enable) {
     }

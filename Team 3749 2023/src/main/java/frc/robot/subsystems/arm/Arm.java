@@ -76,7 +76,7 @@ public class Arm extends SubsystemBase {
         if (armData.kill){
             return;
         }
-        armIO.setCurrentSetpoint(setpoint);
+        armData.currentSetpoint = setpoint;
     }
 
     public ArmSetpoints getCurrentSetpoint() {
