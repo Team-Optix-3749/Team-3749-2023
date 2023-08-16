@@ -125,13 +125,13 @@ public class Constants {
             CUBE_STOW(new Translation2d(0.45, 0.1)),
             STING(new Translation2d(0.65, 0.7)),
             DOUBLE_SUBSTATION_CUBE(new Translation2d(0.5, 0.9)),
-            DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.83)),
+            DOUBLE_SUBSTATION_CONE(new Translation2d(0.5, 0.73)),
             SINGLE_SUBSTATION(new Translation2d(0.5, 0.5)), // NOT REAL
             // GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.14)),
             GROUND_INTAKE_CUBE(new Translation2d(1.19, -0.13)), // 1.19, -0.115
 
-            PLACE_TOP(new Translation2d(1.215, 1.05)),
-            PLACE_MID(new Translation2d(0.85, 0.73));
+            PLACE_TOP(new Translation2d(1.215, .95)),
+            PLACE_MID(new Translation2d(0.85, 0.63));
 
             public Translation2d translation;
 

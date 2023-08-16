@@ -37,7 +37,7 @@ public class Arm extends SubsystemBase {
 
     // safety stow
     private Translation2d position = new Translation2d(0.3, -0.2);
-    private ArmSetpoints currentSetpoint = ArmSetpoints.STOW;
+    private ArmSetpoints currentSetpoint = ArmSetpoints.STOW;  
 
     private ShuffleData<Double> armCacheX = new ShuffleData<Double>("Arm", "Arm Cache X", 0.0);
     private ShuffleData<Double> armCacheY = new ShuffleData<Double>("Arm", "Arm Cache Y", 0.0);

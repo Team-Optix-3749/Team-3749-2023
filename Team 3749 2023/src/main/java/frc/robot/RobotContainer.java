@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -75,13 +76,14 @@ public class RobotContainer {
      */
     public void configureButtonBindings() {
 
-        // if (!JoystickIO.didJoysticksChange())
-        // return;
-        // CommandScheduler.getInstance().getActiveButtonLoop().clear();
+        if (!JoystickIO.didJoysticksChange())
+        return;
+        CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
-        joystickIO.pilotAndOperatorBindings();
-        //hi adrita was here
-        joystickIO.setDefaultCommands();
+        joystickIO.getButtonBindings();
+        // joystickIO.pilotAndOperatorBindings();
+        // //hi adrita was here
+        // joystickIO.setDefaultCommands();
 
     }
 

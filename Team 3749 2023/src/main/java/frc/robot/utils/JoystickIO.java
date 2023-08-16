@@ -81,6 +81,7 @@ public class JoystickIO {
         } else if (DriverStation.isJoystickConnected(0)) {
             // if only one xbox controller is connected
             pilotBindings();
+            System.out.println("pilot bindings");
 
         } else {
             // if no joysticks are connected (ShuffleBoard buttons)
@@ -187,10 +188,16 @@ public class JoystickIO {
         // Rotation2d(swerve.getHeading()))),
         // swerve);
         // swerve rotation cardinals
-        pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
-        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
-        pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
-        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+        // pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
+        // pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
+        // pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
+        // pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+
+        pilot.startWhileHeld(Commands.runOnce(() -> {
+            swerve.setFlipGyro(false);
+            swerve.resetGyro();
+        }, swerve));
+
     }
 
     /**
