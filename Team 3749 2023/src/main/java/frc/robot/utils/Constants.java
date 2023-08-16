@@ -174,7 +174,7 @@ public class Constants {
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // back left
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // back right
 
-        public static final int[] diveMotorPorts = { 1, 2, 7, 5 }; // FL, FR, BL, BR
+        public static final int[] driveMotorPorts = { 1, 3, 7, 5 }; // FL, FR, BL, BR
         public static final int[] turningMotorPorts = { 2, 4, 8, 6 }; // FL, FR, BL, BR
 
         public static final boolean[] turningEncoderReversed = { false, false, false, false };

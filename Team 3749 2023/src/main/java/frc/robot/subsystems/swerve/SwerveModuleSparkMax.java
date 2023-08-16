@@ -50,7 +50,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         absoluteEncoder.configMagnetOffset(DriveConstants.driveAbsoluteEncoderOffsetDeg[index]);
 
-        driveMotor = new CANSparkMax(DriveConstants.diveMotorPorts[index], MotorType.kBrushless);
+        driveMotor = new CANSparkMax(DriveConstants.driveMotorPorts[index], MotorType.kBrushless);
         turningMotor = new CANSparkMax(DriveConstants.turningMotorPorts[index], MotorType.kBrushless);
 
         driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);

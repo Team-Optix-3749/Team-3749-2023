@@ -27,7 +27,6 @@ public class RobotContainer {
     private final Xbox operator = new Xbox(1);
 
 
-
     private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
 
     public RobotContainer() {

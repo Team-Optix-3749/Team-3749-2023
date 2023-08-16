@@ -18,8 +18,8 @@ public interface ArmIO {
         public MechanismLigament2d shoulderLigament;
         public MechanismLigament2d elbowLigament;
 
-        public Translation2d setpoint = new Translation2d(0.3, -0.2);
-        public Translation2d position = new Translation2d(0.3, -0.2);
+        public Translation2d setpoint = ArmSetpoints.STOW.translation;
+        public Translation2d position = ArmSetpoints.STOW.translation;
         public ArmSetpoints currentSetpoint = ArmSetpoints.STOW;
 
         public double shoulderVoltage = 0.0;

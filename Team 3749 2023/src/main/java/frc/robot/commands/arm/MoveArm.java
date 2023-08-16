@@ -44,7 +44,7 @@ public class MoveArm extends CommandBase {
 
     public MoveArm(ArmSetpoints setpoint) {
         this.arm = Robot.arm;
-        this.armTrajectories = armTrajectories;
+        this.armTrajectories = Arm.armTrajectories;
         this.desiredSetpoint = setpoint;
         this.leds = Robot.leds;
         setName(setpoint.toString() + " Trajectory");

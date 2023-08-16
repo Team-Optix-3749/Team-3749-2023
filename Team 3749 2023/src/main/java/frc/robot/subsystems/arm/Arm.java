@@ -41,7 +41,7 @@ public class Arm extends SubsystemBase {
         armIO.setArmBrakeMode(false);
         armData.shoulderLigament = armData.armMechanismRoot
                 .append(new MechanismLigament2d("Shoulder", Constants.Arm.shoulder_length, getShoulderAngle()));
-        armData.elbowLigament = armData.armMechanismRoot
+        armData.elbowLigament = armData.shoulderLigament
                 .append(new MechanismLigament2d("Elbow", Constants.Arm.shoulder_length, getElbowAngle()));
 
     }
@@ -120,12 +120,13 @@ public class Arm extends SubsystemBase {
 
         armIO.updateData(armData);
 
-        // shoulderAngle.set(getShoulderAngle());
-        // elbowAngle.set(getElbowAngle());
-        // shoulderLigament.setAngle(getShoulderAngle());
-        // elbowLigament.setAngle(getElbowAngle());
+        SmartDashboard.putData("Arm Mechanism", armData.armMechanism);
 
-        // SmartDashboard.putData("Arm Mechanism", armMechanism);
+        SmartDashboard.putNumber("Shoulder angle", armData.shoulderAngle);
+        SmartDashboard.putNumber("elbow angle", armData.elbowAngle);
+
+        SmartDashboard.putNumber("Shoulder voltage", armData.shoulderVoltage);
+        SmartDashboard.putNumber("elbow voltage", armData.elbowVoltage);
 
         // armCacheX.set(position.getX());
         // armCacheY.set(position.getY());
