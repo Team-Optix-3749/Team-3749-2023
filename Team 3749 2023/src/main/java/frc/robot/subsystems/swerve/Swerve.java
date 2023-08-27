@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -42,7 +43,8 @@ public class Swerve extends SubsystemBase {
     private SwerveModuleIO[] modules = new SwerveModuleIO[4];
     private ModuleData[] moduleData = new ModuleData[4];
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private GyroIO gyro;
+    private GyroData gyroData;
     // equivilant to a odometer, but also intakes vision
     private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
@@ -50,29 +52,18 @@ public class Swerve extends SubsystemBase {
     private final SlewRateLimiter turningLimiter = new SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
-    private ShuffleData<Double> robotHeading = new ShuffleData<Double>("Swerve", "Robot Heading", 0.0);
-    private ShuffleData<Double> pitch = new ShuffleData<Double>("Swerve", "Robot Pitch", 0.0);
-    private ShuffleData<Double> robotPoseX = new ShuffleData<Double>("Swerve", "Robot Pose X", 0.0);
-    private ShuffleData<Double> robotPoseY = new ShuffleData<Double>("Swerve", "Robot Pose Y", 0.0);
-
     private boolean flipGyro = true;
 
     public Swerve() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(3000);
-                gyro.reset();
 
-            } catch (Exception e) {
-            }
-        }).start();
+        gyro = new NavX2Gyro();
+        gyroData = new GyroData();
 
         for (int i = 0; i < 4; i++){
             modules[i] = new SwerveModuleSparkMax(i);
             moduleData[i] = new ModuleData();
         }
     
-
         swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
                 new Rotation2d(0),
                 new SwerveModulePosition[] { moduleData[0].position,  moduleData[1].position,  moduleData[2].position,
@@ -80,8 +71,9 @@ public class Swerve extends SubsystemBase {
                 new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
         // swerveDrivePoseEstimator.setVisionMeasurementStdDevs(null);
-        gyro.calibrate();
+        
         turnController.enableContinuousInput(-180, 180);
+        
 
     }
 
@@ -105,18 +97,18 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetGyro() {
-        gyro.reset();
+        gyro.resetGyro();
         System.out.println("RESET");
     }
 
     public double getAutoHeading() {
 
-        return new Rotation2d(Math.toRadians(gyro.getYaw()))
+        return new Rotation2d(Math.toRadians(gyroData.yaw))
                 .rotateBy(new Rotation2d(Math.toRadians(180))).getDegrees();
     }
 
     public double getHeading() {
-        return gyro.getYaw();
+        return gyroData.yaw;
     }
 
     public Rotation2d getAutoRotation2d() {
@@ -230,7 +222,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getVerticalTilt() {
-        return gyro.getPitch();
+        return gyroData.pitch;
     }
 
     public PIDController getTurnController() {
@@ -284,9 +276,9 @@ public class Swerve extends SubsystemBase {
             };
         SmartDashboard.putNumberArray("Theoretical States", theoreticalStates);
         SmartDashboard.putNumberArray("Real Staets", realStates);
-        robotHeading.set(getHeading());
-        pitch.set(getVerticalTilt());
-        robotPoseX.set(getPose().getX());
-        robotPoseY.set(getPose().getY());
+        SmartDashboard.putNumber("Yaw", getHeading());
+        SmartDashboard.putNumber("Pitch", getVerticalTilt());
+        SmartDashboard.putNumber("Robot Pose X", getPose().getX());
+        SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
     }
 }
