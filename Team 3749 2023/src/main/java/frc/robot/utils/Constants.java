@@ -58,6 +58,9 @@ public class Constants {
     
     public static final RobotType ROBOT_TYPE = RobotType.VIPER;
 
+    public static final class Sim{
+        public static final double loopPeriodSec = 0.02;
+    }
     public static final class ArmIntake {
         public static final int arm_intake_id = 22;
         public static final double idleVoltage = 1;
