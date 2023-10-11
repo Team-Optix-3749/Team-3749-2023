@@ -95,69 +95,86 @@ public class JoystickIO {
      */
     public void pilotAndOperatorBindings() {
         // arm setpoints (buttons)
-        operator.a().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP));
-        operator.b().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_MID));
-        operator.x().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
-        operator.y().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.CUBE_STOW));
+        // operator.a().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        // ArmSetpoints.PLACE_TOP));
+        // operator.b().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        // ArmSetpoints.PLACE_MID));
+        // operator.x().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        // ArmSetpoints.GROUND_INTAKE_CUBE));
+        // operator.y().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        // ArmSetpoints.CUBE_STOW));
 
         // arm setpoints (bumpers)
-        operator.rightBumper().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING));
-        operator.leftBumper()
-                .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION_CONE));
-        operator.povUp()
-                .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION_CUBE));
-        operator.povDown()
-                .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.DOUBLE_SUBSTATION_CONE));
-        operator.povLeft().onTrue(
-                new SequentialCommandGroup(
-                        new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
-                        Commands.waitSeconds(0.75),
-                        Commands.run(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
-                                .withTimeout(0.175),
-                        Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage))
-                                .withTimeout(0.175)));
+        // operator.rightBumper().onTrue(new MoveArm(arm, armTrajectories, armIntake,
+        // leds, ArmSetpoints.STING));
+        // operator.leftBumper()
+        // .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        // ArmSetpoints.DOUBLE_SUBSTATION_CONE));
+        // operator.povUp()
+        // .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        // ArmSetpoints.DOUBLE_SUBSTATION_CUBE));
+        // operator.povDown()
+        // .onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        // ArmSetpoints.DOUBLE_SUBSTATION_CONE));
+        // operator.povLeft().onTrue(
+        // new SequentialCommandGroup(
+        // new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP),
+        // Commands.waitSeconds(0.75),
+        // Commands.run(() ->
+        // armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
+        // .withTimeout(0.175),
+        // Commands.runOnce(() -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage))
+        // .withTimeout(0.175)));
 
-        operator.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage * 0.55),
-                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-        operator.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
-                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        // operator.rightTriggerWhileHeld(() ->
+        // armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage * 0.55),
+        // () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
+        // operator.leftTriggerWhileHeld(() ->
+        // armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
+        // () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
 
-        operator.rightStickWhileHeld(Commands.runOnce(() -> arm.toggleKillArm(), arm));
+        // operator.rightStickWhileHeld(Commands.runOnce(() -> arm.toggleKillArm(),
+        // arm));
 
-        // operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE), leds);
-        // operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW), leds);
+        // operator.leftStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.PURPLE),
+        // leds);
+        // operator.rightStickWhileHeld(() -> leds.setLEDPattern(LEDPattern.YELLOW),
+        // leds);
 
-        pilot.a()
-                .onTrue(new ParallelCommandGroup(
-                        new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                            
-                                new AlignApriltag(swerve, limelight).withTimeout(2)));
-        pilot.x()
-                .onTrue(new ParallelCommandGroup(
-                    new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                            new AlignApriltag(swerve, limelight, true).withTimeout(2)));
-        pilot.b()
-                .onTrue(new ParallelCommandGroup(
-                    new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
-                            new AlignApriltag(swerve, limelight, false).withTimeout(2)));
+        // pilot.a()
+        // .onTrue(new ParallelCommandGroup(
+        // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+
+        // new AlignApriltag(swerve, limelight).withTimeout(2)));
+        // pilot.x()
+        // .onTrue(new ParallelCommandGroup(
+        // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+        // new AlignApriltag(swerve, limelight, true).withTimeout(2)));
+        // pilot.b()
+        // .onTrue(new ParallelCommandGroup(
+        // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
+        // new AlignApriltag(swerve, limelight, false).withTimeout(2)));
 
         pilot.yWhileHeld(() -> swerve.toggleSpeed());
 
+        pilot.x().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+                ArmSetpoints.GROUND_INTAKE_CUBE));
+        pilot.b().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+                ArmSetpoints.PLACE_MID));
         pilot.leftTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.intakeVoltage),
                 () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage));
-        pilot.rightTriggerWhileHeld(new AutoBalancingPID(swerve, 0));
-        // swerve button bindings
+        pilot.rightTriggerWhileHeld(() -> armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage),
+                () -> armIntake.setVoltage(Constants.ArmIntake.idleVoltage)); // swerve button bindings
         pilot.startWhileHeld(Commands.runOnce(() -> {
             swerve.setFlipGyro(false);
             swerve.resetGyro();
         }, swerve));
 
-
         // swerve rotation cardinals
-        pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
-        pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
-        pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
-        pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
+        // pilot.povUp().whileTrue(Commands.run(() -> swerve.turnToRotation(0)));
+        // pilot.povLeft().whileTrue(Commands.run(() -> swerve.turnToRotation(270)));
+        // pilot.povDown().whileTrue(Commands.run(() -> swerve.turnToRotation(180)));
+        // pilot.povRight().whileTrue(Commands.run(() -> swerve.turnToRotation(90)));
     }
 
     /**
