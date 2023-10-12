@@ -101,8 +101,8 @@ public class JoystickIO {
         // ArmSetpoints.PLACE_MID));
         // operator.x().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
         // ArmSetpoints.GROUND_INTAKE_CUBE));
-        // operator.y().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
-        // ArmSetpoints.CUBE_STOW));
+        pilot.y().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
+        ArmSetpoints.CUBE_STOW));
 
         // arm setpoints (bumpers)
         // operator.rightBumper().onTrue(new MoveArm(arm, armTrajectories, armIntake,
@@ -155,7 +155,7 @@ public class JoystickIO {
         // new MoveArm(arm, armIntake, armTrajectories, leds, ArmSetpoints.STING, true),
         // new AlignApriltag(swerve, limelight, false).withTimeout(2)));
 
-        pilot.yWhileHeld(() -> swerve.toggleSpeed());
+        // pilot.yWhileHeld(() -> swerve.toggleSpeed());
 
         pilot.x().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds,
                 ArmSetpoints.GROUND_INTAKE_CUBE));

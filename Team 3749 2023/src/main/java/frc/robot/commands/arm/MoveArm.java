@@ -319,7 +319,11 @@ public class MoveArm extends CommandBase {
                 } else if (currentSetpoint == ArmSetpoints.CUBE_STOW) {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CUBE);
                     return new Trajectory[] { armTrajectories.getCubeStowToGroundIntakeCube() };
-                } else {
+                } else if (currentSetpoint == ArmSetpoints.PLACE_MID){
+                    arm.setCurrentSetpoint(ArmSetpoints.CUBE_STOW);
+                    return new Trajectory[] { armTrajectories.getMidToCubeStow() };
+                }
+                else {
                     arm.setCurrentSetpoint(ArmSetpoints.GROUND_INTAKE_CUBE);
                     return new Trajectory[] { armTrajectories.getStowToGroundIntakeCube() };
                 }

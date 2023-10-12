@@ -205,6 +205,16 @@ public class Swerve extends SubsystemBase {
 
             }
         }
+        for (int i = 0; i < 4; i++) {
+            desiredStates[i].speedMetersPerSecond = 0.5 * desiredStates[i].speedMetersPerSecond;
+
+        }
+        desiredStates[0].speedMetersPerSecond = -desiredStates[0].speedMetersPerSecond;
+        desiredStates[1].speedMetersPerSecond = -desiredStates[1].speedMetersPerSecond;
+        desiredStates[2].speedMetersPerSecond = -desiredStates[2].speedMetersPerSecond;
+        desiredStates[3].speedMetersPerSecond = -desiredStates[3].speedMetersPerSecond;
+
+
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         frontRight.setDesiredState(desiredStates[0]);
         frontLeft.setDesiredState(desiredStates[1]);
@@ -298,6 +308,12 @@ public class Swerve extends SubsystemBase {
             backRight.getDriveVelocity(),
             backLeft.getAbsoluteEncoderRad(),
             backLeft.getDriveVelocity()};
+        
+        SmartDashboard.putNumber("FL", frontLeft.getAbsoluteEncoderRad()/Math.PI * 180);
+        SmartDashboard.putNumber("FR", frontRight.getAbsoluteEncoderRad()/Math.PI * 180);
+        SmartDashboard.putNumber("BL", backLeft.getAbsoluteEncoderRad()/Math.PI * 180);
+        SmartDashboard.putNumber("BR", backRight.getAbsoluteEncoderRad()/Math.PI * 180);
+
         
         double[] theoreticalStates = {
                 frontRight.getTheoreticalState().angle.getDegrees(),
