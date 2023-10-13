@@ -206,6 +206,10 @@ public class Swerve extends SubsystemBase {
             }
         }
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        desiredStates[0].speedMetersPerSecond = -desiredStates[0].speedMetersPerSecond;
+        desiredStates[1].speedMetersPerSecond = -desiredStates[1].speedMetersPerSecond;
+        desiredStates[2].speedMetersPerSecond = -desiredStates[2].speedMetersPerSecond;
+        desiredStates[3].speedMetersPerSecond = -desiredStates[3].speedMetersPerSecond;
         frontRight.setDesiredState(desiredStates[0]);
         frontLeft.setDesiredState(desiredStates[1]);
         backRight.setDesiredState(desiredStates[2]);
