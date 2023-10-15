@@ -83,15 +83,14 @@ public class RobotContainer {
         //hi adrita was here
         joystickIO.setDefaultCommands();
 
+
     }
 
     /**
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPiece(swerve, arm, armTrajectories, armIntake, limelight, leds);
-        // return AutoCommands.getPieceAlign(swerve, arm, armTrajectories, armIntake, limelight, leds);
-        // return AutoConstants.autoChooser.getSelected();
+        return AutoCommands.getOnePieceTaxi(swerve, arm, armTrajectories, armIntake, limelight, leds);
     }
 
     /**

@@ -95,10 +95,10 @@ public class JoystickIO {
      */
     public void pilotAndOperatorBindings() {
         // arm setpoints (buttons)
-        operator.a().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP));
+        operator.y().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_TOP));
         operator.b().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.PLACE_MID));
         operator.x().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.GROUND_INTAKE_CUBE));
-        operator.y().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.CUBE_STOW));
+        operator.a().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.CUBE_STOW));
 
         // arm setpoints (bumpers)
         operator.rightBumper().onTrue(new MoveArm(arm, armTrajectories, armIntake, leds, ArmSetpoints.STING));
