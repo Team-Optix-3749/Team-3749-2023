@@ -23,7 +23,7 @@ import frc.robot.utils.Constants.ModuleConstants;
  * @author Noah Simon
  * @author Raadwan Masum
  * @author Rohin Sood
- * @author Harkirat 
+ * @author Harkirat
  * 
  *         Object to manage each individual swerve module, including a drive
  *         motor, a turning motor, a drive encoder, and an Absolute CanCoder
@@ -42,7 +42,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
 
     private SwerveModuleState theoreticalState = new SwerveModuleState();
 
-
     public SwerveModuleSparkMax(int index) {
 
         this.absoluteEncoderReversed = DriveConstants.driveAbsoluteEncoderReversed[index];
@@ -56,8 +55,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);
         turningMotor.setInverted(DriveConstants.turningEncoderReversed[index]);
 
-        turningMotor.setIdleMode(IdleMode.kBrake);        
-        driveMotor.setIdleMode(IdleMode.kBrake);                
+        turningMotor.setIdleMode(IdleMode.kBrake);
+        driveMotor.setIdleMode(IdleMode.kBrake);
 
         driveEncoder = driveMotor.getEncoder();
         turningEncoder = turningMotor.getEncoder();
@@ -75,40 +74,43 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         resetEncoders();
     }
 
-    public double getDrivePosition() {
+    private double getDrivePosition() {
         return driveEncoder.getPosition();
     }
 
-    public double getTurningPosition() {
+    private double getTurningPosition() {
         return turningEncoder.getPosition();
     }
 
-    public double getDriveVelocity() {
+    private double getDriveVelocity() {
         return driveEncoder.getVelocity();
     }
 
-    public double getTurningVelocity() {
+    private double getTurningVelocity() {
         return turningEncoder.getVelocity();
     }
 
-    public double getAbsoluteEncoderRad() {
+    private double getAbsoluteEncoderRad() {
         return ((absoluteEncoder.getAbsolutePosition() / 180 * Math.PI)) * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
-    public void resetEncoders() {
+    private void resetEncoders() {
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
-    public SwerveModuleState getState() {
+    private SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
     }
-    public SwerveModuleState getTheoreticalState() {
+
+    private SwerveModuleState getTheoreticalState() {
         return new SwerveModuleState(theoreticalState.speedMetersPerSecond, theoreticalState.angle);
     }
-    public SwerveModulePosition getPosition() {
+
+    private SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
-    }   
+    }
+
     @Override
     public void setDesiredState(SwerveModuleState state) {
         theoreticalState = state;
@@ -124,22 +126,23 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveMotor.set(drive_speed);
         turningMotor.set(turning_speed);
     }
-    
+
     @Override
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
     }
+
     @Override
-    public void updateData(ModuleData data){
-        data.driveCurrentAmps = driveMotor.getBusVoltage();
+    public void updateData(ModuleData data) {
+        data.driveCurrentAmps = new double[] { driveMotor.getBusVoltage() };
         data.drivePositionM = getDrivePosition();
-        data.driveTempCelcius = driveMotor.getMotorTemperature();
+        data.driveTempCelcius = new double[] { driveMotor.getMotorTemperature() };
         data.driveVelocityMPerSec = getDriveVelocity();
         data.turnAbsolutePositionRad = getAbsoluteEncoderRad();
-        data.turnCurrentAmps = turningMotor.getBusVoltage();
+        data.turnCurrentAmps = new double[] { turningMotor.getBusVoltage() };
         data.turnPositionRad = getTurningPosition();
-        data.turnTempCelcius = turningMotor.getMotorTemperature();
+        data.turnTempCelcius = new double[] { turningMotor.getMotorTemperature() };
         data.turnVelocityRadPerSec = getTurningVelocity();
 
         data.position = getPosition();
@@ -148,21 +151,20 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     }
 
     @Override
-    public void setDriveBrakeMode(boolean enable){
-        if (enable){
+    public void setDriveBrakeMode(boolean enable) {
+        if (enable) {
             driveMotor.setIdleMode(IdleMode.kBrake);
-        }
-        else{
+        } else {
             driveMotor.setIdleMode(IdleMode.kCoast);
 
         }
     }
+
     @Override
-    public void setTurningBrakeMode(boolean enable){
-        if (enable){
+    public void setTurningBrakeMode(boolean enable) {
+        if (enable) {
             turningMotor.setIdleMode(IdleMode.kBrake);
-        }
-        else{
+        } else {
             turningMotor.setIdleMode(IdleMode.kCoast);
 
         }

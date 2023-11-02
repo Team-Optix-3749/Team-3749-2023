@@ -16,23 +16,22 @@ public interface SwerveModuleIO {
     public SwerveModuleState theoreticalState = new SwerveModuleState();
     public double drivePositionM = 0.0;
     public double driveVelocityMPerSec = 0.0;
-    public double driveCurrentAmps = 0.0;
-    public double driveTempCelcius = 0.0;   
+    public double driveAppliedVolts = 0.0;
+    public double[] driveCurrentAmps = new double[] {};
+    public double[] driveTempCelcius = new double[] {};   
 
     public double turnAbsolutePositionRad = 0.0;
     public double turnPositionRad = 0.0;
     public double turnVelocityRadPerSec = 0.0;
-    public double turnCurrentAmps = 0.0;
-    public double turnTempCelcius = 0.0;
+    public double turnAppliedVolts = 0.0;
+    public double[] turnCurrentAmps = new double[] {};
+    public double[] turnTempCelcius = new double[] {};
   }
 
   /** Updates the set of loggable inputs. */
   public default void updateData(ModuleData data) {}
-
   /** Run the drive motor at the specified voltage. */
-  public default void setDesiredState(SwerveModuleState state) {}
-
-
+  public default void setDesiredState(SwerveModuleState state, ModuleData data) {}
   /** Run the turn motor at the specified voltage. */
   public default void stop() {}
 
