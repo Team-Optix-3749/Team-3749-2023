@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -25,16 +26,21 @@ public class SwerveModuleSim implements SwerveModuleIO {
     
     private SwerveModuleState theoreticalState = new SwerveModuleState();
     private final PIDController turningPidController;
+    private final PIDController drivingPidController;
 
 
     public SwerveModuleSim() {
         System.out.println("[Init] Creating ModuleIOSim");
+        drivingPidController = new PIDController(ModuleConstants.kPDriving, 0, 0);
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
     }
     private SwerveModuleState getState(ModuleData data) {
         return new SwerveModuleState(data.driveVelocityMPerSec, new Rotation2d(data.turnAbsolutePositionRad));
+    }
+    private SwerveModulePosition getPosition(ModuleData data) {
+        return new SwerveModulePosition(data.drivePositionM, new Rotation2d(data.turnAbsolutePositionRad));
     }
 
 
@@ -69,6 +75,9 @@ public class SwerveModuleSim implements SwerveModuleIO {
         data.turnAppliedVolts = turnAppliedVolts;
         data.turnCurrentAmps = new double[] {Math.abs(turnSim.getCurrentDrawAmps())};
         data.turnTempCelcius = new double[] {};
+
+        data.theoreticalState = theoreticalState;
+        data.position = getPosition();
     }
 
     public void setDriveVoltage(double volts) {
@@ -90,11 +99,11 @@ public class SwerveModuleSim implements SwerveModuleIO {
         }
         state = SwerveModuleState.optimize(state, getState(data).angle);
 
-        double drive_speed = state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+        double drive_volts = state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
 
-        double turning_speed = turningPidController.calculate(data.turnAbsolutePositionRad, state.angle.getRadians());
+        double turning_volts = turningPidController.calculate(data.turnAbsolutePositionRad, state.angle.getRadians());
         // Make a drive PID Controller
-        driveSim.setInputVoltage(drive_speed);
-        turningMotor.set(turning_speed);
+        driveSim.setInputVoltage(drive_volts);
+        turnSim.setInputVoltage(turning_volts);
     }
 }

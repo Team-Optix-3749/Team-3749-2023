@@ -173,7 +173,7 @@ public class Swerve extends SubsystemBase {
         }
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         for (int i = 0; i<4; i++){
-            modules[i].setDesiredState(desiredStates[i]);
+            modules[i].setDesiredState(desiredStates[i], moduleData[i]);
         }
     }
     /***

@@ -112,7 +112,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     }
 
     @Override
-    public void setDesiredState(SwerveModuleState state) {
+    public void setDesiredState(SwerveModuleState state, ModuleData data) {
         theoreticalState = state;
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
