@@ -66,18 +66,18 @@ public class SwerveModuleSim implements SwerveModuleIO {
         data.drivePositionM = data.drivePositionM + (driveSim.getAngularVelocityRadPerSec() * 0.02 * ModuleConstants.kWheelDiameterMeters);
         data.driveVelocityMPerSec = driveSim.getAngularVelocityRadPerSec() * ModuleConstants.kWheelDiameterMeters;
         data.driveAppliedVolts = driveAppliedVolts;
-        data.driveCurrentAmps = new double[] {Math.abs(driveSim.getCurrentDrawAmps())};
-        data.driveTempCelcius = new double[] {};
+        data.driveCurrentAmps = Math.abs(driveSim.getCurrentDrawAmps());
+        data.driveTempCelcius = 0;
 
         data.turnAbsolutePositionRad = turnAbsolutePositionRad;
         data.turnPositionRad = turnRelativePositionRad;
         data.turnVelocityRadPerSec = turnSim.getAngularVelocityRadPerSec();
         data.turnAppliedVolts = turnAppliedVolts;
-        data.turnCurrentAmps = new double[] {Math.abs(turnSim.getCurrentDrawAmps())};
-        data.turnTempCelcius = new double[] {};
+        data.turnCurrentAmps = Math.abs(turnSim.getCurrentDrawAmps());
+        data.turnTempCelcius = 0;
 
         data.theoreticalState = theoreticalState;
-        data.position = getPosition();
+        data.position = getPosition(data);
     }
 
     public void setDriveVoltage(double volts) {
@@ -103,7 +103,13 @@ public class SwerveModuleSim implements SwerveModuleIO {
 
         double turning_volts = turningPidController.calculate(data.turnAbsolutePositionRad, state.angle.getRadians());
         // Make a drive PID Controller
-        driveSim.setInputVoltage(drive_volts);
-        turnSim.setInputVoltage(turning_volts);
+        setDriveVoltage(drive_volts);
+        setTurnVoltage(turning_volts);
+    }
+
+    @Override
+    public void stop(){
+        setDriveVoltage(0);
+        setTurnVoltage(0);
     }
 }
