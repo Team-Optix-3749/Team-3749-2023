@@ -12,6 +12,8 @@
       "/Shuffleboard/Controls/Side Intake/Toggle Lift": "Command",
       "/Shuffleboard/Controls/arm/Arm Intake": "Command",
       "/Shuffleboard/Controls/arm/Arm Outake": "Command",
+      "/Shuffleboard/Swerve/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/Arm Mechanism": "Mechanism2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     }
@@ -27,7 +29,7 @@
     "Plot <0>": {
       "plots": [
         {
-          "height": 369,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -45,7 +47,7 @@
     "Plot <1>": {
       "plots": [
         {
-          "height": 547,
+          "height": 0,
           "series": [
             {
               "color": [

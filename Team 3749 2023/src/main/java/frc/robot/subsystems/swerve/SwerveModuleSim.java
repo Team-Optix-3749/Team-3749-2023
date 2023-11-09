@@ -102,13 +102,15 @@ public class SwerveModuleSim implements SwerveModuleIO {
         }
         state = SwerveModuleState.optimize(state, getState(data).angle);
 
-        double drive_volts = drivingFeedFordward.calculate(data.driveVelocityMPerSec)
+        double drive_volts = drivingFeedFordward.calculate(state.speedMetersPerSecond)
                 + drivingPidController.calculate(data.driveVelocityMPerSec, state.speedMetersPerSecond);
 
         double turning_volts = turningPidController.calculate(data.turnAbsolutePositionRad, state.angle.getRadians());
         // Make a drive PID Controller
         setDriveVoltage(drive_volts);
         setTurnVoltage(turning_volts);
+        System.out.println(turning_volts);
+
     }
 
     @Override
