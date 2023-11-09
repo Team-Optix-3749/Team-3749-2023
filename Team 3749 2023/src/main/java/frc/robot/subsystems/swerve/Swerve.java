@@ -56,13 +56,26 @@ public class Swerve extends SubsystemBase {
 
     public Swerve() {
 
-        gyro = new NavX2Gyro();
-        gyroData = new GyroData();
-
-        for (int i = 0; i < 4; i++){
-            modules[i] = new SwerveModuleSparkMax(i);
-            moduleData[i] = new ModuleData();
+        if (Constants.isSim){
+            gyro = new GyroIO() { };
+            gyroData = new GyroData();
+            for (int i = 0; i < 4; i++){
+                modules[i] = new SwerveModuleSim();
+                moduleData[i] = new ModuleData();
+            }
         }
+        else if (!Constants.isSim){
+            gyro = new NavX2Gyro();
+            gyroData = new GyroData();
+
+            for (int i = 0; i < 4; i++){
+                modules[i] = new SwerveModuleSparkMax(i);
+                moduleData[i] = new ModuleData();
+            }
+
+        }
+
+
     
         swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
                 new Rotation2d(0),

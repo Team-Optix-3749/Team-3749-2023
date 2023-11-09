@@ -16,6 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Constants {
+
+    public static final Boolean isSim = true;
+
+
     /***
      * 
      * @param margin how close the values need to be to return true. Use a positive
@@ -164,7 +168,11 @@ public class Constants {
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
         public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
         public static final double kPTurning = 0.5;
-        public static final double kPDriving = 0.5;
+        public static final double kPDriving = 0.0;
+        public static final double kVDriving = 0.1;
+        public static final double kSDriving = 0.0;
+
+
 
     }
 

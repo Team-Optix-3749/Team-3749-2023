@@ -2,6 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -23,26 +24,27 @@ public class SwerveModuleSim implements SwerveModuleIO {
     private double turnAbsolutePositionRad = Math.random() * 2.0 * Math.PI;
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
-    
+
     private SwerveModuleState theoreticalState = new SwerveModuleState();
     private final PIDController turningPidController;
     private final PIDController drivingPidController;
-
+    private final SimpleMotorFeedforward drivingFeedFordward;
 
     public SwerveModuleSim() {
         System.out.println("[Init] Creating ModuleIOSim");
         drivingPidController = new PIDController(ModuleConstants.kPDriving, 0, 0);
+        drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDriving, ModuleConstants.kVDriving);
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
-
     }
+
     private SwerveModuleState getState(ModuleData data) {
         return new SwerveModuleState(data.driveVelocityMPerSec, new Rotation2d(data.turnAbsolutePositionRad));
     }
+
     private SwerveModulePosition getPosition(ModuleData data) {
         return new SwerveModulePosition(data.drivePositionM, new Rotation2d(data.turnAbsolutePositionRad));
     }
-
 
     @Override
     public void updateData(ModuleData data) {
@@ -63,7 +65,8 @@ public class SwerveModuleSim implements SwerveModuleIO {
             turnAbsolutePositionRad -= 2.0 * Math.PI;
         }
         // distance traveled + Rad/Time * Time * diameter
-        data.drivePositionM = data.drivePositionM + (driveSim.getAngularVelocityRadPerSec() * 0.02 * ModuleConstants.kWheelDiameterMeters);
+        data.drivePositionM = data.drivePositionM
+                + (driveSim.getAngularVelocityRadPerSec() * 0.02 * ModuleConstants.kWheelDiameterMeters);
         data.driveVelocityMPerSec = driveSim.getAngularVelocityRadPerSec() * ModuleConstants.kWheelDiameterMeters;
         data.driveAppliedVolts = driveAppliedVolts;
         data.driveCurrentAmps = Math.abs(driveSim.getCurrentDrawAmps());
@@ -83,12 +86,12 @@ public class SwerveModuleSim implements SwerveModuleIO {
     public void setDriveVoltage(double volts) {
         driveAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
         driveSim.setInputVoltage(driveAppliedVolts);
-      }
-    
-      public void setTurnVoltage(double volts) {
+    }
+
+    public void setTurnVoltage(double volts) {
         turnAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
         turnSim.setInputVoltage(turnAppliedVolts);
-      }
+    }
 
     @Override
     public void setDesiredState(SwerveModuleState state, ModuleData data) {
@@ -99,7 +102,8 @@ public class SwerveModuleSim implements SwerveModuleIO {
         }
         state = SwerveModuleState.optimize(state, getState(data).angle);
 
-        double drive_volts = state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+        double drive_volts = drivingFeedFordward.calculate(data.driveVelocityMPerSec)
+                + drivingPidController.calculate(data.driveVelocityMPerSec, state.speedMetersPerSecond);
 
         double turning_volts = turningPidController.calculate(data.turnAbsolutePositionRad, state.angle.getRadians());
         // Make a drive PID Controller
@@ -108,7 +112,7 @@ public class SwerveModuleSim implements SwerveModuleIO {
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         setDriveVoltage(0);
         setTurnVoltage(0);
     }
