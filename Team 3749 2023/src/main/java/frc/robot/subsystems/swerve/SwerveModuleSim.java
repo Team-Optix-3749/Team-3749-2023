@@ -109,7 +109,6 @@ public class SwerveModuleSim implements SwerveModuleIO {
         // Make a drive PID Controller
         setDriveVoltage(drive_volts);
         setTurnVoltage(turning_volts);
-        System.out.println(turning_volts);
 
     }
 
