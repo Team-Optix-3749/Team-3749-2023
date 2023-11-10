@@ -140,10 +140,10 @@ public final class AutoCommands {
         return new SequentialCommandGroup(
                 getPlaceTop(),
                 path_1,
-                new AlignPiece().withTimeout(2),
+                // new AlignPiece().withTimeout(2),
                 Commands.runOnce(() -> Robot.swerve.resetOdometry(midPose)),
                 path_2,
-                new AlignApriltag().withTimeout(1.2),
+                // new AlignApriltag().withTimeout(1.2),
                 Commands.run(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.releaseConeVoltage))
                         .withTimeout(0.12),
                 Commands.runOnce(() -> Robot.armIntake.setVoltage(Constants.ArmIntake.idleVoltage)),
@@ -263,6 +263,12 @@ public final class AutoCommands {
     public static Command getAprilTagAlign() {
         return new SequentialCommandGroup(
                 getPlaceTop());
+    }
+
+    public static Command getTest() {
+        PathPlannerTrajectory path = PathPlanner.loadPath("BLUE - TEST", new PathConstraints(1, 1));
+        return new SequentialCommandGroup(new FollowPathWithEvents(followTrajectoryCommand(path, true, Robot.swerve), path.getMarkers(),
+                Constants.AutoConstants.eventMap), Commands.runOnce(() -> Robot.swerve.stop()), new PrintCommand("AUTO DONE"));
     }
 
     public static Command getPieceAlign() {

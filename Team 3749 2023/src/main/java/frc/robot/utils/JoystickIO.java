@@ -239,11 +239,15 @@ public class JoystickIO {
                 () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
-        limelight.setDefaultCommand(
-                Commands.run(
-                        () -> {
-                            limelight.setPipeline(Pipelines.APRILTAG.index);
-                            limelight.updatePoseAprilTags(Robot.swerve.getPoseEstimator());
-                        }, limelight));
+
+        if (!Constants.isSim){
+
+            limelight.setDefaultCommand(
+                    Commands.run(
+                            () -> {
+                                limelight.setPipeline(Pipelines.APRILTAG.index);
+                                limelight.updatePoseAprilTags(Robot.swerve.getPoseEstimator());
+                            }, limelight));
+        }
     }
 }

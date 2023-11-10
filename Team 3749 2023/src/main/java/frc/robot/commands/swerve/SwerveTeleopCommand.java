@@ -27,9 +27,9 @@ public class SwerveTeleopCommand extends CommandBase {
     public SwerveTeleopCommand(
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction) {
         this.swerve = Robot.swerve;
-        this.xSpdFunction = () -> 0.5;
-        this.ySpdFunction = () -> 0.5;
-        this.turningSpdFunction = () -> 0.5;
+        this.xSpdFunction = () -> 0.;
+        this.ySpdFunction = () -> 0.;
+        this.turningSpdFunction = () -> 0.;
         this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);

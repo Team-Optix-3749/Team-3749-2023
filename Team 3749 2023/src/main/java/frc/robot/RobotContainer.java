@@ -82,7 +82,8 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return AutoCommands.getTopTwoPiece();
+        return AutoCommands.getTopTwoPieceCharge();
+        // return AutoCommands.getTopTwoPiece();
         // return AutoCommands.getPieceAlign();
         // return AutoConstants.autoChooser.getSelected();
     }
