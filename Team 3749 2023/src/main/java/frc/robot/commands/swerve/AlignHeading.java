@@ -38,7 +38,7 @@ public class AlignHeading extends CommandBase {
 
     @Override
     public void execute() {
-        heading = swerve.getHeading();
+        heading = swerve.getRotation2d().getDegrees();
 
         if (atGoal())
             return;

@@ -52,16 +52,16 @@ public class MoveDistance extends CommandBase {
     // Run every 20 ms
     @Override
     public void execute() {
-
+        double heading = swerve.getRotation2d().getDegrees();
         // How inaccurate we are willing to be in reference to looking straight forward
-        if (Math.abs(swerve.getHeading()) > Constants.AutoBalancing.max_yaw_offset) {
+        if (Math.abs(heading) > Constants.AutoBalancing.max_yaw_offset) {
             // negative so that we move towards the target, not away
-            double turning_speed = turnController.calculate(Math.abs(swerve.getHeading()), 0);
+            double turning_speed = turnController.calculate(Math.abs(heading), 0);
             turning_speed = turningLimiter.calculate(turning_speed)
                     * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
             // remove the negative if it turns the wrong direction around
-            turning_speed = Math.abs(turning_speed) * Math.signum(swerve.getHeading());
+            turning_speed = Math.abs(turning_speed) * Math.signum(heading);
 
             // 4. Construct desired chassis speeds
             ChassisSpeeds chassisSpeeds;
