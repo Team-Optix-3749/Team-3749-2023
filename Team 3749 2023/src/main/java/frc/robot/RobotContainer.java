@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.swerve.AutoCommands;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants;
@@ -56,7 +57,7 @@ public class RobotContainer {
      * @return Autonomous Command
      */
     public Command getAutonomousCommand() {
-        return new PrintCommand("Auto");
+        return AutoCommands.();
         // return AutoCommands.getTopTwoPiece();
         // return AutoCommands.getPieceAlign();
         // return AutoConstants.autoChooser.getSelected();
