@@ -63,7 +63,7 @@ public class AutoBalancingPID extends CommandBase {
         //     swerve.turnToRotation(goalHeading);
         // }
 
-        heading = swerve.getHeading();
+        heading = swerve.getRotation2d().getDegrees();
         angle = swerve.getVerticalTilt();
 
 

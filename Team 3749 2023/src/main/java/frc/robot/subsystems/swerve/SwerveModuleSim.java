@@ -32,9 +32,9 @@ public class SwerveModuleSim implements SwerveModuleIO {
 
     public SwerveModuleSim() {
         System.out.println("[Init] Creating ModuleIOSim");
-        drivingPidController = new PIDController(ModuleConstants.kPDriving, 0, 0);
-        drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDriving, ModuleConstants.kVDriving);
-        turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
+        drivingPidController = new PIDController(ModuleConstants.kPDrivingReal, 0, 0);
+        drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingReal, ModuleConstants.kVDrivingReal);
+        turningPidController = new PIDController(ModuleConstants.kPTurningReal, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
     }
 

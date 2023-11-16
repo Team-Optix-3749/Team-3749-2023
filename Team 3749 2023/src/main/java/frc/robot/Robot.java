@@ -16,10 +16,11 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
 
     public static final Swerve swerve = new Swerve();
-    public static final ArmIntake armIntake = new ArmIntake();
     public static final Arm arm = new Arm();
-    public static final LEDs leds = new LEDs();
     public static final Limelight limelight = new Limelight();
+    public static final LEDs leds = new LEDs();
+    public static final ArmIntake intake = new ArmIntake();
+
 
     @Override
     public void robotInit() {

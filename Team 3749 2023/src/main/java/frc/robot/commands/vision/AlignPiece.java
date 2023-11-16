@@ -87,13 +87,11 @@ public class AlignPiece extends CommandBase {
 
         double ySpeed = yController.calculate(error);
 
-        if (swerve.getFlipGyro()){
-            ySpeed = -ySpeed;
-        }
+
 
         SmartDashboard.putNumber("Y Speed", ySpeed);
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,
-                ySpeed, thetaSpeed, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
+                ySpeed, thetaSpeed, swerve.getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                 .toSwerveModuleStates(chassisSpeeds);
 

@@ -99,7 +99,7 @@ public class AlignRetro extends CommandBase {
             
             double xSpeed = xController.calculate(targetTranslation.getX());
             double ySpeed = yController.calculate(targetTranslation.getY());
-            double thetaSpeed = turnController.calculate(swerve.getHeading());
+            double thetaSpeed = turnController.calculate(swerve.getRotation2d().getDegrees());
 
             SmartDashboard.putNumber("Target 2d X", targetTranslation.getX());
             SmartDashboard.putNumber("Target 2d Y", targetTranslation.getY());
@@ -109,7 +109,7 @@ public class AlignRetro extends CommandBase {
             SmartDashboard.putNumber("theta Speed", thetaSpeed);
 
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed,
-                    ySpeed, thetaSpeed, new Rotation2d(Units.degreesToRadians(swerve.getHeading())));
+                    ySpeed, thetaSpeed, swerve.getRotation2d());
             SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics
                     .toSwerveModuleStates(chassisSpeeds);
 

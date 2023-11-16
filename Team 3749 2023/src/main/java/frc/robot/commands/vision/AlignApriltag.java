@@ -174,7 +174,7 @@ public class AlignApriltag extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         System.out.println("END END END");
-        swerve.stop();
+        swerve.stopModules();
     }
 
     @Override

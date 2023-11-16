@@ -68,7 +68,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveMotor.setSmartCurrentLimit(35, 60);
         turningMotor.setSmartCurrentLimit(35, 60);
 
-        turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
+        turningPidController = new PIDController(ModuleConstants.kPTurningSim, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders();

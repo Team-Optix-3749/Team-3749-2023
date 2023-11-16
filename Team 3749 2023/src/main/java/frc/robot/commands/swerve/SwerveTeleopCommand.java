@@ -66,8 +66,6 @@ public class SwerveTeleopCommand extends CommandBase {
         ChassisSpeeds chassisSpeeds;
 
         // Relative to field
-        turningSpeed = swerve.getFlipGyro() == false ? turningSpeed : -turningSpeed;
-
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
 
