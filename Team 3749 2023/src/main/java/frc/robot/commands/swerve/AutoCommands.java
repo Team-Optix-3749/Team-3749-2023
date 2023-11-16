@@ -2,14 +2,19 @@ package frc.robot.commands.swerve;
 
 import java.util.function.Consumer;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
@@ -30,7 +35,7 @@ public final class AutoCommands {
     private static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath,
             Swerve swerve) {
         PPSwerveControllerCommand.setLoggingCallbacks(null, pathTargetPose, null, null);
-
+    
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
@@ -54,4 +59,20 @@ public final class AutoCommands {
                         swerve // Requires this drive subsystem
                 ));
     }
+
+    public static Command getTestPath(Swerve swerve) {
+        PathPlannerTrajectory path;
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            path = PathPlanner.loadPath("Blue - TEST", new PathConstraints(1.5, 1.5));
+        } else {
+            path = PathPlanner.loadPath("", new PathConstraints(1.5, 1.5));
+        }
+
+        Command pathCommand = new FollowPathWithEvents(followTrajectoryCommand(path, true, swerve), path.getMarkers(),
+                Constants.AutoConstants.eventMap);
+        return new SequentialCommandGroup(
+                pathCommand);
+
+    }
+
 }
