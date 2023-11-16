@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
+
 /**
  * Generate arm trajectories
  * 

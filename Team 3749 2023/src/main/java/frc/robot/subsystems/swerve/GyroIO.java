@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve;
 
+
 public interface GyroIO {
     public static class GyroData {
         public boolean connected = false;

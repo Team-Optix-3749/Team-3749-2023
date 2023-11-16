@@ -23,6 +23,7 @@ public class NavX2Gyro implements GyroIO{
             }
         }).start();
     }
+    
 
     @Override
     public void updateData(GyroData data){

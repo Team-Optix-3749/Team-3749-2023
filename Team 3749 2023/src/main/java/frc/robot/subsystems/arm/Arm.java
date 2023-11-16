@@ -18,6 +18,7 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
+
 /**
  * Double jointed arm subsystem built with 2 CANSparkMaxes at each joint and REV
  * Through Bore Encoders
@@ -65,15 +66,14 @@ public class Arm extends SubsystemBase {
     }
 
     public void setArmPosition(Translation2d pos) {
-        if (armData.kill){
+        if (armData.kill) {
             return;
         }
         armData.setpoint = pos;
     }
 
-
     public void setCurrentSetpoint(ArmSetpoints setpoint) {
-        if (armData.kill){
+        if (armData.kill) {
             return;
         }
         armData.currentSetpoint = setpoint;
@@ -82,7 +82,8 @@ public class Arm extends SubsystemBase {
     public ArmSetpoints getCurrentSetpoint() {
         return armData.currentSetpoint;
     }
-    public Translation2d getArmCoordinate(){
+
+    public Translation2d getArmCoordinate() {
         return armData.position;
     }
 
@@ -95,13 +96,14 @@ public class Arm extends SubsystemBase {
         } else {
             setArmBrakeMode(false);
             System.out.println("UNKILLED ARM");
-        }    }
+        }
+    }
 
     /**
      * @param mode IdleMode of the arm
      */
     public void setArmBrakeMode(boolean enable) {
-        if (armData.kill){
+        if (armData.kill) {
             return;
         }
         armIO.setArmBrakeMode(enable);
@@ -110,7 +112,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         try {
-            if (armData.kill){
+            if (armData.kill) {
                 return;
             }
             armIO.moveArm(armData.setpoint, dynamics);
@@ -124,7 +126,6 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putString("Current Setpoint ENUM", armData.currentSetpoint.name());
         SmartDashboard.putString("Control Theory Setpoint Translation2D ", armData.setpoint.toString());
         SmartDashboard.putString("Arm Position Translation2d", armData.position.toString());
-
 
         SmartDashboard.putNumber("Shoulder Angle", armData.shoulderAngle);
         SmartDashboard.putNumber("Elbow Angle", armData.elbowAngle);

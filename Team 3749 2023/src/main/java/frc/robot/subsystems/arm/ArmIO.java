@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
+
 public interface ArmIO {
     public static class ArmData {
         public Mechanism2d armMechanism = new Mechanism2d(

@@ -17,6 +17,7 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.Arm.ArmSetpoints;
 
+
 /**
  * Double jointed arm subsystem built with 2 CANSparkMaxes at each joint and REV
  * Through Bore Encoders
