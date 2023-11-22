@@ -53,7 +53,7 @@ public class JoystickIO {
         swerve.setDefaultCommand(new SwerveTeleopCommand(
 
                 () -> -pilot.getLeftY(),
-                () -> pilot.getLeftX(),
+                () -> -pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
     }

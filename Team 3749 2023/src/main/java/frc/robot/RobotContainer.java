@@ -32,7 +32,7 @@ public class RobotContainer {
         configureButtonBindings();
         configureAuto();
       
-
+        DataLogManager.start("logs");
         DataLogManager.logNetworkTables(true);
         DriverStation.startDataLog(DataLogManager.getLog(), true);
 

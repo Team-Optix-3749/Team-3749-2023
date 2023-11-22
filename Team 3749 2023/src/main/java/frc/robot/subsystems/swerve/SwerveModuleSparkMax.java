@@ -142,7 +142,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         data.driveVelocityMPerSec = getDriveVelocity();
         data.turnAbsolutePositionRad = getAbsoluteEncoderRad();
         data.turnCurrentAmps = turningMotor.getBusVoltage();
-        data.turnPositionRad = getTurningPosition();
         data.turnTempCelcius = turningMotor.getMotorTemperature();
         data.turnVelocityRadPerSec = getTurningVelocity();
 

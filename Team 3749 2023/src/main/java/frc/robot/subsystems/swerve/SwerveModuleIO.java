@@ -22,7 +22,6 @@ public interface SwerveModuleIO {
     public double driveTempCelcius = 0.0;   
 
     public double turnAbsolutePositionRad = 0.0;
-    public double turnPositionRad = 0.0;
     public double turnVelocityRadPerSec = 0.0;
     public double turnAppliedVolts = 0.0;
     public double turnCurrentAmps = 0.0;
