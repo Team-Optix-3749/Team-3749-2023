@@ -5,7 +5,7 @@ public interface GyroIO {
     public static class GyroData {
         public boolean connected = false;
         public boolean isCalibrating = false;
-        public double yaw = 0;
+        public double yaw = 180;
         public double pitch = 0;
         public double roll = 0;
       }

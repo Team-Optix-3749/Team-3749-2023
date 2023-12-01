@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.ModuleConstants;
@@ -84,7 +85,9 @@ public class SwerveModuleSim implements SwerveModuleIO {
     }
 
     private void setDriveVoltage(double volts) {
-        driveAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
+        // driveAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
+        driveAppliedVolts = volts;
+        SmartDashboard.putNumber("Drive volts", volts);
         driveSim.setInputVoltage(driveAppliedVolts);
     }
 

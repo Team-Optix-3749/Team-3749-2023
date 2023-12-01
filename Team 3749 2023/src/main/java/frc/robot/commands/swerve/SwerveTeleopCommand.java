@@ -45,7 +45,6 @@ public class SwerveTeleopCommand extends CommandBase {
 
     @Override
     public void execute() {
-        System.out.println("RUNNNNNN");
 
         // 1. Get real-time joystick inputs
         double xSpeed = xSpdFunction.get();
