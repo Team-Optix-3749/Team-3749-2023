@@ -6,6 +6,7 @@ import java.io.IOException;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -28,6 +29,12 @@ public class RobotContainer {
     private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
 
     public RobotContainer() {
+
+        SmartDashboard.putNumberArray("point 1", new double[] {2,2,0});
+        SmartDashboard.putNumberArray("point 2", new double[] {2,4,0});
+        SmartDashboard.putNumberArray("point 3", new double[] {0,4,180});
+
+
         DriverStation.silenceJoystickConnectionWarning(true);
         DriverStation.removeRefreshedDataEventHandle(44000);
 

@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
@@ -31,12 +32,14 @@ public class FollowTrajectory extends CommandBase {
     private final Swerve swerve;
 
     public FollowTrajectory(Swerve swerve) {
+        
         this.swerve = swerve;
         addRequirements(swerve);
     }
 
     @Override
     public void initialize() {
+        // swerve.resetOdometry(new Pose2d(0,0,new Rotation2d(0)));
         trajectory = createTrajectory();
         timer.start();
     }
@@ -80,6 +83,7 @@ public class FollowTrajectory extends CommandBase {
     
     
     private Trajectory createTrajectory() {
+
         Pose2d startPose = new Pose2d(new Translation2d(0,0), new Rotation2d(0));
         List<Translation2d> midpoints = new ArrayList<>();
         midpoints.add(new Translation2d(2,2));
@@ -94,8 +98,8 @@ public class FollowTrajectory extends CommandBase {
                 midpoints,
                 endPose,
                 new TrajectoryConfig(
-                        4,
-                        3));
+                        0.5,
+                        0.5));
     }
                     
 

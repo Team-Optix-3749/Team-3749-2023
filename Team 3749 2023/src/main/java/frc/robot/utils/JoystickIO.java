@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.commands.swerve.MoveToPosition;
 import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.subsystems.swerve.Swerve;
 
@@ -41,7 +42,7 @@ public class JoystickIO {
      */
     public void getButtonBindings() {
 
-
+        pilot.a().whileTrue(new MoveToPosition(swerve));
 
         setDefaultCommands();
     }
@@ -52,8 +53,8 @@ public class JoystickIO {
     public void setDefaultCommands() {
         swerve.setDefaultCommand(new SwerveTeleopCommand(
 
-                () -> -pilot.getLeftY(),
-                () -> -pilot.getLeftX(),
+                () -> pilot.getLeftY(),
+                () -> pilot.getLeftX(),
                 () -> pilot.getRightX()));
 
     }
