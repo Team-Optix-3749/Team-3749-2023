@@ -62,6 +62,8 @@ public class SwerveTeleopCommand extends CommandBase {
         turningSpeed = turningLimiter.calculate(turningSpeed)
                 * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
+
+
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
 
@@ -75,11 +77,13 @@ public class SwerveTeleopCommand extends CommandBase {
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         
+        // 6. Output each module states to wheels
+
+
+        swerve.setModuleStates(moduleStates);
+        
         SmartDashboard.putNumber("XSPEED", chassisSpeeds.vxMetersPerSecond);
         SmartDashboard.putNumber("YSPEED", chassisSpeeds.vyMetersPerSecond);
-
-        // 6. Output each module states to wheels
-        swerve.setModuleStates(moduleStates);
     }
 
     @Override

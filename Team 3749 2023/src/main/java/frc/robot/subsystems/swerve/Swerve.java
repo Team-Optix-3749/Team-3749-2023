@@ -131,6 +131,7 @@ public class Swerve extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        System.out.println(desiredStates[0].speedMetersPerSecond);
         for (int i = 0; i < 4; i++) {
             modules[i].setDesiredState(desiredStates[i], moduleData[i]);
         }
